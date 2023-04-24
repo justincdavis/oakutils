@@ -256,18 +256,24 @@ class OAK_Camera:
             self._R2 = np.array(calibData.getStereoRightRectificationRotation())
             self._R_primary = self._R1 if self._primary_mono_left else self._R2
 
-            self._T1 = np.array(
-                calibData.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.LEFT,
-                    dstCamera=dai.CameraBoardSocket.RIGHT,
+            self._T1 = (
+                np.array(
+                    calibData.getCameraTranslationVector(
+                        srcCamera=dai.CameraBoardSocket.LEFT,
+                        dstCamera=dai.CameraBoardSocket.RIGHT,
+                    )
                 )
-            ) / 100  # convert to meters
-            self._T2 = np.array(
-                calibData.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.RIGHT,
-                    dstCamera=dai.CameraBoardSocket.LEFT,
+                / 100
+            )  # convert to meters
+            self._T2 = (
+                np.array(
+                    calibData.getCameraTranslationVector(
+                        srcCamera=dai.CameraBoardSocket.RIGHT,
+                        dstCamera=dai.CameraBoardSocket.LEFT,
+                    )
                 )
-            ) / 100  # convert to meters
+                / 100
+            )  # convert to meters
             self._T_primary = self._T1 if self._primary_mono_left else self._T2
 
             self._H_left = np.matmul(
@@ -833,9 +839,9 @@ class OAK_Camera:
                                 gx, gy, gz = gyroValues.x, gyroValues.y, gyroValues.z
 
                                 # double integrate each ax, ay, az
-                                self._imu_pose[0] += ax * (accelero_ts ** 2)
-                                self._imu_pose[1] += ay * (accelero_ts ** 2)
-                                self._imu_pose[2] += az * (accelero_ts ** 2)
+                                self._imu_pose[0] += ax * (accelero_ts**2)
+                                self._imu_pose[1] += ay * (accelero_ts**2)
+                                self._imu_pose[2] += az * (accelero_ts**2)
 
                                 # integrate each gx, gy, gz
                                 self._imu_rotation[0] += gx * gyro_ts
