@@ -1,7 +1,7 @@
 from threading import Thread
 import time
 
-from oakutils import OAK_Camera
+from oakutils import Camera
 
 
 STOPPED = False
@@ -16,7 +16,7 @@ def target():
         time.sleep(1)
 
 
-cam = OAK_Camera(
+cam = Camera(
     display_depth=True,
     display_mono=True,
     display_rectified=True,

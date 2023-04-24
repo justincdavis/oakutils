@@ -1,4 +1,4 @@
-from .oak_camera import OAK_Camera
+from .camera import Camera
 
-__all__ = ["OAK_Camera"]
+__all__ = ["Camera"]
 __version__ = "0.0.1"

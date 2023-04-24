@@ -1,8 +1,8 @@
-from oakutils import OAK_Camera
+from oakutils import Camera
 
 
 def test_stop():
-    cam = OAK_Camera()
+    cam = Camera()
     cam.start(block=True)
 
     cam.stop()

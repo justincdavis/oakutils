@@ -9,7 +9,7 @@ on:
       - main
 jobs:
   build_check:
-    name: "Build pteranodon package"
+    name: "Build oakutils package"
 
     runs-on: ubuntu-latest
 

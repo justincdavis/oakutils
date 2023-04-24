@@ -20,7 +20,7 @@ import open3d as o3d
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class OAK_Camera:
+class Camera:
     """
     Class for interfacing with the OAK-D camera.
     Params:
