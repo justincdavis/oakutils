@@ -7,6 +7,8 @@ import numpy as np
 import cv2
 import open3d as o3d
 
+from .calibration import CalibrationData, create_camera_calibration
+
 
 # TODO: Implement all from link
 # https://docs.luxonis.com/projects/api/en/latest/samples/StereoDepth/depth_post_processing/#depth-post-processing
@@ -193,214 +195,8 @@ class Camera:
             else:
                 self._median_filter = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
 
-        with dai.Device() as device:
-            calibData = device.readCalibration2()
-
-            self._K_rgb = np.array(
-                calibData.getCameraIntrinsics(
-                    dai.CameraBoardSocket.RGB, self._rgb_size[0], self._rgb_size[1]
-                )
-            )
-            self._D_rgb = np.array(
-                calibData.getDistortionCoefficients(dai.CameraBoardSocket.RGB)
-            )
-            self._fx_rgb = self._K_rgb[0][0]
-            self._fy_rgb = self._K_rgb[1][1]
-            self._cx_rgb = self._K_rgb[0][2]
-            self._cy_rgb = self._K_rgb[1][2]
-
-            self._K_left = np.array(
-                calibData.getCameraIntrinsics(
-                    dai.CameraBoardSocket.LEFT, self._mono_size[0], self._mono_size[1]
-                )
-            )
-            self._fx_left = self._K_left[0][0]
-            self._fy_left = self._K_left[1][1]
-            self._cx_left = self._K_left[0][2]
-            self._cy_left = self._K_left[1][2]
-            self._K_right = np.array(
-                calibData.getCameraIntrinsics(
-                    dai.CameraBoardSocket.RIGHT, self._mono_size[0], self._mono_size[1]
-                )
-            )
-
-            self._fx_right = self._K_right[0][0]
-            self._fy_right = self._K_right[1][1]
-            self._cx_right = self._K_right[0][2]
-            self._cy_right = self._K_right[1][2]
-            self._D_left = np.array(
-                calibData.getDistortionCoefficients(dai.CameraBoardSocket.LEFT)
-            )
-            self._D_right = np.array(
-                calibData.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT)
-            )
-
-            self._rgb_fov = calibData.getFov(dai.CameraBoardSocket.RGB)
-            self._mono_fov = calibData.getFov(dai.CameraBoardSocket.LEFT)
-
-            self._K_primary = self._K_left if self._primary_mono_left else self._K_right
-            self._fx_primary = (
-                self._fx_left if self._primary_mono_left else self._fx_right
-            )
-            self._fy_primary = (
-                self._fy_left if self._primary_mono_left else self._fy_right
-            )
-            self._cx_primary = (
-                self._cx_left if self._primary_mono_left else self._cx_right
-            )
-            self._cy_primary = (
-                self._cy_left if self._primary_mono_left else self._cy_right
-            )
-
-            self._R1 = np.array(calibData.getStereoLeftRectificationRotation())
-            self._R2 = np.array(calibData.getStereoRightRectificationRotation())
-            self._R_primary = self._R1 if self._primary_mono_left else self._R2
-
-            self._T1 = (
-                np.array(
-                    calibData.getCameraTranslationVector(
-                        srcCamera=dai.CameraBoardSocket.LEFT,
-                        dstCamera=dai.CameraBoardSocket.RIGHT,
-                    )
-                )
-                / 100
-            )  # convert to meters
-            self._T2 = (
-                np.array(
-                    calibData.getCameraTranslationVector(
-                        srcCamera=dai.CameraBoardSocket.RIGHT,
-                        dstCamera=dai.CameraBoardSocket.LEFT,
-                    )
-                )
-                / 100
-            )  # convert to meters
-            self._T_primary = self._T1 if self._primary_mono_left else self._T2
-
-            self._H_left = np.matmul(
-                np.matmul(self._K_right, self._R1), np.linalg.inv(self._K_left)
-            )
-            self._H_right = np.matmul(
-                np.matmul(self._K_right, self._R1), np.linalg.inv(self._K_right)
-            )
-
-            self._l2r_extrinsic = np.array(
-                calibData.getCameraExtrinsics(
-                    srcCamera=dai.CameraBoardSocket.LEFT,
-                    dstCamera=dai.CameraBoardSocket.RIGHT,
-                )
-            )
-            self._r2l_extrinsic = np.array(
-                calibData.getCameraExtrinsics(
-                    srcCamera=dai.CameraBoardSocket.RIGHT,
-                    dstCamera=dai.CameraBoardSocket.LEFT,
-                )
-            )
-            self._primary_extrinsic = (
-                self._l2r_extrinsic if self._primary_mono_left else self._r2l_extrinsic
-            )
-
-            self._baseline = calibData.getBaselineDistance() / 100  # in meters
-
-        def _create_Q_matrix(fx, fy, cx, cy, baseline):
-            return np.array(
-                [
-                    1,
-                    0,
-                    0,
-                    -cx,
-                    0,
-                    1,
-                    0,
-                    -cy,
-                    0,
-                    0,
-                    0,
-                    (fx + fy) // 2,
-                    0,
-                    0,
-                    -1 / baseline,
-                    (cx - cy) / baseline,
-                ]
-            ).reshape(4, 4)
-
-        self._Q_left = _create_Q_matrix(
-            self._fx_left, self._fy_left, self._cx_left, self._cy_left, self._baseline
-        )
-        self._Q_right = _create_Q_matrix(
-            self._fx_right,
-            self._fy_right,
-            self._cx_right,
-            self._cy_right,
-            self._baseline,
-        )
-        self._Q_primary = self._Q_left if self._primary_mono_left else self._Q_right
-
-        (
-            R1,
-            R2,
-            P1,
-            P2,
-            Q,
-            self._valid_region_left,
-            self._valid_region_right,
-        ) = cv2.stereoRectify(
-            self._K_left,
-            self._D_left,
-            self._K_right,
-            self._D_right,
-            (self._mono_size[0], self._mono_size[1]),
-            self._R_primary,
-            self._T_primary,
-        )
-        self._map_left_1, self._map_left_2 = cv2.initUndistortRectifyMap(
-            self._K_left,
-            self._D_left,
-            R1,
-            P1,
-            (self._mono_size[0], self._mono_size[1]),
-            cv2.CV_16SC2,
-        )
-        self._map_right_1, self._map_right_2 = cv2.initUndistortRectifyMap(
-            self._K_right,
-            self._D_right,
-            R2,
-            P2,
-            (self._mono_size[0], self._mono_size[1]),
-            cv2.CV_16SC2,
-        )
-
-        self._primary_valid_region = (
-            self._valid_region_left
-            if self._primary_mono_left
-            else self._valid_region_right
-        )
-        self._Q_primary = Q if self._use_cv2_Q_matrix else self._Q_primary
-
-        # run cv2.getOptimalNewCameraMatrix for RGB cam
-        self._P_rgb, self._valid_region_rgb = cv2.getOptimalNewCameraMatrix(
-            self._K_rgb,
-            self._D_rgb,
-            (self._rgb_size[1], self._rgb_size[0]),
-            1,
-            (self._rgb_size[1], self._rgb_size[0]),
-        )
-        self._map_rgb_1, self._map_rgb_2 = cv2.initUndistortRectifyMap(
-            self._K_rgb,
-            self._D_rgb,
-            None,
-            self._P_rgb,
-            (self._rgb_size[0], self._rgb_size[1]),
-            cv2.CV_16SC2,
-        )
-
-        self._o3d_pinhole_camera_intrinsic = o3d.camera.PinholeCameraIntrinsic(
-            self._mono_size[0],
-            self._mono_size[1],
-            self._K_primary[0][0],
-            self._K_primary[1][1],
-            self._K_primary[0][2],
-            self._K_primary[1][2],
-        )
+        self._calibration: CalibrationData = create_camera_calibration((self._rgb_size[0], self._rgb_size[1]), (self._mono_size[0], self._mono_size[1]), self._primary_mono_left)
+        self._Q = self._calibration.stereo.cv2_Q if self._use_cv2_Q_matrix else self._calibration.stereo.Q_primary
 
         # pipeline
         self._pipeline: dai.Pipeline = dai.Pipeline()
@@ -454,6 +250,13 @@ class Camera:
 
         # set atexit methods
         atexit.register(self.stop)
+
+    @property
+    def calibration(self) -> CalibrationData:
+        """
+        Gets the calibration data
+        """
+        return self._calibration
 
     @property
     def rgb(self) -> Optional[np.ndarray]:
@@ -756,7 +559,7 @@ class Camera:
 
         pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
             rgbd_image,
-            self._o3d_pinhole_camera_intrinsic,
+            self._calibration.primary.pinhole,
         )
         # pcd = pcd.voxel_down_sample(voxel_size=0.01)
         pcd = pcd.remove_statistical_outlier(30, 0.1)[0]
@@ -768,7 +571,7 @@ class Camera:
             self._point_cloud.colors = pcd.colors
 
     def _update_im3d(self) -> None:
-        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q_primary)
+        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)
 
     def _target(self) -> None:
         if self._enable_rgb:
@@ -794,8 +597,8 @@ class Camera:
                             self._rgb_frame = data.getCvFrame()
                             self._rectified_rgb_frame = cv2.remap(
                                 self._rgb_frame,
-                                self._map_rgb_1,
-                                self._map_rgb_2,
+                                self._calibration.rgb.map_1,
+                                self._calibration.rgb.map_2,
                                 cv2.INTER_LINEAR,
                             )
                         elif name == "left":
@@ -874,8 +677,8 @@ class Camera:
 
     def _crop_to_valid_primary_region(self, img: np.ndarray) -> np.ndarray:
         return img[
-            self._primary_valid_region[1] : self._primary_valid_region[3],
-            self._primary_valid_region[0] : self._primary_valid_region[2],
+            self._calibration.primary.valid_region[1] : self._calibration.primary.valid_region[3],
+            self._calibration.primary.valid_region[0] : self._calibration.primary.valid_region[2],
         ]
 
     def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:

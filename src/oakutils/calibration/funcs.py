@@ -47,11 +47,13 @@ def get_camera_calibration(
     """
     Requires available OAK device.
     Get camera calibration data from OAK-D device.
+    
     Params:
         rgb_size: Tuple[int, int] = (1920, 1080)
             RGB camera resolution.
         mono_size: Tuple[int, int] = (640, 400)
             Mono camera resolution.
+
     Returns:
         K_rgb: np.ndarray
             RGB camera intrinsic matrix.
@@ -113,21 +115,21 @@ def get_camera_calibration(
             Baseline between left and right camera. (in meters)
     """
     with dai.Device() as device:
-        calibData = device.readCalibration2()
+        calib_data = device.readCalibration2()
 
         K_rgb = np.array(
-            calibData.getCameraIntrinsics(
+            calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.RGB, rgb_size[0], rgb_size[1]
             )
         )
-        D_rgb = np.array(calibData.getDistortionCoefficients(dai.CameraBoardSocket.RGB))
+        D_rgb = np.array(calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB))
         fx_rgb = K_rgb[0][0]
         fy_rgb = K_rgb[1][1]
         cx_rgb = K_rgb[0][2]
         cy_rgb = K_rgb[1][2]
 
         K_left = np.array(
-            calibData.getCameraIntrinsics(
+            calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.LEFT, mono_size[0], mono_size[1]
             )
         )
@@ -136,7 +138,7 @@ def get_camera_calibration(
         cx_left = K_left[0][2]
         cy_left = K_left[1][2]
         K_right = np.array(
-            calibData.getCameraIntrinsics(
+            calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.RIGHT, mono_size[0], mono_size[1]
             )
         )
@@ -146,21 +148,21 @@ def get_camera_calibration(
         cx_right = K_right[0][2]
         cy_right = K_right[1][2]
         D_left = np.array(
-            calibData.getDistortionCoefficients(dai.CameraBoardSocket.LEFT)
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.LEFT)
         )
         D_right = np.array(
-            calibData.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT)
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT)
         )
 
-        rgb_fov = calibData.getFov(dai.CameraBoardSocket.RGB)
-        mono_fov = calibData.getFov(dai.CameraBoardSocket.LEFT)
+        rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
+        mono_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
 
-        R1 = np.array(calibData.getStereoLeftRectificationRotation())
-        R2 = np.array(calibData.getStereoRightRectificationRotation())
+        R1 = np.array(calib_data.getStereoLeftRectificationRotation())
+        R2 = np.array(calib_data.getStereoRightRectificationRotation())
 
         T1 = (
             np.array(
-                calibData.getCameraTranslationVector(
+                calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.LEFT,
                     dstCamera=dai.CameraBoardSocket.RIGHT,
                 )
@@ -169,7 +171,7 @@ def get_camera_calibration(
         )  # convert to meters
         T2 = (
             np.array(
-                calibData.getCameraTranslationVector(
+                calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RIGHT,
                     dstCamera=dai.CameraBoardSocket.LEFT,
                 )
@@ -181,19 +183,19 @@ def get_camera_calibration(
         H_right = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_right))
 
         l2r_extrinsic = np.array(
-            calibData.getCameraExtrinsics(
+            calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.LEFT,
                 dstCamera=dai.CameraBoardSocket.RIGHT,
             )
         )
         r2l_extrinsic = np.array(
-            calibData.getCameraExtrinsics(
+            calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RIGHT,
                 dstCamera=dai.CameraBoardSocket.LEFT,
             )
         )
 
-        baseline = calibData.getBaselineDistance() / 100  # in meters
+        baseline = calib_data.getBaselineDistance() / 100  # in meters
 
         return (
             K_rgb,
@@ -275,6 +277,7 @@ def get_camera_calibration_primary_mono(
     Get the calibration data for both rgb and mono cameras, as well as produces the
     primary mono camera calibration data. The primary mono camera is the one that has
     the depth aligned to it. The other mono camera is the secondary mono camera.
+
     Params:
         rgb_size: Tuple[int, int] = (1920, 1080)
             RGB camera resolution.
@@ -282,6 +285,7 @@ def get_camera_calibration_primary_mono(
             Mono camera resolution.
         is_primary_mono_left: bool = True
             Whether the primary mono camera is the left or right mono camera.
+    
     Returns:
         K_rgb: np.ndarray
             RGB camera intrinsic matrix.
@@ -449,6 +453,7 @@ def get_camera_calibration_primary_mono(
 def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float):
     """
     Create Q matrix for stereo depth map.
+
     Params:
         fx: float
             Focal length in x direction. (in millimeters)
@@ -460,6 +465,10 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
             Principal point in y direction.
         baseline: float
             Baseline distance between left and right camera. (in meters)
+
+    Returns:
+        np.ndarray
+            Q matrix for stereo depth map.
     """
     return np.array(
         [
@@ -488,6 +497,7 @@ def create_camera_calibration(
 ) -> CalibrationData:
     """
     Wrapper around 'get_camera_calibration_primary_mono' to create a CalibrationData object
+
     Params:
         rgb_size: Tuple[int, int] = (1920, 1080)
             RGB camera resolution.
@@ -495,6 +505,7 @@ def create_camera_calibration(
             Mono camera resolution.
         is_primary_mono_left: bool = True
             Whether the primary mono camera is the left or right mono camera.
+
     Returns:
         CalibrationData
             Object containing all the calibration data.

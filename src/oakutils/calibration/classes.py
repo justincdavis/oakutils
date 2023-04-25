@@ -9,6 +9,7 @@ import open3d as o3d
 class MonoCalibrationData:
     """
     Class to store a mono cameras calibration data
+    
     Attributes:
         size: image size
         K: camera matrix
@@ -48,6 +49,7 @@ class MonoCalibrationData:
 class StereoCalibrationData:
     """
     Class to store a stereo cameras calibration data
+
     Attributes:
         left: left camera calibration data
         right: right camera calibration data
@@ -101,6 +103,7 @@ class StereoCalibrationData:
 class ColorCalibrationData:
     """
     Class to store a color cameras calibration data
+    
     Attributes:
         size: image size
         K: camera matrix
@@ -137,6 +140,7 @@ class CalibrationData:
     """
     Class for rgb and two mono cameras calibration data
     Used for the OAK-D cameras
+
     Attributes:
         rgb: rgb camera calibration data
         left: left mono camera calibration data
