@@ -2,6 +2,8 @@ from typing import Tuple
 
 import depthai as dai
 import numpy as np
+import cv2
+import open3d as o3d
 
 from .classes import CalibrationData, ColorCalibrationData, MonoCalibrationData, StereoCalibrationData
 
@@ -337,7 +339,34 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
     K_rgb, D_rgb, fx_rgb, fy_rgb, cx_rgb, cy_rgb, K_left, D_left, fx_left, fy_left, cx_left, cy_left, K_right, D_right, fx_right, fy_right, cx_right, cy_right, rgb_fov, mono_fov, R1, R2, T1, T2, H_left, H_right, l2r_extrinsic, r2l_extrinsic, baseline, K_primary, D_primary, fx_primary, fy_primary, cx_primary, cy_primary, R_primary, T_primary, primary_extrinsic = get_camera_calibration_primary_mono(rgb_size=rgb_size, mono_size=mono_size, is_primary_mono_left=is_primary_mono_left)
 
     # construct the Q matrix
-    Q = create_q_matrix(fx_primary, fy_primary, cx_primary, cy_primary, baseline)
+    Q_primary = create_q_matrix(fx_primary, fy_primary, cx_primary, cy_primary, baseline)
+    Q_left = create_q_matrix(fx_left, fy_left, cx_left, cy_left, baseline)
+    Q_right = create_q_matrix(fx_right, fy_right, cx_right, cy_right, baseline)
+
+    # run cv2.getOptimalNewCameraMatrix for RGB cam
+    P_rgb, valid_region_rgb = cv2.getOptimalNewCameraMatrix(
+        K_rgb,
+        D_rgb,
+        rgb_size,
+        1,
+        rgb_size,
+    )
+    map_rgb_1, map_rgb_2 = cv2.initUndistortRectifyMap(
+        K_rgb,
+        D_rgb,
+        None,
+        P_rgb,
+        rgb_size,
+        cv2.CV_16SC2,
+    )
+    pinhole_rgb = o3d.camera.PinholeCameraIntrinsic(
+        width=rgb_size[0],
+        height=rgb_size[1],
+        fx=fx_rgb,
+        fy=fy_rgb,
+        cx=cx_rgb,
+        cy=cy_rgb,
+    )
 
     # construct the ColorCalibrationData object
     color_calibration_data = ColorCalibrationData(
@@ -349,6 +378,84 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         cx=cx_rgb,
         cy=cy_rgb,
         fov=rgb_fov,
+        P=P_rgb,
+        valid_region=valid_region_rgb,
+        map_1=map_rgb_1,
+        map_2=map_rgb_2,
+        pinhole=pinhole_rgb,
+    )
+
+    # run stereoRectify and initUndistortRectifyMap for left and right mono cams
+    (
+        R1,
+        R2,
+        P1,
+        P2,
+        cv2_Q,
+        valid_region_left,
+        valid_region_right,
+    ) = cv2.stereoRectify(
+        K_left,
+        D_left,
+        K_right,
+        D_right,
+        mono_size,
+        R_primary,
+        T_primary,
+    )
+    map_left_1, map_left_2 = cv2.initUndistortRectifyMap(
+        K_left,
+        D_left,
+        R1,
+        P1,
+        mono_size,
+        cv2.CV_16SC2,
+    )
+    map_right_1, map_right_2 = cv2.initUndistortRectifyMap(
+        K_right,
+        D_right,
+        R2,
+        P2,
+        mono_size,
+        cv2.CV_16SC2,
+    )
+    valid_region_primary = (
+        valid_region_left
+        if is_primary_mono_left
+        else valid_region_right
+    )
+    map_1_primary = (
+        map_left_1
+        if is_primary_mono_left
+        else map_right_1
+    )
+    map_2_primary = (
+        map_left_2
+        if is_primary_mono_left
+        else map_right_2
+    )
+
+    # create open3d PinholeCameraIntrinsic objects for left, right, and primary mono cams
+    pinhole_left = o3d.camera.PinholeCameraIntrinsic(
+        width=mono_size[0],
+        height=mono_size[1],
+        fx=fx_left,
+        fy=fy_left,
+        cx=cx_left,
+        cy=cy_left,
+    )
+    pinhole_right = o3d.camera.PinholeCameraIntrinsic(
+        width=mono_size[0],
+        height=mono_size[1],
+        fx=fx_right,
+        fy=fy_right,
+        cx=cx_right,
+        cy=cy_right,
+    )
+    pinhole_primary = (
+        pinhole_left
+        if is_primary_mono_left
+        else pinhole_right
     )
 
     # construct the left, right, and primary MonoCalibrationData objects
@@ -364,6 +471,10 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         R=R1,
         T=T1,
         H=H_left,
+        valid_region=valid_region_left,
+        map_1=map_left_1,
+        map_2=map_left_2,
+        pinhole=pinhole_left,
     )  
     right_mono_calibration_data = MonoCalibrationData(
         size=mono_size,
@@ -377,6 +488,10 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         R=R2,
         T=T2,
         H=H_right,
+        valid_region=valid_region_right,
+        map_1=map_right_1,
+        map_2=map_right_2,
+        pinhole=pinhole_right,
     )
     primary_mono_calibration_data = MonoCalibrationData(
         size=mono_size,
@@ -390,6 +505,10 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         R=R_primary,
         T=T_primary,
         H=primary_extrinsic,
+        valid_region=valid_region_primary,
+        map_1=map_1_primary,
+        map_2=map_2_primary,
+        pinhole=pinhole_primary,
     )
 
     # construct the StereoCalibrationData object
@@ -404,9 +523,18 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         H_right=H_right,
         l2r_extrinsic=l2r_extrinsic,
         r2l_extrinsic=r2l_extrinsic,
-        Q=Q,
+        Q_left=Q_left,
+        Q_right=Q_right,
         baseline=baseline,
         primary=primary_mono_calibration_data,
+        Q_primary=Q_primary,
+        cv2_Q=cv2_Q,
+        R1=R1,
+        R2=R2,
+        P1=P1,
+        P2=P2,
+        valid_region_primary=valid_region_primary,
+        pinhole_primary=pinhole_primary,
     )
 
     # construct the CalibrationData object
