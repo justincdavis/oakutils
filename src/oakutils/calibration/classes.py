@@ -10,6 +10,7 @@ class MonoCalibrationData:
     """
     Class to store a mono cameras calibration data
     """
+
     size: Tuple[int, int]
     K: np.ndarray
     D: np.ndarray
@@ -26,11 +27,13 @@ class MonoCalibrationData:
     map_2: Optional[np.ndarray] = None
     pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
+
 @dataclass
 class StereoCalibrationData:
     """
     Class to store a stereo cameras calibration data
     """
+
     left: MonoCalibrationData
     right: MonoCalibrationData
     R1: np.ndarray
@@ -54,11 +57,13 @@ class StereoCalibrationData:
     valid_region_primary: Optional[Tuple[int, int, int, int]] = None
     pinhole_primary: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
+
 @dataclass
 class ColorCalibrationData:
     """
     Class to store a color cameras calibration data
     """
+
     size: Tuple[int, int]
     K: np.ndarray
     D: np.ndarray
@@ -73,12 +78,14 @@ class ColorCalibrationData:
     map_2: Optional[np.ndarray] = None
     pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
+
 @dataclass
 class CalibrationData:
     """
     Class for rgb and two mono cameras calibration data
     Used for the OAK-D cameras
     """
+
     rgb: ColorCalibrationData
     left: MonoCalibrationData
     right: MonoCalibrationData
