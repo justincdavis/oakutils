@@ -839,9 +839,9 @@ class Camera:
                                 gx, gy, gz = gyroValues.x, gyroValues.y, gyroValues.z
 
                                 # double integrate each ax, ay, az
-                                self._imu_pose[0] += ax * (accelero_ts ** 2)
-                                self._imu_pose[1] += ay * (accelero_ts ** 2)
-                                self._imu_pose[2] += az * (accelero_ts ** 2)
+                                self._imu_pose[0] += ax * (accelero_ts**2)
+                                self._imu_pose[1] += ay * (accelero_ts**2)
+                                self._imu_pose[2] += az * (accelero_ts**2)
 
                                 # integrate each gx, gy, gz
                                 self._imu_rotation[0] += gx * gyro_ts

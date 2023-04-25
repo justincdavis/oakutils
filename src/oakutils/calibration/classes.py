@@ -50,8 +50,8 @@ class StereoCalibrationData:
     primary: Optional[MonoCalibrationData] = None
     Q_primary: Optional[np.ndarray] = None
     cv2_Q: Optional[np.ndarray] = None
-    R1: Optional[np.ndarray] = None
-    R2: Optional[np.ndarray] = None
+    cv2_R1: Optional[np.ndarray] = None
+    cv2_R2: Optional[np.ndarray] = None
     P1: Optional[np.ndarray] = None
     P2: Optional[np.ndarray] = None
     valid_region_primary: Optional[Tuple[int, int, int, int]] = None

@@ -5,10 +5,45 @@ import numpy as np
 import cv2
 import open3d as o3d
 
-from .classes import CalibrationData, ColorCalibrationData, MonoCalibrationData, StereoCalibrationData
+from .classes import (
+    CalibrationData,
+    ColorCalibrationData,
+    MonoCalibrationData,
+    StereoCalibrationData,
+)
 
 
-def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)) -> Tuple[np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, float]:  
+def get_camera_calibration(
+    rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)
+) -> Tuple[
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    float,
+]:
     """
     Requires available OAK device.
     Get camera calibration data from OAK-D device.
@@ -28,19 +63,19 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
             RGB camera focal length in y direction. (in millimeters)
         cx_rgb: float
             RGB camera principal point in x direction.
-        cy_rgb: float   
+        cy_rgb: float
             RGB camera principal point in y direction.
         K_left: np.ndarray
             Left mono camera intrinsic matrix.
-        D_left: np.ndarray  
+        D_left: np.ndarray
             Left mono camera distortion coefficients.
-        fx_left: float  
+        fx_left: float
             Left mono camera focal length in x direction. (in millimeters)
         fy_left: float
             Left mono camera focal length in y direction. (in millimeters)
-        cx_left: float  
+        cx_left: float
             Left mono camera principal point in x direction.
-        cy_left: float 
+        cy_left: float
             Left mono camera principal point in y direction.
         K_right: np.ndarray
             Right mono camera intrinsic matrix.
@@ -64,7 +99,7 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
             Rectification transform (rotation matrix) for the right camera.
         T1: np.ndarray
             Translation vector for the left camera. (in meters)
-        T2: np.ndarray  
+        T2: np.ndarray
             Translation vector for the right camera. (in meters)
         H_left: np.ndarray
             Rectification homography matrix for the left camera.
@@ -85,9 +120,7 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
                 dai.CameraBoardSocket.RGB, rgb_size[0], rgb_size[1]
             )
         )
-        D_rgb = np.array(
-            calibData.getDistortionCoefficients(dai.CameraBoardSocket.RGB)
-        )
+        D_rgb = np.array(calibData.getDistortionCoefficients(dai.CameraBoardSocket.RGB))
         fx_rgb = K_rgb[0][0]
         fy_rgb = K_rgb[1][1]
         cx_rgb = K_rgb[0][2]
@@ -124,7 +157,7 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
 
         R1 = np.array(calibData.getStereoLeftRectificationRotation())
         R2 = np.array(calibData.getStereoRightRectificationRotation())
-        
+
         T1 = (
             np.array(
                 calibData.getCameraTranslationVector(
@@ -144,12 +177,8 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
             / 100
         )  # convert to meters
 
-        H_left = np.matmul(
-            np.matmul(K_right, R1), np.linalg.inv(K_left)
-        )
-        H_right = np.matmul(
-            np.matmul(K_right, R1), np.linalg.inv(K_right)
-        )
+        H_left = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_left))
+        H_right = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_right))
 
         l2r_extrinsic = np.array(
             calibData.getCameraExtrinsics(
@@ -163,16 +192,88 @@ def get_camera_calibration(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: 
                 dstCamera=dai.CameraBoardSocket.LEFT,
             )
         )
-        
+
         baseline = calibData.getBaselineDistance() / 100  # in meters
 
-        return K_rgb, D_rgb, fx_rgb, fy_rgb, cx_rgb, cy_rgb, K_left, D_left, fx_left, fy_left, cx_left, cy_left, K_right, D_right, fx_right, fy_right, cx_right, cy_right, rgb_fov, mono_fov, R1, R2, T1, T2, H_left, H_right, l2r_extrinsic, r2l_extrinsic, baseline
+        return (
+            K_rgb,
+            D_rgb,
+            fx_rgb,
+            fy_rgb,
+            cx_rgb,
+            cy_rgb,
+            K_left,
+            D_left,
+            fx_left,
+            fy_left,
+            cx_left,
+            cy_left,
+            K_right,
+            D_right,
+            fx_right,
+            fy_right,
+            cx_right,
+            cy_right,
+            rgb_fov,
+            mono_fov,
+            R1,
+            R2,
+            T1,
+            T2,
+            H_left,
+            H_right,
+            l2r_extrinsic,
+            r2l_extrinsic,
+            baseline,
+        )
 
-def get_camera_calibration_primary_mono(rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400), is_primary_mono_left: bool = True) -> Tuple[np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, np.ndarray, float, float, float, float, np.ndarray, np.ndarray, np.ndarray]:
+
+def get_camera_calibration_primary_mono(
+    rgb_size: Tuple[int, int] = (1920, 1080),
+    mono_size: Tuple[int, int] = (640, 400),
+    is_primary_mono_left: bool = True,
+) -> Tuple[
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    float,
+    np.ndarray,
+    np.ndarray,
+    float,
+    float,
+    float,
+    float,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+]:
     """
     Requires available OAK device.
-    Get the calibration data for both rgb and mono cameras, as well as produces the 
-    primary mono camera calibration data. The primary mono camera is the one that has 
+    Get the calibration data for both rgb and mono cameras, as well as produces the
+    primary mono camera calibration data. The primary mono camera is the one that has
     the depth aligned to it. The other mono camera is the secondary mono camera.
     Params:
         rgb_size: Tuple[int, int] = (1920, 1080)
@@ -192,19 +293,19 @@ def get_camera_calibration_primary_mono(rgb_size: Tuple[int, int] = (1920, 1080)
             RGB camera focal length in y direction. (in millimeters)
         cx_rgb: float
             RGB camera principal point in x direction.
-        cy_rgb: float   
+        cy_rgb: float
             RGB camera principal point in y direction.
         K_left: np.ndarray
             Left mono camera intrinsic matrix.
-        D_left: np.ndarray  
+        D_left: np.ndarray
             Left mono camera distortion coefficients.
-        fx_left: float  
+        fx_left: float
             Left mono camera focal length in x direction. (in millimeters)
         fy_left: float
             Left mono camera focal length in y direction. (in millimeters)
-        cx_left: float  
+        cx_left: float
             Left mono camera principal point in x direction.
-        cy_left: float 
+        cy_left: float
             Left mono camera principal point in y direction.
         K_right: np.ndarray
             Right mono camera intrinsic matrix.
@@ -228,7 +329,7 @@ def get_camera_calibration_primary_mono(rgb_size: Tuple[int, int] = (1920, 1080)
             Rectification transform (rotation matrix) for the right camera.
         T1: np.ndarray
             Translation vector for the left camera. (in meters)
-        T2: np.ndarray  
+        T2: np.ndarray
             Translation vector for the right camera. (in meters)
         H_left: np.ndarray
             Rectification homography matrix for the left camera.
@@ -256,34 +357,94 @@ def get_camera_calibration_primary_mono(rgb_size: Tuple[int, int] = (1920, 1080)
             Rectification transform (rotation matrix) for the primary mono camera.
         T_primary: np.ndarray
             Translation vector for the primary mono camera. (in meters)
-        primary_extrinsic: np.ndarray 
-            Extrinsic matrix from primary mono camera to the secondary mono camera.   
+        primary_extrinsic: np.ndarray
+            Extrinsic matrix from primary mono camera to the secondary mono camera.
     """
     # load the data from get_camera_calibration
-    K_rgb, D_rgb, fx_rgb, fy_rgb, cx_rgb, cy_rgb, K_left, D_left, fx_left, fy_left, cx_left, cy_left, K_right, D_right, fx_right, fy_right, cx_right, cy_right, rgb_fov, mono_fov, R1, R2, T1, T2, H_left, H_right, l2r_extrinsic, r2l_extrinsic, baseline = get_camera_calibration(rgb_size=rgb_size, mono_size=mono_size)
+    (
+        K_rgb,
+        D_rgb,
+        fx_rgb,
+        fy_rgb,
+        cx_rgb,
+        cy_rgb,
+        K_left,
+        D_left,
+        fx_left,
+        fy_left,
+        cx_left,
+        cy_left,
+        K_right,
+        D_right,
+        fx_right,
+        fy_right,
+        cx_right,
+        cy_right,
+        rgb_fov,
+        mono_fov,
+        R1,
+        R2,
+        T1,
+        T2,
+        H_left,
+        H_right,
+        l2r_extrinsic,
+        r2l_extrinsic,
+        baseline,
+    ) = get_camera_calibration(rgb_size=rgb_size, mono_size=mono_size)
 
     K_primary = K_left if is_primary_mono_left else K_right
     D_primary = D_left if is_primary_mono_left else D_right
-    fx_primary = (
-            fx_left if is_primary_mono_left else fx_right
-        )
-    fy_primary = (
-        fy_left if is_primary_mono_left else fy_right
-    )
-    cx_primary = (
-        cx_left if is_primary_mono_left else cx_right
-    )
-    cy_primary = (
-        cy_left if is_primary_mono_left else cy_right
-        )
+    fx_primary = fx_left if is_primary_mono_left else fx_right
+    fy_primary = fy_left if is_primary_mono_left else fy_right
+    cx_primary = cx_left if is_primary_mono_left else cx_right
+    cy_primary = cy_left if is_primary_mono_left else cy_right
     R_primary = R1 if is_primary_mono_left else R2
     T_primary = T1 if is_primary_mono_left else T2
-    primary_extrinsic = (
-            l2r_extrinsic if is_primary_mono_left else r2l_extrinsic
-        )
+    primary_extrinsic = l2r_extrinsic if is_primary_mono_left else r2l_extrinsic
 
     # return all the data, including from get_camera_calibration
-    return K_rgb, D_rgb, fx_rgb, fy_rgb, cx_rgb, cy_rgb, K_left, D_left, fx_left, fy_left, cx_left, cy_left, K_right, D_right, fx_right, fy_right, cx_right, cy_right, rgb_fov, mono_fov, R1, R2, T1, T2, H_left, H_right, l2r_extrinsic, r2l_extrinsic, baseline, K_primary, D_primary, fx_primary, fy_primary, cx_primary, cy_primary, R_primary, T_primary, primary_extrinsic
+    return (
+        K_rgb,
+        D_rgb,
+        fx_rgb,
+        fy_rgb,
+        cx_rgb,
+        cy_rgb,
+        K_left,
+        D_left,
+        fx_left,
+        fy_left,
+        cx_left,
+        cy_left,
+        K_right,
+        D_right,
+        fx_right,
+        fy_right,
+        cx_right,
+        cy_right,
+        rgb_fov,
+        mono_fov,
+        R1,
+        R2,
+        T1,
+        T2,
+        H_left,
+        H_right,
+        l2r_extrinsic,
+        r2l_extrinsic,
+        baseline,
+        K_primary,
+        D_primary,
+        fx_primary,
+        fy_primary,
+        cx_primary,
+        cy_primary,
+        R_primary,
+        T_primary,
+        primary_extrinsic,
+    )
+
 
 def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float):
     """
@@ -321,7 +482,10 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
         ]
     ).reshape(4, 4)
 
-def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool) -> CalibrationData:
+
+def create_camera_calibration(
+    rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool
+) -> CalibrationData:
     """
     Wrapper around 'get_camera_calibration_primary_mono' to create a CalibrationData object
     Params:
@@ -336,10 +500,55 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
             Object containing all the calibration data.
     """
     # get the data from get_camera_calibration_primary_mono
-    K_rgb, D_rgb, fx_rgb, fy_rgb, cx_rgb, cy_rgb, K_left, D_left, fx_left, fy_left, cx_left, cy_left, K_right, D_right, fx_right, fy_right, cx_right, cy_right, rgb_fov, mono_fov, R1, R2, T1, T2, H_left, H_right, l2r_extrinsic, r2l_extrinsic, baseline, K_primary, D_primary, fx_primary, fy_primary, cx_primary, cy_primary, R_primary, T_primary, primary_extrinsic = get_camera_calibration_primary_mono(rgb_size=rgb_size, mono_size=mono_size, is_primary_mono_left=is_primary_mono_left)
+    (
+        K_rgb,
+        D_rgb,
+        fx_rgb,
+        fy_rgb,
+        cx_rgb,
+        cy_rgb,
+        K_left,
+        D_left,
+        fx_left,
+        fy_left,
+        cx_left,
+        cy_left,
+        K_right,
+        D_right,
+        fx_right,
+        fy_right,
+        cx_right,
+        cy_right,
+        rgb_fov,
+        mono_fov,
+        R1,
+        R2,
+        T1,
+        T2,
+        H_left,
+        H_right,
+        l2r_extrinsic,
+        r2l_extrinsic,
+        baseline,
+        K_primary,
+        D_primary,
+        fx_primary,
+        fy_primary,
+        cx_primary,
+        cy_primary,
+        R_primary,
+        T_primary,
+        primary_extrinsic,
+    ) = get_camera_calibration_primary_mono(
+        rgb_size=rgb_size,
+        mono_size=mono_size,
+        is_primary_mono_left=is_primary_mono_left,
+    )
 
     # construct the Q matrix
-    Q_primary = create_q_matrix(fx_primary, fy_primary, cx_primary, cy_primary, baseline)
+    Q_primary = create_q_matrix(
+        fx_primary, fy_primary, cx_primary, cy_primary, baseline
+    )
     Q_left = create_q_matrix(fx_left, fy_left, cx_left, cy_left, baseline)
     Q_right = create_q_matrix(fx_right, fy_right, cx_right, cy_right, baseline)
 
@@ -387,8 +596,8 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
 
     # run stereoRectify and initUndistortRectifyMap for left and right mono cams
     (
-        R1,
-        R2,
+        cv2_R1,
+        cv2_R2,
         P1,
         P2,
         cv2_Q,
@@ -406,7 +615,7 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
     map_left_1, map_left_2 = cv2.initUndistortRectifyMap(
         K_left,
         D_left,
-        R1,
+        cv2_R1,
         P1,
         mono_size,
         cv2.CV_16SC2,
@@ -414,26 +623,16 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
     map_right_1, map_right_2 = cv2.initUndistortRectifyMap(
         K_right,
         D_right,
-        R2,
+        cv2_R2,
         P2,
         mono_size,
         cv2.CV_16SC2,
     )
     valid_region_primary = (
-        valid_region_left
-        if is_primary_mono_left
-        else valid_region_right
+        valid_region_left if is_primary_mono_left else valid_region_right
     )
-    map_1_primary = (
-        map_left_1
-        if is_primary_mono_left
-        else map_right_1
-    )
-    map_2_primary = (
-        map_left_2
-        if is_primary_mono_left
-        else map_right_2
-    )
+    map_1_primary = map_left_1 if is_primary_mono_left else map_right_1
+    map_2_primary = map_left_2 if is_primary_mono_left else map_right_2
 
     # create open3d PinholeCameraIntrinsic objects for left, right, and primary mono cams
     pinhole_left = o3d.camera.PinholeCameraIntrinsic(
@@ -452,11 +651,7 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         cx=cx_right,
         cy=cy_right,
     )
-    pinhole_primary = (
-        pinhole_left
-        if is_primary_mono_left
-        else pinhole_right
-    )
+    pinhole_primary = pinhole_left if is_primary_mono_left else pinhole_right
 
     # construct the left, right, and primary MonoCalibrationData objects
     left_mono_calibration_data = MonoCalibrationData(
@@ -475,7 +670,7 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         map_1=map_left_1,
         map_2=map_left_2,
         pinhole=pinhole_left,
-    )  
+    )
     right_mono_calibration_data = MonoCalibrationData(
         size=mono_size,
         K=K_right,
@@ -529,8 +724,8 @@ def create_camera_calibration(rgb_size: Tuple[int, int], mono_size: Tuple[int, i
         primary=primary_mono_calibration_data,
         Q_primary=Q_primary,
         cv2_Q=cv2_Q,
-        R1=R1,
-        R2=R2,
+        cv2_R1=cv2_R1,
+        cv2_R2=cv2_R2,
         P1=P1,
         P2=P2,
         valid_region_primary=valid_region_primary,
