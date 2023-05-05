@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 import open3d as o3d
 
-from .classes import (
+from ._classes import (
     CalibrationData,
     ColorCalibrationData,
     MonoCalibrationData,
@@ -47,7 +47,7 @@ def get_camera_calibration(
     """
     Requires available OAK device.
     Get camera calibration data from OAK-D device.
-    
+
     Params:
         rgb_size: Tuple[int, int] = (1920, 1080)
             RGB camera resolution.
@@ -122,7 +122,9 @@ def get_camera_calibration(
                 dai.CameraBoardSocket.RGB, rgb_size[0], rgb_size[1]
             )
         )
-        D_rgb = np.array(calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB))
+        D_rgb = np.array(
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB)
+        )
         fx_rgb = K_rgb[0][0]
         fy_rgb = K_rgb[1][1]
         cx_rgb = K_rgb[0][2]
@@ -285,7 +287,7 @@ def get_camera_calibration_primary_mono(
             Mono camera resolution.
         is_primary_mono_left: bool = True
             Whether the primary mono camera is the left or right mono camera.
-    
+
     Returns:
         K_rgb: np.ndarray
             RGB camera intrinsic matrix.

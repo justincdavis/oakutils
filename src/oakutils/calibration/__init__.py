@@ -1,10 +1,10 @@
-from .funcs import (
+from ._funcs import (
     get_camera_calibration,
     get_camera_calibration_primary_mono,
     create_q_matrix,
     create_camera_calibration,
 )
-from .classes import (
+from ._classes import (
     MonoCalibrationData,
     StereoCalibrationData,
     ColorCalibrationData,

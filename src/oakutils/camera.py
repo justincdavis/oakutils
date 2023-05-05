@@ -8,6 +8,7 @@ import cv2
 import open3d as o3d
 
 from .calibration import CalibrationData, create_camera_calibration
+from .point_clouds import get_point_cloud_from_rgb_depth_image, filter_point_cloud
 
 
 # TODO: Implement all from link
@@ -69,7 +70,7 @@ class Camera:
         mono_size: str = "400p",
         enable_mono: bool = True,
         rgb_fps: int = 30,
-        mono_fps: int = 30,
+        mono_fps: int = 60,
         primary_mono_left: bool = True,
         use_cv2_Q_matrix: bool = True,
         compute_im3d_on_demand: bool = True,
@@ -95,7 +96,7 @@ class Camera:
         stereo_threshold_filter_min_range: int = 200,
         stereo_threshold_filter_max_range: int = 20000,
         stereo_decimation_filter_factor: int = 1,
-        enable_imu: bool = True,
+        enable_imu: bool = False,
         imu_batch_report_threshold: int = 20,
         imu_max_batch_reports: int = 20,
         imu_accelerometer_refresh_rate: int = 400,
@@ -195,8 +196,16 @@ class Camera:
             else:
                 self._median_filter = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
 
-        self._calibration: CalibrationData = create_camera_calibration((self._rgb_size[0], self._rgb_size[1]), (self._mono_size[0], self._mono_size[1]), self._primary_mono_left)
-        self._Q = self._calibration.stereo.cv2_Q if self._use_cv2_Q_matrix else self._calibration.stereo.Q_primary
+        self._calibration: CalibrationData = create_camera_calibration(
+            (self._rgb_size[0], self._rgb_size[1]),
+            (self._mono_size[0], self._mono_size[1]),
+            self._primary_mono_left,
+        )
+        self._Q = (
+            self._calibration.stereo.cv2_Q
+            if self._use_cv2_Q_matrix
+            else self._calibration.stereo.Q_primary
+        )
 
         # pipeline
         self._pipeline: dai.Pipeline = dai.Pipeline()
@@ -547,22 +556,9 @@ class Camera:
         self._nodes.extend(["imu"])
 
     def _update_point_cloud(self) -> None:
-        rgb_frame = cv2.resize(
-            self._rgb_frame, (self._depth.shape[1], self._depth.shape[0])
-        )
-        rgb_o3d = o3d.geometry.Image(rgb_frame)
-        depth_o3d = o3d.geometry.Image(self._depth)
-
-        rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(
-            rgb_o3d, depth_o3d
-        )
-
-        pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
-            rgbd_image,
-            self._calibration.primary.pinhole,
-        )
-        # pcd = pcd.voxel_down_sample(voxel_size=0.01)
-        pcd = pcd.remove_statistical_outlier(30, 0.1)[0]
+        pcd = get_point_cloud_from_rgb_depth_image(self._rgb_frame, self._depth, self._calibration.primary.pinhole)
+        
+        pcd = filter_point_cloud(pcd, voxel_size=None, nb_neighbors=30, std_ratio=0.1, downsample_first=True)
 
         if self._point_cloud is None:
             self._point_cloud = pcd
@@ -677,8 +673,12 @@ class Camera:
 
     def _crop_to_valid_primary_region(self, img: np.ndarray) -> np.ndarray:
         return img[
-            self._calibration.primary.valid_region[1] : self._calibration.primary.valid_region[3],
-            self._calibration.primary.valid_region[0] : self._calibration.primary.valid_region[2],
+            self._calibration.primary.valid_region[
+                1
+            ] : self._calibration.primary.valid_region[3],
+            self._calibration.primary.valid_region[
+                0
+            ] : self._calibration.primary.valid_region[2],
         ]
 
     def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:

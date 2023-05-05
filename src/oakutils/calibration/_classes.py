@@ -9,7 +9,7 @@ import open3d as o3d
 class MonoCalibrationData:
     """
     Class to store a mono cameras calibration data
-    
+
     Attributes:
         size: image size
         K: camera matrix
@@ -103,7 +103,7 @@ class StereoCalibrationData:
 class ColorCalibrationData:
     """
     Class to store a color cameras calibration data
-    
+
     Attributes:
         size: image size
         K: camera matrix
