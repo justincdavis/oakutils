@@ -9,7 +9,9 @@ DISPLAY_TIME = 10
 
 # using threading on the Visualizers can potentially improve performance
 VIS = PointCloudVisualizer(window_name="Depth Point Cloud")
-VIS2 = PointCloudVisualizer(window_name="RGB Point Cloud", use_threading=False)  # showing that both options work
+VIS2 = PointCloudVisualizer(
+    window_name="RGB Point Cloud", use_threading=False
+)  # showing that both options work
 
 cam = Camera(
     display_point_cloud=False,  # the camera class has built in point cloud for RGBD images but we will be explicit

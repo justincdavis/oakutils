@@ -59,7 +59,7 @@ class PointCloudVisualizer:
                 self._create()
             else:
                 self._update()
-        
+
         if self._started:
             self._vis.destroy_window()
 
@@ -106,7 +106,7 @@ class PointCloudVisualizer:
         else:
             self._pcd.points = pcd.points
             self._pcd.colors = pcd.colors
-        
+
         if self._use_threading:
             with self._update_condition:
                 self._update_condition.notify()
