@@ -8,7 +8,7 @@ import cv2
 import open3d as o3d
 
 from .calibration import CalibrationData, create_camera_calibration
-from .point_clouds import get_point_cloud_from_rgb_depth_image, filter_point_cloud
+from .point_clouds import PointCloudVisualizer, get_point_cloud_from_rgb_depth_image, filter_point_cloud
 
 
 # TODO: Implement all from link
@@ -232,9 +232,7 @@ class Camera:
 
         self._point_cloud: Optional[o3d.geometry.PointCloud] = None
         self._compute_point_cloud_on_demand = compute_point_cloud_on_demand
-        self._point_cloud_current = False
-        self._point_cloud_vis = o3d.visualization.Visualizer()
-        self._started_point_cloud_vis = False
+        self._point_cloud_vis = PointCloudVisualizer()
 
         # imu information
         self._imu_packet: Optional[np.ndarray] = None
@@ -424,21 +422,9 @@ class Camera:
                     cv2.resize(self._right_rect_frame, self._display_size),
                 )
             if self._point_cloud is not None and self._display_point_cloud:
-                if not self._started_point_cloud_vis:
-                    self._point_cloud_vis.create_window()
-                    self._point_cloud_vis.add_geometry(self._point_cloud)
-                    origin = o3d.geometry.TriangleMesh.create_coordinate_frame(
-                        size=0.3, origin=[0, 0, 0]
-                    )
-                    self._point_cloud_vis.add_geometry(origin)
-                    self._started_point_cloud_vis = True
-                else:
-                    self._point_cloud_vis.update_geometry(self._point_cloud)
-                    self._point_cloud_vis.poll_events()
-                    self._point_cloud_vis.update_renderer()
+                self._point_cloud_vis.update(self._point_cloud)
             cv2.waitKey(50)
-        if self._started_point_cloud_vis:
-            self._point_cloud_vis.destroy_window()
+        self._point_cloud_vis.stop()
 
     def start_display(self) -> None:
         """
