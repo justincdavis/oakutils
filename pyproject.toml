@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oakutils"
-version = "0.0.2"
+version = "0.0.1"
 authors = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
@@ -46,3 +46,16 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/justincdavis/oakutils"
 "Bug Tracker" = "https://github.com/justincdavis/oakutils/issues"
+
+[tool.bumpver]
+current_version = "0.0.1"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "Bump version {old_version} -> {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"src/oakutils/__init__.py" = ["{__version__}"]
+
