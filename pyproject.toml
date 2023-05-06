@@ -57,5 +57,5 @@ push            = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
-"src/oakutils/__init__.py" = ["{__version__}"]
+"src/oakutils/__init__.py" = ["{version}"]
 
