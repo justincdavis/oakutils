@@ -1,38 +1,31 @@
-from threading import Thread
+# Simple example of using the Camera class to display the output of the OAK-D camera
 import time
 
+import cv2
 from oakutils import Camera
 
 
-STOPPED = False
-
-
-def target():
-    while not STOPPED:
-        # when on_demand flag is set to false, computed everytime new data is ready
-        # when on_demand flag is set to true, computed only when the function is called
-        cam.compute_im3d()
-        cam.compute_point_cloud()
-        time.sleep(1)
-
+DISPLAY_TIME = 10
 
 cam = Camera(
     display_depth=True,
     display_mono=True,
     display_rectified=True,
-    display_point_cloud=False,
-    compute_im3d_on_demand=True,
-    compute_point_cloud_on_demand=True,
+    compute_im3d_on_demand=True,  # on demand, so must call compute_im3d to update
 )
 
 cam.start_display()
 cam.start()
 
-thread = Thread(target=target)
-thread.start()
+start_time = time.time()
+while True:
+    if time.time() - start_time > DISPLAY_TIME:
+        break
 
-input("Press Enter to continue...")
+    cam.compute_im3d(block=True)
+    cv2.imshow("im3d", cam.im3d)
+    cv2.waitKey(1)
 
-STOPPED = True
-thread.join()
+    time.sleep(0.05)
+
 cam.stop()

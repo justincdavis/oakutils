@@ -556,9 +556,13 @@ class Camera:
         self._nodes.extend(["imu"])
 
     def _update_point_cloud(self) -> None:
-        pcd = get_point_cloud_from_rgb_depth_image(self._rgb_frame, self._depth, self._calibration.primary.pinhole)
-        
-        pcd = filter_point_cloud(pcd, voxel_size=None, nb_neighbors=30, std_ratio=0.1, downsample_first=True)
+        pcd = get_point_cloud_from_rgb_depth_image(
+            self._rgb_frame, self._depth, self._calibration.primary.pinhole
+        )
+
+        pcd = filter_point_cloud(
+            pcd, voxel_size=None, nb_neighbors=30, std_ratio=0.1, downsample_first=True
+        )
 
         if self._point_cloud is None:
             self._point_cloud = pcd
@@ -684,6 +688,11 @@ class Camera:
     def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:
         """
         Compute point cloud from depth map.
+
+        Params:
+            block: bool
+                If True, block until the next data packet is received.
+
         Returns:
             Optional[o3d.geometry.PointCloud]: point cloud
         """
@@ -701,6 +710,11 @@ class Camera:
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
         """
         Compute 3D points from disparity map.
+
+        Params:
+            block: bool
+                If True, block until the next data packet is received.
+
         Returns:
             Tuple[np.ndarray, np.ndarray, np.ndarray]: depth map, disparity map, left frame
         """
