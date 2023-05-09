@@ -23,14 +23,14 @@ class ModelType(Enum):
 POSSIBLE_MODELS = {
     "gaussian": (Gaussian, ModelType.KERNEL),
     "laplacian": (Laplacian, ModelType.KERNEL),
-    "canny": (Canny, ModelType.KERNEL),
+    # "canny": (Canny, ModelType.KERNEL),
     "sobel": (Sobel, ModelType.NONE),
     "sobel_blur": (SobelBlur, ModelType.KERNEL),
 }
 
 # onnx folder path
-ONNX_FOLDER = "models/onnx"
-TEMP_ONNX_FOLDER = "models/temp_onnx"
+ONNX_FOLDER = os.path.join("models", "onnx")
+TEMP_ONNX_FOLDER = os.path.join("models", "temp_onnx")
 
 # kernel hyperparamters
 MIN_KERNEL_SIZE = 3
@@ -38,8 +38,11 @@ MAX_KERNEL_SIZE = 15
 KERNEL_INCREMENT = 2
 
 # blob folder
-BLOB_FOLDER = "models/blobs"
-FINAL_BLOB_FOLDER = "blobs"
+BLOB_FOLDER = os.path.join("models", "blobs")
+FINAL_BLOB_FOLDER = os.path.join("blobs")
+
+# for init file creation
+INIT_FILE = os.path.join("src", "oakutils", "blobs", "__init__.py")
 
 def create_model_none(model: Callable) -> nn.Module:
     """
@@ -85,10 +88,8 @@ def delete_folder(folder_path: str):
 
 def generate_onnx():
     # delete the onnx and temp folders
-    delete_folder(ONNX_FOLDER)
     delete_folder(TEMP_ONNX_FOLDER)
     # recreate the folders
-    os.makedirs(ONNX_FOLDER)
     os.makedirs(TEMP_ONNX_FOLDER)
 
     # load the models from the definitions
@@ -147,6 +148,13 @@ def generate_onnx():
         # onnx path
         onnx_path = os.path.join(TEMP_ONNX_FOLDER, f"{model_name}.onnx")
 
+        # also create the final onnx path
+        final_onnx_path = os.path.join(ONNX_FOLDER, f"{model_name}.onnx")
+
+        # if the final onnx path already exists skip this
+        if os.path.exists(final_onnx_path):
+            continue
+
         # export the model
         torch.onnx.export(
             model_instance,
@@ -163,6 +171,12 @@ def generate_onnx():
     model_names = os.listdir(TEMP_ONNX_FOLDER)
     for model_name in model_names:
         model_path = os.path.join(TEMP_ONNX_FOLDER, model_name)
+        new_model_path = os.path.join(ONNX_FOLDER, model_name)
+
+        # if the new_model_path already exists skip this
+        if os.path.exists(new_model_path):
+            continue
+
         model = onnx.load(model_path)
         model_simp, check = simplify(model)
 
@@ -170,17 +184,16 @@ def generate_onnx():
 
         print(f"Model for: {model_name}, was simplified successfully")
 
-        new_model_path = os.path.join(ONNX_FOLDER, model_name)
         onnx.save(model_simp, new_model_path)
 
     # delete the temp onnx folder
     delete_folder(TEMP_ONNX_FOLDER)
 
 def generate_blobs():
-    # delete the blob folder
-    delete_folder(BLOB_FOLDER)
+    # delete the final blob folder
+    delete_folder(FINAL_BLOB_FOLDER)
     # recreate the folder
-    os.makedirs(BLOB_FOLDER)
+    os.makedirs(FINAL_BLOB_FOLDER)
 
     # for each model in the onnx folder
     model_names = os.listdir(ONNX_FOLDER)
@@ -192,28 +205,23 @@ def generate_blobs():
         # convert the model to a blob
         blob_path = os.path.join(BLOB_FOLDER, model_name.split(".")[0])
 
-        # create the folder for blob_path
-        os.makedirs(blob_path)
+        # check if the blob folder exists
+        if os.path.exists(blob_path):
+            # skip the model
+            pass
+        else:
+            # create the folder for blob_path
+            os.makedirs(blob_path)
 
-        blobconverter.from_onnx(
-            model=model_path, 
-            output_dir=blob_path,
-            data_type="FP16",
-            shaves=5,
-        )
+            blobconverter.from_onnx(
+                model=model_path, 
+                output_dir=blob_path,
+                data_type="FP16",
+                shaves=5,
+            )
+    
+        blob_name = model_name.split(".")[0]
 
-def copy_blobs():
-    # delete the final blob folder
-    delete_folder(FINAL_BLOB_FOLDER)
-    # recreate the folder
-    os.makedirs(FINAL_BLOB_FOLDER)
-
-    # copy the blobs to the blob folder
-    # each blob is contained in a folder with its name
-    # copy the blob file and rename to be directory_name.blob
-    blob_names = os.listdir(BLOB_FOLDER)
-
-    for blob_name in blob_names:
         # each blob_name is a directory containing a single blob file
         blob_path = os.path.join(BLOB_FOLDER, blob_name)
         blob_file = os.listdir(blob_path)[0]
@@ -222,9 +230,43 @@ def copy_blobs():
         final_blob_path = os.path.join(FINAL_BLOB_FOLDER, f"{blob_name}.blob")
 
         shutil.copyfile(os.path.join(blob_path, blob_file), final_blob_path)
+        
+def create_init():
+    # create an __init__.py file which will contain the model names
+    # this allows easy importing of the blob paths as pre-defined variables
+    # in the __init__.py file
+    
+    # delete the init file
+    os.remove(INIT_FILE)
 
+    # store the names of all defined variables for making the __all__
+    var_names = []
+
+    # create the init file
+    with open(INIT_FILE, "w") as f:
+        # add big comment saying this is an auto-generated file
+        f.write("# This file is auto-generated by models/generate.py\n\n")
+
+        # handle imports first
+        f.write("import os\n\n")
+
+        # get the path to the blob folder
+        f.write(f"_BLOB_FOLDER = '{FINAL_BLOB_FOLDER}'\n\n")
+
+        # write the model names
+        model_names = os.listdir(FINAL_BLOB_FOLDER)
+        for model_name in model_names:
+            var_name = model_name.upper().split(".")[0]
+            var_names.append(var_name)
+            f.write(f"{var_name} = os.path.join(_BLOB_FOLDER, '{model_name}')\n")
+
+        # write the __all__ variable
+        f.write("\n__all__ = [\n")
+        for var_name in var_names:
+            f.write(f"    '{var_name}',\n")
+        f.write("]\n")
 
 if __name__ == "__main__":
     generate_onnx()
     generate_blobs()
-    copy_blobs()
+    create_init()
