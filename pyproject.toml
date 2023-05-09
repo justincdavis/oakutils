@@ -55,6 +55,8 @@ dev = [
     "twine",
     "wheel",
     "bumpver",
+    "kornia",
+    "torch",
 ]
 
 [tool.bumpver]
