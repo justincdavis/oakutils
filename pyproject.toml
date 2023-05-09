@@ -57,6 +57,10 @@ dev = [
     "bumpver",
     "kornia",
     "torch",
+    "onnx>=1.12.0",
+    "onnxruntime",
+    "onnxsim",
+    "openvino-dev[pytorch,onnx]",
 ]
 
 [tool.bumpver]
