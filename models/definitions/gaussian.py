@@ -7,7 +7,7 @@ class Gaussian(nn.Module):
     nn.Module wrapper for kornia.filters.gaussian_blur2d
     """
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 1.0):
+    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma

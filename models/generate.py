@@ -1,7 +1,8 @@
 import itertools
-from typing import Callable, Optional, Tuple
+from typing import Callable, Tuple
 import os
 import shutil
+from enum import Enum
 
 import torch
 from torch import nn
@@ -9,8 +10,23 @@ import onnx
 from onnxsim import simplify
 import blobconverter
 
-from definitions import Gaussian, Laplacian
+from definitions import Gaussian, Laplacian, Canny, Sobel, SobelBlur
 
+
+class ModelType(Enum):
+    """
+    Enum for the different model types.
+    """
+    NONE = 0
+    KERNEL = 1
+
+POSSIBLE_MODELS = {
+    "gaussian": (Gaussian, ModelType.KERNEL),
+    "laplacian": (Laplacian, ModelType.KERNEL),
+    "canny": (Canny, ModelType.KERNEL),
+    "sobel": (Sobel, ModelType.NONE),
+    "sobel_blur": (SobelBlur, ModelType.KERNEL),
+}
 
 # onnx folder path
 ONNX_FOLDER = "models/onnx"
@@ -18,17 +34,18 @@ TEMP_ONNX_FOLDER = "models/temp_onnx"
 
 # kernel hyperparamters
 MIN_KERNEL_SIZE = 3
-MAX_KERNEL_SIZE = 11
+MAX_KERNEL_SIZE = 15
 KERNEL_INCREMENT = 2
-
-# sigma hyperparameters
-MIN_SIGMA = 1.0
-MAX_SIGMA = 2.0
-SIGMA_INCREMENT = 0.5
 
 # blob folder
 BLOB_FOLDER = "models/blobs"
+FINAL_BLOB_FOLDER = "blobs"
 
+def create_model_none(model: Callable) -> nn.Module:
+    """
+    Creates a model instance for the given model.
+    """
+    return model()
 
 def create_model_kernel(model: Callable, kernel_size: int) -> nn.Module:
     """
@@ -36,26 +53,22 @@ def create_model_kernel(model: Callable, kernel_size: int) -> nn.Module:
     """
     return model(kernel_size)
 
-
-def create_model_kernel_sigma(
-    model: Callable, kernel_size: int, sigma: float
-) -> nn.Module:
-    """
-    Creates a model instance for the given model and kernel size and sigma.
-    """
-    return model(kernel_size, sigma)
-
-
 def create_model(
-    model: Callable, kernel_size: int, sigma: Optional[float] = None
-) -> Tuple[nn.Module, bool]:
+    model: Callable, model_type: int, *args, **kwargs
+) -> nn.Module:
     """
     Creates a model instance for the given model and kernel size and sigma (if applicable).
     """
     try:
-        return create_model_kernel_sigma(model, kernel_size, sigma), True
-    except TypeError:
-        return create_model_kernel(model, kernel_size), False
+        if model_type == ModelType.NONE:
+            return create_model_none(model)
+        elif model_type == ModelType.KERNEL:
+            return create_model_kernel(model, *args, **kwargs)
+        else:
+            raise ValueError("Invalid model type")
+    except TypeError as e:
+        print("Error creating model")
+        raise e
 
 def delete_folder(folder_path: str):
     """
@@ -82,12 +95,6 @@ def generate_onnx():
     # create a model instance for each combination of kernel size and (if applicable) sigma
     # save the models to a dictionary
 
-    # enumerate the possible models
-    possible_models = {
-        "laplacian": Laplacian,
-        "gaussian": Gaussian,
-    }
-
     # model dict
     models = {}
 
@@ -96,37 +103,44 @@ def generate_onnx():
         x for x in range(MIN_KERNEL_SIZE, MAX_KERNEL_SIZE + 1, KERNEL_INCREMENT)
     ]
 
-    # possible sigmas
-    sigmas = []
-    num_sigmas = (MAX_SIGMA - MIN_SIGMA) // SIGMA_INCREMENT
-    for i in range(int(num_sigmas) + 1):
-        sigmas.append(MIN_SIGMA + i * SIGMA_INCREMENT)
-
-    # compute the combinations of kernel_sizes and sigmas
-    combinations = list(itertools.product(kernel_sizes, sigmas, possible_models.keys()))
-
-    # create a model for each combination
-    for kernel_size, sigma, model in combinations:
+    # get list of models of ModelType.NONE
+    none_models = [
+        model_str for model_str, (model, model_type) in POSSIBLE_MODELS.items()
+        if model_type == ModelType.NONE
+    ]
+    for model_str in none_models:
         # create the model
-        model_instance, used_sigma = create_model(
-            possible_models[model], kernel_size, sigma
+        model, model_type = POSSIBLE_MODELS[model_str]
+        model_instance = create_model(
+            model, model_type
         )
 
         # store the model
-        if used_sigma:
-            # convert the sigma to use an underscore instead of a decimal point
-            sigma = str(sigma).replace(".", "_")
-            model_name = f"{model}_{kernel_size}x{kernel_size}_{sigma}"
-        else:
-            model_name = f"{model}_{kernel_size}x{kernel_size}"
+        models[model_str] = model_instance
+
+    kernel_models = [
+        model_str for model_str, (model, model_type) in POSSIBLE_MODELS.items()
+        if model_type == ModelType.KERNEL
+    ]
+    kernel_models = list(
+        itertools.product(kernel_sizes, kernel_models)
+    )
+    for kernel_size, model_str in kernel_models:
+        # create the model
+        model, model_type = POSSIBLE_MODELS[model_str]
+        model_instance = create_model(
+            model, model_type, kernel_size
+        )
+
+        # store the model
+        model_name = f"{model_str}_{kernel_size}x{kernel_size}"
         models[model_name] = model_instance
 
     print(f"Generated {len(models)} models.")
+    # save the models in onnx format
     for model_name, model_instance in models.items():
         print(f"{model_name}: {model_instance}")
 
-    # save the models in onnx format
-    for model_name, model_instance in models.items():
         # create dummy input
         dummy_input = torch.randn(1, 3, 480, 640)
 
@@ -188,6 +202,29 @@ def generate_blobs():
             shaves=5,
         )
 
+def copy_blobs():
+    # delete the final blob folder
+    delete_folder(FINAL_BLOB_FOLDER)
+    # recreate the folder
+    os.makedirs(FINAL_BLOB_FOLDER)
+
+    # copy the blobs to the blob folder
+    # each blob is contained in a folder with its name
+    # copy the blob file and rename to be directory_name.blob
+    blob_names = os.listdir(BLOB_FOLDER)
+
+    for blob_name in blob_names:
+        # each blob_name is a directory containing a single blob file
+        blob_path = os.path.join(BLOB_FOLDER, blob_name)
+        blob_file = os.listdir(blob_path)[0]
+
+        # copy the blob file to the final blob folder
+        final_blob_path = os.path.join(FINAL_BLOB_FOLDER, f"{blob_name}.blob")
+
+        shutil.copyfile(os.path.join(blob_path, blob_file), final_blob_path)
+
+
 if __name__ == "__main__":
     generate_onnx()
     generate_blobs()
+    copy_blobs()
