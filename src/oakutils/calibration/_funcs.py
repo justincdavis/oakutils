@@ -48,71 +48,22 @@ def get_camera_calibration(
     Requires available OAK device.
     Get camera calibration data from OAK-D device.
 
-    Params:
-        rgb_size: Tuple[int, int] = (1920, 1080)
-            RGB camera resolution.
-        mono_size: Tuple[int, int] = (640, 400)
-            Mono camera resolution.
-
-    Returns:
-        K_rgb: np.ndarray
-            RGB camera intrinsic matrix.
-        D_rgb: np.ndarray
-            RGB camera distortion coefficients.
-        fx_rgb: float
-            RGB camera focal length in x direction. (in millimeters)
-        fy_rgb: float
-            RGB camera focal length in y direction. (in millimeters)
-        cx_rgb: float
-            RGB camera principal point in x direction.
-        cy_rgb: float
-            RGB camera principal point in y direction.
-        K_left: np.ndarray
-            Left mono camera intrinsic matrix.
-        D_left: np.ndarray
-            Left mono camera distortion coefficients.
-        fx_left: float
-            Left mono camera focal length in x direction. (in millimeters)
-        fy_left: float
-            Left mono camera focal length in y direction. (in millimeters)
-        cx_left: float
-            Left mono camera principal point in x direction.
-        cy_left: float
-            Left mono camera principal point in y direction.
-        K_right: np.ndarray
-            Right mono camera intrinsic matrix.
-        D_right: np.ndarray
-            Right mono camera distortion coefficients.
-        fx_right: float
-            Right mono camera focal length in x direction. (in millimeters)
-        fy_right: float
-            Right mono camera focal length in y direction. (in millimeters)
-        cx_right: float
-            Right mono camera principal point in x direction.
-        cy_right: float
-            Right mono camera principal point in y direction.
-        rgb_fov: float
-            RGB camera field of view. (in degrees)
-        mono_fov: float
-            Mono camera field of view. (in degrees)
-        R1: np.ndarray
-            Rectification transform (rotation matrix) for the left camera.
-        R2: np.ndarray
-            Rectification transform (rotation matrix) for the right camera.
-        T1: np.ndarray
-            Translation vector for the left camera. (in meters)
-        T2: np.ndarray
-            Translation vector for the right camera. (in meters)
-        H_left: np.ndarray
-            Rectification homography matrix for the left camera.
-        H_right: np.ndarray
-            Rectification homography matrix for the right camera.
-        l2r_extrinsic: np.ndarray
-            Extrinsic matrix from left to right camera.
-        r2l_extrinsic: np.ndarray
-            Extrinsic matrix from right to left camera.
-        baseline: float
-            Baseline between left and right camera. (in meters)
+    :param rgb_size: RGB camera resolution.
+    :type rgb_size: Tuple[int, int], optional
+    :param mono_size: Mono camera resolution.
+    :type mono_size: Tuple[int, int], optional
+    :return: Object containing all the calibration data.
+    :rtype: Tuple[
+        np.ndarray, np.ndarray, float, float, float, float,
+        np.ndarray, np.ndarray, float, float, float, float,
+        np.ndarray, np.ndarray, float, float, float, float,
+        float, float,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        float,
+    ]
     """
     with dai.Device() as device:
         calib_data = device.readCalibration2()
@@ -280,91 +231,27 @@ def get_camera_calibration_primary_mono(
     primary mono camera calibration data. The primary mono camera is the one that has
     the depth aligned to it. The other mono camera is the secondary mono camera.
 
-    Params:
-        rgb_size: Tuple[int, int] = (1920, 1080)
-            RGB camera resolution.
-        mono_size: Tuple[int, int] = (640, 400)
-            Mono camera resolution.
-        is_primary_mono_left: bool = True
-            Whether the primary mono camera is the left or right mono camera.
-
-    Returns:
-        K_rgb: np.ndarray
-            RGB camera intrinsic matrix.
-        D_rgb: np.ndarray
-            RGB camera distortion coefficients.
-        fx_rgb: float
-            RGB camera focal length in x direction. (in millimeters)
-        fy_rgb: float
-            RGB camera focal length in y direction. (in millimeters)
-        cx_rgb: float
-            RGB camera principal point in x direction.
-        cy_rgb: float
-            RGB camera principal point in y direction.
-        K_left: np.ndarray
-            Left mono camera intrinsic matrix.
-        D_left: np.ndarray
-            Left mono camera distortion coefficients.
-        fx_left: float
-            Left mono camera focal length in x direction. (in millimeters)
-        fy_left: float
-            Left mono camera focal length in y direction. (in millimeters)
-        cx_left: float
-            Left mono camera principal point in x direction.
-        cy_left: float
-            Left mono camera principal point in y direction.
-        K_right: np.ndarray
-            Right mono camera intrinsic matrix.
-        D_right: np.ndarray
-            Right mono camera distortion coefficients.
-        fx_right: float
-            Right mono camera focal length in x direction. (in millimeters)
-        fy_right: float
-            Right mono camera focal length in y direction. (in millimeters)
-        cx_right: float
-            Right mono camera principal point in x direction.
-        cy_right: float
-            Right mono camera principal point in y direction.
-        rgb_fov: float
-            RGB camera field of view. (in degrees)
-        mono_fov: float
-            Mono camera field of view. (in degrees)
-        R1: np.ndarray
-            Rectification transform (rotation matrix) for the left camera.
-        R2: np.ndarray
-            Rectification transform (rotation matrix) for the right camera.
-        T1: np.ndarray
-            Translation vector for the left camera. (in meters)
-        T2: np.ndarray
-            Translation vector for the right camera. (in meters)
-        H_left: np.ndarray
-            Rectification homography matrix for the left camera.
-        H_right: np.ndarray
-            Rectification homography matrix for the right camera.
-        l2r_extrinsic: np.ndarray
-            Extrinsic matrix from left to right camera.
-        r2l_extrinsic: np.ndarray
-            Extrinsic matrix from right to left camera.
-        baseline: float
-            Baseline between left and right camera. (in meters)
-        K_primary: np.ndarray
-            Primary mono camera intrinsic matrix.
-        D_primary: np.ndarray
-            Primary mono camera distortion coefficients.
-        fx_primary: float
-            Primary mono camera focal length in x direction. (in millimeters)
-        fy_primary: float
-            Primary mono camera focal length in y direction. (in millimeters)
-        cx_primary: float
-            Primary mono camera principal point in x direction.
-        cy_primary: float
-            Primary mono camera principal point in y direction.
-        R_primary: np.ndarray
-            Rectification transform (rotation matrix) for the primary mono camera.
-        T_primary: np.ndarray
-            Translation vector for the primary mono camera. (in meters)
-        primary_extrinsic: np.ndarray
-            Extrinsic matrix from primary mono camera to the secondary mono camera.
+    :param rgb_size: RGB camera resolution.
+    :type rgb_size: Tuple[int, int], optional
+    :param mono_size: Mono camera resolution.
+    :type mono_size: Tuple[int, int], optional
+    :param is_primary_mono_left: Whether the primary mono camera is the left or right mono camera.
+    :type is_primary_mono_left: bool, optional
+    :return: Object containing all the calibration data.
+    :rtype: Tuple[
+        np.ndarray, np.ndarray, float, float, float, float,
+        np.ndarray, np.ndarray, float, float, float, float,
+        np.ndarray, np.ndarray, float, float, float, float,
+        float, float,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        np.ndarray, np.ndarray,
+        float,
+        np.ndarray, np.ndarray, float, float, float, float,
+        np.ndarray, np.ndarray,
+        np.ndarray,
+    ]
     """
     # load the data from get_camera_calibration
     (
@@ -456,21 +343,18 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
     """
     Create Q matrix for stereo depth map.
 
-    Params:
-        fx: float
-            Focal length in x direction. (in millimeters)
-        fy: float
-            Focal length in y direction. (in millimeters)
-        cx: float
-            Principal point in x direction.
-        cy: float
-            Principal point in y direction.
-        baseline: float
-            Baseline distance between left and right camera. (in meters)
-
-    Returns:
-        np.ndarray
-            Q matrix for stereo depth map.
+    :param fx: Focal length in x direction. (in millimeters)
+    :type fx: float
+    :param fy: Focal length in y direction. (in millimeters)
+    :type fy: float
+    :param cx: Principal point in x direction.
+    :type cx: float
+    :param cy: Principal point in y direction.
+    :type cy: float
+    :param baseline: Baseline distance between left and right camera. (in meters)
+    :type baseline: float
+    :return: Q matrix for stereo depth map.
+    :rtype: np.ndarray
     """
     return np.array(
         [
@@ -498,19 +382,17 @@ def create_camera_calibration(
     rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool
 ) -> CalibrationData:
     """
-    Wrapper around 'get_camera_calibration_primary_mono' to create a CalibrationData object
+    Wrapper around 'get_camera_calibration_primary_mono' to create a CalibrationData object.
 
-    Params:
-        rgb_size: Tuple[int, int] = (1920, 1080)
-            RGB camera resolution.
-        mono_size: Tuple[int, int] = (640, 400)
-            Mono camera resolution.
-        is_primary_mono_left: bool = True
-            Whether the primary mono camera is the left or right mono camera.
-
-    Returns:
-        CalibrationData
-            Object containing all the calibration data.
+    :param rgb_size: RGB camera resolution. Defaults to (1920, 1080).
+    :type rgb_size: Tuple[int, int]
+    :param mono_size: Mono camera resolution. Defaults to (640, 400).
+    :type mono_size: Tuple[int, int]
+    :param is_primary_mono_left: Whether the primary mono camera is the left or right mono camera.
+        Defaults to True.
+    :type is_primary_mono_left: bool
+    :return: Object containing all the calibration data.
+    :rtype: CalibrationData
     """
     # get the data from get_camera_calibration_primary_mono
     (

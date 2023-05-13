@@ -18,6 +18,13 @@ class PointCloudVisualizer:
     ) -> "PointCloudVisualizer":
         """
         Creates a PointCloudVisualizer object.
+
+        :param window_name: The name of the visualization window. Defaults to "PointCloud".
+        :type window_name: str
+        :param window_size: The size of the visualization window. Defaults to (1920, 1080).
+        :type window_size: Tuple[int, int]
+        :param use_threading: Whether to use threading for visualization. Defaults to True.
+        :type use_threading: bool
         """
         self._pcd: Optional[o3d.geometry.PointCloud] = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
@@ -97,9 +104,8 @@ class PointCloudVisualizer:
         """
         Updates the point cloud to visualize.
 
-        Params:
-            pcd: o3d.geometry.PointCloud
-                The point cloud to visualize
+        :param pcd: The point cloud to visualize.
+        :type pcd: open3d.geometry.PointCloud
         """
         if self._pcd is None:
             self._pcd = pcd
