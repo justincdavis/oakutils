@@ -12,7 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join("..", "src", "oakutils")))
+sys.path.insert(0, os.path.abspath(os.path.join("..", "src")))
+import oakutils
 
 # -- Project information -----------------------------------------------------
 
@@ -21,15 +22,20 @@ copyright = "2023, Justin Davis"
 author = "Justin Davis"
 version = "0.0.2"
 
+assert version == oakutils.__version__  # Make sure version is consistent
+
 # -- General configuration ---------------------------------------------------
 # -- General configuration
 
 extensions = [
     "sphinx.ext.duration",
     "sphinx.ext.doctest",
+    "sphinx.ext.todo",
+    "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
+    'sphinx.ext.mathjax',
 ]
 
 intersphinx_mapping = {
@@ -71,3 +77,5 @@ html_sidebars = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+def setup(app):
+    app.add_css_file('theme_overrides.css')

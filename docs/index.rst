@@ -17,11 +17,11 @@ Contents
 --------
 
 .. toctree::
-
    Home <self>
    usage
    installation
-   oakutils
+   api
+   source/modules
 
 Indices and Tables
 ==================
