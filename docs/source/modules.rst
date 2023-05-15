@@ -1,5 +1,5 @@
-src
-===
+oakutils
+========
 
 .. toctree::
    :maxdepth: 4

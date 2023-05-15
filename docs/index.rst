@@ -17,11 +17,12 @@ Contents
 --------
 
 .. toctree::
+   :maxdepth: 2
+
    Home <self>
-   usage
-   installation
-   api
-   source/modules
+   Usage <usage>
+   Installation <installation>
+   API <api>
 
 Indices and Tables
 ==================
