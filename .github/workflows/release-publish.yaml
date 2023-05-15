@@ -10,6 +10,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    environment:
+      name: pypi
+      url: https://pypi.org/p/oakutils
+    permissions:
+      id-token: write
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.9
