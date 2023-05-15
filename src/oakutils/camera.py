@@ -7,22 +7,17 @@ import numpy as np
 import cv2
 import open3d as o3d
 
-from .calibration import CalibrationData, create_camera_calibration
+from .calibration import CalibrationData, get_camera_calibration
 from .point_clouds import (
     PointCloudVisualizer,
     get_point_cloud_from_rgb_depth_image,
     filter_point_cloud,
 )
-
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/samples/StereoDepth/depth_post_processing/#depth-post-processing
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/tutorials/image_quality/#improving-image-quality
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/components/nodes/stereo_depth/#currently-configurable-blocks
+from .nodes import (
+    create_color_camera,
+    create_stereo_depth,
+    create_imu,
+)
 
 
 # KNOWN BUGS:
@@ -30,41 +25,54 @@ from .point_clouds import (
 class Camera:
     """
     Class for interfacing with the OAK-D camera.
-    Params:
-        rgb_size: Size of the RGB image. Options are 1080p, 4K
-        enable_rgb: Whether to enable the RGB camera
-        mono_size: Size of the monochrome image. Options are 720p, 480p, 400p
-        enable_mono: Whether to enable the monochrome camera
-        primary_mono_left: Whether the primary monochrome image is the left image or the right image
-        use_cv2_Q_matrix: Whether to use the cv2.Q matrix for disparity to depth conversion
-        compute_im3d_on_demand: Whether to compute the IM3D on update
-        compute_point_cloud_on_demand: Whether to compute the point cloud on update
-        display_size: Size of the display window
-        display_rgb: Whether to display the RGB image
-        display_mono: Whether to display the monochrome image
-        display_depth: Whether to display the depth image
-        display_disparity: Whether to display the disparity image
-        display_rectified: Whether to display the rectified image
-        display_point_cloud: Whether to display the point cloud
-        extended_disparity: Whether to use extended disparity
-        subpixel: Whether to use subpixel
-        lr_check: Whether to use left-right check
-        median_filter: Whether to use median filter. If so, what size
-        stereo_confidence_threshold: Confidence threshold for stereo matching
-        stereo_speckle_filter_enable: Whether to use speckle filter
-        stereo_speckle_filter_range: Speckle filter range
-        stereo_temporal_filter_enable: Whether to use temporal filter
-        stereo_spatial_filter_enable: Whether to use spatial filter
-        stereo_spatial_filter_radius: Spatial filter radius
-        stereo_spatial_filter_num_iterations: Spatial filter number of iterations
-        stereo_threshold_filter_min_range: Threshold filter minimum range
-        stereo_threshold_filter_max_range: Threshold filter maximum range
-        stereo_decimation_filter_factor: Decimation filter factor. Options are 1, 2
-        enable_imu: Whether to enable the IMU
-        imu_batch_report_threshold: IMU batch report threshold
-        imu_max_batch_reports: IMU maximum report batches
-        imu_accelerometer_refresh_rate: IMU accelerometer refresh rate
-        imu_gyroscope_refresh_rate: IMU gyroscope refresh rate
+
+    Attributes
+    ----------
+    calibration : CalibrationData
+        The calibration data for the camera.
+    rgb : Optional[np.ndarray]
+        The most recent RGB image from the camera.
+    rectified_rgb : Optional[np.ndarray]
+        The most recent rectified RGB image from the camera.
+    disparity: Optional[np.ndarray]
+        The most recent disparity image from the camera.
+    depth: Optional[np.ndarray]
+        The most recent depth image from the camera.
+    left: Optional[np.ndarray]
+        The most recent left mono image from the camera.
+    right: Optional[np.ndarray]
+        The most recent right mono image from the camera.
+    rectified_left: Optional[np.ndarray]
+        The most recent rectified left mono image from the camera.
+    rectified_right: Optional[np.ndarray]
+        The most recent rectified right mono image from the camera.
+    im3d: Optional[np.ndarray]
+        The most recent im3d image from the camera.
+    point_cloud: Optional[o3d.geometry.PointCloud]
+        The most recent point cloud from the camera.
+    imu_pose: Optional[List[float]]
+        The most recent IMU pose from the camera.
+    imu_rotation: Optional[List[float]]
+        The most recent IMU rotation from the camera.
+    started: bool
+        Whether or not the camera has been started.
+
+    Methods
+    -------
+    start()
+        Starts the camera.
+    stop()
+        Stops the camera.
+    wait_for_data()
+        Waits for the data packet to be ready.
+    start_display()
+        Starts the display.
+    stop_display()
+        Stops the display.
+    compute_point_cloud(block=True)
+        Computes the point cloud from the depth map.
+    compute_im3d(block=True)
+        Computes the 3D points from the disparity map.
     """
 
     def __init__(
@@ -106,13 +114,84 @@ class Camera:
         imu_accelerometer_refresh_rate: int = 400,
         imu_gyroscope_refresh_rate: int = 400,
     ):
-        self._enable_rgb = enable_rgb
-        self._enable_mono = enable_mono
-        self._enable_imu = enable_imu
+        """
+        Initializes the camera object.
 
-        self._rgb_fps = rgb_fps
-        self._mono_fps = mono_fps
-
+        Parameters
+        ----------
+        rgb_size : str, optional
+            Size of the RGB image. Options are 1080p, 4K.
+        enable_rgb : bool, optional
+            Whether to enable the RGB camera.
+        mono_size : str, optional
+            Size of the monochrome image. Options are 720p, 480p, 400p.
+        enable_mono : bool, optional
+            Whether to enable the monochrome camera.
+        rgb_fps : int, optional
+            FPS for the RGB camera.
+        mono_fps : int, optional
+            FPS for the monochrome camera.
+        primary_mono_left : bool, optional
+            Whether the primary monochrome image is the left image or the right image.
+        use_cv2_Q_matrix : bool, optional
+            Whether to use the cv2.Q matrix for disparity to depth conversion.
+        compute_im3d_on_demand : bool, optional
+            Whether to compute the IM3D on update.
+        compute_point_cloud_on_demand : bool, optional
+            Whether to compute the point cloud on update.
+        display_size : tuple[int, int], optional
+            Size of the display window.
+        display_rgb : bool, optional
+            Whether to display the RGB image.
+        display_mono : bool, optional
+            Whether to display the monochrome image.
+        display_depth : bool, optional
+            Whether to display the depth image.
+        display_disparity : bool, optional
+            Whether to display the disparity image.
+        display_rectified : bool, optional
+            Whether to display the rectified image.
+        display_point_cloud : bool, optional
+            Whether to display the point cloud.
+        extended_disparity : bool, optional
+            Whether to use extended disparity.
+        subpixel : bool, optional
+            Whether to use subpixel.
+        lr_check : bool, optional
+            Whether to use left-right check.
+        median_filter : int or None, optional
+            Whether to use median filter. If so, what size.
+        stereo_confidence_threshold : int, optional
+            Confidence threshold for stereo matching.
+        stereo_speckle_filter_enable : bool, optional
+            Whether to use speckle filter.
+        stereo_speckle_filter_range : int, optional
+            Speckle filter range.
+        stereo_temporal_filter_enable : bool, optional
+            Whether to use temporal filter.
+        stereo_spatial_filter_enable : bool, optional
+            Whether to use spatial filter.
+        stereo_spatial_filter_radius : int, optional
+            Spatial filter radius.
+        stereo_spatial_filter_num_iterations : int, optional
+            Spatial filter number of iterations.
+        stereo_threshold_filter_min_range : int, optional
+            Threshold filter minimum range.
+        stereo_threshold_filter_max_range : int, optional
+            Threshold filter maximum range.
+        stereo_decimation_filter_factor : int, optional
+            Decimation filter factor. Options are 1, 2.
+        enable_imu : bool, optional
+            Whether to enable the IMU.
+        imu_batch_report_threshold : int, optional
+            IMU batch report threshold.
+        imu_max_batch_reports : int, optional
+            IMU maximum report batches.
+        imu_accelerometer_refresh_rate : int, optional
+            IMU accelerometer refresh rate.
+        imu_gyroscope_refresh_rate : int, optional
+            IMU gyroscope refresh rate.
+        """
         self._primary_mono_left = primary_mono_left
         self._use_cv2_Q_matrix = use_cv2_Q_matrix
 
@@ -124,22 +203,7 @@ class Camera:
         self._display_rectified = display_rectified
         self._display_point_cloud = display_point_cloud
 
-        self._extended_disparity = extended_disparity
-        self._subpixel = subpixel
-        self._lr_check = lr_check
-
         self._stereo_confidence_threshold = stereo_confidence_threshold
-        self._stereo_speckle_filter_enable = stereo_speckle_filter_enable
-        self._stereo_speckle_filter_range = stereo_speckle_filter_range
-        self._stereo_temporal_filter_enable = stereo_temporal_filter_enable
-        self._stereo_spatial_filter_enable = stereo_spatial_filter_enable
-        self._stereo_spatial_filter_radius = stereo_spatial_filter_radius
-        self._stereo_spatial_filter_num_iterations = (
-            stereo_spatial_filter_num_iterations
-        )
-        self._stereo_threshold_filter_min_range = stereo_threshold_filter_min_range
-        self._stereo_threshold_filter_max_range = stereo_threshold_filter_max_range
-        self._stereo_decimation_filter_factor = stereo_decimation_filter_factor
 
         if rgb_size not in ["4k", "1080p"]:
             raise ValueError('rgb_size must be one of "1080p" or "4k"')
@@ -179,7 +243,7 @@ class Camera:
                     dai.MonoCameraProperties.SensorResolution.THE_400_P,
                 )
 
-        if self._stereo_decimation_filter_factor == 2:
+        if stereo_decimation_filter_factor == 2:
             # need to divide the mono height by 2
             self._mono_size = (
                 self._mono_size[0],
@@ -200,7 +264,7 @@ class Camera:
             else:
                 self._median_filter = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
 
-        self._calibration: CalibrationData = create_camera_calibration(
+        self._calibration: CalibrationData = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),
             (self._mono_size[0], self._mono_size[1]),
             self._primary_mono_left,
@@ -214,7 +278,7 @@ class Camera:
         # pipeline
         self._pipeline: dai.Pipeline = dai.Pipeline()
         # storage for the nodes
-        self._nodes: List[str] = []
+        self._streams: List[str] = []
         # stop condition
         self._stopped: bool = False
         # thread for the camera
@@ -259,110 +323,257 @@ class Camera:
         # Condition for data
         self._data_condition = Condition()
 
+        # creaate the nodes on the pipeline
+        if enable_rgb:
+            cam = create_color_camera(
+                pipeline=self._pipeline,
+                resolution=self._rgb_size[2],
+                fps=rgb_fps,
+            )
+            xout_rgb = self._pipeline.create(dai.node.XLinkOut)
+            xout_rgb.setStreamName("rgb")
+            cam.video.link(xout_rgb.input)
+
+            self._streams.extend(["rgb"])
+        if enable_mono:
+            align_socket = (
+                dai.CameraBoardSocket.LEFT
+                if self._primary_mono_left
+                else dai.CameraBoardSocket.RIGHT
+            )
+            (
+                stereo,
+                left,
+                right,
+                xout_left,
+                xout_right,
+                xout_depth,
+                xout_disparity,
+                xout_rect_left,
+                xout_rect_right,
+            ) = create_stereo_depth(
+                pipeline=self._pipeline,
+                resolution=self._mono_size[2],
+                fps=mono_fps,
+                align_socket=align_socket,
+                confidence_threshold=stereo_confidence_threshold,
+                median_filter=self._median_filter,
+                lr_check=lr_check,
+                extended_disparity=extended_disparity,
+                subpixel=subpixel,
+                decimation_factor=stereo_decimation_filter_factor,
+                enable_spatial_filter=stereo_spatial_filter_enable,
+                enable_speckle_filter=stereo_speckle_filter_enable,
+                enable_temporal_filter=stereo_temporal_filter_enable,
+                speckle_range=stereo_speckle_filter_range,
+                spatial_radius=stereo_spatial_filter_radius,
+                spatial_iterations=stereo_spatial_filter_num_iterations,
+                threshold_min_range=stereo_threshold_filter_min_range,
+                threshold_max_range=stereo_threshold_filter_max_range,
+            )
+
+            self._streams.extend(
+                [
+                    "left",
+                    "right",
+                    "depth",
+                    "disparity",
+                    "rectified_left",
+                    "rectified_right",
+                ]
+            )
+        if enable_imu:
+            imu, xout_imu = create_imu(
+                pipeline=self._pipeline,
+                accel_range=self._imu_accelerometer_refresh_rate,
+                gyroscope_rate=self._imu_gyroscope_refresh_rate,
+                batch_report_threshold=self._imu_batch_report_threshold,
+                max_batch_reports=self._imu_max_batch_reports,
+                enable_accelerometer_raw=True,
+                enable_gyroscope_raw=True,
+            )
+
+            self._streams.extend(["imu"])
+
         # set atexit methods
         atexit.register(self.stop)
 
     @property
     def calibration(self) -> CalibrationData:
         """
-        Gets the calibration data
+        Gets the calibration data.
+
+        Returns
+        -------
+        np.ndarray
+            The calibration data.
         """
         return self._calibration
 
     @property
     def rgb(self) -> Optional[np.ndarray]:
         """
-        Get the rgb color frame
+        Get the rectified RGB color frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified RGB color frame, or None if the frame is not available.
         """
         return self._rgb_frame
 
     @property
     def rectified_rgb(self) -> Optional[np.ndarray]:
         """
-        Get the rectified rgb color frame
+        Get the rectified RGB color frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified RGB color frame, or None if the frame is not available.
         """
         return self._rectified_rgb_frame
 
     @property
     def disparity(self) -> Optional[np.ndarray]:
         """
-        Gets the disparity frame
+        Get the disparity frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The disparity frame, or None if the frame is not available.
         """
         return self._disparity
 
     @property
     def depth(self) -> Optional[np.ndarray]:
         """
-        Gets the depth frame
+        Get the depth frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The depth frame, or None if the frame is not available.
         """
         return self._depth
 
     @property
     def left(self) -> Optional[np.ndarray]:
         """
-        Gets the left frame
+        Get the left frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The left frame, or None if the frame is not available.
         """
         return self._left_frame
 
     @property
     def right(self) -> Optional[np.ndarray]:
         """
-        Gets the right frame
+        Get the right frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The right frame, or None if the frame is not available.
         """
         return self._right_frame
 
     @property
-    def rectified_left_frame(self) -> Optional[np.ndarray]:
+    def rectified_left(self) -> Optional[np.ndarray]:
         """
-        Gets the rectified left frame
+        Gets the rectified left frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified left frame, or None if the frame is not available.
         """
         return self._left_rect_frame
 
     @property
-    def rectified_right_frame(self) -> Optional[np.ndarray]:
+    def rectified_right(self) -> Optional[np.ndarray]:
         """
-        Gets the rectified right frame
+        Gets the rectified right frame.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified right frame, or None if the frame is not available.
         """
         return self._right_rect_frame
 
     @property
     def im3d(self) -> Optional[np.ndarray]:
         """
-        Gets the 3d image
+        Gets the 3D image.
+
+        Returns
+        -------
+        Optional[np.ndarray]
+            The 3D image, or None if it is not available.
         """
         return self._im3d
 
     @property
     def point_cloud(self) -> Optional[o3d.geometry.PointCloud]:
         """
-        Gets the point cloud
+        Gets the point cloud.
+
+        Returns
+        -------
+        Optional[o3d.geometry.PointCloud]
+            The point cloud, or None if it is not available.
         """
         return self._point_cloud
 
     @property
     def imu_pose(self) -> List[float]:
         """
-        Gets the imu pose (in meters)
+        Gets the IMU pose in meters.
+
+        Returns
+        -------
+        List[float]
+            The IMU pose as a list of floats.
         """
         return self._imu_pose
 
     @property
     def imu_rotation(self) -> List[float]:
         """
-        Gets the imu rotation (in radians)
+        Gets the IMU rotation in radians.
+
+        Returns
+        -------
+        List[float]
+            The IMU rotation as a list of floats.
         """
         return self._imu_rotation
 
     @property
     def started(self) -> bool:
         """
-        Returns true if the camera is started
+        Returns True if the camera is started.
+
+        Returns
+        -------
+        bool
+            True if the camera is started, False otherwise.
         """
         return self._cam_thread.is_alive()
 
     def start(self, block=True) -> None:
         """
-        Starts the camera
+        Starts the camera.
+
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the first set of data arrives. Defaults to False.
         """
         self._cam_thread.start()
         if block:
@@ -443,108 +654,6 @@ class Camera:
         self._display_stopped = True
         self._display_thread.join()
 
-    def _create_cam_rgb(self) -> None:
-        cam = self._pipeline.create(dai.node.ColorCamera)
-        xout_video = self._pipeline.create(dai.node.XLinkOut)
-
-        cam.setBoardSocket(dai.CameraBoardSocket.RGB)
-        cam.setResolution(self._rgb_size[2])
-        cam.setInterleaved(False)
-        cam.setFps(self._rgb_fps)
-
-        xout_video.setStreamName("rgb")
-        cam.video.link(xout_video.input)
-
-        self._nodes.extend(["rgb"])
-
-    def _create_stereo(self) -> None:
-        left = self._pipeline.create(dai.node.MonoCamera)
-        right = self._pipeline.create(dai.node.MonoCamera)
-        stereo = self._pipeline.create(dai.node.StereoDepth)
-        stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_ACCURACY)
-        xout_left = self._pipeline.create(dai.node.XLinkOut)
-        xout_right = self._pipeline.create(dai.node.XLinkOut)
-        xout_depth = self._pipeline.create(dai.node.XLinkOut)
-        xout_disparity = self._pipeline.create(dai.node.XLinkOut)
-        xout_rect_left = self._pipeline.create(dai.node.XLinkOut)
-        xout_rect_right = self._pipeline.create(dai.node.XLinkOut)
-
-        left.setBoardSocket(dai.CameraBoardSocket.LEFT)
-        right.setBoardSocket(dai.CameraBoardSocket.RIGHT)
-        for cam in [left, right]:
-            cam.setFps(self._mono_fps)
-            cam.setResolution(self._mono_size[2])
-
-        stereo.initialConfig.setConfidenceThreshold(self._stereo_confidence_threshold)
-        stereo.setRectifyEdgeFillColor(0)
-        stereo.initialConfig.setMedianFilter(self._median_filter)
-        stereo.setLeftRightCheck(self._lr_check)
-        stereo.setExtendedDisparity(self._extended_disparity)
-        stereo.setSubpixel(self._subpixel)
-
-        config = stereo.initialConfig.get()
-        config.postProcessing.speckleFilter.enable = self._stereo_speckle_filter_enable
-        config.postProcessing.speckleFilter.speckleRange = (
-            self._stereo_speckle_filter_range
-        )
-        config.postProcessing.temporalFilter.enable = (
-            self._stereo_temporal_filter_enable
-        )
-        config.postProcessing.spatialFilter.enable = self._stereo_spatial_filter_enable
-        config.postProcessing.spatialFilter.holeFillingRadius = (
-            self._stereo_spatial_filter_radius
-        )
-        config.postProcessing.spatialFilter.numIterations = (
-            self._stereo_spatial_filter_num_iterations
-        )
-        config.postProcessing.thresholdFilter.minRange = (
-            self._stereo_threshold_filter_min_range
-        )
-        config.postProcessing.thresholdFilter.maxRange = (
-            self._stereo_threshold_filter_max_range
-        )
-        config.postProcessing.decimationFilter.decimationFactor = (
-            self._stereo_decimation_filter_factor
-        )
-        stereo.initialConfig.set(config)
-
-        xout_left.setStreamName("left")
-        xout_right.setStreamName("right")
-        xout_depth.setStreamName("depth")
-        xout_disparity.setStreamName("disparity")
-        xout_rect_left.setStreamName("rectified_left")
-        xout_rect_right.setStreamName("rectified_right")
-
-        left.out.link(stereo.left)
-        right.out.link(stereo.right)
-        stereo.syncedLeft.link(xout_left.input)
-        stereo.syncedRight.link(xout_right.input)
-        stereo.depth.link(xout_depth.input)
-        stereo.disparity.link(xout_disparity.input)
-        stereo.rectifiedLeft.link(xout_rect_left.input)
-        stereo.rectifiedRight.link(xout_rect_right.input)
-
-        self._nodes.extend(
-            ["left", "right", "depth", "disparity", "rectified_left", "rectified_right"]
-        )
-
-    def _create_imu(self) -> None:
-        imu = self._pipeline.create(dai.node.IMU)
-        xout_imu = self._pipeline.create(dai.node.XLinkOut)
-
-        imu.enableIMUSensor(dai.IMUSensor.GRAVITY, self._imu_accelerometer_refresh_rate)
-        imu.enableIMUSensor(
-            dai.IMUSensor.GYROSCOPE_CALIBRATED, self._imu_gyroscope_refresh_rate
-        )
-        imu.setBatchReportThreshold(self._imu_batch_report_threshold)
-        imu.setMaxBatchReports(self._imu_max_batch_reports)
-
-        xout_imu.setStreamName("imu")
-
-        imu.out.link(xout_imu.input)
-
-        self._nodes.extend(["imu"])
-
     def _update_point_cloud(self) -> None:
         pcd = get_point_cloud_from_rgb_depth_image(
             self._rgb_frame, self._depth, self._calibration.primary.pinhole
@@ -564,15 +673,9 @@ class Camera:
         self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)
 
     def _target(self) -> None:
-        if self._enable_rgb:
-            self._create_cam_rgb()
-        if self._enable_mono:
-            self._create_stereo()
-        if self._enable_imu:
-            self._create_imu()
         with dai.Device(self._pipeline) as device:
             queues = {}
-            for stream in self._nodes:
+            for stream in self._streams:
                 queues[stream] = device.getOutputQueue(
                     name=stream, maxSize=1, blocking=False
                 )
@@ -677,14 +780,17 @@ class Camera:
 
     def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:
         """
-        Compute point cloud from depth map.
+        Compute a point cloud from the depth map.
 
-        Params:
-            block: bool
-                If True, block until the next data packet is received.
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the next data packet is received. Defaults to True.
 
-        Returns:
-            Optional[o3d.geometry.PointCloud]: point cloud
+        Returns
+        -------
+        Optional[o3d.geometry.PointCloud]
+            The computed point cloud, or None if no data is available.
         """
         if block:
             with self._data_condition:
@@ -699,14 +805,17 @@ class Camera:
         self, block=True
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
         """
-        Compute 3D points from disparity map.
+        Compute 3D points from the disparity map.
 
-        Params:
-            block: bool
-                If True, block until the next data packet is received.
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the next data packet is received. Defaults to True.
 
-        Returns:
-            Tuple[np.ndarray, np.ndarray, np.ndarray]: depth map, disparity map, left frame
+        Returns
+        -------
+        Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]
+            A tuple containing the depth map, disparity map, and left frame (if available).
         """
         if block:
             with self._data_condition:

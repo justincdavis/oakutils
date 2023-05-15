@@ -1,9 +1,9 @@
-from oakutils.calibration import create_camera_calibration
+from oakutils.calibration import get_camera_calibration
 
 # Create a CalibrationData object for the camera
 # create_camera_calibration requires an open device through depthai
 # this function will also pre-create the primary mono camera
-calibration = create_camera_calibration(
+calibration = get_camera_calibration(
     rgb_size=(1920, 1080),
     mono_size=(640, 400),
     is_primary_mono_left=True,
@@ -23,3 +23,5 @@ print(f"Distortion coefficients for primary: {calibration.primary.D}")
 
 # print out the stereo information
 print(f"Q matrix: {calibration.stereo.cv2_Q}")
+print(f"Manual Left Q matrix: {calibration.stereo.Q_left}")
+print(f"Manual Right Q matrix: {calibration.stereo.Q_right}")

@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   build_check:
     name: "Build oakutils package"
@@ -23,6 +24,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install build
-    - name: Build pteranodon
+    - name: Build oakutils
       run: |
         python -m build
