@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_publish:
-    name: "Build and Publish PyPI package"
+    name: "Build and Publish PyPI package - TEST"
 
     runs-on: ubuntu-latest
 
