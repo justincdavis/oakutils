@@ -11,22 +11,21 @@ def get_point_cloud_from_rgb_depth_image(
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
 ) -> o3d.geometry.PointCloud:
     """
-    Creates an Open3D point cloud from an rgb and a depth image. The depth image is
-    assumed to be in millimeters (the default for the Oak-D cameras). The rgb image
-    is assumed to be in BGR format (the default for OpenCV). The camera intrinsics
-    are provided in the o3d.camera.PinholeCameraIntrinsics format.
+    Creates an o3d point cloud from an RGB and a depth image.
 
-    Params:
-        rgb_image: np.ndarray
-            The rgb image to use
-        depth_image: np.ndarray
-            The depth image to use
-        camera_intrinsics: o3d.camera.PinholeCameraIntrinsic
-            The camera intrinsics to use
+    Parameters
+    ----------
+    rgb_image : np.ndarray
+        The RGB image to use.
+    depth_image : np.ndarray
+        The depth image to use.
+    camera_intrinsics : o3d.camera.PinholeCameraIntrinsic
+        The camera intrinsics to use.
 
-    Returns:
-        o3d.geometry.PointCloud
-            The point cloud created from the rgb and depth images
+    Returns
+    -------
+    o3d.geometry.PointCloud
+        The point cloud created from the RGB and depth images.
     """
 
     if (
@@ -57,32 +56,27 @@ def get_point_cloud_from_depth_image(
     project_valid_depth_only: bool = True,
 ) -> o3d.geometry.PointCloud:
     """
-    Creates an Open3D point cloud from a depth image. The depth image is
-    assumed to be in millimeters (the default for the Oak-D cameras). The camera intrinsics
-    are provided in the o3d.camera.PinholeCameraIntrinsics format.
+    Creates an o3d point cloud from a depth image.
 
-    Params:
-        depth_image: np.ndarray
-            The depth image to use
-        camera_intrinsics: o3d.camera.PinholeCameraIntrinsic
-            The camera intrinsics to use
-        depth_scale: float
-            Depth is scaled by 1 / depth_scale.
-            Defaults to 1000.0 to convert from millimeters to meters.
-            I.E. If depth format is meters, set to 1.0
-        depth_trunc: float
-            Truncated depth values to this value.
-            Defaults to 25000.0 to truncate depth values to 25 meters.
-        stride: int
-            Sampling factor to support coarse point cloud extraction
-            Defaults to 1
-        project_valid_depth_only: bool
-            If True, only projects pixels with valid depth values
-            Defaults to True
+    Parameters
+    ----------
+    depth_image : np.ndarray
+        The depth image to use.
+    camera_intrinsics : o3d.camera.PinholeCameraIntrinsic
+        The camera intrinsics to use.
+    depth_scale : float, optional
+        Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
+    depth_trunc : float, optional
+        Truncated depth values to this value. Defaults to 25000.0 to truncate depth values to 25 meters.
+    stride : int, optional
+        Sampling factor to support coarse point cloud extraction. Defaults to 1.
+    project_valid_depth_only : bool, optional
+        If True, only projects pixels with valid depth values. Defaults to True.
 
-    Returns:
-        o3d.geometry.PointCloud
-            The point cloud created from the depth image
+    Returns
+    -------
+    o3d.geometry.PointCloud
+        The point cloud created from the depth image.
     """
     depth_o3d = o3d.geometry.Image(depth_image)
 
@@ -108,26 +102,24 @@ def filter_point_cloud(
     """
     Filters the point cloud by performing voxel downsampling and outlier removal.
 
-    Params:
-        pcd: o3d.geometry.PointCloud
-            The point cloud to filter
-        voxel_size: Optional[float]
-            The voxel size to use for downsampling
-            Defaults to 0.1
-        nb_neighbors: Optional[int]
-            The number of neighbors to use for outlier removal
-            Defaults to 30
-        std_ratio: Optional[float]
-            The standard deviation ratio to use for outlier removal
-            Defaults to 0.1
-        downsample_first: bool
-            If True, performs voxel downsampling first, then outlier removal
-            If False, performs outlier removal first, then voxel downsampling
-            Defaults to True
+    Parameters
+    ----------
+    pcd : o3d.geometry.PointCloud
+        The point cloud to filter.
+    voxel_size : float or None, optional
+        The voxel size to use for downsampling. Defaults to 0.1.
+    nb_neighbors : int or None, optional
+        The number of neighbors to use for outlier removal. Defaults to 30.
+    std_ratio : float or None, optional
+        The standard deviation ratio to use for outlier removal. Defaults to 0.1.
+    downsample_first : bool, optional
+        If True, performs voxel downsampling first, then outlier removal.
+        If False, performs outlier removal first, then voxel downsampling. Defaults to True.
 
-    Returns:
-        o3d.geometry.PointCloud
-            The filtered point cloud
+    Returns
+    -------
+    o3d.geometry.PointCloud
+        The filtered point cloud.
     """
     if downsample_first:
         if voxel_size is not None:
