@@ -5,10 +5,14 @@ import atexit
 import depthai as dai
 import numpy as np
 import cv2
-import open3d
+import open3d as o3d
 
-from .calibration import CalibrationData, create_camera_calibration
-from .point_clouds import PointCloudVisualizer, get_point_cloud_from_rgb_depth_image, filter_point_cloud
+from .calibration import CalibrationData, get_camera_calibration
+from .point_clouds import (
+    PointCloudVisualizer,
+    get_point_cloud_from_rgb_depth_image,
+    filter_point_cloud,
+)
 
 
 # TODO: Implement all from link
@@ -26,6 +30,54 @@ from .point_clouds import PointCloudVisualizer, get_point_cloud_from_rgb_depth_i
 class Camera:
     """
     Class for interfacing with the OAK-D camera.
+
+    Attributes
+    ----------
+    calibration : CalibrationData
+        The calibration data for the camera.
+    rgb : Optional[np.ndarray]
+        The most recent RGB image from the camera.
+    rectified_rgb : Optional[np.ndarray]
+        The most recent rectified RGB image from the camera.
+    disparity: Optional[np.ndarray]
+        The most recent disparity image from the camera.
+    depth: Optional[np.ndarray]
+        The most recent depth image from the camera.
+    left: Optional[np.ndarray]
+        The most recent left mono image from the camera.
+    right: Optional[np.ndarray]
+        The most recent right mono image from the camera.
+    rectified_left: Optional[np.ndarray]
+        The most recent rectified left mono image from the camera.
+    rectified_right: Optional[np.ndarray]
+        The most recent rectified right mono image from the camera.
+    im3d: Optional[np.ndarray]
+        The most recent im3d image from the camera.
+    point_cloud: Optional[o3d.geometry.PointCloud]
+        The most recent point cloud from the camera.
+    imu_pose: Optional[List[float]]
+        The most recent IMU pose from the camera.
+    imu_rotation: Optional[List[float]]
+        The most recent IMU rotation from the camera.
+    started: bool
+        Whether or not the camera has been started.
+
+    Methods
+    -------
+    start()
+        Starts the camera.
+    stop()
+        Stops the camera.
+    wait_for_data()
+        Waits for the data packet to be ready.
+    start_display()
+        Starts the display.
+    stop_display()
+        Stops the display.
+    compute_point_cloud(block=True)
+        Computes the point cloud from the depth map.
+    compute_im3d(block=True)
+        Computes the 3D points from the disparity map.
     """
 
     def __init__(
@@ -68,81 +120,82 @@ class Camera:
         imu_gyroscope_refresh_rate: int = 400,
     ):
         """
-        Initialize the camera object.
+        Initializes the camera object.
 
-        :param rgb_size: Size of the RGB image. Options are 1080p, 4K
-        :type rgb_size: str
-        :param enable_rgb: Whether to enable the RGB camera
-        :type enable_rgb: bool
-        :param mono_size: Size of the monochrome image. Options are 720p, 480p, 400p
-        :type mono_size: str
-        :param enable_mono: Whether to enable the monochrome camera
-        :type enable_mono: bool
-        :param rgb_fps: FPS for the RGB camera
-        :type rgb_fps: int
-        :param mono_fps: FPS for the monochrome camera
-        :type mono_fps: int
-        :param primary_mono_left: Whether the primary monochrome image is the left image or the right image
-        :type primary_mono_left: bool
-        :param use_cv2_Q_matrix: Whether to use the cv2.Q matrix for disparity to depth conversion
-        :type use_cv2_Q_matrix: bool
-        :param compute_im3d_on_demand: Whether to compute the IM3D on update
-        :type compute_im3d_on_demand: bool
-        :param compute_point_cloud_on_demand: Whether to compute the point cloud on update
-        :type compute_point_cloud_on_demand: bool
-        :param display_size: Size of the display window
-        :type display_size: tuple[int, int]
-        :param display_rgb: Whether to display the RGB image
-        :type display_rgb: bool
-        :param display_mono: Whether to display the monochrome image
-        :type display_mono: bool
-        :param display_depth: Whether to display the depth image
-        :type display_depth: bool
-        :param display_disparity: Whether to display the disparity image
-        :type display_disparity: bool
-        :param display_rectified: Whether to display the rectified image
-        :type display_rectified: bool
-        :param display_point_cloud: Whether to display the point cloud
-        :type display_point_cloud: bool
-        :param extended_disparity: Whether to use extended disparity
-        :type extended_disparity: bool
-        :param subpixel: Whether to use subpixel
-        :type subpixel: bool
-        :param lr_check: Whether to use left-right check
-        :type lr_check: bool
-        :param median_filter: Whether to use median filter. If so, what size
-        :type median_filter: int or None
-        :param stereo_confidence_threshold: Confidence threshold for stereo matching
-        :type stereo_confidence_threshold: int
-        :param stereo_speckle_filter_enable: Whether to use speckle filter
-        :type stereo_speckle_filter_enable: bool
-        :param stereo_speckle_filter_range: Speckle filter range
-        :type stereo_speckle_filter_range: int
-        :param stereo_temporal_filter_enable: Whether to use temporal filter
-        :type stereo_temporal_filter_enable: bool
-        :param stereo_spatial_filter_enable: Whether to use spatial filter
-        :type stereo_spatial_filter_enable: bool
-        :param stereo_spatial_filter_radius: Spatial filter radius
-        :type stereo_spatial_filter_radius: int
-        :param stereo_spatial_filter_num_iterations: Spatial filter number of iterations
-        :type stereo_spatial_filter_num_iterations: int
-        :param stereo_threshold_filter_min_range
-        :param stereo_threshold_filter_min_range: Threshold filter minimum range
-        :type stereo_threshold_filter_min_range: int
-        :param stereo_threshold_filter_max_range: Threshold filter maximum range
-        :type stereo_threshold_filter_max_range: int
-        :param stereo_decimation_filter_factor: Decimation filter factor. Options are 1, 2
-        :type stereo_decimation_filter_factor: int
-        :param enable_imu: Whether to enable the IMU
-        :type enable_imu: bool
-        :param imu_batch_report_threshold: IMU batch report threshold
-        :type imu_batch_report_threshold: int
-        :param imu_max_batch_reports: IMU maximum report batches
-        :type imu_max_batch_reports: int
-        :param imu_accelerometer_refresh_rate: IMU accelerometer refresh rate
-        :type imu_accelerometer_refresh_rate: int
-        :param imu_gyroscope_refresh_rate: IMU gyroscope refresh rate
-        :type imu_gyroscope_refresh_rate: int
+        Parameters
+        ----------
+        rgb_size : str, optional
+            Size of the RGB image. Options are 1080p, 4K.
+        enable_rgb : bool, optional
+            Whether to enable the RGB camera.
+        mono_size : str, optional
+            Size of the monochrome image. Options are 720p, 480p, 400p.
+        enable_mono : bool, optional
+            Whether to enable the monochrome camera.
+        rgb_fps : int, optional
+            FPS for the RGB camera.
+        mono_fps : int, optional
+            FPS for the monochrome camera.
+        primary_mono_left : bool, optional
+            Whether the primary monochrome image is the left image or the right image.
+        use_cv2_Q_matrix : bool, optional
+            Whether to use the cv2.Q matrix for disparity to depth conversion.
+        compute_im3d_on_demand : bool, optional
+            Whether to compute the IM3D on update.
+        compute_point_cloud_on_demand : bool, optional
+            Whether to compute the point cloud on update.
+        display_size : tuple[int, int], optional
+            Size of the display window.
+        display_rgb : bool, optional
+            Whether to display the RGB image.
+        display_mono : bool, optional
+            Whether to display the monochrome image.
+        display_depth : bool, optional
+            Whether to display the depth image.
+        display_disparity : bool, optional
+            Whether to display the disparity image.
+        display_rectified : bool, optional
+            Whether to display the rectified image.
+        display_point_cloud : bool, optional
+            Whether to display the point cloud.
+        extended_disparity : bool, optional
+            Whether to use extended disparity.
+        subpixel : bool, optional
+            Whether to use subpixel.
+        lr_check : bool, optional
+            Whether to use left-right check.
+        median_filter : int or None, optional
+            Whether to use median filter. If so, what size.
+        stereo_confidence_threshold : int, optional
+            Confidence threshold for stereo matching.
+        stereo_speckle_filter_enable : bool, optional
+            Whether to use speckle filter.
+        stereo_speckle_filter_range : int, optional
+            Speckle filter range.
+        stereo_temporal_filter_enable : bool, optional
+            Whether to use temporal filter.
+        stereo_spatial_filter_enable : bool, optional
+            Whether to use spatial filter.
+        stereo_spatial_filter_radius : int, optional
+            Spatial filter radius.
+        stereo_spatial_filter_num_iterations : int, optional
+            Spatial filter number of iterations.
+        stereo_threshold_filter_min_range : int, optional
+            Threshold filter minimum range.
+        stereo_threshold_filter_max_range : int, optional
+            Threshold filter maximum range.
+        stereo_decimation_filter_factor : int, optional
+            Decimation filter factor. Options are 1, 2.
+        enable_imu : bool, optional
+            Whether to enable the IMU.
+        imu_batch_report_threshold : int, optional
+            IMU batch report threshold.
+        imu_max_batch_reports : int, optional
+            IMU maximum report batches.
+        imu_accelerometer_refresh_rate : int, optional
+            IMU accelerometer refresh rate.
+        imu_gyroscope_refresh_rate : int, optional
+            IMU gyroscope refresh rate.
         """
         self._enable_rgb = enable_rgb
         self._enable_mono = enable_mono
@@ -238,7 +291,7 @@ class Camera:
             else:
                 self._median_filter = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
 
-        self._calibration: CalibrationData = create_camera_calibration(
+        self._calibration: CalibrationData = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),
             (self._mono_size[0], self._mono_size[1]),
             self._primary_mono_left,
@@ -272,7 +325,7 @@ class Camera:
         self._compute_im3d_on_demand = compute_im3d_on_demand
         self._im3d_current = False
 
-        self._point_cloud: Optional[open3d.geometry.PointCloud] = None
+        self._point_cloud: Optional[o3d.geometry.PointCloud] = None
         self._compute_point_cloud_on_demand = compute_point_cloud_on_demand
         self._point_cloud_vis = PointCloudVisualizer()
 
@@ -303,135 +356,179 @@ class Camera:
     @property
     def calibration(self) -> CalibrationData:
         """
-        Gets the calibration data
+        Gets the calibration data.
 
-        :rtype: CalibrationData
+        Returns
+        -------
+        np.ndarray
+            The calibration data.
         """
         return self._calibration
 
     @property
     def rgb(self) -> Optional[np.ndarray]:
         """
-        Get the rgb color frame
+        Get the rectified RGB color frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified RGB color frame, or None if the frame is not available.
         """
         return self._rgb_frame
 
     @property
     def rectified_rgb(self) -> Optional[np.ndarray]:
         """
-        Get the rectified rgb color frame
+        Get the rectified RGB color frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified RGB color frame, or None if the frame is not available.
         """
         return self._rectified_rgb_frame
 
     @property
     def disparity(self) -> Optional[np.ndarray]:
         """
-        Gets the disparity frame
+        Get the disparity frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The disparity frame, or None if the frame is not available.
         """
         return self._disparity
 
     @property
     def depth(self) -> Optional[np.ndarray]:
         """
-        Gets the depth frame
+        Get the depth frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The depth frame, or None if the frame is not available.
         """
         return self._depth
 
     @property
     def left(self) -> Optional[np.ndarray]:
         """
-        Gets the left frame
+        Get the left frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The left frame, or None if the frame is not available.
         """
         return self._left_frame
 
     @property
     def right(self) -> Optional[np.ndarray]:
         """
-        Gets the right frame
+        Get the right frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The right frame, or None if the frame is not available.
         """
         return self._right_frame
 
     @property
-    def rectified_left_frame(self) -> Optional[np.ndarray]:
+    def rectified_left(self) -> Optional[np.ndarray]:
         """
-        Gets the rectified left frame
+        Gets the rectified left frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified left frame, or None if the frame is not available.
         """
         return self._left_rect_frame
 
     @property
-    def rectified_right_frame(self) -> Optional[np.ndarray]:
+    def rectified_right(self) -> Optional[np.ndarray]:
         """
-        Gets the rectified right frame
+        Gets the rectified right frame.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The rectified right frame, or None if the frame is not available.
         """
         return self._right_rect_frame
 
     @property
     def im3d(self) -> Optional[np.ndarray]:
         """
-        Gets the 3d image
+        Gets the 3D image.
 
-        :rtype: Optional[np.ndarray]
+        Returns
+        -------
+        Optional[np.ndarray]
+            The 3D image, or None if it is not available.
         """
         return self._im3d
 
     @property
-    def point_cloud(self) -> Optional[open3d.geometry.PointCloud]:
+    def point_cloud(self) -> Optional[o3d.geometry.PointCloud]:
         """
-        Gets the point cloud
+        Gets the point cloud.
 
-        :rtype: Optional[open3d.geometry.PointCloud]
+        Returns
+        -------
+        Optional[o3d.geometry.PointCloud]
+            The point cloud, or None if it is not available.
         """
         return self._point_cloud
 
     @property
     def imu_pose(self) -> List[float]:
         """
-        Gets the imu pose (in meters)
+        Gets the IMU pose in meters.
 
-        :rtype: List[float]
+        Returns
+        -------
+        List[float]
+            The IMU pose as a list of floats.
         """
         return self._imu_pose
 
     @property
     def imu_rotation(self) -> List[float]:
         """
-        Gets the imu rotation (in radians)
+        Gets the IMU rotation in radians.
 
-        :rtype: List[float]
+        Returns
+        -------
+        List[float]
+            The IMU rotation as a list of floats.
         """
         return self._imu_rotation
 
     @property
     def started(self) -> bool:
         """
-        Returns true if the camera is started
+        Returns True if the camera is started.
 
-        :rtype: bool
+        Returns
+        -------
+        bool
+            True if the camera is started, False otherwise.
         """
         return self._cam_thread.is_alive()
 
     def start(self, block=True) -> None:
         """
-        Starts the camera
+        Starts the camera.
 
-        :param block: if true, blocks until the first set of data arrives
-        :type block: bool
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the first set of data arrives. Defaults to False.
         """
         self._cam_thread.start()
         if block:
@@ -630,7 +727,7 @@ class Camera:
             self._point_cloud.colors = pcd.colors
 
     def _update_im3d(self) -> None:
-        self._im3d = cv2.reprojectImageTopen3d(self._disparity, self._Q)
+        self._im3d = cv2.reprojectImageTo3d(self._disparity, self._Q)
 
     def _target(self) -> None:
         if self._enable_rgb:
@@ -744,14 +841,19 @@ class Camera:
             ] : self._calibration.primary.valid_region[2],
         ]
 
-    def compute_point_cloud(self, block=True) -> Optional[open3d.geometry.PointCloud]:
+    def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:
         """
-        Compute point cloud from depth map.
+        Compute a point cloud from the depth map.
 
-        :param block: If True, block until the next data packet is received.
-        :type block: bool
-        :return: The computed point cloud, or None if no data is available.
-        :rtype: open3d.geometry.PointCloud or None
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the next data packet is received. Defaults to True.
+
+        Returns
+        -------
+        Optional[o3d.geometry.PointCloud]
+            The computed point cloud, or None if no data is available.
         """
         if block:
             with self._data_condition:
@@ -766,12 +868,17 @@ class Camera:
         self, block=True
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
         """
-        Compute 3D points from disparity map.
+        Compute 3D points from the disparity map.
 
-        :param block: If True, block until the next data packet is received.
-        :type block: bool
-        :return: A tuple containing depth map, disparity map, and left frame (if available).
-        :rtype: tuple[np.ndarray, np.ndarray, np.ndarray]
+        Parameters
+        ----------
+        block : bool, optional
+            If True, blocks until the next data packet is received. Defaults to True.
+
+        Returns
+        -------
+        Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]
+            A tuple containing the depth map, disparity map, and left frame (if available).
         """
         if block:
             with self._data_condition:
