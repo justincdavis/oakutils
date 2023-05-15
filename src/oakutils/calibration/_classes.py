@@ -5,7 +5,7 @@ import numpy as np
 import open3d as o3d
 
 
-@dataclass
+@dataclass(frozen=True)
 class MonoCalibrationData:
     """
     Class to store calibration data for a mono camera.
@@ -61,7 +61,7 @@ class MonoCalibrationData:
     pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
 
-@dataclass
+@dataclass(frozen=True)
 class StereoCalibrationData:
     """
     Class to store calibration data for stereo cameras.
@@ -142,7 +142,7 @@ class StereoCalibrationData:
     pinhole_primary: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
 
-@dataclass
+@dataclass(frozen=True)
 class ColorCalibrationData:
     """
     Class to store calibration data for a color camera.
@@ -192,7 +192,7 @@ class ColorCalibrationData:
     pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
 
 
-@dataclass
+@dataclass(frozen=True)
 class CalibrationData:
     """
     An object to store calibration data for an entire OAK camera.

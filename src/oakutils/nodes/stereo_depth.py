@@ -16,7 +16,7 @@ def create_stereo_depth(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
-    align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.RGB,
+    align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
@@ -41,7 +41,7 @@ def create_stereo_depth(
     temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
-    bilateral_sigma: float = 0.5,
+    bilateral_sigma: int = 1,
 ) -> Tuple[
     dai.node.StereoDepth,
     dai.node.MonoCamera,
@@ -133,8 +133,8 @@ def create_stereo_depth(
         The threshold min range of the stereo depth node, by default 200
     threshold_max_range : int, optional
         The threshold max range of the stereo depth node, by default 25000
-    bilateral_sigma : float, optional
-        The bilateral sigma of the stereo depth node, by default 0.5
+    bilateral_sigma : int, optional
+        The bilateral sigma of the stereo depth node, by default 1
 
     Returns
     -------
@@ -226,7 +226,7 @@ def create_stereo_depth_from_mono_cameras(
     left: dai.node.MonoCamera,
     right: dai.node.MonoCamera,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
-    align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.RGB,
+    align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
@@ -251,7 +251,7 @@ def create_stereo_depth_from_mono_cameras(
     temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
-    bilateral_sigma: float = 0.5,
+    bilateral_sigma: int = 1,
 ) -> Tuple[
     dai.node.StereoDepth,
     dai.node.XLinkOut,
@@ -296,12 +296,14 @@ def create_stereo_depth_from_mono_cameras(
         The max brightness of the stereo depth node, by default 255
     decimation_factor : int, optional
         The decimation factor of the stereo depth node, by default 1
+        Valid values are 1, 2, 3, 4
     decimation_mode : dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode, optional
         The decimation mode of the stereo depth node, by default dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN
     enable_spatial_filter : bool, optional
         The enable spatial filter of the stereo depth node, by default False
     spatial_alpha : float, optional
         The spatial alpha of the stereo depth node, by default 0.5
+        Valid values are 0.0 - 1.0
     spatial_delta : int, optional
         The spatial delta of the stereo depth node, by default 0
     spatial_radius : int, optional
@@ -316,6 +318,7 @@ def create_stereo_depth_from_mono_cameras(
         The enable temporal filter of the stereo depth node, by default False
     temporal_alpha : float, optional
         The temporal alpha of the stereo depth node, by default 0.5
+        Valid values are 0.0 - 1.0
     temporal_delta : int, optional
         The temporal delta of the stereo depth node, by default 0
     temporal_mode : dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode, optional
@@ -324,8 +327,8 @@ def create_stereo_depth_from_mono_cameras(
         The threshold min range of the stereo depth node, by default 200
     threshold_max_range : int, optional
         The threshold max range of the stereo depth node, by default 25000
-    bilateral_sigma : float, optional
-        The bilateral sigma of the stereo depth node, by default 0.5
+    bilateral_sigma : int, optional
+        The bilateral sigma of the stereo depth node, by default 1
 
     Returns
     -------
@@ -343,7 +346,26 @@ def create_stereo_depth_from_mono_cameras(
         The rectified left xlink out node, has stream name "rectified_left"
     dai.node.XLinkOut
         The rectified right xlink out node, has stream name "rectified_right"
+
+    Raises
+    ------
+    ValueError
+        If spatial_alpha is not between 0.0 and 1.0
+    ValueError
+        If temporal_alpha is not between 0.0 and 1.0
+    ValueError
+        If decimation_factor is not 1,2,3,4
     """
+    # parse the inputs
+    # all alpha parameters should be between 0.0 and 1.0
+    if not 0.0 <= spatial_alpha <= 1.0:
+        raise ValueError("spatial_alpha should be between 0.0 and 1.0")
+    if not 0.0 <= temporal_alpha <= 1.0:
+        raise ValueError("temporal_alpha should be between 0.0 and 1.0")
+    # decimation should be 1,2,3,4
+    if decimation_factor not in [1, 2, 3, 4]:
+        raise ValueError("decimation_factor should be 1,2,3,4")
+
     stereo: dai.node.StereoDepth = pipeline.create(dai.node.StereoDepth)
     stereo.setDefaultProfilePreset(preset)
 
