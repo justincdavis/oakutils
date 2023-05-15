@@ -8,7 +8,11 @@ import cv2
 import open3d as o3d
 
 from .calibration import CalibrationData, create_camera_calibration
-from .point_clouds import PointCloudVisualizer, get_point_cloud_from_rgb_depth_image, filter_point_cloud
+from .point_clouds import (
+    PointCloudVisualizer,
+    get_point_cloud_from_rgb_depth_image,
+    filter_point_cloud,
+)
 
 
 # TODO: Implement all from link
