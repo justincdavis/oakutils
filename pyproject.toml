@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "oakutils"
@@ -78,3 +78,8 @@ push            = false
 "src/oakutils/__init__.py" = ["{version}"]
 "docs/conf.py" = ["{version}"]
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+oakutils = ["*.blob"]
