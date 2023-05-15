@@ -1,7 +1,7 @@
 from .camera import Camera
 
 __all__ = ["Camera"]
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)

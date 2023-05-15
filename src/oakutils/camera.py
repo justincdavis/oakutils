@@ -13,16 +13,11 @@ from .point_clouds import (
     get_point_cloud_from_rgb_depth_image,
     filter_point_cloud,
 )
-
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/samples/StereoDepth/depth_post_processing/#depth-post-processing
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/tutorials/image_quality/#improving-image-quality
-
-# TODO: Implement all from link
-# https://docs.luxonis.com/projects/api/en/latest/components/nodes/stereo_depth/#currently-configurable-blocks
+from .nodes import (
+    create_color_camera,
+    create_stereo_depth,
+    create_imu,
+)
 
 
 # KNOWN BUGS:
@@ -197,13 +192,6 @@ class Camera:
         imu_gyroscope_refresh_rate : int, optional
             IMU gyroscope refresh rate.
         """
-        self._enable_rgb = enable_rgb
-        self._enable_mono = enable_mono
-        self._enable_imu = enable_imu
-
-        self._rgb_fps = rgb_fps
-        self._mono_fps = mono_fps
-
         self._primary_mono_left = primary_mono_left
         self._use_cv2_Q_matrix = use_cv2_Q_matrix
 
@@ -215,22 +203,7 @@ class Camera:
         self._display_rectified = display_rectified
         self._display_point_cloud = display_point_cloud
 
-        self._extended_disparity = extended_disparity
-        self._subpixel = subpixel
-        self._lr_check = lr_check
-
         self._stereo_confidence_threshold = stereo_confidence_threshold
-        self._stereo_speckle_filter_enable = stereo_speckle_filter_enable
-        self._stereo_speckle_filter_range = stereo_speckle_filter_range
-        self._stereo_temporal_filter_enable = stereo_temporal_filter_enable
-        self._stereo_spatial_filter_enable = stereo_spatial_filter_enable
-        self._stereo_spatial_filter_radius = stereo_spatial_filter_radius
-        self._stereo_spatial_filter_num_iterations = (
-            stereo_spatial_filter_num_iterations
-        )
-        self._stereo_threshold_filter_min_range = stereo_threshold_filter_min_range
-        self._stereo_threshold_filter_max_range = stereo_threshold_filter_max_range
-        self._stereo_decimation_filter_factor = stereo_decimation_filter_factor
 
         if rgb_size not in ["4k", "1080p"]:
             raise ValueError('rgb_size must be one of "1080p" or "4k"')
@@ -270,7 +243,7 @@ class Camera:
                     dai.MonoCameraProperties.SensorResolution.THE_400_P,
                 )
 
-        if self._stereo_decimation_filter_factor == 2:
+        if stereo_decimation_filter_factor == 2:
             # need to divide the mono height by 2
             self._mono_size = (
                 self._mono_size[0],
@@ -305,7 +278,7 @@ class Camera:
         # pipeline
         self._pipeline: dai.Pipeline = dai.Pipeline()
         # storage for the nodes
-        self._nodes: List[str] = []
+        self._streams: List[str] = []
         # stop condition
         self._stopped: bool = False
         # thread for the camera
@@ -349,6 +322,78 @@ class Camera:
 
         # Condition for data
         self._data_condition = Condition()
+
+        # creaate the nodes on the pipeline
+        if enable_rgb:
+            cam = create_color_camera(
+                pipeline=self._pipeline,
+                resolution=self._rgb_size[2],
+                fps=rgb_fps,
+            )
+            xout_rgb = self._pipeline.create(dai.node.XLinkOut)
+            xout_rgb.setStreamName("rgb")
+            cam.video.link(xout_rgb.input)
+
+            self._streams.extend(["rgb"])
+        if enable_mono:
+            align_socket = (
+                dai.CameraBoardSocket.LEFT
+                if self._primary_mono_left
+                else dai.CameraBoardSocket.RIGHT
+            )
+            (
+                stereo,
+                left,
+                right,
+                xout_left,
+                xout_right,
+                xout_depth,
+                xout_disparity,
+                xout_rect_left,
+                xout_rect_right,
+            ) = create_stereo_depth(
+                pipeline=self._pipeline,
+                resolution=self._mono_size[2],
+                fps=mono_fps,
+                align_socket=align_socket,
+                confidence_threshold=stereo_confidence_threshold,
+                median_filter=self._median_filter,
+                lr_check=lr_check,
+                extended_disparity=extended_disparity,
+                subpixel=subpixel,
+                decimation_factor=stereo_decimation_filter_factor,
+                enable_spatial_filter=stereo_spatial_filter_enable,
+                enable_speckle_filter=stereo_speckle_filter_enable,
+                enable_temporal_filter=stereo_temporal_filter_enable,
+                speckle_range=stereo_speckle_filter_range,
+                spatial_radius=stereo_spatial_filter_radius,
+                spatial_iterations=stereo_spatial_filter_num_iterations,
+                threshold_min_range=stereo_threshold_filter_min_range,
+                threshold_max_range=stereo_threshold_filter_max_range,
+            )
+
+            self._streams.extend(
+                [
+                    "left",
+                    "right",
+                    "depth",
+                    "disparity",
+                    "rectified_left",
+                    "rectified_right",
+                ]
+            )
+        if enable_imu:
+            imu, xout_imu = create_imu(
+                pipeline=self._pipeline,
+                accel_range=self._imu_accelerometer_refresh_rate,
+                gyroscope_rate=self._imu_gyroscope_refresh_rate,
+                batch_report_threshold=self._imu_batch_report_threshold,
+                max_batch_reports=self._imu_max_batch_reports,
+                enable_accelerometer_raw=True,
+                enable_gyroscope_raw=True,
+            )
+
+            self._streams.extend(["imu"])
 
         # set atexit methods
         atexit.register(self.stop)
@@ -609,108 +654,6 @@ class Camera:
         self._display_stopped = True
         self._display_thread.join()
 
-    def _create_cam_rgb(self) -> None:
-        cam = self._pipeline.create(dai.node.ColorCamera)
-        xout_video = self._pipeline.create(dai.node.XLinkOut)
-
-        cam.setBoardSocket(dai.CameraBoardSocket.RGB)
-        cam.setResolution(self._rgb_size[2])
-        cam.setInterleaved(False)
-        cam.setFps(self._rgb_fps)
-
-        xout_video.setStreamName("rgb")
-        cam.video.link(xout_video.input)
-
-        self._nodes.extend(["rgb"])
-
-    def _create_stereo(self) -> None:
-        left = self._pipeline.create(dai.node.MonoCamera)
-        right = self._pipeline.create(dai.node.MonoCamera)
-        stereo = self._pipeline.create(dai.node.StereoDepth)
-        stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_ACCURACY)
-        xout_left = self._pipeline.create(dai.node.XLinkOut)
-        xout_right = self._pipeline.create(dai.node.XLinkOut)
-        xout_depth = self._pipeline.create(dai.node.XLinkOut)
-        xout_disparity = self._pipeline.create(dai.node.XLinkOut)
-        xout_rect_left = self._pipeline.create(dai.node.XLinkOut)
-        xout_rect_right = self._pipeline.create(dai.node.XLinkOut)
-
-        left.setBoardSocket(dai.CameraBoardSocket.LEFT)
-        right.setBoardSocket(dai.CameraBoardSocket.RIGHT)
-        for cam in [left, right]:
-            cam.setFps(self._mono_fps)
-            cam.setResolution(self._mono_size[2])
-
-        stereo.initialConfig.setConfidenceThreshold(self._stereo_confidence_threshold)
-        stereo.setRectifyEdgeFillColor(0)
-        stereo.initialConfig.setMedianFilter(self._median_filter)
-        stereo.setLeftRightCheck(self._lr_check)
-        stereo.setExtendedDisparity(self._extended_disparity)
-        stereo.setSubpixel(self._subpixel)
-
-        config = stereo.initialConfig.get()
-        config.postProcessing.speckleFilter.enable = self._stereo_speckle_filter_enable
-        config.postProcessing.speckleFilter.speckleRange = (
-            self._stereo_speckle_filter_range
-        )
-        config.postProcessing.temporalFilter.enable = (
-            self._stereo_temporal_filter_enable
-        )
-        config.postProcessing.spatialFilter.enable = self._stereo_spatial_filter_enable
-        config.postProcessing.spatialFilter.holeFillingRadius = (
-            self._stereo_spatial_filter_radius
-        )
-        config.postProcessing.spatialFilter.numIterations = (
-            self._stereo_spatial_filter_num_iterations
-        )
-        config.postProcessing.thresholdFilter.minRange = (
-            self._stereo_threshold_filter_min_range
-        )
-        config.postProcessing.thresholdFilter.maxRange = (
-            self._stereo_threshold_filter_max_range
-        )
-        config.postProcessing.decimationFilter.decimationFactor = (
-            self._stereo_decimation_filter_factor
-        )
-        stereo.initialConfig.set(config)
-
-        xout_left.setStreamName("left")
-        xout_right.setStreamName("right")
-        xout_depth.setStreamName("depth")
-        xout_disparity.setStreamName("disparity")
-        xout_rect_left.setStreamName("rectified_left")
-        xout_rect_right.setStreamName("rectified_right")
-
-        left.out.link(stereo.left)
-        right.out.link(stereo.right)
-        stereo.syncedLeft.link(xout_left.input)
-        stereo.syncedRight.link(xout_right.input)
-        stereo.depth.link(xout_depth.input)
-        stereo.disparity.link(xout_disparity.input)
-        stereo.rectifiedLeft.link(xout_rect_left.input)
-        stereo.rectifiedRight.link(xout_rect_right.input)
-
-        self._nodes.extend(
-            ["left", "right", "depth", "disparity", "rectified_left", "rectified_right"]
-        )
-
-    def _create_imu(self) -> None:
-        imu = self._pipeline.create(dai.node.IMU)
-        xout_imu = self._pipeline.create(dai.node.XLinkOut)
-
-        imu.enableIMUSensor(dai.IMUSensor.GRAVITY, self._imu_accelerometer_refresh_rate)
-        imu.enableIMUSensor(
-            dai.IMUSensor.GYROSCOPE_CALIBRATED, self._imu_gyroscope_refresh_rate
-        )
-        imu.setBatchReportThreshold(self._imu_batch_report_threshold)
-        imu.setMaxBatchReports(self._imu_max_batch_reports)
-
-        xout_imu.setStreamName("imu")
-
-        imu.out.link(xout_imu.input)
-
-        self._nodes.extend(["imu"])
-
     def _update_point_cloud(self) -> None:
         pcd = get_point_cloud_from_rgb_depth_image(
             self._rgb_frame, self._depth, self._calibration.primary.pinhole
@@ -727,18 +670,12 @@ class Camera:
             self._point_cloud.colors = pcd.colors
 
     def _update_im3d(self) -> None:
-        self._im3d = cv2.reprojectImageTo3d(self._disparity, self._Q)
+        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)
 
     def _target(self) -> None:
-        if self._enable_rgb:
-            self._create_cam_rgb()
-        if self._enable_mono:
-            self._create_stereo()
-        if self._enable_imu:
-            self._create_imu()
         with dai.Device(self._pipeline) as device:
             queues = {}
-            for stream in self._nodes:
+            for stream in self._streams:
                 queues[stream] = device.getOutputQueue(
                     name=stream, maxSize=1, blocking=False
                 )
