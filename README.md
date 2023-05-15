@@ -8,6 +8,10 @@ A easy-to-use and robust library for interacting easily with OAK cameras and the
 
 https://oakutils.readthedocs.io/en/latest/
 
+See Also:
+
+https://pypi.org/project/oakutils/
+
 ## Installation
 
 OakUtils is published on PyPi and which allows easy installation using pip:
