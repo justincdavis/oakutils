@@ -75,7 +75,8 @@ def get_camera_calibration_basic(
         )
 
         rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
-        mono_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
+        left_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
+        right_fov = calib_data.getFov(dai.CameraBoardSocket.RIGHT)
 
         R1 = np.array(calib_data.getStereoLeftRectificationRotation())
         R2 = np.array(calib_data.getStereoRightRectificationRotation())
@@ -98,6 +99,42 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
+        T_l_rgb = (
+            np.array(
+                calib_data.getCameraTranslationVector(
+                    srcCamera=dai.CameraBoardSocket.LEFT,
+                    dstCamera=dai.CameraBoardSocket.RGB,
+                )
+            )
+            / 100
+        )  # convert to meters
+        T_r_rgb = (
+            np.array(
+                calib_data.getCameraTranslationVector(
+                    srcCamera=dai.CameraBoardSocket.RIGHT,
+                    dstCamera=dai.CameraBoardSocket.RGB,
+                )
+            )
+            / 100
+        )  # convert to meters
+        T_rgb_l = (
+            np.array(
+                calib_data.getCameraTranslationVector(
+                    srcCamera=dai.CameraBoardSocket.RGB,
+                    dstCamera=dai.CameraBoardSocket.LEFT,
+                )
+            )
+            / 100
+        )  # convert to meters
+        T_rgb_r = (
+            np.array(
+                calib_data.getCameraTranslationVector(
+                    srcCamera=dai.CameraBoardSocket.RGB,
+                    dstCamera=dai.CameraBoardSocket.RIGHT,
+                )
+            )
+            / 100
+        )  # convert to meters
 
         H_left = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_left))
         H_right = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_right))
@@ -112,6 +149,30 @@ def get_camera_calibration_basic(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RIGHT,
                 dstCamera=dai.CameraBoardSocket.LEFT,
+            )
+        )
+        l2rgb_extrinsic = np.array(
+            calib_data.getCameraExtrinsics(
+                srcCamera=dai.CameraBoardSocket.LEFT,
+                dstCamera=dai.CameraBoardSocket.RGB,
+            )
+        )
+        r2rgb_extrinsic = np.array(
+            calib_data.getCameraExtrinsics(
+                srcCamera=dai.CameraBoardSocket.RIGHT,
+                dstCamera=dai.CameraBoardSocket.RGB,
+            )
+        )
+        rgb2l_extrinsic = np.array(
+            calib_data.getCameraExtrinsics(
+                srcCamera=dai.CameraBoardSocket.RGB,
+                dstCamera=dai.CameraBoardSocket.LEFT,
+            )
+        )
+        rgb2r_extrinsic = np.array(
+            calib_data.getCameraExtrinsics(
+                srcCamera=dai.CameraBoardSocket.RGB,
+                dstCamera=dai.CameraBoardSocket.RIGHT,
             )
         )
 
@@ -133,7 +194,7 @@ def get_camera_calibration_basic(
             fy=fy_left,
             cx=cx_left,
             cy=cy_left,
-            fov=mono_fov,
+            fov=left_fov,
             R=R1,
             T=T1,
             H=H_left,
@@ -145,7 +206,7 @@ def get_camera_calibration_basic(
             fy=fy_right,
             cx=cx_right,
             cy=cy_right,
-            fov=mono_fov,
+            fov=right_fov,
             R=R2,
             T=T2,
             H=H_right,
@@ -170,6 +231,14 @@ def get_camera_calibration_basic(
             left=left_data,
             right=right_data,
             stereo=stereo_data,
+            l2rgb_extrinsic=l2rgb_extrinsic,
+            r2rgb_extrinsic=r2rgb_extrinsic,
+            rgb2l_extrinsic=rgb2l_extrinsic,
+            rgb2r_extrinsic=rgb2r_extrinsic,
+            T_l_rgb=T_l_rgb,
+            T_r_rgb=T_r_rgb,
+            T_rgb_l=T_rgb_l,
+            T_rgb_r=T_rgb_r,
         )
     return data
 

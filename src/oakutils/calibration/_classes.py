@@ -207,6 +207,22 @@ class CalibrationData:
         Right mono camera calibration data.
     stereo : StereoCalibrationData
         Stereo camera calibration data.
+    l2rgb_extrinsic : np.ndarray
+        Extrinsic matrix from the left to the RGB camera.
+    r2rgb_extrinsic : np.ndarray
+        Extrinsic matrix from the right to the RGB camera.
+    rgb2l_extrinsic : np.ndarray
+        Extrinsic matrix from the RGB to the left camera.
+    rgb2r_extrinsic : np.ndarray
+        Extrinsic matrix from the RGB to the right camera.
+    T_l_rgb : np.ndarray
+        Translation vector from the left to the RGB camera.
+    T_r_rgb : np.ndarray
+        Translation vector from the right to the RGB camera.
+    T_rgb_l : np.ndarray
+        Translation vector from the RGB to the left camera.
+    T_rgb_r : np.ndarray
+        Translation vector from the RGB to the right camera.
     primary : Optional[MonoCalibrationData], optional
         Primary camera calibration data.
 
@@ -221,4 +237,12 @@ class CalibrationData:
     left: MonoCalibrationData
     right: MonoCalibrationData
     stereo: StereoCalibrationData
+    l2rgb_extrinsic: np.ndarray
+    r2rgb_extrinsic: np.ndarray
+    rgb2l_extrinsic: np.ndarray
+    rgb2r_extrinsic: np.ndarray
+    T_l_rgb: np.ndarray
+    T_r_rgb: np.ndarray
+    T_rgb_l: np.ndarray
+    T_rgb_r: np.ndarray
     primary: Optional[MonoCalibrationData] = None
