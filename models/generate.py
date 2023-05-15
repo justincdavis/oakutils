@@ -167,6 +167,10 @@ def generate_onnx():
             output_names=["output"],
         )
     
+    # perform a check that the onnx folder exists, if not make it
+    if not os.path.exists(ONNX_FOLDER):
+        os.makedirs(ONNX_FOLDER)
+
     # simplify all onnx models in the onnx folder
     model_names = os.listdir(TEMP_ONNX_FOLDER)
     for model_name in model_names:
@@ -178,7 +182,7 @@ def generate_onnx():
             continue
 
         model = onnx.load(model_path)
-        model_simp, check = simplify(model)
+        model_simp, check = simplify(model, check_n=5, perform_optimization=True)
 
         assert check, f"Simplified ONNX model for: {model_name}, could not be validated"
 
@@ -217,7 +221,7 @@ def generate_blobs():
                 model=model_path, 
                 output_dir=blob_path,
                 data_type="FP16",
-                shaves=5,
+                shaves=6,
             )
     
         blob_name = model_name.split(".")[0]
