@@ -28,9 +28,9 @@ def create_imu(
     """
     Creates a pipeline for the IMU.
     Sensors which use both gyroscope and accelerometer will default to slower rate.
-    An in-depth explanation of the IMU can be found here: 
+    An in-depth explanation of the IMU can be found here:
     https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/
-    
+
     Parameters
     ----------
     pipeline : dai.Pipeline
@@ -53,7 +53,7 @@ def create_imu(
         Enable gyroscope raw, by default False
     enable_gyroscope_calibrated : bool, optional
         Enable gyroscope calibrated, by default False
-    enable_gyroscope_uncalibrated : bool, optional  
+    enable_gyroscope_uncalibrated : bool, optional
         Enable gyroscope uncalibrated, by default False
     enable_magnetometer_raw : bool, optional
         Enable magnetometer raw, by default False
@@ -71,7 +71,7 @@ def create_imu(
         Enable arvr stabilized rotation vector, by default False
     enable_arvr_stabilized_game_rotation_vector : bool, optional
         Enable arvr stabilized game rotation vector, by default False
-    
+
     Returns
     -------
     dai.node.IMU
@@ -146,7 +146,7 @@ def create_imu(
             imu.enableIMUSensor(sensor, accelerometer_rate)
         else:
             imu.enableIMUSensor(sensor, slower_rate)
-    
+
     imu.setBatchReportThreshold(batch_report_threshold)
     imu.setMaxBatchReports(max_batch_reports)
 
