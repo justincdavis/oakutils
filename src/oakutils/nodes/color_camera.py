@@ -23,7 +23,7 @@ def create_color_camera(
     """
     Creates a pipeline for the color camera.
     setVideoSize, setStillSize are both automatically called using the tuple from get_tuple_from_color_sensor_resolution.
-    
+
     Parameters
     ----------
     resolution : dai.ColorCameraProperties.SensorResolution, optional
@@ -55,7 +55,7 @@ def create_color_camera(
         Allows scaling of the cameras frames on-board the OAK to any size
         not just the natively supported resolutions.
         Works together with the isp_target_size parameter
-        
+
     Returns
     -------
     dai.node.ColorCamera

@@ -13,7 +13,7 @@ def create_mono_camera(
     contrast: int = 1,
     sharpness: int = 1,
     luma_denoise: int = 1,
-    chroma_denoise: int = 1,        
+    chroma_denoise: int = 1,
 ) -> dai.node.MonoCamera:
     """
     Creates a pipeline for the mono camera.
@@ -72,7 +72,7 @@ def create_left_right_cameras(
     contrast: int = 1,
     sharpness: int = 1,
     luma_denoise: int = 1,
-    chroma_denoise: int = 1,  
+    chroma_denoise: int = 1,
 ) -> Tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Wrapper function for creating the left and right mono cameras.
