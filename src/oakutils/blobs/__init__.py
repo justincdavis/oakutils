@@ -44,6 +44,86 @@ SOBEL_BLUR_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, '_sobel_blur_5x5.blo
 SOBEL_BLUR_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, '_sobel_blur_7x7.blob'))
 SOBEL_BLUR_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, '_sobel_blur_9x9.blob'))
 
+'''
+Note
+-----
+This module is auto-generated
+Attributes
+----------
+GAUSSIAN_11X11 : str
+    Absolute file path for GAUSSIAN_11X11 file
+GAUSSIAN_13X13 : str
+    Absolute file path for GAUSSIAN_13X13 file
+GAUSSIAN_15X15 : str
+    Absolute file path for GAUSSIAN_15X15 file
+GAUSSIAN_3X3 : str
+    Absolute file path for GAUSSIAN_3X3 file
+GAUSSIAN_5X5 : str
+    Absolute file path for GAUSSIAN_5X5 file
+GAUSSIAN_7X7 : str
+    Absolute file path for GAUSSIAN_7X7 file
+GAUSSIAN_9X9 : str
+    Absolute file path for GAUSSIAN_9X9 file
+GAUSSIAN_GRAY_11X11 : str
+    Absolute file path for GAUSSIAN_GRAY_11X11 file
+GAUSSIAN_GRAY_13X13 : str
+    Absolute file path for GAUSSIAN_GRAY_13X13 file
+GAUSSIAN_GRAY_15X15 : str
+    Absolute file path for GAUSSIAN_GRAY_15X15 file
+GAUSSIAN_GRAY_3X3 : str
+    Absolute file path for GAUSSIAN_GRAY_3X3 file
+GAUSSIAN_GRAY_5X5 : str
+    Absolute file path for GAUSSIAN_GRAY_5X5 file
+GAUSSIAN_GRAY_7X7 : str
+    Absolute file path for GAUSSIAN_GRAY_7X7 file
+GAUSSIAN_GRAY_9X9 : str
+    Absolute file path for GAUSSIAN_GRAY_9X9 file
+LAPLACIAN_11X11 : str
+    Absolute file path for LAPLACIAN_11X11 file
+LAPLACIAN_13X13 : str
+    Absolute file path for LAPLACIAN_13X13 file
+LAPLACIAN_15X15 : str
+    Absolute file path for LAPLACIAN_15X15 file
+LAPLACIAN_3X3 : str
+    Absolute file path for LAPLACIAN_3X3 file
+LAPLACIAN_5X5 : str
+    Absolute file path for LAPLACIAN_5X5 file
+LAPLACIAN_7X7 : str
+    Absolute file path for LAPLACIAN_7X7 file
+LAPLACIAN_9X9 : str
+    Absolute file path for LAPLACIAN_9X9 file
+LAPLACIAN_GRAY_11X11 : str
+    Absolute file path for LAPLACIAN_GRAY_11X11 file
+LAPLACIAN_GRAY_13X13 : str
+    Absolute file path for LAPLACIAN_GRAY_13X13 file
+LAPLACIAN_GRAY_15X15 : str
+    Absolute file path for LAPLACIAN_GRAY_15X15 file
+LAPLACIAN_GRAY_3X3 : str
+    Absolute file path for LAPLACIAN_GRAY_3X3 file
+LAPLACIAN_GRAY_5X5 : str
+    Absolute file path for LAPLACIAN_GRAY_5X5 file
+LAPLACIAN_GRAY_7X7 : str
+    Absolute file path for LAPLACIAN_GRAY_7X7 file
+LAPLACIAN_GRAY_9X9 : str
+    Absolute file path for LAPLACIAN_GRAY_9X9 file
+SOBEL : str
+    Absolute file path for SOBEL file
+SOBEL_BLUR_11X11 : str
+    Absolute file path for SOBEL_BLUR_11X11 file
+SOBEL_BLUR_13X13 : str
+    Absolute file path for SOBEL_BLUR_13X13 file
+SOBEL_BLUR_15X15 : str
+    Absolute file path for SOBEL_BLUR_15X15 file
+SOBEL_BLUR_3X3 : str
+    Absolute file path for SOBEL_BLUR_3X3 file
+SOBEL_BLUR_5X5 : str
+    Absolute file path for SOBEL_BLUR_5X5 file
+SOBEL_BLUR_7X7 : str
+    Absolute file path for SOBEL_BLUR_7X7 file
+SOBEL_BLUR_9X9 : str
+    Absolute file path for SOBEL_BLUR_9X9 file
+'''
+
 __all__ = [
     'GAUSSIAN_11X11',
     'GAUSSIAN_13X13',

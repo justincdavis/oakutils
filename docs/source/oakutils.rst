@@ -7,8 +7,12 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   oakutils.blobs
    oakutils.calibration
+   oakutils.nodes
    oakutils.point_clouds
+   oakutils.tools
+   oakutils.utils
 
 Submodules
 ----------

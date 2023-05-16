@@ -4,7 +4,11 @@ oakutils
 .. toctree::
     :maxdepth: 3
 
-    source/modules
     source/oakutils
+    source/oakutils.blobs
     source/oakutils.calibration
+    source/oakutils.nodes
     source/oakutils.point_clouds
+    source/oakutils.tools
+    source/oakutils.utils
+    

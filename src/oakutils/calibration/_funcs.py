@@ -367,10 +367,10 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
     -----
     This uses the OpenCV formula for Q matrix, with an alpha value of 0.
     Thus, the Q matrix is:
-        [[1, 0, 0, -cx],
-        [0, 1, 0, -cy],
-        [0, 0, 0, (fx + fy) / 2],
-        [0, 0, -1 / baseline, 0]]
+    [[1, 0, 0, -cx],
+    [0, 1, 0, -cy],
+    [0, 0, 0, (fx + fy) / 2],
+    [0, 0, -1 / baseline, 0]]
     """
     return np.array(
         [
