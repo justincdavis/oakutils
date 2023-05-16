@@ -1,10 +1,8 @@
-from .laplacian import Laplacian
-from .gaussian import Gaussian
+from .laplacian import Laplacian, LaplacianGray
+from .gaussian import Gaussian, GaussianGray
 from .canny import Canny
-from .sobel import Sobel
-from .sobel_blur import SobelBlur
-from .laplacian_gray import LaplacianGray
-from .gaussian_gray import GaussianGray
+from .sobel import Sobel, SobelBlur
+from .advanced import DepthFilter
 
 __all__ = [
     "Laplacian",
@@ -14,4 +12,5 @@ __all__ = [
     "SobelBlur",
     "LaplacianGray",
     "GaussianGray",
+    "DepthFilter",
 ]

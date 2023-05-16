@@ -10,7 +10,7 @@ import onnx
 from onnxsim import simplify
 import blobconverter
 
-from definitions import Gaussian, Laplacian, Canny, Sobel, SobelBlur, LaplacianGray, GaussianGray
+from definitions import Gaussian, Laplacian, Canny, Sobel, SobelBlur, LaplacianGray, GaussianGray, DepthFilter
 
 
 class ModelType(Enum):
@@ -19,15 +19,26 @@ class ModelType(Enum):
     """
     NONE = 0
     KERNEL = 1
+    DUAL_KERNEL = 2
+
+class InputType(Enum):
+    """
+    Enum for the different input types.
+    """
+    COLOR = 0
+    GRAY = 1
 
 POSSIBLE_MODELS = {
-    "gaussian": (Gaussian, ModelType.KERNEL),
-    "laplacian": (Laplacian, ModelType.KERNEL),
-    # "canny": (Canny, ModelType.KERNEL),
-    "sobel": (Sobel, ModelType.NONE),
-    "sobel_blur": (SobelBlur, ModelType.KERNEL),
-    "laplacian_gray": (LaplacianGray, ModelType.KERNEL),
-    "gaussian_gray": (GaussianGray, ModelType.KERNEL),
+    "gaussian": (Gaussian, ModelType.KERNEL, InputType.COLOR),
+    "laplacian": (Laplacian, ModelType.KERNEL, InputType.COLOR),
+    # "canny": (Canny, ModelType.KERNEL, InputType.COLOR),
+    "sobel": (Sobel, ModelType.NONE, InputType.COLOR),
+    "sobel_blur": (SobelBlur, ModelType.KERNEL, InputType.COLOR),
+    "laplacian_gray": (LaplacianGray, ModelType.KERNEL, InputType.COLOR),
+    "gaussian_gray": (GaussianGray, ModelType.KERNEL, InputType.COLOR),
+    # "grayscale_laplacian": (Laplacian, ModelType.KERNEL, InputType.GRAY),
+    # "grayscale_gaussian": (Gaussian, ModelType.KERNEL, InputType.GRAY),
+    # "depth_filter": (DepthFilter, ModelType.KERNEL, InputType.GRAY),
 }
 
 # onnx folder path
@@ -38,6 +49,10 @@ TEMP_ONNX_FOLDER = os.path.join("models", "temp_onnx")
 MIN_KERNEL_SIZE = 3
 MAX_KERNEL_SIZE = 15
 KERNEL_INCREMENT = 2
+
+# size hyperparameters
+HEIGHT = 480
+WIDTH = 640
 
 # blob folder
 BLOB_FOLDER = os.path.join("models", "blobs")
@@ -108,12 +123,12 @@ def generate_onnx():
 
     # get list of models of ModelType.NONE
     none_models = [
-        model_str for model_str, (model, model_type) in POSSIBLE_MODELS.items()
+        model_str for model_str, (model, model_type, model_input) in POSSIBLE_MODELS.items()
         if model_type == ModelType.NONE
     ]
     for model_str in none_models:
         # create the model
-        model, model_type = POSSIBLE_MODELS[model_str]
+        model, model_type, model_input = POSSIBLE_MODELS[model_str]
         model_instance = create_model(
             model, model_type
         )
@@ -122,7 +137,7 @@ def generate_onnx():
         models[model_str] = model_instance
 
     kernel_models = [
-        model_str for model_str, (model, model_type) in POSSIBLE_MODELS.items()
+        model_str for model_str, (model, model_type, model_input) in POSSIBLE_MODELS.items()
         if model_type == ModelType.KERNEL
     ]
     kernel_models = list(
@@ -130,7 +145,7 @@ def generate_onnx():
     )
     for kernel_size, model_str in kernel_models:
         # create the model
-        model, model_type = POSSIBLE_MODELS[model_str]
+        model, model_type, model_input = POSSIBLE_MODELS[model_str]
         model_instance = create_model(
             model, model_type, kernel_size
         )
@@ -145,7 +160,10 @@ def generate_onnx():
         print(f"{model_name}: {model_instance}")
 
         # create dummy input
-        dummy_input = torch.randn(1, 3, 480, 640)
+        if model_name.startswith("grayscale"):
+            dummy_input = torch.randn(1, 1, HEIGHT, WIDTH)
+        else:
+            dummy_input = torch.randn(1, 3, HEIGHT, WIDTH)
 
         # onnx path
         onnx_path = os.path.join(TEMP_ONNX_FOLDER, f"{model_name}.onnx")
@@ -211,20 +229,42 @@ def generate_blobs():
         # convert the model to a blob
         blob_path = os.path.join(BLOB_FOLDER, model_name.split(".")[0])
 
+        skip_blob = False
         # check if the blob folder exists
         if os.path.exists(blob_path):
-            # skip the model
-            pass
-        else:
+            # check if the blob file exists
+            try:
+                blob_file = os.listdir(blob_path)[0]
+                skip_blob = True
+            except IndexError:
+                # blob file doesn't exist
+                skip_blob = False
+        if not skip_blob:
             # create the folder for blob_path
-            os.makedirs(blob_path)
+            try:
+                os.makedirs(blob_path)
+            except FileExistsError:
+                pass
 
-            blobconverter.from_onnx(
-                model=model_path, 
-                output_dir=blob_path,
-                data_type="FP16",
-                shaves=6,
-            )
+            try:
+                blobconverter.from_onnx(
+                    model=model_path, 
+                    output_dir=blob_path,
+                    data_type="FP16",
+                    shaves=6,
+                )
+            except Exception:
+                blobconverter.from_onnx(
+                    model=model_path,
+                    output_dir=blob_path,
+                    data_type="FP16",
+                    shaves=6,
+                    optimizer_params=[
+                        f"--input_shape=[1,1,{HEIGHT},{WIDTH}]",
+                        "--mean_values=[127.5,127.5,127.5]",
+                        "--scale_values=[255,255,255]",
+                    ],
+                )
     
         blob_name = model_name.split(".")[0]
 
