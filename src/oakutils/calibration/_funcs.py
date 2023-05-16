@@ -75,8 +75,11 @@ def get_camera_calibration_basic(
         )
 
         rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
+        rgb_fov_rad = np.deg2rad(rgb_fov)
         left_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
+        left_fov_rad = np.deg2rad(left_fov)
         right_fov = calib_data.getFov(dai.CameraBoardSocket.RIGHT)
+        right_fov_rad = np.deg2rad(right_fov)
 
         R1 = np.array(calib_data.getStereoLeftRectificationRotation())
         R2 = np.array(calib_data.getStereoRightRectificationRotation())
@@ -187,6 +190,7 @@ def get_camera_calibration_basic(
             cx=cx_rgb,
             cy=cy_rgb,
             fov=rgb_fov,
+            fov_rad=rgb_fov_rad,
         )
         left_data = MonoCalibrationData(
             size=mono_size,
@@ -197,6 +201,7 @@ def get_camera_calibration_basic(
             cx=cx_left,
             cy=cy_left,
             fov=left_fov,
+            fov_rad=left_fov_rad,
             R=R1,
             T=T1,
             H=H_left,
@@ -210,6 +215,7 @@ def get_camera_calibration_basic(
             cx=cx_right,
             cy=cy_right,
             fov=right_fov,
+            fov_rad=right_fov_rad,
             R=R2,
             T=T2,
             H=H_right,
@@ -282,6 +288,8 @@ def get_camera_calibration_primary_mono(
     fy_primary = data.left.fy if is_primary_mono_left else data.right.fy
     cx_primary = data.left.cx if is_primary_mono_left else data.right.cx
     cy_primary = data.left.cy if is_primary_mono_left else data.right.cy
+    fov_primary = data.left.fov if is_primary_mono_left else data.right.fov
+    fov_rad_primary = data.left.fov_rad if is_primary_mono_left else data.right.fov_rad
     R_primary = data.stereo.R1 if is_primary_mono_left else data.stereo.R2
     T_primary = data.stereo.T1 if is_primary_mono_left else data.stereo.T2
     primary_extrinsic = (
@@ -297,7 +305,8 @@ def get_camera_calibration_primary_mono(
         fy=fy_primary,
         cx=cx_primary,
         cy=cy_primary,
-        fov=data.left.fov,
+        fov=fov_primary,
+        fov_rad=fov_rad_primary,
         R=R_primary,
         T=T_primary,
         H=primary_extrinsic,
@@ -444,6 +453,7 @@ def get_camera_calibration(
         cx=data.rgb.cx,
         cy=data.rgb.cy,
         fov=data.rgb.fov,
+        fov_rad=data.rgb.fov_rad,
         P=P_rgb,
         valid_region=valid_region_rgb,
         map_1=map_rgb_1,
@@ -520,6 +530,7 @@ def get_camera_calibration(
         cx=data.left.cx,
         cy=data.left.cy,
         fov=data.left.fov,
+        fov_rad=data.left.fov_rad,
         R=data.left.R,
         T=data.left.T,
         H=data.left.H,
@@ -537,6 +548,7 @@ def get_camera_calibration(
         cx=data.right.cx,
         cy=data.right.cy,
         fov=data.right.fov,
+        fov_rad=data.right.fov_rad,
         R=data.right.R,
         T=data.right.T,
         H=data.right.H,
@@ -554,6 +566,7 @@ def get_camera_calibration(
         cx=data.primary.cx,
         cy=data.primary.cy,
         fov=data.primary.fov,
+        fov_rad=data.primary.fov_rad,
         R=data.primary.R,
         T=data.primary.T,
         H=data.primary.H,

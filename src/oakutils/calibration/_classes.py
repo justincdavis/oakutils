@@ -28,6 +28,8 @@ class MonoCalibrationData:
         Principal point in y.
     fov : float
         Field of view.
+    fov_rad : float
+        Field of view in radians.
     R : np.ndarray
         Rotation matrix.
     T : np.ndarray
@@ -52,6 +54,7 @@ class MonoCalibrationData:
     cx: float
     cy: float
     fov: float
+    fov_rad: float
     R: np.ndarray
     T: np.ndarray
     H: np.ndarray
@@ -165,6 +168,8 @@ class ColorCalibrationData:
         Principal point in the y direction.
     fov : float
         Field of view.
+    fov_rad : float
+        Field of view in radians.
     P : Optional[np.ndarray], optional
         Projection matrix.
     valid_region : Optional[Tuple[int, int, int, int]], optional
@@ -185,6 +190,7 @@ class ColorCalibrationData:
     cx: float
     cy: float
     fov: float
+    fov_rad: float
     P: Optional[np.ndarray] = None
     valid_region: Optional[Tuple[int, int, int, int]] = None
     map_1: Optional[np.ndarray] = None

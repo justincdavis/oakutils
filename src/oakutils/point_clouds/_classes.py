@@ -18,6 +18,10 @@ class PointCloudVisualizer:
         Updates the point cloud to visualize.
     update_rotation(R_camera_to_world: np.ndarray)
         Updates the rotation matrix to use for the point cloud.
+
+    References
+    ----------
+    https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/device-pointcloud/projector_device.py
     """
 
     def __init__(
