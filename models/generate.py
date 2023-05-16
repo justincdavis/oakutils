@@ -10,7 +10,7 @@ import onnx
 from onnxsim import simplify
 import blobconverter
 
-from definitions import Gaussian, Laplacian, Canny, Sobel, SobelBlur
+from definitions import Gaussian, Laplacian, Canny, Sobel, SobelBlur, LaplacianGray, GaussianGray
 
 
 class ModelType(Enum):
@@ -26,6 +26,8 @@ POSSIBLE_MODELS = {
     # "canny": (Canny, ModelType.KERNEL),
     "sobel": (Sobel, ModelType.NONE),
     "sobel_blur": (SobelBlur, ModelType.KERNEL),
+    "laplacian_gray": (LaplacianGray, ModelType.KERNEL),
+    "gaussian_gray": (GaussianGray, ModelType.KERNEL),
 }
 
 # onnx folder path

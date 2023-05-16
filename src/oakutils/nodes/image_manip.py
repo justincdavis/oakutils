@@ -1,11 +1,11 @@
-from typing import Tuple, Optional, List, Callable
+from typing import Tuple, Optional, List
 
 import depthai as dai
 
 
 def create_image_manip(
     pipeline: dai.Pipeline,
-    input_link: Callable,
+    input_link: dai.Node.Output,
     frame_type: dai.RawImgFrame.Type,
     stream_name: str = "image_manip",
     center_crop: Optional[Tuple[float, float]] = None,
@@ -106,7 +106,7 @@ def create_image_manip(
     if warp_transform_matrix_3x3 is not None:
         manip.initialConfig.setWarpTransformMatrix3x3(*warp_transform_matrix_3x3)
 
-    input_link(manip.inputImage)
+    input_link.link(manip.inputImage)
 
     xout_manip = pipeline.create(dai.node.XLinkOut)
     xout_manip.setStreamName(stream_name)
