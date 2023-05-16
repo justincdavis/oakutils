@@ -225,7 +225,7 @@ def get_camera_calibration_basic(
             H_right=H_right,
             l2r_extrinsic=l2r_extrinsic,
             r2l_extrinsic=r2l_extrinsic,
-            Q_left=create_q_matrix(fx_left, fy_left, cx_left, cy_left, -1.0*baseline),
+            Q_left=create_q_matrix(fx_left, fy_left, cx_left, cy_left, -1.0 * baseline),
             Q_right=create_q_matrix(fx_right, fy_right, cx_right, cy_right, baseline),
             baseline=baseline,
         )

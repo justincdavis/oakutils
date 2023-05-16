@@ -67,7 +67,7 @@ def create_mono_camera(
     ValueError
         If the luma_denoise is not between 0 and 4
     ValueError
-        If the chroma_denoise is not between 0 and 4 
+        If the chroma_denoise is not between 0 and 4
     """
     if fps < 0 or fps > 120:
         raise ValueError("fps must be between 0 and 120")
@@ -83,7 +83,7 @@ def create_mono_camera(
         raise ValueError("luma_denoise must be between 0 and 4")
     if chroma_denoise < 0 or chroma_denoise > 4:
         raise ValueError("chroma_denoise must be between 0 and 4")
-    
+
     # static properties
     cam: dai.node.MonoCamera = pipeline.create(dai.node.MonoCamera)
     cam.setBoardSocket(socket)
@@ -147,7 +147,7 @@ def create_left_right_cameras(
     dai.node.MonoCamera
         The left mono camera node
     dai.node.MonoCamera
-        The right mono camera node   
+        The right mono camera node
     """
     left_cam = create_mono_camera(
         pipeline=pipeline,

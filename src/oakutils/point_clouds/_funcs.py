@@ -9,6 +9,8 @@ def get_point_cloud_from_rgb_depth_image(
     rgb_image: np.ndarray,
     depth_image: np.ndarray,
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
+    depth_trunc: float = 25000.0,
+    depth_scale: float = 1000.0,
 ) -> o3d.geometry.PointCloud:
     """
     Creates an o3d point cloud from an RGB and a depth image.
@@ -21,6 +23,10 @@ def get_point_cloud_from_rgb_depth_image(
         The depth image to use.
     camera_intrinsics : o3d.camera.PinholeCameraIntrinsic
         The camera intrinsics to use.
+    depth_trunc : float, optional
+        Truncated depth values to this value. Defaults to 25000.0 to truncate depth values to 25 meters.
+    depth_scale : float, optional
+        Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
 
     Returns
     -------
@@ -33,11 +39,12 @@ def get_point_cloud_from_rgb_depth_image(
         or rgb_image.shape[1] != depth_image.shape[1]
     ):
         rgb_image = cv2.resize(rgb_image, (depth_image.shape[1], depth_image.shape[0]))
+    rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
 
     rgb_o3d = o3d.geometry.Image(rgb_image)
     depth_o3d = o3d.geometry.Image(depth_image)
 
-    rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(rgb_o3d, depth_o3d)
+    rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(rgb_o3d, depth_o3d, depth_trunc=depth_trunc, depth_scale=depth_scale)
 
     pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
         rgbd_image,

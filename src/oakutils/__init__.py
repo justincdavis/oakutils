@@ -1,7 +1,21 @@
 from .camera import Camera
+from . import (
+    calibration,
+    point_clouds,
+    blobs,
+    nodes,
+    tools,
+)
 
-__all__ = ["Camera"]
-__version__ = "0.0.3"
+__all__ = [
+    "Camera",
+    "calibration",
+    "point_clouds",
+    "blobs",
+    "nodes",
+    "tools",
+]
+__version__ = "0.0.4"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)
