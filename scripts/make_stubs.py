@@ -2,16 +2,21 @@ import subprocess
 import os
 import shutil
 
-import cv2
 import open3d
 
 
-def move_stubs():
+def get_name(module):
+    try:
+        return module.__name__
+    except AttributeError:
+        return module
+
+def move_open3d_stubs():
     # moves stubs from out to typings
-    delete_folder(os.path.join(os.path.dirname(__file__), "..", ".typings"))
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", ".typings", "open3d"))
     shutil.move(
-        os.path.join(os.path.dirname(__file__), "..", "out"),
-        os.path.join(os.path.dirname(__file__), "..", ".typings"),
+        os.path.join(os.path.dirname(__file__), "..", "out", "open3d"),
+        os.path.join(os.path.dirname(__file__), "..", ".typings", "open3d"),
     )
 
 def delete_folder(folder_path: str):
@@ -61,13 +66,13 @@ def fix_open3d_stub_syntax():
 
 
 def make_stubs(module):
-    print(f"    Making stubs for {module.__name__}")
-    subprocess.run(["stubgen", "-m", module.__name__])
+    name = get_name(module)
+    print(f"    Making stubs for {name}")
+    subprocess.run(["stubgen", "-m", name])
 
 
 def main():
     for module in [
-        cv2,
         open3d,
         open3d.camera,
         open3d.core,
@@ -80,15 +85,16 @@ def main():
         open3d.utility,
         open3d.visualization,
     ]:
-        print(f"Making stubs for {module.__name__}")
+        print(f"Making stubs for {get_name(module)}")
         make_stubs(module)
 
     fix_open3d_stubs()
 
-    move_stubs()
+    move_open3d_stubs()
 
     fix_open3d_stub_syntax()
 
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
 
 if __name__ == "__main__":
     main()
