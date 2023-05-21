@@ -34,7 +34,7 @@ def create_neural_network(
         The number of NCEs per inference thread, by default None
     num_pool_frames : Optional[int], optional
         The number of pool frames, by default None
-    
+
     Returns
     -------
     dai.node.NeuralNetwork
@@ -63,10 +63,13 @@ def create_neural_network(
 
     return nn, xout_nn
 
-def get_nn_bgr_frame(data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)) -> np.ndarray:
+
+def get_nn_bgr_frame(
+    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+) -> np.ndarray:
     """
     Takes the raw data output from a neural network execution and converts it to a BGR frame
-    usable by cv2. 
+    usable by cv2.
 
     Parameters
     ----------
@@ -80,12 +83,18 @@ def get_nn_bgr_frame(data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int,
     """
     if isinstance(data, dai.NNData):
         data = data.getData()
-    frame = data.view(np.float16).reshape((3, frame_size[1], frame_size[0])).transpose(1, 2, 0)
+    frame = (
+        data.view(np.float16)
+        .reshape((3, frame_size[1], frame_size[0]))
+        .transpose(1, 2, 0)
+    )
     frame = (frame * 255 + 127.5).astype(np.uint8)
     return frame
 
 
-def get_nn_gray_frame(data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)) -> np.ndarray:
+def get_nn_gray_frame(
+    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+) -> np.ndarray:
     """
     Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
@@ -102,6 +111,10 @@ def get_nn_gray_frame(data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int
     """
     if isinstance(data, dai.NNData):
         data = data.getData()
-    frame = data.view(np.float16).reshape((1, frame_size[1], frame_size[0])).transpose(1, 2, 0)
+    frame = (
+        data.view(np.float16)
+        .reshape((1, frame_size[1], frame_size[0]))
+        .transpose(1, 2, 0)
+    )
     frame = (frame * 255 + 127.5).astype(np.uint8)
     return frame

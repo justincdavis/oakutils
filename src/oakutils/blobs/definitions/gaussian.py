@@ -1,8 +1,12 @@
+from typing import List
+
 import kornia
-from torch import nn
+import torch
+
+from .abstract_model import AbstractModel, ModelInput
 
 
-class Gaussian(nn.Module):
+class Gaussian(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.gaussian_blur2d
     """
@@ -12,12 +16,34 @@ class Gaussian(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+    
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
 
-class GaussianGray(nn.Module):
+
+class GaussianGray(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output
     """
@@ -27,7 +53,28 @@ class GaussianGray(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )

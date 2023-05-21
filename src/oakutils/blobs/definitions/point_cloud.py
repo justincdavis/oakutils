@@ -1,14 +1,88 @@
 import torch
+import numpy as np
+
+from .abstract_model import AbstractModel, ModelInput
+from .utils import convert_to_fp16
 
 
-def depth_to_3d(depth: torch.Tensor, xyz: torch.Tensor) -> torch.Tensor:
+def create_xyz(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
+    """
+    Creates a constant reprojection matrix for the given camera matrix and image size.
+    This is for generating the input to the point cloud generation model.
+
+    Parameters
+    ----------
+    width : int
+        The width of the image
+    height : int
+        The height of the image
+    camera_matrix : np.ndarray
+        The camera matrix to use for the reprojection
+        This should be a 3x3 matrix
+
+    Returns
+    -------
+    np.ndarray
+        The reprojection matrix
+    """
+    xs = np.linspace(0, width - 1, width, dtype=np.float32)
+    ys = np.linspace(0, height - 1, height, dtype=np.float32)
+
+    # generate grid by stacking coordinates
+    base_grid = np.stack(np.meshgrid(xs, ys))  # WxHx2
+    points_2d = base_grid.transpose(1, 2, 0)  # 1xHxWx2
+
+    # unpack coordinates
+    u_coord: np.array = points_2d[..., 0]
+    v_coord: np.array = points_2d[..., 1]
+
+    # unpack intrinsics
+    fx: np.array = camera_matrix[0, 0]
+    fy: np.array = camera_matrix[1, 1]
+    cx: np.array = camera_matrix[0, 2]
+    cy: np.array = camera_matrix[1, 2]
+
+    # projective
+    x_coord: np.array = (u_coord - cx) / fx
+    y_coord: np.array = (v_coord - cy) / fy
+
+    xyz = np.stack([x_coord, y_coord], axis=-1)
+    return np.pad(xyz, ((0, 0), (0, 0), (0, 1)), "constant", constant_values=1.0)
+
+
+def _depth_to_3d(depth: torch.Tensor, xyz: torch.Tensor) -> torch.Tensor:
     # depth should come in Bx1xHxW
     points_depth: torch.Tensor = depth.permute(0, 2, 3, 1)  # 1xHxWx1
     points_3d: torch.Tensor = xyz * points_depth
     return points_3d.permute(0, 3, 1, 2)  # Bx3xHxW
 
-class PointCloud(torch.nn.Module):
-    def forward(self, xyz, depth):
+
+class PointCloud(AbstractModel):
+    def __init__(self):
+        super().__init__()
+
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.DEPTH
+
+    @classmethod
+    def input_names(self):
+        """
+        The names of the input tensors
+        """
+        return ["xyz", "depth"]
+
+    @classmethod
+    def output_names(self):
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, xyz: np.ndarray, depth: torch.Tensor) -> torch.Tensor:
         # TODO: once U16 -> FP16 is supported, use that.
-        depthFP16 = 256.0 * depth[:,:,:,1::2] + depth[:,:,:,::2]
-        return depth_to_3d(depthFP16, xyz)
+        depthFP16 = convert_to_fp16(depth)
+        return _depth_to_3d(depthFP16, xyz)

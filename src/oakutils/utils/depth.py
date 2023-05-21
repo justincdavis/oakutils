@@ -2,7 +2,16 @@ import cv2
 import numpy as np
 
 
-def align_depth_to_rgb(depth_image: np.ndarray, pixel_coords: np.ndarray, inverse_depth_intrinsic: np.ndarray, rgb_intrinsic: np.ndarray, depth_to_rgb_extrinsic: np.ndarray, rgb_width: int, rgb_height: int, depth_scale: float = 10.0) -> np.ndarray:
+def align_depth_to_rgb(
+    depth_image: np.ndarray,
+    pixel_coords: np.ndarray,
+    inverse_depth_intrinsic: np.ndarray,
+    rgb_intrinsic: np.ndarray,
+    depth_to_rgb_extrinsic: np.ndarray,
+    rgb_width: int,
+    rgb_height: int,
+    depth_scale: float = 10.0,
+) -> np.ndarray:
     """
     Aligns a depth image to an RGB image.
 
@@ -24,7 +33,7 @@ def align_depth_to_rgb(depth_image: np.ndarray, pixel_coords: np.ndarray, invers
         The height of the RGB image.
     depth_scale : float, optional
         Depth scaling factor. Defaults to 10.0 to convert from millimeters to centimeters.
-    
+
     Returns
     -------
     np.ndarray
@@ -35,13 +44,15 @@ def align_depth_to_rgb(depth_image: np.ndarray, pixel_coords: np.ndarray, invers
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
     # depth to 3d coordinates [x, y, z]
-    cam_coords = np.dot(inverse_depth_intrinsic, pixel_coords) * depth_image.flatten().astype(float) / depth_scale
+    cam_coords = (
+        np.dot(inverse_depth_intrinsic, pixel_coords)
+        * depth_image.flatten().astype(float)
+        / depth_scale
+    )
 
     # move the depth image 3d coordinates to the rgb camera  location
-    cam_coords_homogeneous = np.vstack(
-        (cam_coords, np.ones((1, cam_coords.shape[1]))))
-    depth_points_homogeneous = np.dot(
-        depth_to_rgb_extrinsic, cam_coords_homogeneous)
+    cam_coords_homogeneous = np.vstack((cam_coords, np.ones((1, cam_coords.shape[1]))))
+    depth_points_homogeneous = np.dot(depth_to_rgb_extrinsic, cam_coords_homogeneous)
 
     # project the 3d depth points onto the rgb image plane
     rgb_frame_ref_cloud = depth_points_homogeneous[:3, :]
@@ -58,22 +69,24 @@ def align_depth_to_rgb(depth_image: np.ndarray, pixel_coords: np.ndarray, invers
 
     # place the valid aligned points into a new depth image
     aligned_depth_image = np.full((rgb_height, rgb_width), 0, dtype=np.uint16)
-    aligned_depth_image[y_idx, x_idx] = u_v_z_sampled[3]*depth_scale
+    aligned_depth_image[y_idx, x_idx] = u_v_z_sampled[3] * depth_scale
     return aligned_depth_image
 
 
-def quantize_colormap_depth_frame(frame: np.ndarray, depth_scale_factor: float = 2.0) -> np.ndarray:
+def quantize_colormap_depth_frame(
+    frame: np.ndarray, depth_scale_factor: float = 2.0
+) -> np.ndarray:
     """
-    Further quantize the depth image for nice visualization, and 
+    Further quantize the depth image for nice visualization, and
     apply a colormap for better visualization.
-    
+
     Parameters
     ----------
     frame : np.ndarray
         Depth map image
     depth_scale_factor : float
         Scale factor to apply to the depth map before quantization
-    
+
     Returns
     -------
     np.ndarray
@@ -83,11 +96,16 @@ def quantize_colormap_depth_frame(frame: np.ndarray, depth_scale_factor: float =
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
-    quantized_depth = cv2.convertScaleAbs(frame.astype(float), alpha=255/depth_scale_factor)
+    quantized_depth = cv2.convertScaleAbs(
+        frame.astype(float), alpha=255 / depth_scale_factor
+    )
     quantized_depth = cv2.applyColorMap(quantized_depth, cv2.COLORMAP_JET)
     return quantized_depth
 
-def overlay_depth_frame(rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5) -> np.ndarray:
+
+def overlay_depth_frame(
+    rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5
+) -> np.ndarray:
     """
     Overlay the depth map on top of the RGB image.
 
@@ -114,6 +132,10 @@ def overlay_depth_frame(rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alph
     cond = depth_three_channel[:, :, 2] > 0
     depth_three_channel[cond, 2] = 255
     # Blend aligned depth + rgb image
-    blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(float) + rgb_alpha * rgb_frame.astype(float)
-    blended_image = (255 * blended_image.astype(float) / blended_image.max()).astype(np.uint8)
+    blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(
+        float
+    ) + rgb_alpha * rgb_frame.astype(float)
+    blended_image = (255 * blended_image.astype(float) / blended_image.max()).astype(
+        np.uint8
+    )
     return blended_image

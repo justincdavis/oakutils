@@ -1,8 +1,12 @@
+from typing import List
+
 import kornia
-from torch import nn
+import torch
+
+from .abstract_model import AbstractModel, ModelInput
 
 
-class Laplacian(nn.Module):
+class Laplacian(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.laplacian
     """
@@ -11,10 +15,32 @@ class Laplacian(nn.Module):
         super().__init__()
         self._kernel_size = kernel_size
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.laplacian(image, self._kernel_size)
 
-class LaplacianGray(nn.Module):
+
+class LaplacianGray(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.laplacian, with grayscale output
     """
@@ -23,12 +49,34 @@ class LaplacianGray(nn.Module):
         super().__init__()
         self._kernel_size = kernel_size
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         laplacian = kornia.filters.laplacian(image, self._kernel_size)
         normalized = kornia.enhance.normalize_min_max(laplacian)
         return kornia.color.bgr_to_grayscale(normalized)
 
-class LaplacianBlur(nn.Module):
+
+class LaplacianBlur(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.laplacian, with gaussian blur
     """
@@ -38,13 +86,35 @@ class LaplacianBlur(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
         return kornia.filters.laplacian(gaussian, self._kernel_size)
-    
-class LaplacianBlurGray(nn.Module):
+
+
+class LaplacianBlurGray(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.laplacian, with gaussian blur, that outputs grayscale
     """
@@ -54,7 +124,28 @@ class LaplacianBlurGray(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )

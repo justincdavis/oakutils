@@ -1,8 +1,12 @@
+from typing import List
+
 import kornia
-from torch import nn
+import torch
+
+from .abstract_model import AbstractModel, ModelInput
 
 
-class Sobel(nn.Module):
+class Sobel(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.sobel
     """
@@ -10,12 +14,32 @@ class Sobel(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(self, image):
-        return kornia.filters.sobel(
-            image
-        )
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
 
-class SobelBlur(nn.Module):
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
+        return kornia.filters.sobel(image)
+
+
+class SobelBlur(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d)
     """
@@ -25,14 +49,38 @@ class SobelBlur(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.sobel(
             kornia.filters.gaussian_blur2d(
-                image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+                image,
+                (self._kernel_size, self._kernel_size),
+                (self._sigma, self._sigma),
             )
         )
 
-class SobelGray(nn.Module):
+
+class SobelGray(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.sobel, with grayscale output
     """
@@ -40,14 +88,34 @@ class SobelGray(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(self, image):
-        sobel = kornia.filters.sobel(
-            image
-        )
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+    
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+    
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
+        sobel = kornia.filters.sobel(image)
         normalized = kornia.enhance.normalize_min_max(sobel)
         return kornia.color.bgr_to_grayscale(normalized)
 
-class SobelBlurGray(nn.Module):
+
+class SobelBlurGray(AbstractModel):
     """
     nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d), with grayscale output
     """
@@ -57,10 +125,33 @@ class SobelBlurGray(nn.Module):
         self._kernel_size = kernel_size
         self._sigma = sigma
 
-    def forward(self, image):
+    @classmethod
+    def input_type(self) -> ModelInput:
+        """
+        The type of input this model takes
+        """
+        return ModelInput.COLOR
+    
+    @classmethod
+    def input_names(self) -> List[str]:
+        """
+        The names of the input tensors
+        """
+        return ["input"]
+    
+    @classmethod
+    def output_names(self) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         sobel = kornia.filters.sobel(
             kornia.filters.gaussian_blur2d(
-                image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+                image,
+                (self._kernel_size, self._kernel_size),
+                (self._sigma, self._sigma),
             )
         )
         normalized = kornia.enhance.normalize_min_max(sobel)
