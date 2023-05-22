@@ -140,3 +140,24 @@ def filter_point_cloud(
             pcd = pcd.voxel_down_sample(voxel_size=voxel_size)
 
     return pcd
+
+
+def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
+    """
+    Convert a numpy array to an open3d point cloud.
+    The numpy array should be of shape (N, 3) or (N, 4) where N is the number of points.
+
+    Parameters
+    ----------
+    pcl_data : np.ndarray
+        The numpy array to convert.
+
+    Returns
+    -------
+    o3d.geometry.PointCloud
+        The open3d point cloud.
+    """
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(pcl_data)
+    pcd.remove_non_finite_points()
+    return pcd
