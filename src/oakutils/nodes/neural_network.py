@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Tuple, Optional, Union
 
 import numpy as np
@@ -26,6 +27,7 @@ def create_neural_network(
         Explicitly pass in the link as a non-called function.
     blob_path : str
         The path to the blob file to use for the neural network.
+        Will be converted to a pathlib.Path.
     stream_name : str, optional
         The name of the stream, by default "nn"
     num_inference_threads : int, optional
@@ -42,9 +44,11 @@ def create_neural_network(
     dai.node.XLinkOut
         The output link of the neural network node, stream name is default "nn"
     """
+    bpath: Path = Path(blob_path)
+
     # create the node and handle the always present parameters
     nn = pipeline.create(dai.node.NeuralNetwork)
-    nn.setBlobPath(blob_path)
+    nn.setBlobPath(bpath)
     nn.setNumInferenceThreads(num_inference_threads)
 
     # handle the optional parameters

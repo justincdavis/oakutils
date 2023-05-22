@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 import atexit
 from threading import Thread, Condition
 
+import numpy as np
 import open3d as o3d
 
 
@@ -15,6 +16,12 @@ class PointCloudVisualizer:
         Stops the visualizer.
     update(pcd: o3d.geometry.PointCloud)
         Updates the point cloud to visualize.
+    update_rotation(R_camera_to_world: np.ndarray)
+        Updates the rotation matrix to use for the point cloud.
+
+    References
+    ----------
+    https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/device-pointcloud/projector_device.py
     """
 
     def __init__(
@@ -22,7 +29,7 @@ class PointCloudVisualizer:
         window_name: str = "PointCloud",
         window_size: Tuple[int, int] = (1920, 1080),
         use_threading: bool = True,
-    ) -> "PointCloudVisualizer":
+    ):
         """
         Creates a PointCloudVisualizer object.
 
@@ -37,6 +44,7 @@ class PointCloudVisualizer:
         """
         self._pcd: Optional[o3d.geometry.PointCloud] = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
+        self._R_camera_to_world = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]]).astype(np.float64)
         self._window_name: str = window_name
         self._window_size: Tuple[int, int] = window_size
         self._started: bool = False
@@ -99,6 +107,9 @@ class PointCloudVisualizer:
         """
         Updates the visualizer.
         """
+        if self._pcd is None:
+            return
+        self._pcd.rotate(self._R_camera_to_world, center=np.array([0,0,0],dtype=np.float64))
         self._vis.update_geometry(self._pcd)
         self._vis.poll_events()
         self._vis.update_renderer()
@@ -113,9 +124,19 @@ class PointCloudVisualizer:
         """
         Updates the point cloud to visualize.
 
-        :param pcd: The point cloud to visualize.
-        :type pcd: o3d.geometry.PointCloud
+        Parameters
+        ----------
+        pcd : o3d.geometry.PointCloud
+            The point cloud to visualize.
+
+        Raises
+        ------
+        TypeError
+            If pcd is not an open3d.geometry.PointCloud object.
         """
+        if not isinstance(pcd, o3d.geometry.PointCloud):
+            raise TypeError("pcd must be an open3d.geometry.PointCloud object.")
+
         if self._pcd is None:
             self._pcd = pcd
         else:
@@ -129,3 +150,14 @@ class PointCloudVisualizer:
             if not self._started:
                 self._create()
             self._update()
+
+    def update_rotation(self, rot: np.ndarray) -> None:
+        """
+        Updates the rotation matrix of the point cloud.
+
+        Parameters
+        ----------
+        rot : np.ndarray
+            The rotation matrix.
+        """
+        self._R_camera_to_world = rot
