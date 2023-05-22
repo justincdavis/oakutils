@@ -13,10 +13,10 @@ def get_name(module):
 
 def move_open3d_stubs():
     # moves stubs from out to typings
-    delete_folder(os.path.join(os.path.dirname(__file__), "..", ".typings", "open3d"))
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"))
     shutil.move(
         os.path.join(os.path.dirname(__file__), "..", "out", "open3d"),
-        os.path.join(os.path.dirname(__file__), "..", ".typings", "open3d"),
+        os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"),
     )
 
 def delete_folder(folder_path: str):
@@ -50,7 +50,7 @@ def fix_open3d_stubs():
 
 def fix_open3d_stub_syntax():
     # resolve syntax issues
-    path = os.path.join(os.path.dirname(__file__), "..", ".typings", "open3d")
+    path = os.path.join(os.path.dirname(__file__), "..", "typings", "open3d")
     camera = os.path.join(path, "camera", "__init__.pyi")
     with open(camera, "r") as f:
         data = f.read()
