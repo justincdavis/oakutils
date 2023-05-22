@@ -29,7 +29,7 @@ class PointCloudVisualizer:
         window_name: str = "PointCloud",
         window_size: Tuple[int, int] = (1920, 1080),
         use_threading: bool = True,
-    ) -> "PointCloudVisualizer":
+    ):
         """
         Creates a PointCloudVisualizer object.
 

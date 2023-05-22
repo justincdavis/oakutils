@@ -418,6 +418,8 @@ def get_camera_calibration(
         mono_size=mono_size,
         is_primary_mono_left=is_primary_mono_left,
     )
+    assert data.primary is not None  # help mypy
+
     # run cv2.getOptimalNewCameraMatrix for RGB cam
     P_rgb, valid_region_rgb = cv2.getOptimalNewCameraMatrix(
         data.rgb.K,
