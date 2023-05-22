@@ -30,7 +30,7 @@ class HostSpatialsCalc:
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-calc-spatials-on-host/calc.py
     """
-    def __init__(self, data: CalibrationData, delta: int = 5, thresh_low: int = 200, thresh_high: int = 30000) -> "HostSpatialsCalc":
+    def __init__(self, data: CalibrationData, delta: int = 5, thresh_low: int = 200, thresh_high: int = 30000):
         """
         Creates a HostSpatialsCalc object.
 

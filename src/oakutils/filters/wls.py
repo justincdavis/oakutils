@@ -13,7 +13,7 @@ class WLSFilter:
     on disparity images.
     """
     
-    def __init__(self, cam_data: StereoCalibrationData, l: int = 8000, s: float = 1.0, disp_levels: int = 96) -> "WLSFilter":
+    def __init__(self, cam_data: StereoCalibrationData, l: int = 8000, s: float = 1.0, disp_levels: int = 96):
         """
         Creates a WLSFilter object.
 
