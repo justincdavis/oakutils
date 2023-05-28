@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 import depthai as dai
 
@@ -14,6 +14,7 @@ def create_mono_camera(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
+    isp_3a_fps: Optional[int] = None,
 ) -> dai.node.MonoCamera:
     """
     Creates a pipeline for the mono camera.
@@ -46,6 +47,10 @@ def create_mono_camera(
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
         Valid values are 0 ... 4
+    isp_3a_fps: Optional[int], optional
+        The fps of how often the 3a algorithms will run, by default None
+        Reducing this can help with performance onboard the device.
+        A common value to reduce CPU usage on device is 15.
 
     Returns
     -------
@@ -98,6 +103,9 @@ def create_mono_camera(
     cam.setResolution(resolution)
     cam.setFps(fps)
 
+    if isp_3a_fps is not None:
+        cam.setIsp3aFps(isp_3a_fps)
+
     return cam
 
 
@@ -111,6 +119,7 @@ def create_left_right_cameras(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
+    isp_3a_fps: Optional[int] = None,
 ) -> Tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Wrapper function for creating the left and right mono cameras.
@@ -141,6 +150,10 @@ def create_left_right_cameras(
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
         Valid values are 0 ... 4
+    isp_3a_fps: Optional[int], optional
+        The fps of how often the 3a algorithms will run, by default None
+        Reducing this can help with performance onboard the device.
+        A common value to reduce CPU usage on device is 15.
 
     Returns
     -------
@@ -160,6 +173,7 @@ def create_left_right_cameras(
         sharpness=sharpness,
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
+        isp_3a_fps=isp_3a_fps,
     )
     right_cam = create_mono_camera(
         pipeline=pipeline,
@@ -172,6 +186,7 @@ def create_left_right_cameras(
         sharpness=sharpness,
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
+        isp_3a_fps=isp_3a_fps,
     )
 
     return left_cam, right_cam
