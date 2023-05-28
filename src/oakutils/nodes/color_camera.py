@@ -19,6 +19,7 @@ def create_color_camera(
     chroma_denoise: int = 1,
     isp_target_size: Optional[Tuple[int, int]] = None,
     isp_scale: Optional[Tuple[int, int]] = None,
+    isp_3a_fps: Optional[int] = None,
 ) -> dai.node.ColorCamera:
     """
     Creates a pipeline for the color camera.
@@ -61,6 +62,10 @@ def create_color_camera(
         Allows scaling of the cameras frames on-board the OAK to any size
         not just the natively supported resolutions.
         Works together with the isp_target_size parameter
+    isp_3a_fps: Optional[int], optional
+        The fps of how often the 3a algorithms will run, by default None
+        Reducing this can help with performance onboard the device.
+        A common value to reduce CPU usage on device is 15.
 
     Returns
     -------
@@ -124,5 +129,8 @@ def create_color_camera(
     else:
         cam.setVideoSize(size_tuple)
         cam.setStillSize(size_tuple)
+    
+    if isp_3a_fps is not None:
+        cam.setIsp3aFps(isp_3a_fps)
 
     return cam
