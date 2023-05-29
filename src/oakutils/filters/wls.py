@@ -12,8 +12,14 @@ class WLSFilter:
     A class for computing the weighted-least-squares filter,
     on disparity images.
     """
-    
-    def __init__(self, cam_data: StereoCalibrationData, l: int = 8000, s: float = 1.0, disp_levels: int = 96):
+
+    def __init__(
+        self,
+        cam_data: StereoCalibrationData,
+        l: int = 8000,
+        s: float = 1.0,
+        disp_levels: int = 96,
+    ):
         """
         Creates a WLSFilter object.
 
@@ -38,7 +44,9 @@ class WLSFilter:
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
 
-    def filter(self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+    def filter(
+        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool = True
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Filters the disparity image.
 
@@ -56,16 +64,24 @@ class WLSFilter:
         np.ndarray
             The filtered disparity image.
         np.ndarray
-            The new depth image.        
+            The new depth image.
         """
         if self._depth_scale_left is None:
-            self._depth_scale_left = self._data.baseline * (disparity.shape[1] / (2.0 * math.tan(math.radians(self._data.left.fov / 2))))
-            self._depth_scale_right = self._data.baseline * (disparity.shape[1] / (2.0 * math.tan(math.radians(self._data.right.fov / 2))))
+            self._depth_scale_left = self._data.baseline * (
+                disparity.shape[1]
+                / (2.0 * math.tan(math.radians(self._data.left.fov / 2)))
+            )
+            self._depth_scale_right = self._data.baseline * (
+                disparity.shape[1]
+                / (2.0 * math.tan(math.radians(self._data.right.fov / 2)))
+            )
 
-        depth_scale = self._depth_scale_left if use_mono_left else self._depth_scale_right
+        depth_scale = (
+            self._depth_scale_left if use_mono_left else self._depth_scale_right
+        )
 
         filtered_disp = self._filter.filter(disparity, mono_frame)
         with np.errstate(divide="ignore"):
             depth = (depth_scale / filtered_disp).astype(np.uint16)
-        
+
         return filtered_disp, depth

@@ -1,7 +1,9 @@
+from typing import List, Tuple
+
 import torch
 import numpy as np
 
-from .abstract_model import AbstractModel, ModelInput
+from .abstract_model import AbstractModel, ModelType, InputType
 from .utils import convert_to_fp16
 
 
@@ -33,18 +35,18 @@ def create_xyz(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray
     points_2d = base_grid.transpose(1, 2, 0)  # 1xHxWx2
 
     # unpack coordinates
-    u_coord: np.array = points_2d[..., 0]
-    v_coord: np.array = points_2d[..., 1]
+    u_coord: np.ndarray = points_2d[..., 0]
+    v_coord: np.ndarray = points_2d[..., 1]
 
     # unpack intrinsics
-    fx: np.array = camera_matrix[0, 0]
-    fy: np.array = camera_matrix[1, 1]
-    cx: np.array = camera_matrix[0, 2]
-    cy: np.array = camera_matrix[1, 2]
+    fx: np.ndarray = camera_matrix[0, 0]
+    fy: np.ndarray = camera_matrix[1, 1]
+    cx: np.ndarray = camera_matrix[0, 2]
+    cy: np.ndarray = camera_matrix[1, 2]
 
     # projective
-    x_coord: np.array = (u_coord - cx) / fx
-    y_coord: np.array = (v_coord - cy) / fy
+    x_coord: np.ndarray = (u_coord - cx) / fx
+    y_coord: np.ndarray = (v_coord - cy) / fy
 
     xyz = np.stack([x_coord, y_coord], axis=-1)
     return np.pad(xyz, ((0, 0), (0, 0), (0, 1)), "constant", constant_values=1.0)
@@ -62,27 +64,26 @@ class PointCloud(AbstractModel):
         super().__init__()
 
     @classmethod
-    def input_type(self) -> ModelInput:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
-        return ModelInput.DEPTH
+        return ModelType.NONE
 
     @classmethod
-    def input_names(self):
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
-        return ["xyz", "depth"]
+        return [("xyz", InputType.FP16), ("depth", InputType.U8)]
 
     @classmethod
-    def output_names(self):
+    def output_names(cls):
         """
         The names of the output tensors
         """
         return ["output"]
 
-    def forward(self, xyz: np.ndarray, depth: torch.Tensor) -> torch.Tensor:
-        # TODO: once U16 -> FP16 is supported, use that.
+    def forward(self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
         depthFP16 = convert_to_fp16(depth)
         return _depth_to_3d(depthFP16, xyz)

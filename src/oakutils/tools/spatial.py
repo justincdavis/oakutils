@@ -30,7 +30,14 @@ class HostSpatialsCalc:
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-calc-spatials-on-host/calc.py
     """
-    def __init__(self, data: CalibrationData, delta: int = 5, thresh_low: int = 200, thresh_high: int = 30000):
+
+    def __init__(
+        self,
+        data: CalibrationData,
+        delta: int = 5,
+        thresh_low: int = 200,
+        thresh_high: int = 30000,
+    ):
         """
         Creates a HostSpatialsCalc object.
 
@@ -51,8 +58,8 @@ class HostSpatialsCalc:
         """
         self._data: CalibrationData = data
         self._delta: int = delta
-        self._thresh_low: int = thresh_low # 20cm
-        self._thresh_high: int = thresh_high # 30m
+        self._thresh_low: int = thresh_low  # 20cm
+        self._thresh_high: int = thresh_high  # 30m
 
         # parameters which get resolved on first run
         self._first_run: bool = True
@@ -74,7 +81,7 @@ class HostSpatialsCalc:
     @delta.setter
     def delta(self, value: int) -> None:
         self._delta = value
-    
+
     @property
     def thresh_low(self) -> int:
         """
@@ -85,29 +92,40 @@ class HostSpatialsCalc:
     @thresh_low.setter
     def thresh_low(self, value: int) -> None:
         self._thresh_low = value
-    
+
     @property
     def thresh_high(self) -> int:
         """
         The upper threshold for the spatial coordinates calculation.
         """
         return self._thresh_high
-    
+
     @thresh_high.setter
     def thresh_high(self, value: int) -> None:
         self._thresh_high = value
 
-    def _check_input(self, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], frame: np.ndarray) -> Tuple[int, int, int, int]:
+    def _check_input(
+        self, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], frame: np.ndarray
+    ) -> Tuple[int, int, int, int]:
         """
         Checks if the input is valid, and constrains to the frame size.
         """
-        if len(roi) == 4: return roi
-        if len(roi) != 2: raise ValueError("You have to pass either ROI (4 values) or point (2 values)!")
+        if len(roi) == 4:
+            return roi
+        if len(roi) != 2:
+            raise ValueError(
+                "You have to pass either ROI (4 values) or point (2 values)!"
+            )
         x = min(max(roi[0], self._delta), frame.shape[1] - self._delta)
         y = min(max(roi[1], self._delta), frame.shape[0] - self._delta)
-        return (x-self._delta,y-self._delta,x+self._delta,y+self._delta)
+        return (x - self._delta, y - self._delta, x + self._delta, y + self._delta)
 
-    def calc_spatials(self, depth_data: dai.ImgFrame, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], averaging_method: Callable = np.mean) -> Tuple[float, float, float, Tuple[int, int]]:
+    def calc_spatials(
+        self,
+        depth_data: dai.ImgFrame,
+        roi: Union[Tuple[int, int], Tuple[int, int, int, int]],
+        averaging_method: Callable = np.mean,
+    ) -> Tuple[float, float, float, Tuple[int, int]]:
         """
         Computes spatial coordinates of the ROI.
 
@@ -136,10 +154,12 @@ class HostSpatialsCalc:
         depth_frame = depth_data.getFrame()
 
         if self._first_run:
-            self._mid_w = int(depth_frame.shape[1] / 2) # middle of the depth img width
-            self._mid_h = int(depth_frame.shape[0] / 2) # middle of the depth img height
-            self._f_mid_w = depth_frame.shape[1] / 2.0 # middle of the depth img width
-            self._f_mid_h = depth_frame.shape[0] / 2.0 # middle of the depth img height
+            self._mid_w = int(depth_frame.shape[1] / 2)  # middle of the depth img width
+            self._mid_h = int(
+                depth_frame.shape[0] / 2
+            )  # middle of the depth img height
+            self._f_mid_w = depth_frame.shape[1] / 2.0  # middle of the depth img width
+            self._f_mid_h = depth_frame.shape[0] / 2.0  # middle of the depth img height
 
             # Required information for calculating spatial coordinates on the host
             cam_num = depth_data.getInstanceNum()
@@ -157,7 +177,9 @@ class HostSpatialsCalc:
             # reset flag
             self._first_run = False
 
-        roi = self._check_input(roi, depth_frame) # If point was passed, convert it to ROI
+        roi = self._check_input(
+            roi, depth_frame
+        )  # If point was passed, convert it to ROI
         xmin, ymin, xmax, ymax = roi
 
         # Calculate the average depth in the ROI.
@@ -166,9 +188,9 @@ class HostSpatialsCalc:
 
         averageDepth = averaging_method(depthROI[inRange])
 
-        centroid = ( # Get centroid of the ROI
+        centroid = (  # Get centroid of the ROI
             int((xmax + xmin) / 2),
-            int((ymax + ymin) / 2)
+            int((ymax + ymin) / 2),
         )
 
         bb_x_pos = centroid[0] - self._mid_w
@@ -180,6 +202,6 @@ class HostSpatialsCalc:
         spatials = (
             averageDepth,
             averageDepth * math.tan(angle_x),
-            -averageDepth * math.tan(angle_y)
+            -averageDepth * math.tan(angle_y),
         )
         return *spatials, centroid

@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Tuple
 
 import kornia
 import torch
 
-from .abstract_model import AbstractModel, ModelInput
+from .abstract_model import AbstractModel, ModelType, InputType
 
 
 class Laplacian(AbstractModel):
@@ -16,21 +16,21 @@ class Laplacian(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def input_type(self) -> ModelInput:
+    def input_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
-        return ModelInput.COLOR
+        return ModelType.KERNEL
 
     @classmethod
-    def input_names(self) -> List[str]:
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
-        return ["input"]
+        return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(self) -> List[str]:
+    def output_names(cls) -> List[str]:
         """
         The names of the output tensors
         """
@@ -50,21 +50,21 @@ class LaplacianGray(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def input_type(self) -> ModelInput:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
-        return ModelInput.COLOR
+        return ModelType.KERNEL
 
     @classmethod
-    def input_names(self) -> List[str]:
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
-        return ["input"]
+        return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(self) -> List[str]:
+    def output_names(cls) -> List[str]:
         """
         The names of the output tensors
         """
@@ -87,21 +87,21 @@ class LaplacianBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def input_type(self) -> ModelInput:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
-        return ModelInput.COLOR
+        return ModelType.KERNEL
 
     @classmethod
-    def input_names(self) -> List[str]:
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
-        return ["input"]
+        return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(self) -> List[str]:
+    def output_names(cls) -> List[str]:
         """
         The names of the output tensors
         """
@@ -125,21 +125,21 @@ class LaplacianBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def input_type(self) -> ModelInput:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
-        return ModelInput.COLOR
+        return ModelType.KERNEL
 
     @classmethod
-    def input_names(self) -> List[str]:
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
-        return ["input"]
+        return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(self) -> List[str]:
+    def output_names(cls) -> List[str]:
         """
         The names of the output tensors
         """

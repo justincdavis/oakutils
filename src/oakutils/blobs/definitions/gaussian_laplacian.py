@@ -6,14 +6,15 @@ import torch
 from .abstract_model import AbstractModel, ModelType, InputType
 
 
-class Gaussian(AbstractModel):
+class GaussianLaplacian(AbstractModel):
     """
-    nn.Module wrapper for kornia.filters.gaussian_blur2d
+    nn.Module wrapper for kornia.filters.gaussian_blur2d followed by kornia.filters.laplacian
     """
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
         super().__init__()
         self._kernel_size = kernel_size
+        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -21,44 +22,7 @@ class Gaussian(AbstractModel):
         """
         The type of input this model takes
         """
-        return ModelType.KERNEL
-
-    @classmethod
-    def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
-        return [("input", InputType.FP16)]
-
-    @classmethod
-    def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
-        return ["output"]
-
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
-        return kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
-        )
-
-
-class GaussianGray(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output
-    """
-
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
-        super().__init__()
-        self._kernel_size = kernel_size
-        self._sigma = sigma
-
-    @classmethod
-    def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
-        return ModelType.KERNEL
+        return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
@@ -78,5 +42,49 @@ class GaussianGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        normalized = kornia.enhance.normalize_min_max(gaussian)
+        return kornia.filters.laplacian(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
+
+
+class GaussianLaplacianGray(AbstractModel):
+    """
+    nn.Module wrapper for kornia.filters.gaussian_blur2d followed by kornia.filters.laplacian
+    """
+
+    def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
+        super().__init__()
+        self._kernel_size = kernel_size
+        self._kernel_size2 = kernel_size2
+        self._sigma = sigma
+
+    @classmethod
+    def model_type(cls) -> ModelType:
+        """
+        The type of input this model takes
+        """
+        return ModelType.DUAL_KERNEL
+
+    @classmethod
+    def input_names(cls) -> List[Tuple[str, InputType]]:
+        """
+        The names of the input tensors
+        """
+        return [("input", InputType.FP16)]
+
+    @classmethod
+    def output_names(cls) -> List[str]:
+        """
+        The names of the output tensors
+        """
+        return ["output"]
+
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
+        gaussian = kornia.filters.gaussian_blur2d(
+            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+        )
+        laplacian = kornia.filters.laplacian(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
+        normalized = kornia.enhance.normalize_min_max(laplacian)
         return kornia.color.bgr_to_grayscale(normalized)

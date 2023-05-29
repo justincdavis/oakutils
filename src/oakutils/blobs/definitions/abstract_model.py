@@ -1,14 +1,10 @@
 from abc import ABC, abstractmethod
-from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 import torch
 
+from .utils.types import ModelType, InputType
 
-class ModelInput(Enum):
-    COLOR = 0
-    GRAY = 1
-    DEPTH = 2
 
 class AbstractModel(ABC, torch.nn.Module):
     def __init__(self):
@@ -16,14 +12,15 @@ class AbstractModel(ABC, torch.nn.Module):
 
     @classmethod
     @abstractmethod
-    def input_type(self) -> ModelInput:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
+        pass
 
     @classmethod
     @abstractmethod
-    def input_names(self) -> List[str]:
+    def input_names(cls) -> List[Tuple[str, InputType]]:
         """
         The names of the input tensors
         """
@@ -31,7 +28,7 @@ class AbstractModel(ABC, torch.nn.Module):
 
     @classmethod
     @abstractmethod
-    def output_names(self) -> List[str]:
+    def output_names(cls) -> List[str]:
         """
         The names of the output tensors
         """

@@ -51,23 +51,13 @@ def get_cache_dir_path() -> str:
     return os.path.join(get_blobs_path(), "_cache")
 
 
-def delete_folder(folder_path: str):
+def get_models_dir_path() -> str:
     """
-    Deletes the folder at the given path.
-    This will delete all files and subfolders in the folder,
-    as well as the folder itself.
-    This is permanent and cannot be undone.
+    Gets the path to the oakutils blobs models folder.
 
-    Parameters
-    ----------
-    folder_path : str
-        The path to the folder to delete.
+    Returns
+    -------
+    str
+        The path to the oakutils blobs models folder.
     """
-    if not os.path.exists(folder_path):
-        return
-    for root, dirs, files in os.walk(folder_path):
-        for f in files:
-            os.unlink(os.path.join(root, f))
-        for d in dirs:
-            shutil.rmtree(os.path.join(root, d))
-    os.rmdir(folder_path)
+    return os.path.join(get_blobs_path(), "models")

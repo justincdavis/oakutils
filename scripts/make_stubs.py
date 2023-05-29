@@ -11,6 +11,7 @@ def get_name(module):
     except AttributeError:
         return module
 
+
 def move_open3d_stubs():
     # moves stubs from out to typings
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"))
@@ -18,6 +19,7 @@ def move_open3d_stubs():
         os.path.join(os.path.dirname(__file__), "..", "out", "open3d"),
         os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"),
     )
+
 
 def delete_folder(folder_path: str):
     """
@@ -95,6 +97,7 @@ def main():
     fix_open3d_stub_syntax()
 
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
+
 
 if __name__ == "__main__":
     main()

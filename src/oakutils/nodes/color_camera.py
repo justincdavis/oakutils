@@ -129,7 +129,7 @@ def create_color_camera(
     else:
         cam.setVideoSize(size_tuple)
         cam.setStillSize(size_tuple)
-    
+
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 

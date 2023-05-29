@@ -9,10 +9,10 @@ def dict_to_str(d: Dict) -> str:
     ----------
     d : Dict
         The dictionary to convert
-    
+
     Returns
     -------
     str
         The converted string
     """
-    return "".join([str(v) + "_" for v in d.values()]).removesuffix("_")
+    return "".join([f"{str(v)}x{str(v)}" if "kernel_size" in k else str(v) + "_" for k, v in d.items()]).removesuffix("_")

@@ -57,7 +57,6 @@ compiler = [
     "blobconverter",
 ]
 dev = [
-    compiler,
     "black",
     "pylint",
     "mypy",
