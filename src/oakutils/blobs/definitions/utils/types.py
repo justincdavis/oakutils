@@ -19,6 +19,7 @@ class InputType(Enum):
 
     FP16 = 0
     U8 = 1
+    XYZ = 2
 
 
 def input_type_to_str(inputtype: InputType) -> str:

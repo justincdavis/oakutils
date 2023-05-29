@@ -36,12 +36,18 @@ def _create_dummy_input(
         # if we are using a single channel, should assume that it will be grayscale
         # need to double the columns due to the way data is propagated through the pipeline
         return torch.ones(
-            (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32
+            (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float16
         )
-    else:
+    elif input_type == InputType.FP16:
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32
         )
+    elif input_type == InputType.XYZ:
+        return torch.ones(
+            (1, input_shape[1], input_shape[2], 3), dtype=torch.float16
+        )
+    else:
+        raise ValueError(f"Unknown input type: {input_type}")
 
 
 def _create_multiple_dummy_input(

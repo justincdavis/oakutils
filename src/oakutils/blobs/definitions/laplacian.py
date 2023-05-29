@@ -16,7 +16,7 @@ class Laplacian(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def input_type(cls) -> ModelType:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """

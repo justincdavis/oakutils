@@ -75,7 +75,7 @@ class PointCloud(AbstractModel):
         """
         The names of the input tensors
         """
-        return [("xyz", InputType.FP16), ("depth", InputType.U8)]
+        return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
     def output_names(cls):

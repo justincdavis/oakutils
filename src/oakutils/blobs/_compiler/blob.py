@@ -27,12 +27,21 @@ def compile_blob(
         iop += f"{input_name}:{type_str},"
     iop = iop[:-1]
 
-    blobconverter.from_onnx(
-        model=onnx_path,
-        output_dir=output_path,
-        data_type="FP16",
-        use_cache=False,
-        shaves=shaves,
-        optimizer_params=[],
-        compile_params=[iop],
-    )
+    if "U8" in iop:
+        blobconverter.from_onnx(
+            model=onnx_path,
+            output_dir=output_path,
+            data_type="FP16",
+            use_cache=False,
+            shaves=shaves,
+            optimizer_params=[],
+            compile_params=[iop],
+        )
+    else:
+        blobconverter.from_onnx(
+            model=onnx_path,
+            output_dir=output_path,
+            data_type="FP16",
+            use_cache=False,
+            shaves=shaves,
+        )
