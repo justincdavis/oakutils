@@ -9,6 +9,7 @@ __all__ = [
 
 try:
     from ._compiler import compile
+
     __all__.append("compile")
 except ImportError:
     pass
