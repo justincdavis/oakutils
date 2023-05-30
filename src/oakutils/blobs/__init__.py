@@ -1,9 +1,14 @@
 from . import definitions
 from . import models
-from ._compiler import compile
+
 
 __all__ = [
     "definitions",
     "models",
-    "compile",
 ]
+
+try:
+    from ._compiler import compile
+    __all__.append("compile")
+except ImportError:
+    pass
