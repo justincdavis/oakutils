@@ -15,6 +15,11 @@ def dict_to_str(d: Dict) -> str:
     str
         The converted string
     """
-    rv = "".join([f"{str(v)}x{str(v)}_" if "kernel_size" in k else f"{str(v)}_" for k, v in d.items()])
+    rv = "".join(
+        [
+            f"{str(v)}x{str(v)}_" if "kernel_size" in k else f"{str(v)}_"
+            for k, v in d.items()
+        ]
+    )
     rv = rv.removesuffix("_")
     return rv

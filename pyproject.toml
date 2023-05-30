@@ -57,6 +57,7 @@ compiler = [
     "blobconverter",
 ]
 dev = [
+    "oakutils[compiler]",
     "black",
     "pylint",
     "mypy",

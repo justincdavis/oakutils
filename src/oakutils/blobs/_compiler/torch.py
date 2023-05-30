@@ -69,9 +69,9 @@ def _create_multiple_dummy_input(
         The dummy input tensors
     """
     return [
-            _create_dummy_input(input_shape, input_type)
-            for input_shape, input_type in input_shapes
-        ]
+        _create_dummy_input(input_shape, input_type)
+        for input_shape, input_type in input_shapes
+    ]
 
 
 def _export_module_to_onnx(

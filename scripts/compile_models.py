@@ -66,10 +66,11 @@ def compile_model(model_type: AbstractModel):
         ]
     else:
         raise RuntimeError("Unknown model type")
-    
+
     # stolen from compiler code in oakutils internal
     def get_model_name(model_type, model_args):
         from oakutils.blobs._compiler.utils import dict_to_str
+
         arg_str = dict_to_str(model_args)
 
         # resolve the paths ahead of time for caching
@@ -79,20 +80,29 @@ def compile_model(model_type: AbstractModel):
             model_name = model_type.__class__.__name__
         model_name = f"{model_name}_{arg_str}".removesuffix("_")
         return model_name
-    
+
     model_name = get_model_name(model_type, model_args[0])
-    model_paths = [os.path.join(MODEL_FOLDER, f) for f in os.listdir(MODEL_FOLDER) if model_name == f.replace(".blob", "")]
+    model_paths = [
+        os.path.join(MODEL_FOLDER, f)
+        for f in os.listdir(MODEL_FOLDER)
+        if model_name == f.replace(".blob", "")
+    ]
     if len(model_paths) != 0:
         print(f"Model {model_name} already exists, skipping...")
         return
 
     model_paths = []
     with mp.Pool() as pool:
-        results = [pool.apply_async(_compile_model, args=(model_type, model_arg)) for model_arg in model_args]
+        results = [
+            pool.apply_async(_compile_model, args=(model_type, model_arg))
+            for model_arg in model_args
+        ]
         model_paths = [r.get() for r in results]
 
     for model_path in model_paths:
-        shutil.copy(model_path, os.path.join(MODEL_FOLDER, os.path.basename(model_path)))
+        shutil.copy(
+            model_path, os.path.join(MODEL_FOLDER, os.path.basename(model_path))
+        )
 
 
 def compiles_models():
@@ -126,7 +136,9 @@ def compiles_models():
         f.write("import sysconfig\n\n")
 
         # get the path to the blob folder
-        f.write(f"_RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs', 'models')\n")
+        f.write(
+            f"_RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs', 'models')\n"
+        )
 
         # get the site packages path
         f.write("_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
@@ -149,7 +161,9 @@ def compiles_models():
             # # drop the first character since it is an underscore
             # var_name = var_name[1:]
             var_names.append(var_name)
-            f.write(f"{var_name} = os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}'))\n")
+            f.write(
+                f"{var_name} = os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}'))\n"
+            )
             # f.write(f"{var_name} = _Blob(os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}')))\n")
             # f.write(f"{var_name}.__doc__ = 'Absolute file path for {model_name} file'\n")
 
