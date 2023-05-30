@@ -1,14 +1,13 @@
 import itertools
 import os
 import shutil
+import multiprocessing as mp
 
 from oakutils.blobs import compile
-from oakutils.blobs.definitions import AbstractModel, ModelType, InputType
+from oakutils.blobs.definitions import AbstractModel, ModelType
 from oakutils.blobs.definitions import (
     Gaussian,
     GaussianGray,
-    GaussianLaplacian,
-    GaussianLaplacianGray,
     Laplacian,
     LaplacianGray,
     LaplacianBlur,
@@ -28,6 +27,15 @@ def delete_folder(folder_path: str):
         for d in dirs:
             shutil.rmtree(os.path.join(root, d))
     os.rmdir(folder_path)
+
+
+def _compile_model(model_type, model_arg):
+    print(f"Compiling {model_type.__name__} with args {model_arg}")
+    model_path = compile(
+        model_type,
+        model_arg,
+    )
+    return model_path
 
 
 def compile_model(model_type: AbstractModel):
@@ -58,15 +66,30 @@ def compile_model(model_type: AbstractModel):
         ]
     else:
         raise RuntimeError("Unknown model type")
+    
+    # stolen from compiler code in oakutils internal
+    def get_model_name(model_type, model_args):
+        from oakutils.blobs._compiler.utils import dict_to_str
+        arg_str = dict_to_str(model_args)
+
+        # resolve the paths ahead of time for caching
+        try:
+            model_name = model_type.__name__
+        except AttributeError:
+            model_name = model_type.__class__.__name__
+        model_name = f"{model_name}_{arg_str}".removesuffix("_")
+        return model_name
+    
+    model_name = get_model_name(model_type, model_args[0])
+    model_paths = [os.path.join(MODEL_FOLDER, f) for f in os.listdir(MODEL_FOLDER) if model_name == f.replace(".blob", "")]
+    if len(model_paths) != 0:
+        print(f"Model {model_name} already exists, skipping...")
+        return
 
     model_paths = []
-    for model_arg in model_args:
-        print(f"Compiling {model_type.__name__} with args {model_arg}")
-        model_path = compile(
-            model_type,
-            model_arg,
-        )
-        model_paths.append(model_path)
+    with mp.Pool() as pool:
+        results = [pool.apply_async(_compile_model, args=(model_type, model_arg)) for model_arg in model_args]
+        model_paths = [r.get() for r in results]
 
     for model_path in model_paths:
         shutil.copy(model_path, os.path.join(MODEL_FOLDER, os.path.basename(model_path)))
@@ -76,8 +99,6 @@ def compiles_models():
     models = [
         Gaussian,
         GaussianGray,
-        GaussianLaplacian,
-        GaussianLaplacianGray,
         Laplacian,
         LaplacianGray,
         LaplacianBlur,

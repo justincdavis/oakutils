@@ -45,5 +45,7 @@ def input_type_to_str(inputtype: InputType) -> str:
         return "FP16"
     elif inputtype == InputType.U8:
         return "U8"
+    elif inputtype == InputType.XYZ:
+        return "FP16"
     else:
         raise ValueError(f"Unknown input type: {inputtype}")

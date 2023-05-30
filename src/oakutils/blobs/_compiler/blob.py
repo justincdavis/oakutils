@@ -27,14 +27,17 @@ def compile_blob(
         iop += f"{input_name}:{type_str},"
     iop = iop[:-1]
 
+    print(iop)
+
     if "U8" in iop:
+        print("U8 found")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
             data_type="FP16",
             use_cache=False,
             shaves=shaves,
-            optimizer_params=[],
+            # optimizer_params=[],
             compile_params=[iop],
         )
     else:

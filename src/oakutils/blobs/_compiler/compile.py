@@ -58,7 +58,7 @@ def _compile(
         model_name = model.__name__
     except AttributeError:
         model_name = model.__class__.__name__
-    model_name = f"{model_name}_{arg_str}"
+    model_name = f"{model_name}_{arg_str}".removesuffix("_")
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()
@@ -145,12 +145,19 @@ def compile(
     """
     input_data = model_type.input_names()
     dummy_input_shapes = []
+    print("HERE")
+    print(input_data)
     for _, input_type in input_data:
+        print(input_type)
         if shape_mapping is None:
             if input_type == InputType.FP16:
                 dummy_input_shapes.append(((640, 480, 3), InputType.FP16))
             elif input_type == InputType.U8:
                 dummy_input_shapes.append(((640, 400, 1), InputType.U8))
+            elif input_type == InputType.XYZ:
+                dummy_input_shapes.append(((640, 400, 3), InputType.XYZ))
+            else:
+                raise ValueError(f"Unknown input type: {input_type}")
         else:
             dummy_input_shapes.append((shape_mapping[input_type], input_type))
 

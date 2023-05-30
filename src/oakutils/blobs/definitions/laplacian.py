@@ -81,9 +81,10 @@ class LaplacianBlur(AbstractModel):
     nn.Module wrapper for kornia.filters.laplacian, with gaussian blur
     """
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
         super().__init__()
         self._kernel_size = kernel_size
+        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -91,7 +92,7 @@ class LaplacianBlur(AbstractModel):
         """
         The type of input this model takes
         """
-        return ModelType.KERNEL
+        return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
@@ -111,7 +112,7 @@ class LaplacianBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.filters.laplacian(gaussian, self._kernel_size)
+        return kornia.filters.laplacian(gaussian, self._kernel_size2)
 
 
 class LaplacianBlurGray(AbstractModel):
@@ -119,9 +120,10 @@ class LaplacianBlurGray(AbstractModel):
     nn.Module wrapper for kornia.filters.laplacian, with gaussian blur, that outputs grayscale
     """
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
         super().__init__()
         self._kernel_size = kernel_size
+        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -129,7 +131,7 @@ class LaplacianBlurGray(AbstractModel):
         """
         The type of input this model takes
         """
-        return ModelType.KERNEL
+        return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
@@ -149,6 +151,6 @@ class LaplacianBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        laplacian = kornia.filters.laplacian(gaussian, self._kernel_size)
+        laplacian = kornia.filters.laplacian(gaussian, self._kernel_size2)
         normalized = kornia.enhance.normalize_min_max(laplacian)
         return kornia.color.bgr_to_grayscale(normalized)
