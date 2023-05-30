@@ -108,7 +108,10 @@ def compiles_models():
         PointCloud,
     ]
     for model in models:
-        compile_model(model)
+        try:
+            compile_model(model)
+        except Exception as e:
+            print(f"Failed to compile model {model.__name__} with error {e}")
 
     # handle writing the __init__.py file
     var_names = []
@@ -123,7 +126,7 @@ def compiles_models():
         f.write("import sysconfig\n\n")
 
         # get the path to the blob folder
-        f.write(f"_RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs')\n")
+        f.write(f"_RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs', 'models')\n")
 
         # get the site packages path
         f.write("_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
@@ -143,8 +146,8 @@ def compiles_models():
             if model_name == "__init__.py":
                 continue
             var_name = model_name.upper().split(".")[0]
-            # drop the first character since it is an underscore
-            var_name = var_name[1:]
+            # # drop the first character since it is an underscore
+            # var_name = var_name[1:]
             var_names.append(var_name)
             f.write(f"{var_name} = os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}'))\n")
             # f.write(f"{var_name} = _Blob(os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}')))\n")
