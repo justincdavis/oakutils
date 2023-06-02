@@ -1,7 +1,7 @@
 import cv2
 import depthai as dai
 
-from oakutils import blobs
+from oakutils.blobs import models
 from oakutils.nodes import create_neural_network, get_nn_gray_frame, create_stereo_depth, create_color_camera, get_nn_bgr_frame
 
 
@@ -14,7 +14,7 @@ cam = create_color_camera(pipeline)
 stereo, left, right, xout_left, xout_right, xout_depth, xout_disparity, xout_rect_left, xout_rect_right = create_stereo_depth(pipeline, resolution=dai.MonoCameraProperties.SensorResolution.THE_480_P)
 
 # create neural network node
-lp, xout_lp = create_neural_network(pipeline, cam.preview, blobs.LAPLACIAN_GRAY_3X3, stream_name="l")
+lp, xout_lp = create_neural_network(pipeline, cam.preview, models.LAPLACIANGRAY_7X7, stream_name="l")
 
 with dai.Device(pipeline) as device:
     l_queue: dai.DataOutputQueue = device.getOutputQueue("l")

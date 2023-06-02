@@ -19,7 +19,13 @@ cam = Camera(
 )
 
 cam.start_display()
-cam.start()
+cam.start(block=True)
+
+# asserts for pylint, to show block=True ensures that data is present
+assert cam.depth
+assert cam.rgb
+assert cam.calibration.primary
+assert cam.calibration.primary.pinhole
 
 start_time = time.time()
 while True:
