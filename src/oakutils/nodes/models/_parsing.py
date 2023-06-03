@@ -1,4 +1,5 @@
 from typing import List, Tuple
+import os
 
 from ...blobs import models
 
@@ -33,6 +34,19 @@ def parse_kernel_size(kernel_size: int) -> bool:
 
 
 def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
+    """
+    Checks if a name is valid againist the names of compiled models
+
+    Parameters
+    ----------
+    model_type : str
+        The model type to check
+
+    Returns
+    -------
+    Tuple[bool, List[str]]
+        A tuple of the validity of the model type and the list of valid names
+    """
     valid_names = [
         "gaussian",
         "laplacian",
@@ -43,13 +57,18 @@ def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
         "sobel",
         "sobelblur",
     ]
+    valid_names.extend(
+        [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names]
+    )
     for name in valid_names:
         if model_type in name:
             return True, valid_names
     return False, valid_names
 
 
-def get_candidates(model_type: str, attributes: List[str]) -> List[str]:
+def get_candidates(
+    model_type: str, attributes: List[str]
+) -> List[Tuple[str, List[str], str]]:
     """
     Gets the list of candidate models for a given model type and attribute
 
@@ -64,8 +83,8 @@ def get_candidates(model_type: str, attributes: List[str]) -> List[str]:
 
     Returns
     -------
-    List[str]
-        The list of candidate models
+    List[Tuple[str, List[str], str]]
+        The list of candidate models, each candidate is a tuple of the name, attributes, and path
 
     Raises
     ------
@@ -75,30 +94,35 @@ def get_candidates(model_type: str, attributes: List[str]) -> List[str]:
     valid, valid_names = _valid_model_names(model_type)
     if not valid:
         raise ValueError(f"Invalid model type, valid names are: {valid_names}")
+    model_type = model_type.upper()
 
     potential_blobs = []
     for model in [d for d in dir(models) if not d.startswith("_")]:
         if model_type in model:
             blob_path = getattr(models, model)
-            potential_blobs.append(blob_path)
+            potential_blobs.append(blob_path.upper())
 
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
     for blob in potential_blobs:
-        path: str = blob[:-5]  # remove .blob
+        path: str = os.path.basename(blob)  # drop the extension
+        path = os.path.split(path)[-1]  # just the file name
         data = path.split("_")  # split into name and attributes
         name = data[0]  # name is the first piece
         # if the name is not equal to the model_type, maybe gaussian_gray instead of gaussian
         if model_type != name:  # throw out if the case
             continue
         data.pop(0)  # remove name from list
-        data = [d.split("x")[0] for d in data]  # split NxN attributes into N
+        data = [d.split("X")[0] for d in data]  # split NxN attributes into N
         candidate_blobs.append((name, data, blob))  # add to list
 
-    candidate_models = candidate_blobs  # copy list
-    for attribute in attributes:  # for each attribute
-        for name, attr_data, blob_path in candidate_models:  # for each model
-            if attribute not in attr_data:  # if the attribute is not in the model
-                candidate_models.remove((name, attr_data, blob_path))
+    candidate_models = []
+    if len(attributes) == 0:  # if no attributes are given, return all models
+        return candidate_blobs
+    else:
+        for attribute in attributes:  # for each attribute
+            for name, attr_data, blob_path in candidate_blobs:  # for each model
+                if attribute in attr_data:  # if the attribute is not in the model
+                    candidate_models.append((name, attr_data, blob_path))
 
     return candidate_models

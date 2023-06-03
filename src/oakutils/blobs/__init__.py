@@ -1,11 +1,15 @@
-from . import definitions
 from . import models
 
-
 __all__ = [
-    "definitions",
     "models",
 ]
+
+try:
+    from . import definitions
+
+    __all__.append("definitions")
+except ImportError:
+    pass
 
 try:
     from ._compiler import compile
