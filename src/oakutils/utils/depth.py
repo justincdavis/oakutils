@@ -10,7 +10,7 @@ def align_depth_to_rgb(
     depth_to_rgb_extrinsic: np.ndarray,
     rgb_width: int,
     rgb_height: int,
-    depth_scale: float = 10.0,
+    depth_scale: float = 1000.0,
 ) -> np.ndarray:
     """
     Aligns a depth image to an RGB image.
@@ -32,7 +32,7 @@ def align_depth_to_rgb(
     rgb_height : int
         The height of the RGB image.
     depth_scale : float, optional
-        Depth scaling factor. Defaults to 10.0 to convert from millimeters to centimeters.
+        Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
 
     Returns
     -------
