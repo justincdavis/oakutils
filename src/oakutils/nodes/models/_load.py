@@ -83,7 +83,7 @@ def create_no_args_model(
         Example: cam_rgb.preview
     model_name : str
         The name of the model to use
-    
+
     Returns
     -------
     dai.node.NeuralNetwork

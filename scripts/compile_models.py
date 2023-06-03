@@ -14,6 +14,8 @@ from oakutils.blobs.definitions import (
     LaplacianBlurGray,
     Sobel,
     SobelBlur,
+    SobelGray,
+    SobelBlurGray,
     PointCloud,
 )
 
