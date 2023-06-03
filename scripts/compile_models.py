@@ -117,6 +117,8 @@ def compiles_models():
         LaplacianBlurGray,
         Sobel,
         SobelBlur,
+        SobelGray,
+        SobelBlurGray,
         PointCloud,
     ]
     for model in models:

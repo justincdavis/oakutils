@@ -126,7 +126,7 @@ class SobelBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def input_type(cls) -> ModelType:
+    def model_type(cls) -> ModelType:
         """
         The type of input this model takes
         """
