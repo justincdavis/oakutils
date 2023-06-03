@@ -300,7 +300,8 @@ class Camera:
 
         self._point_cloud: Optional[o3d.geometry.PointCloud] = None
         self._compute_point_cloud_on_demand = compute_point_cloud_on_demand
-        self._point_cloud_vis = PointCloudVisualizer()
+        if self._display_point_cloud:
+            self._point_cloud_vis = PointCloudVisualizer()
 
         # imu information
         self._imu_packet: Optional[np.ndarray] = None
@@ -639,7 +640,8 @@ class Camera:
             if self._point_cloud is not None and self._display_point_cloud:
                 self._point_cloud_vis.update(self._point_cloud)
             cv2.waitKey(50)
-        self._point_cloud_vis.stop()
+        if self._display_point_cloud:
+            self._point_cloud_vis.stop()
 
     def start_display(self) -> None:
         """
