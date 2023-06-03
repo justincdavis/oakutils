@@ -27,7 +27,6 @@ def _create_dummy_input(
     ValueError
         If the input_shape is not in the correct form
     """
-    print(f"input_shape: {input_shape}, input_type: {input_type}")
     if len(input_shape) != 3:
         raise ValueError("input_shape must be in form width, height, channels")
     if input_shape[2] not in [1, 3]:
@@ -80,6 +79,7 @@ def _export_module_to_onnx(
     onnx_path: str,
     input_names: List[str],
     output_names: List[str],
+    verbose: bool = False,
 ):
     """
     Runs torch.onnx.export with the given parameters
@@ -96,12 +96,15 @@ def _export_module_to_onnx(
         The names of the input tensors
     output_names : List[str]
         The names of the output tensors
+    verbose : bool, optional
+        Whether to print out information about the export, by default False
     """
-    print(f"Exporting model to {onnx_path}")
-    print(f"Input names: {input_names}")
-    print(f"Output names: {output_names}")
-    for dummy_input_tensor in dummy_input:
-        print(f"Dummy input shape: {dummy_input_tensor.shape}")
+    if verbose:
+        print(f"Exporting model to {onnx_path}")
+        print(f"Input names: {input_names}")
+        print(f"Output names: {output_names}")
+        for dummy_input_tensor in dummy_input:
+            print(f"Dummy input shape: {dummy_input_tensor.shape}")
 
     torch.onnx.export(
         model_instance,
@@ -124,6 +127,7 @@ def export(
     onnx_path: str,
     input_names: List[str],
     output_names: List[str],
+    verbose: bool = False,
 ):
     """
     Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx
@@ -140,9 +144,13 @@ def export(
         The names of the input tensors
     output_names : List[str]
         The names of the output tensors
+    verbose : bool, optional
+        Whether to print out information about the export, by default False
     """
-    print(dummy_input_shapes)
-    print(type(dummy_input_shapes))
+    if verbose:
+        print(dummy_input_shapes)
+        print(type(dummy_input_shapes))
+        
     if not isinstance(dummy_input_shapes, list):
         input_shape, input_type = dummy_input_shapes
         dummy_input = _create_dummy_input(input_shape, input_type)

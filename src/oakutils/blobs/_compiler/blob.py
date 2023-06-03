@@ -27,18 +27,16 @@ def compile_blob(
         iop += f"{input_name}:{type_str},"
     iop = iop[:-1]
 
-    print(iop)
-
     if "U8" in iop:
-        print("U8 found")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
             data_type="FP16",
             use_cache=False,
             shaves=shaves,
-            # optimizer_params=[],
+            optimizer_params=[],
             compile_params=[iop],
+            version="2021.4",  # change in version hack since U8 stuff is bad on 2022.1
         )
     else:
         blobconverter.from_onnx(
@@ -47,4 +45,5 @@ def compile_blob(
             data_type="FP16",
             use_cache=False,
             shaves=shaves,
+            version="2022.1",  # be explicit about the version, due to above hack
         )

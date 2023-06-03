@@ -133,6 +133,7 @@ LAPLACIAN_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Laplacian_3x3.blob')
 LAPLACIAN_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Laplacian_5x5.blob'))
 LAPLACIAN_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Laplacian_7x7.blob'))
 LAPLACIAN_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Laplacian_9x9.blob'))
+POINTCLOUD = os.path.abspath(os.path.join(_BLOB_FOLDER, 'PointCloud.blob'))
 SOBEL = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Sobel.blob'))
 SOBELBLURGRAY_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'SobelBlurGray_11x11.blob'))
 SOBELBLURGRAY_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'SobelBlurGray_13x13.blob'))
@@ -408,6 +409,8 @@ LAPLACIAN_7X7 : str
     Absolute file path for LAPLACIAN_7X7 file
 LAPLACIAN_9X9 : str
     Absolute file path for LAPLACIAN_9X9 file
+POINTCLOUD : str
+    Absolute file path for POINTCLOUD file
 SOBEL : str
     Absolute file path for SOBEL file
 SOBELBLURGRAY_11X11 : str
@@ -569,6 +572,7 @@ __all__ = [
     'LAPLACIAN_5X5',
     'LAPLACIAN_7X7',
     'LAPLACIAN_9X9',
+    'POINTCLOUD',
     'SOBEL',
     'SOBELBLURGRAY_11X11',
     'SOBELBLURGRAY_13X13',

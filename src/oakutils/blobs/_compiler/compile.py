@@ -145,10 +145,7 @@ def compile(
     """
     input_data = model_type.input_names()
     dummy_input_shapes = []
-    print("HERE")
-    print(input_data)
     for _, input_type in input_data:
-        print(input_type)
         if shape_mapping is None:
             if input_type == InputType.FP16:
                 dummy_input_shapes.append(((640, 480, 3), InputType.FP16))
