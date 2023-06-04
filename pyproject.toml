@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oakutils"
-version = "0.0.4"
+version = "0.1.0"
 authors = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
@@ -48,25 +48,28 @@ dependencies = [
 "Bug Tracker" = "https://github.com/justincdavis/oakutils/issues"
 
 [project.optional-dependencies]
+compiler = [
+    "kornia",
+    "torch",
+    "onnx>=1.12.0",
+    "onnxruntime",
+    "onnxsim",
+    "blobconverter",
+]
 dev = [
+    "oakutils[compiler]",
     "black",
     "pylint",
     "mypy",
     "twine",
     "wheel",
     "bumpver",
-    "kornia",
-    "torch",
-    "onnx>=1.12.0",
-    "onnxruntime",
-    "onnxsim",
-    "openvino-dev[pytorch,onnx]",
     "sphinx",
     "sphinx-rtd-theme",
 ]
 
 [tool.bumpver]
-current_version = "0.0.4"
+current_version = "0.1.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true
@@ -75,11 +78,11 @@ push            = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
-"src/oakutils/__init__.py" = ["{version}"]
+"oakutils/__init__.py" = ["{version}"]
 "docs/conf.py" = ["{version}"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["oakutils"]
 
 [tool.setuptools.package-data]
 oakutils = ["*.blob"]

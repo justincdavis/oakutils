@@ -12,6 +12,14 @@ oakutils.tools.parsing module
    :undoc-members:
    :show-inheritance:
 
+oakutils.tools.spatial module
+-----------------------------
+
+.. automodule:: oakutils.tools.spatial
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -11,8 +11,11 @@ clean:
 
 docs:
 	rm -rf docs/source/*
-	sphinx-apidoc -o docs/source/ src/
+	sphinx-apidoc -o docs/source/ oakutils/
 	cd docs && make html
 
 blobs:
-	python3 /models/generate.py
+	python3 scripts/compile_models.py
+
+stubs:
+	python3 scripts/make_stubs.py
