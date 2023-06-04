@@ -9,6 +9,7 @@ Subpackages
 
    oakutils.blobs
    oakutils.calibration
+   oakutils.filters
    oakutils.nodes
    oakutils.point_clouds
    oakutils.tools

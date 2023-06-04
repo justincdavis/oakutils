@@ -78,11 +78,11 @@ push            = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
-"src/oakutils/__init__.py" = ["{version}"]
+"oakutils/__init__.py" = ["{version}"]
 "docs/conf.py" = ["{version}"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["oakutils"]
 
 [tool.setuptools.package-data]
 oakutils = ["*.blob"]

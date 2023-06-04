@@ -1,6 +1,14 @@
 oakutils.nodes package
 ======================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   oakutils.nodes.models
+
 Submodules
 ----------
 

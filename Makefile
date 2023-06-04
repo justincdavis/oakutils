@@ -11,7 +11,7 @@ clean:
 
 docs:
 	rm -rf docs/source/*
-	sphinx-apidoc -o docs/source/ src/
+	sphinx-apidoc -o docs/source/ oakutils/
 	cd docs && make html
 
 blobs:
