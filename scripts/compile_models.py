@@ -204,5 +204,5 @@ def main():
 
 if __name__ == "__main__":
     SCRIPT_PATH = os.path.realpath(os.path.dirname(__file__))
-    MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "src", "oakutils", "blobs", "models")
+    MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "oakutils", "blobs", "models")
     main()
