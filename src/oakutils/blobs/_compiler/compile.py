@@ -7,7 +7,7 @@ from .paths import get_cache_dir_path
 from .torch import export
 from .onnx import simplify
 from .blob import compile_blob
-from .utils import dict_to_str
+from .utils import dict_to_str, remove_suffix
 
 
 def _compile(
@@ -58,7 +58,7 @@ def _compile(
         model_name = model.__name__
     except AttributeError:
         model_name = model.__class__.__name__
-    model_name = f"{model_name}_{arg_str}".removesuffix("_")
+    model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()

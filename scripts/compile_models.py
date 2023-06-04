@@ -75,12 +75,19 @@ def compile_model(model_type: AbstractModel):
 
         arg_str = dict_to_str(model_args)
 
+        # for 3.8 compatibility
+        def remove_suffix(input_string, suffix):
+            if suffix and input_string.endswith(suffix):
+                return input_string[:-len(suffix)]
+            return input_string
+
         # resolve the paths ahead of time for caching
         try:
             model_name = model_type.__name__
         except AttributeError:
             model_name = model_type.__class__.__name__
-        model_name = f"{model_name}_{arg_str}".removesuffix("_")
+        
+        model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
         return model_name
 
     model_name = get_model_name(model_type, model_args[0])
@@ -157,7 +164,7 @@ def compiles_models():
         # f.write("class _Blob(str):\n")
         # f.write("    __metaclass__ = abc.ABCMeta\n\n")
         # write the model names
-        model_names = os.listdir(MODEL_FOLDER)
+        model_names = sorted(os.listdir(MODEL_FOLDER))
         for model_name in model_names:
             if model_name == "__init__.py":
                 continue

@@ -15,4 +15,7 @@ docs:
 	cd docs && make html
 
 blobs:
-	python3 /models/generate.py
+	python3 scripts/compile_models.py
+
+stubs:
+	python3 scripts/make_stubs.py
