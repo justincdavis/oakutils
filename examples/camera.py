@@ -2,6 +2,8 @@
 import time
 
 import cv2
+import oakutils
+print(dir(oakutils))
 from oakutils import Camera
 
 
