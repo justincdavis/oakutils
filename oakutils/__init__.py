@@ -6,7 +6,6 @@ from . import (
     nodes,
     point_clouds,
     tools,
-    utils,
 )
 
 __all__ = [
@@ -17,7 +16,6 @@ __all__ = [
     "nodes",
     "point_clouds",
     "tools",
-    "utils",
 ]
 __version__ = "0.1.1"
 

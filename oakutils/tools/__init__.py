@@ -1,4 +1,6 @@
-from . import parsing, spatial
+from . import depth, display, parsing, pixel, spatial
+from .depth import align_depth_to_rgb
+from .display import DisplayManager
 from .parsing import (
     get_tuple_from_color_sensor_resolution,
     get_tuple_from_mono_sensor_resolution,
@@ -6,8 +8,13 @@ from .parsing import (
 from .spatial import HostSpatialsCalc
 
 __all__ = [
+    "depth",
+    "display",
     "parsing",
+    "pixel",
     "spatial",
+    "align_depth_to_rgb",
+    "DisplayManager",
     "get_tuple_from_color_sensor_resolution",
     "get_tuple_from_mono_sensor_resolution",
     "HostSpatialsCalc",

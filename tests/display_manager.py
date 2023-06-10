@@ -2,9 +2,9 @@ import unittest
 import random
 import concurrent
 
-from oakutils.utils.display import DisplayManager
+from oakutils.tools import DisplayManager
 
-# from ._utils.images import generate_random_frame
+from ._utils.images import generate_random_frame
 
 
 class TestDisplayManager(unittest.TestCase):
