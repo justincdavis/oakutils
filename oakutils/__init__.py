@@ -19,7 +19,7 @@ __all__ = [
     "tools",
     "utils",
 ]
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)
