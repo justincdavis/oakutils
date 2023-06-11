@@ -7,7 +7,9 @@ clean:
 	rm -rf build
 	rm -rf dist
 	rm -rf *.egg-info
-	rm -rf src/*.egg-info
+	rm -rf oakutils/*.egg-info
+	rm -rf src/oakutils/*.egg-info
+	pyclean .
 
 docs:
 	rm -rf docs/source/*
