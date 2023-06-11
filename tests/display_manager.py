@@ -1,12 +1,9 @@
 import unittest
 import random
-import concurrent
 
-import oakutils
-import oakutils.tools
-import oakutils.tools.display
+from oakutils.tools.display import DisplayManager
 
-from ._utils.images import generate_random_frame
+from _utils import generate_random_frame, check_method_timout
 
 
 class TestDisplayManager(unittest.TestCase):
@@ -24,13 +21,9 @@ class TestDisplayManager(unittest.TestCase):
         for name, frame in frames:
             display_manager.update(name, frame)
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(display_manager.stop)
-            try:
-                result = future.result(timeout=5)
-            except concurrent.futures.TimeoutError:
-                future.cancel()
-                raise TimeoutError("cam.stop timed out after 5 seconds")
+        result = check_method_timout(display_manager.stop, "display_manager.stop", timeout=5)
 
         self.assertIsNone(result)
         
+if __name__ == "__main__":
+    unittest.main()

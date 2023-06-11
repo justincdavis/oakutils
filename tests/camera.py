@@ -1,7 +1,8 @@
-import concurrent.futures
 import unittest
 
 from oakutils import Camera
+
+from _utils import check_method_timout
 
 
 class TestCamera(unittest.TestCase):
@@ -9,13 +10,7 @@ class TestCamera(unittest.TestCase):
         cam = Camera()
         cam.start(block=True)
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(cam.stop)
-            try:
-                result = future.result(timeout=5)
-            except concurrent.futures.TimeoutError:
-                future.cancel()
-                raise TimeoutError("cam.stop timed out after 5 seconds")
+        result = check_method_timout(cam.stop, "cam.stop", timeout=5)
 
         self.assertIsNone(result)
 

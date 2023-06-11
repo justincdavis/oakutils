@@ -83,7 +83,7 @@ push            = false
 "docs/conf.py" = ["{version}"]
 
 [tool.setuptools.packages.find]
-where = ["src/oakutils"]
+where = ["src"]
 
 [tool.setuptools.package-data]
 oakutils = ["src/*.blob"]
