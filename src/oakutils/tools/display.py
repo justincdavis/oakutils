@@ -52,6 +52,12 @@ class DisplayManager:
         for display in self._displays.values():
             display.stop()
 
+    def stop(self):
+        """
+        Stops the display manager. 
+        """
+        self._stop()
+
     def _update(self, name: str, frame: np.ndarray):
         frame = cv2.resize(frame, self._display_size)
         try:

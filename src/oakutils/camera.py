@@ -3,6 +3,7 @@ from typing import List, Tuple, Optional
 import atexit
 
 import depthai as dai
+import depthai_sdk as sdk
 import numpy as np
 import cv2
 import open3d as o3d
@@ -22,7 +23,7 @@ from .nodes import (
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera:
+class Camera(sdk.OakCamera):
     """
     Class for interfacing with the OAK-D camera.
 

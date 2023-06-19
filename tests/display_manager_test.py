@@ -19,7 +19,7 @@ class TestDisplayManager(unittest.TestCase):
         ]
 
         for name, frame in frames:
-            display_manager.update(name, frame)
+            display_manager.update((name, frame))
 
         result = check_method_timout(display_manager.stop, "display_manager.stop", timeout=5)
 

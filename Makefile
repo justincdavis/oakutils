@@ -1,4 +1,4 @@
-.PHONY: all clean docs blobs
+.PHONY: all clean docs blobs test
 
 all: 
 	pip3 install .
@@ -21,3 +21,6 @@ blobs:
 
 stubs:
 	python3 scripts/make_stubs.py
+
+test:
+	python3 -m unittest discover -s tests -p '*_test.py'

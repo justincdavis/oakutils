@@ -6,6 +6,15 @@ from _utils import check_method_timout
 
 
 class TestCamera(unittest.TestCase):
+    def test_init(self):
+        try:
+            _ = Camera()
+        except RuntimeError as e:
+            if "No available device" in str(e):
+                pass
+            else:
+                raise e
+
     def test_stop(self):
         cam = Camera()
         cam.start(block=True)
