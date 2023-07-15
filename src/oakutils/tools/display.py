@@ -42,19 +42,20 @@ class DisplayManager:
     """
     Used in the Camera class to display all the image streams.
     """
+
     def __init__(self, fps: int = 15, display_size: Tuple[int, int] = (640, 480)):
         self._displays: Dict[str, _Display] = {}
         self._display_size = display_size
         self._fps = fps
         atexit.register(self._stop)
-    
+
     def _stop(self):
         for display in self._displays.values():
             display.stop()
 
     def stop(self):
         """
-        Stops the display manager. 
+        Stops the display manager.
         """
         self._stop()
 
@@ -66,10 +67,12 @@ class DisplayManager:
             self._displays[name] = _Display(name, self._fps)
             self._displays[name](frame)
 
-    def update(self, data: Union[Tuple[str, np.ndarray], Iterable[Tuple[str, np.ndarray]]]):
+    def update(
+        self, data: Union[Tuple[str, np.ndarray], Iterable[Tuple[str, np.ndarray]]]
+    ):
         """
         Updates the display with the given data.
-        
+
         Parameters
         ----------
         data : Union[Tuple[str, np.ndarray], Iterable[str, np.ndarray]]

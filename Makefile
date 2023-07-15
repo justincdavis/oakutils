@@ -1,6 +1,15 @@
-.PHONY: all clean docs blobs test
+.PHONY: help install clean docs blobs test
 
-all: 
+help: 
+	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  install    to install the package"
+	@echo "  clean      to clean the directory tree"
+	@echo "  docs       to generate the documentation"
+	@echo "  blobs      to compile the models"
+	@echo "  stubs      to generate the stubs"
+	@echo "  test       to run the tests"
+
+install:
 	pip3 install .
 
 clean: 

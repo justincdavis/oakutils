@@ -1,6 +1,6 @@
 from . import (
     color_camera,
-    image_manip,    
+    image_manip,
     imu,
     mono_camera,
     neural_network,

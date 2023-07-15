@@ -4,7 +4,7 @@ from typing import Dict
 # for 3.8 compatibility
 def remove_suffix(input_string: str, suffix: str) -> str:
     if suffix and input_string.endswith(suffix):
-        return input_string[:-len(suffix)]
+        return input_string[: -len(suffix)]
     return input_string
 
 

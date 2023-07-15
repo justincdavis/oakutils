@@ -55,16 +55,26 @@ def create_neural_network(
     """
     if hasattr(input_link, "__iter__"):
         if input_names is None:
-            raise ValueError("input_names must be provided if input_link is an iterable")
+            raise ValueError(
+                "input_names must be provided if input_link is an iterable"
+            )
         if not hasattr(input_names, "__iter__"):
-            raise ValueError("input_names must be an iterable if input_link is an iterable")
+            raise ValueError(
+                "input_names must be an iterable if input_link is an iterable"
+            )
         if len(input_link) != len(input_names):
-            raise ValueError("input_link and input_names must be the same length if both are iterables")
+            raise ValueError(
+                "input_link and input_names must be the same length if both are iterables"
+            )
         if reuse_messages is not None:
             if not hasattr(reuse_messages, "__iter__"):
-                raise ValueError("reuse_messages must be an iterable if input_link is an iterable")
+                raise ValueError(
+                    "reuse_messages must be an iterable if input_link is an iterable"
+                )
             if len(input_link) != len(reuse_messages):
-                raise ValueError("input_link and reuse_messages must be the same length if both are iterables")
+                raise ValueError(
+                    "input_link and reuse_messages must be the same length if both are iterables"
+                )
 
     bpath: Path = Path(blob_path)
 
@@ -84,7 +94,7 @@ def create_neural_network(
         # handle a single input to the network
         if input_names is not None:
             input_link.link(nn.inputs[input_names])
-        else:    
+        else:
             input_link.link(nn.input)
     else:
         input_data = zip(input_link, input_names, reuse_messages)
