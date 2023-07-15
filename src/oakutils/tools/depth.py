@@ -74,7 +74,7 @@ def align_depth_to_rgb(
 
 
 def quantize_colormap_depth_frame(
-    frame: np.ndarray, depth_scale_factor: float = 2.0
+    frame: np.ndarray, depth_scale_factor: float = 2.0, apply_colormap: bool = True
 ) -> np.ndarray:
     """
     Further quantize the depth image for nice visualization, and
@@ -86,6 +86,8 @@ def quantize_colormap_depth_frame(
         Depth map image
     depth_scale_factor : float
         Scale factor to apply to the depth map before quantization
+    apply_colormap : bool
+        Whether to apply a colormap to the depth map
 
     Returns
     -------
@@ -99,7 +101,8 @@ def quantize_colormap_depth_frame(
     quantized_depth = cv2.convertScaleAbs(
         frame.astype(float), alpha=255 / depth_scale_factor
     )
-    quantized_depth = cv2.applyColorMap(quantized_depth, cv2.COLORMAP_JET)
+    if apply_colormap:
+        quantized_depth = cv2.applyColorMap(quantized_depth, cv2.COLORMAP_JET)
     return quantized_depth
 
 
