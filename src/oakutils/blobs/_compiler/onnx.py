@@ -29,7 +29,7 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
     onnx.save(model_simp, output_path)
 
 
-def compile_onnx(model_path: str, output_path: str, shaves: int = 6, version="2022.1"):
+def compile_onnx(model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify=True):
     """
     Compiles an ONNX model to a blob saved at the output path
 
@@ -39,8 +39,15 @@ def compile_onnx(model_path: str, output_path: str, shaves: int = 6, version="20
         The path to the model to compile
     output_path : str
         The path to save the compiled model to
+
+    Raises
+    ------
+    AssertionError
+        If the simplified model could not be validated
     """
-    simplify(model_path, output_path)
+    if simplify:
+        simplify(model_path, output_path)
+
 
     blobconverter.from_onnx(
         model=output_path,

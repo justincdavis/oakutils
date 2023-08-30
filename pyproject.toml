@@ -38,10 +38,11 @@ classifiers = [
 requires-python=">=3.8"
 dependencies = [
     "depthai>=2.20",
-    "depthai-sdk==1.11.0",
+    "depthai-sdk>=1.11.0",
     "numpy>=1.20",
     "open3d>=0.16",
     "opencv-contrib-python>=4.5",
+    "typing_extensions>=4.0.0",
 ]
 
 [project.urls]
