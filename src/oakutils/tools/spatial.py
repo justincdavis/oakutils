@@ -122,7 +122,7 @@ class HostSpatialsCalc:
 
     def calc_spatials(
         self,
-        depth_data: dai.ImgFrame,
+        depth_data: Union[dai.ImgFrame, np.ndarray],
         roi: Union[Tuple[int, int], Tuple[int, int, int, int]],
         averaging_method: Callable = np.mean,
     ) -> Tuple[float, float, float, Tuple[int, int]]:
@@ -150,8 +150,10 @@ class HostSpatialsCalc:
         Tuple[int, int]
             The centroid of the ROI.
         """
-
-        depth_frame = depth_data.getFrame()
+        if isinstance(depth_data, dai.ImgFrame):
+            depth_frame = depth_data.getFrame()
+        else:
+            depth_frame = depth_data
 
         if self._first_run:
             self._mid_w = int(depth_frame.shape[1] / 2)  # middle of the depth img width

@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Union, Iterable, Tuple
 from threading import Thread
 import atexit
+import time
 
 import cv2
 import numpy as np
@@ -32,9 +33,11 @@ class _Display:
     def _run(self):
         while self._stopped:
             if self._frame is not None:
+                s = time.time()
                 cv2.imshow(self._name, self._frame)
                 self._frame = None
-                cv2.waitKey(self._delay_time)
+                e = time.time()
+                cv2.waitKey(max(1, int((self._delay_time - (e - s)) * 1000)))
         cv2.destroyWindow(self._name)
 
 
@@ -60,7 +63,8 @@ class DisplayManager:
         self._stop()
 
     def _update(self, name: str, frame: np.ndarray):
-        frame = cv2.resize(frame, self._display_size)
+        if frame.shape[1] != self._display_size[0] or frame.shape[0] != self._display_size[1]:
+            frame = cv2.resize(frame, self._display_size)
         try:
             self._displays[name](frame)
         except KeyError:

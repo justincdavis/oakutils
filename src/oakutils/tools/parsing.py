@@ -226,16 +226,26 @@ def get_median_filter_from_str(
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
     """
+    if int(str(dai.Version(dai.__version__)).split(".")[1]) >= 21:
+        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+        median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
+        median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
+        median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
+    else:
+        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+        median_3 = dai.StereoDepthProperties.MedianFilter.MEDIAN_3x3
+        median_5 = dai.StereoDepthProperties.MedianFilter.MEDIAN_5x5
+        median_7 = dai.StereoDepthProperties.MedianFilter.MEDIAN_7x7
     if filter_size is None:
-        return dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+        return median_off
     elif filter_size == 0:
-        return dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+        return median_off
     elif filter_size == 3:
-        return dai.StereoDepthProperties.MedianFilter.MEDIAN_3x3
+        return median_3
     elif filter_size == 5:
-        return dai.StereoDepthProperties.MedianFilter.MEDIAN_5x5
+        return median_5
     elif filter_size == 7:
-        return dai.StereoDepthProperties.MedianFilter.MEDIAN_7x7
+        return median_7
     else:
         raise ValueError(
             "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
