@@ -1,4 +1,4 @@
-from .camera import Camera
+from .camera import OakCamera
 from . import (
     blobs,
     calibration,
@@ -9,7 +9,7 @@ from . import (
 )
 
 __all__ = [
-    "Camera",
+    "OakCamera",
     "blobs",
     "calibration",
     "filters",
