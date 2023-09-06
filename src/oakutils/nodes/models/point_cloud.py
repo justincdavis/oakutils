@@ -22,7 +22,7 @@ def create_point_cloud(
     depth_link : dai.Node.Output
         The output link of the depth node
         Example: stereo.depth
-        Explicity pass it without calling (i.e. not stereo.depth())
+        Explicity pass the object without calling (i.e. not stereo.depth())
 
     Returns
     -------
