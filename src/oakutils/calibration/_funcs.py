@@ -1,3 +1,5 @@
+# pylint: disable=C0103
+
 from typing import Tuple
 
 import depthai as dai

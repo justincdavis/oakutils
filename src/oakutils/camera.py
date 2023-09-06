@@ -68,7 +68,9 @@ class OakCamera:
         self._pipeline: Optional[dai.Pipeline] = None
 
         # handle custom displays directly for API stuff without visualize
-        self._display_size: Tuple[int, int] = get_smaller_size(self._color_size, self._mono_size)
+        self._display_size: Tuple[int, int] = get_smaller_size(
+            self._color_size, self._mono_size
+        )
         self._displays: Optional[DisplayManager] = None
         self._pcv: Optional[PointCloudVisualizer] = None
 
@@ -99,7 +101,9 @@ class OakCamera:
             If the OakCamera has not been built yet.
         """
         if self._oak is None:
-            raise RuntimeError("OakCamera has not been built yet. Failure in processing thread.")
+            raise RuntimeError(
+                "OakCamera has not been built yet. Failure in processing thread."
+            )
         return self._oak
 
     @property
@@ -114,7 +118,9 @@ class OakCamera:
             If the pipeline has not been built yet.
         """
         if self._pipeline is None:
-            raise RuntimeError("Pipeline has not been built yet. Failure in depthai_sdk.OakCamera.start() or in processing thread.")
+            raise RuntimeError(
+                "Pipeline has not been built yet. Failure in depthai_sdk.OakCamera.start() or in processing thread."
+            )
         return self._pipeline
 
     @property
@@ -132,7 +138,7 @@ class OakCamera:
         if self._displays is None:
             self._displays = DisplayManager(display_size=self._display_size)
         return self._displays
-    
+
     @property
     def pcv(self) -> PointCloudVisualizer:
         """
@@ -141,7 +147,7 @@ class OakCamera:
         if self._pcv is None:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
-    
+
     def build(self):
         """
         Builds the pipeline. To be done after all sdk calls are made.
@@ -153,9 +159,9 @@ class OakCamera:
         """
         Starts the camera. To be done after all api calls are made.
         """
-        with self._start_condition: 
+        with self._start_condition:
             self._start_condition.notify()
-        
+
         if blocking:
             with self._stop_condition:
                 self._stop_condition.wait()
@@ -165,7 +171,7 @@ class OakCamera:
         Stops the camera.
         """
         self._stopped = True
-        
+
         # call conditions if system never started
         with self._build_condition:
             self._build_condition.notify()
@@ -193,7 +199,7 @@ class OakCamera:
     def _run(self):
         with sdk.OakCamera(*self._oak_camera_args) as oak:
             self._cam = oak
-            
+
             # wait for the build call, this allows user to define sdk calls
             with self._build_condition:
                 self._build_condition.wait()
@@ -212,12 +218,11 @@ class OakCamera:
 
             # get the output queues ahead of time
             queues = {
-                name: oak.device.getOutputQueue(name) for name, _ in self._callbacks.items()
+                name: oak.device.getOutputQueue(name)
+                for name, _ in self._callbacks.items()
             }
             # create a cache for queue results to enable multi queue callbacks
-            data_cache = {
-                name: None for name, _ in self._callbacks.items()
-            }
+            data_cache = {name: None for name, _ in self._callbacks.items()}
             while not self._stopped:
                 # poll the camera to get new data
                 oak.poll()
@@ -231,14 +236,12 @@ class OakCamera:
                         data = data_cache[name]
                     else:
                         data = [data_cache[n] for n in name]
-                    partials.append(
-                        partial(callback, data)
-                    )
+                    partials.append(partial(callback, data))
                 # run/dispatch the callback partials
                 # TODO: run in async loop or another thread or process?
                 for callback in partials:
                     callback()
-            
+
         # call stop conditions if start was called with blocking
         with self._stop_condition:
             self._stop_condition.notify()

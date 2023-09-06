@@ -1,3 +1,5 @@
+# pylint: disable=C0103
+
 from dataclasses import dataclass
 from typing import Optional, Tuple
 

@@ -1,0 +1,17 @@
+[BASIC]
+good-names=
+    i,
+    j,
+    k,
+    logger,
+
+good-names-rgxs=^[_a-z][_a-z0-9]?$
+no-docstring-rgx=^_
+
+[FORMAT]
+max-line-length=140
+
+ignored-modules=cv2,depthai,open3d
+
+[MESSAGES CONTROL]
+disable=C0303,C0114,W0401,R0801,R0902,R0904,C0305,W0703,C0200,R0913,R0914,W0107,W1203,W0246
