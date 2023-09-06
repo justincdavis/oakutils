@@ -17,10 +17,12 @@ def create_point_cloud(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the point_cloud to
-    input_link : dai.node.XLinkOut
-        The input link to connect to the point_cloud node.
-        Example: cam_rgb.preview.link
-        Explicitly pass in the link as a non-called function.
+    xyz_link : dai.Node.Output
+        The output link of the xyz node
+    depth_link : dai.Node.Output
+        The output link of the depth node
+        Example: stereo.depth
+        Explicity pass it without calling (i.e. not stereo.depth())
 
     Returns
     -------
