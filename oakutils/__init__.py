@@ -1,4 +1,4 @@
-# from .camera import Camera
+from .api_camera import Camera
 from . import (
     blobs,
     calibration,
@@ -9,7 +9,7 @@ from . import (
 )
 
 __all__ = [
-    # "Camera",
+    "Camera",
     "blobs",
     "calibration",
     "filters",

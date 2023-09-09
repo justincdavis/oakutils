@@ -13,7 +13,6 @@ Subpackages
    oakutils.nodes
    oakutils.point_clouds
    oakutils.tools
-   oakutils.utils
 
 Submodules
 ----------
