@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import depthai as dai
 
 from ._load import create_double_kernel_model as _create_double_kernel_model
@@ -13,9 +11,9 @@ def create_laplacian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     blur_kernel_size: int = 3,
-    use_blur: Optional[bool] = None,
-    grayscale_out: Optional[bool] = None,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    use_blur: bool | None = None,
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """Creates a laplacian model with a specified kernel size.
 
     Parameters

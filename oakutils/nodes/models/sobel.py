@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import depthai as dai
 
 from ._load import create_no_args_model as _create_no_args_model
@@ -12,9 +10,9 @@ def create_sobel(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     blur_kernel_size: int = 3,
-    use_blur: Optional[bool] = None,
-    grayscale_out: Optional[bool] = None,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    use_blur: bool | None = None,
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """Creates a sobel model with a specified kernel size.
 
     Parameters

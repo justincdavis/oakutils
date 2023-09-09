@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import blobconverter
 import onnx
 import onnxsim
@@ -33,7 +31,7 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
 
 
 def compile_onnx(
-    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify: Optional[bool] = None
+    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify: bool | None = None
 ):
     """Compiles an ONNX model to a blob saved at the output path.
 

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import atexit
 from threading import Condition, Thread
-from typing import List, Optional, Tuple
 
 import cv2
 import depthai as dai
@@ -81,37 +80,37 @@ class Camera(sdk.OakCamera):
     def __init__(
         self,
         rgb_size: str = "1080p",
-        enable_rgb: Optional[bool] = None,
+        enable_rgb: bool | None = None,
         mono_size: str = "400p",
-        enable_mono: Optional[bool] = None,
+        enable_mono: bool | None = None,
         rgb_fps: int = 30,
         mono_fps: int = 60,
-        primary_mono_left: Optional[bool] = None,
-        use_cv2_q_matrix: Optional[bool] = None,
-        compute_im3d_on_demand: Optional[bool] = None,
-        compute_point_cloud_on_demand: Optional[bool] = None,
-        display_size: Tuple[int, int] = (640, 400),
-        display_rgb: Optional[bool] = None,
-        display_mono: Optional[bool] = None,
-        display_depth: Optional[bool] = None,
-        display_disparity: Optional[bool] = None,
-        display_rectified: Optional[bool] = None,
-        display_point_cloud: Optional[bool] = None,
-        extended_disparity: Optional[bool] = None,
-        subpixel: Optional[bool] = None,
-        lr_check: Optional[bool] = None,
-        median_filter: Optional[int] = 7,
+        primary_mono_left: bool | None = None,
+        use_cv2_q_matrix: bool | None = None,
+        compute_im3d_on_demand: bool | None = None,
+        compute_point_cloud_on_demand: bool | None = None,
+        display_size: tuple[int, int] = (640, 400),
+        display_rgb: bool | None = None,
+        display_mono: bool | None = None,
+        display_depth: bool | None = None,
+        display_disparity: bool | None = None,
+        display_rectified: bool | None = None,
+        display_point_cloud: bool | None = None,
+        extended_disparity: bool | None = None,
+        subpixel: bool | None = None,
+        lr_check: bool | None = None,
+        median_filter: int | None = 7,
         stereo_confidence_threshold: int = 200,
-        stereo_speckle_filter_enable: Optional[bool] = None,
+        stereo_speckle_filter_enable: bool | None = None,
         stereo_speckle_filter_range: int = 60,
-        stereo_temporal_filter_enable: Optional[bool] = None,
-        stereo_spatial_filter_enable: Optional[bool] = None,
+        stereo_temporal_filter_enable: bool | None = None,
+        stereo_spatial_filter_enable: bool | None = None,
         stereo_spatial_filter_radius: int = 2,
         stereo_spatial_filter_num_iterations: int = 1,
         stereo_threshold_filter_min_range: int = 200,
         stereo_threshold_filter_max_range: int = 20000,
         stereo_decimation_filter_factor: int = 1,
-        enable_imu: Optional[bool] = None,
+        enable_imu: bool | None = None,
         imu_batch_report_threshold: int = 20,
         imu_max_batch_reports: int = 20,
         imu_accelerometer_refresh_rate: int = 400,
@@ -273,43 +272,43 @@ class Camera(sdk.OakCamera):
         # pipeline
         self._pipeline: dai.Pipeline = dai.Pipeline()
         # storage for the nodes
-        self._streams: List[str] = []
+        self._streams: list[str] = []
         # stop condition
         self._stopped: bool = False
         # thread for the camera
         self._cam_thread = Thread(target=self._target)
 
-        self._rgb_frame: Optional[np.ndarray] = None
-        self._rectified_rgb_frame: Optional[np.ndarray] = None
-        self._disparity: Optional[np.ndarray] = None
-        self._depth: Optional[np.ndarray] = None
-        self._left_frame: Optional[np.ndarray] = None
-        self._right_frame: Optional[np.ndarray] = None
-        self._left_rect_frame: Optional[np.ndarray] = None
-        self._right_rect_frame: Optional[np.ndarray] = None
-        self._primary_rect_frame: Optional[np.ndarray] = None
+        self._rgb_frame: np.ndarray | None = None
+        self._rectified_rgb_frame: np.ndarray | None = None
+        self._disparity: np.ndarray | None = None
+        self._depth: np.ndarray | None = None
+        self._left_frame: np.ndarray | None = None
+        self._right_frame: np.ndarray | None = None
+        self._left_rect_frame: np.ndarray | None = None
+        self._right_rect_frame: np.ndarray | None = None
+        self._primary_rect_frame: np.ndarray | None = None
 
-        self._im3d: Optional[np.ndarray] = None
+        self._im3d: np.ndarray | None = None
         self._compute_im3d_on_demand = compute_im3d_on_demand
         self._im3d_current = False
 
-        self._point_cloud: Optional[o3d.geometry.PointCloud] = None
+        self._point_cloud: o3d.geometry.PointCloud | None = None
         self._compute_point_cloud_on_demand = compute_point_cloud_on_demand
         if self._display_point_cloud:
             self._point_cloud_vis = PointCloudVisualizer()
 
         # imu information
-        self._imu_packet: Optional[np.ndarray] = None
+        self._imu_packet: np.ndarray | None = None
         self._imu_batch_report_threshold: int = imu_batch_report_threshold
         self._imu_max_batch_reports: int = imu_max_batch_reports
         self._imu_accelerometer_refresh_rate: float = imu_accelerometer_refresh_rate
         self._imu_gyroscope_refresh_rate: float = imu_gyroscope_refresh_rate
-        self._imu_pose: List[float] = [0, 0, 0]
-        self._imu_rotation: List[float] = [0, 0, 0]
+        self._imu_pose: list[float] = [0, 0, 0]
+        self._imu_rotation: list[float] = [0, 0, 0]
 
         # packet for compute_3d
-        self._3d_packet: Tuple[
-            Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]
+        self._3d_packet: tuple[
+            np.ndarray | None, np.ndarray | None, np.ndarray | None
         ] = (None, None, None)
 
         # display information
@@ -406,7 +405,7 @@ class Camera(sdk.OakCamera):
         return self._calibration
 
     @property
-    def rgb(self) -> Optional[np.ndarray]:
+    def rgb(self) -> np.ndarray | None:
         """Get the rectified RGB color frame.
 
         Returns
@@ -417,7 +416,7 @@ class Camera(sdk.OakCamera):
         return self._rgb_frame
 
     @property
-    def rectified_rgb(self) -> Optional[np.ndarray]:
+    def rectified_rgb(self) -> np.ndarray | None:
         """Get the rectified RGB color frame.
 
         Returns
@@ -428,7 +427,7 @@ class Camera(sdk.OakCamera):
         return self._rectified_rgb_frame
 
     @property
-    def disparity(self) -> Optional[np.ndarray]:
+    def disparity(self) -> np.ndarray | None:
         """Get the disparity frame.
 
         Returns
@@ -439,7 +438,7 @@ class Camera(sdk.OakCamera):
         return self._disparity
 
     @property
-    def depth(self) -> Optional[np.ndarray]:
+    def depth(self) -> np.ndarray | None:
         """Get the depth frame.
 
         Returns
@@ -450,7 +449,7 @@ class Camera(sdk.OakCamera):
         return self._depth
 
     @property
-    def left(self) -> Optional[np.ndarray]:
+    def left(self) -> np.ndarray | None:
         """Get the left frame.
 
         Returns
@@ -461,7 +460,7 @@ class Camera(sdk.OakCamera):
         return self._left_frame
 
     @property
-    def right(self) -> Optional[np.ndarray]:
+    def right(self) -> np.ndarray | None:
         """Get the right frame.
 
         Returns
@@ -472,7 +471,7 @@ class Camera(sdk.OakCamera):
         return self._right_frame
 
     @property
-    def rectified_left(self) -> Optional[np.ndarray]:
+    def rectified_left(self) -> np.ndarray | None:
         """Gets the rectified left frame.
 
         Returns
@@ -483,7 +482,7 @@ class Camera(sdk.OakCamera):
         return self._left_rect_frame
 
     @property
-    def rectified_right(self) -> Optional[np.ndarray]:
+    def rectified_right(self) -> np.ndarray | None:
         """Gets the rectified right frame.
 
         Returns
@@ -494,7 +493,7 @@ class Camera(sdk.OakCamera):
         return self._right_rect_frame
 
     @property
-    def im3d(self) -> Optional[np.ndarray]:
+    def im3d(self) -> np.ndarray | None:
         """Gets the 3D image.
 
         Returns
@@ -505,7 +504,7 @@ class Camera(sdk.OakCamera):
         return self._im3d
 
     @property
-    def point_cloud(self) -> Optional[o3d.geometry.PointCloud]:
+    def point_cloud(self) -> o3d.geometry.PointCloud | None:
         """Gets the point cloud.
 
         Returns
@@ -516,7 +515,7 @@ class Camera(sdk.OakCamera):
         return self._point_cloud
 
     @property
-    def imu_pose(self) -> List[float]:
+    def imu_pose(self) -> list[float]:
         """Gets the IMU pose in meters.
 
         Returns
@@ -527,7 +526,7 @@ class Camera(sdk.OakCamera):
         return self._imu_pose
 
     @property
-    def imu_rotation(self) -> List[float]:
+    def imu_rotation(self) -> list[float]:
         """Gets the IMU rotation in radians.
 
         Returns
@@ -548,7 +547,7 @@ class Camera(sdk.OakCamera):
         """
         return self._cam_thread.is_alive()
 
-    def start(self, block: Optional[bool] = None) -> None:
+    def start(self, block: bool | None = None) -> None:
         """Starts the camera.
 
         Parameters
@@ -754,7 +753,7 @@ class Camera(sdk.OakCamera):
             ] : self._calibration.primary.valid_region[2],
         ]
 
-    def compute_point_cloud(self, block: Optional[bool] = None) -> Optional[o3d.geometry.PointCloud]:
+    def compute_point_cloud(self, block: bool | None = None) -> o3d.geometry.PointCloud | None:
         """Compute a point cloud from the depth map.
 
         Parameters
@@ -779,8 +778,8 @@ class Camera(sdk.OakCamera):
         return self._point_cloud
 
     def compute_im3d(
-        self, block: Optional[bool] = None
-    ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
+        self, block: bool | None = None
+    ) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None]:
         """Compute 3D points from the disparity map.
 
         Parameters

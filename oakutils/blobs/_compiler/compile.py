@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import shutil
-from typing import Dict, List, Optional, Tuple, Union
 
 from ..definitions import AbstractModel, InputType
 from .blob import compile_blob
@@ -14,12 +13,9 @@ from .utils import dict_to_str, remove_suffix
 
 def _compile(
     model_type: AbstractModel,
-    model_args: Dict,
-    dummy_input_shapes: Union[
-        List[Tuple[Tuple[int, int, int], InputType]],
-        Tuple[Tuple[int, int, int], InputType],
-    ],
-    cache: Optional[bool] = None,
+    model_args: dict,
+    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]] | tuple[tuple[int, int, int], InputType],
+    cache: bool | None = None,
     shaves: int = 6,
 ) -> str:
     """Compiles a given torch.nn.Module class into a blob using the provided arguments.
@@ -113,10 +109,10 @@ def _compile(
 
 def compile_model(
     model_type: AbstractModel,
-    model_args: Dict,
-    cache: Optional[bool] = None,
+    model_args: dict,
+    cache: bool | None = None,
     shaves: int = 6,
-    shape_mapping: Optional[Dict[InputType, Tuple[int, int, int]]] = None,
+    shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
 ) -> str:
     """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 

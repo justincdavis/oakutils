@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import cv2
 import numpy as np
 
@@ -79,7 +77,7 @@ def align_depth_to_rgb(
 def quantize_colormap_depth_frame(
     frame: np.ndarray,
     depth_scale_factor: float = 2.0,
-    apply_colormap: Optional[bool] = None,
+    apply_colormap: bool | None = None,
 ) -> np.ndarray:
     """Further quantize the depth image for nice visualization, and
     apply a colormap for better visualization.

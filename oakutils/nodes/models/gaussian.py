@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import depthai as dai
 
 from ._load import create_single_kernel_model as _create_single_kernel_model
@@ -11,8 +9,8 @@ def create_gaussian(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     kernel_size: int = 3,
-    grayscale_out: Optional[bool] = None,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """Creates a gaussian model with a specified kernel size.
 
     Parameters

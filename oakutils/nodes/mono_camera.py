@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import depthai as dai
 
 
@@ -16,7 +14,7 @@ def create_mono_camera(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: Optional[int] = None,
+    isp_3a_fps: int | None = None,
 ) -> dai.node.MonoCamera:
     """Creates a pipeline for the mono camera.
 
@@ -120,8 +118,8 @@ def create_left_right_cameras(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: Optional[int] = None,
-) -> Tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
+    isp_3a_fps: int | None = None,
+) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
     """Wrapper function for creating the left and right mono cameras.
 
     Parameters

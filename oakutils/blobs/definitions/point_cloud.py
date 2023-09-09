@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import List, Tuple
-
 import numpy as np
 import torch
 
@@ -70,7 +68,7 @@ class PointCloud(AbstractModel):
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls) -> List[Tuple[str, InputType]]:
+    def input_names(cls) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 

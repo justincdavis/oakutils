@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, List, Optional, Tuple, Union
+from typing import Iterable
 
 import torch
 
@@ -8,7 +8,7 @@ from ..definitions.utils import InputType
 
 
 def _create_dummy_input(
-    input_shape: Tuple[int, int, int], input_type: InputType
+    input_shape: tuple[int, int, int], input_type: InputType
 ) -> torch.Tensor:
     """Creates a dummy input based on the input_shape.
 
@@ -52,8 +52,8 @@ def _create_dummy_input(
 
 
 def _create_multiple_dummy_input(
-    input_shapes: Iterable[Tuple[Tuple[int, int, int], InputType]]
-) -> List[torch.Tensor]:
+    input_shapes: Iterable[tuple[tuple[int, int, int], InputType]]
+) -> list[torch.Tensor]:
     """Creates a dummy input based on the input_shapes.
 
     Parameters
@@ -75,11 +75,11 @@ def _create_multiple_dummy_input(
 
 def _export_module_to_onnx(
     model_instance: torch.nn.Module,
-    dummy_input: Union[torch.Tensor, List[torch.Tensor]],
+    dummy_input: torch.Tensor | list[torch.Tensor],
     onnx_path: str,
-    input_names: List[str],
-    output_names: List[str],
-    verbose: Optional[bool] = None,
+    input_names: list[str],
+    output_names: list[str],
+    verbose: bool | None = None,
 ):
     """Runs torch.onnx.export with the given parameters.
 
@@ -122,14 +122,11 @@ def _export_module_to_onnx(
 
 def export(
     model_instance: torch.nn.Module,
-    dummy_input_shapes: Union[
-        List[Tuple[Tuple[int, int, int], InputType]],
-        Tuple[Tuple[int, int, int], InputType],
-    ],
+    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]] | tuple[tuple[int, int, int], InputType],
     onnx_path: str,
-    input_names: List[str],
-    output_names: List[str],
-    verbose: Optional[bool] = None,
+    input_names: list[str],
+    output_names: list[str],
+    verbose: bool | None = None,
 ):
     """Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx.
 

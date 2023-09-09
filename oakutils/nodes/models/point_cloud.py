@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Tuple
-
 import depthai as dai
 
 from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model
@@ -11,7 +9,7 @@ def create_point_cloud(
     pipeline: dai.Pipeline,
     xyz_link: dai.Node.Output,
     depth_link: dai.Node.Output,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """Creates a point_cloud model with a specified kernel size.
 
     Parameters

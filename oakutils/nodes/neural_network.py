@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable, Optional, Tuple, Union
+from typing import Iterable
 
 import depthai as dai
 import numpy as np
@@ -9,15 +9,15 @@ import numpy as np
 
 def create_neural_network(
     pipeline: dai.Pipeline,
-    input_link: Union[dai.Node.Output, Iterable[dai.Node.Output]],
+    input_link: dai.Node.Output | Iterable[dai.Node.Output],
     blob_path: str,
     stream_name: str = "nn",
-    input_names: Optional[Union[str, Iterable[str]]] = None,
-    reuse_messages: Optional[Union[bool, Iterable[Optional[bool]]]] = None,
+    input_names: str | Iterable[str] | None = None,
+    reuse_messages: bool | Iterable[bool | None] | None = None,
     num_inference_threads: int = 2,
-    num_nce_per_inference_thread: Optional[int] = None,
-    num_pool_frames: Optional[int] = None,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
+    num_nce_per_inference_thread: int | None = None,
+    num_pool_frames: int | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
     """Creates a neural network node.
 
     Parameters
@@ -113,7 +113,7 @@ def create_neural_network(
 
 
 def get_nn_bgr_frame(
-    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a BGR frame
     usable by cv2.
@@ -139,7 +139,7 @@ def get_nn_bgr_frame(
 
 
 def get_nn_gray_frame(
-    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.

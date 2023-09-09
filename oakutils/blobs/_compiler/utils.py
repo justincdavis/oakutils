@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Dict
-
 
 # for 3.8 compatibility
 def remove_suffix(input_string: str, suffix: str) -> str:
@@ -10,7 +8,7 @@ def remove_suffix(input_string: str, suffix: str) -> str:
     return input_string
 
 
-def dict_to_str(d: Dict) -> str:
+def dict_to_str(d: dict) -> str:
     """Converts a dictionary to a string by combining the values with underscores.
 
     Parameters

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import cv2
 import depthai as dai
 import numpy as np
@@ -16,9 +14,9 @@ from ._classes import (
 
 
 def get_camera_calibration_basic(
-    device: Optional[dai.Device] = None,
-    rgb_size: Tuple[int, int] = (1920, 1080),
-    mono_size: Tuple[int, int] = (640, 400),
+    device: dai.Device | None = None,
+    rgb_size: tuple[int, int] = (1920, 1080),
+    mono_size: tuple[int, int] = (640, 400),
 ) -> CalibrationData:
     """Requires available OAK device.
     Get camera calibration data from OAK-D device.
@@ -260,10 +258,10 @@ def get_camera_calibration_basic(
 
 
 def get_camera_calibration_primary_mono(
-    device: Optional[dai.Device] = None,
-    rgb_size: Tuple[int, int] = (1920, 1080),
-    mono_size: Tuple[int, int] = (640, 400),
-    is_primary_mono_left: Optional[bool] = None,
+    device: dai.Device | None = None,
+    rgb_size: tuple[int, int] = (1920, 1080),
+    mono_size: tuple[int, int] = (640, 400),
+    is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:
     """Requires available OAK device.
     Get the calibration data for both RGB and mono cameras, as well as produce the
@@ -401,10 +399,10 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
 
 
 def get_camera_calibration(
-    rgb_size: Tuple[int, int],
-    mono_size: Tuple[int, int],
-    is_primary_mono_left: Optional[bool] = None,
-    device: Optional[dai.Device] = None,
+    rgb_size: tuple[int, int],
+    mono_size: tuple[int, int],
+    is_primary_mono_left: bool | None = None,
+    device: dai.Device | None = None,
 ) -> CalibrationData:
     """Creates the full CalibrationData object, including the primary
       mono camera calibration data

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import math
-from typing import Optional, Tuple
 
 import cv2
 import numpy as np
@@ -38,15 +37,15 @@ class WLSFilter:
         self._lambda: int = lamb
         self._sigma: float = sigma
         self._disp_levels: int = disp_levels
-        self._depth_scale_left: Optional[float] = None
-        self._depth_scale_right: Optional[float] = None
+        self._depth_scale_left: float | None = None
+        self._depth_scale_right: float | None = None
         self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(use_confidence=False)
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
 
     def filter_frame(
-        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: Optional[bool] = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool | None = None
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Filters the disparity image.
 
         Parameters

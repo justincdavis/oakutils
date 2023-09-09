@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 
 import torch
 
@@ -20,12 +19,12 @@ class AbstractModel(ABC, torch.nn.Module):
 
     @classmethod
     @abstractmethod
-    def input_names(cls) -> List[Tuple[str, InputType]]:
+    def input_names(cls) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         pass
 
     @classmethod
     @abstractmethod
-    def output_names(cls) -> List[str]:
+    def output_names(cls) -> list[str]:
         """The names of the output tensors."""
         pass

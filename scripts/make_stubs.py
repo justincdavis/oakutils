@@ -54,13 +54,13 @@ def fix_open3d_stub_syntax():
     # resolve syntax issues
     path = os.path.join(os.path.dirname(__file__), "..", "typings", "open3d")
     camera = os.path.join(path, "camera", "__init__.pyi")
-    with open(camera, "r") as f:
+    with open(camera) as f:
         data = f.read()
     data = data.replace("3x3 numpy array", "np.ndarray")
     data = data.replace("4x4 numpy array", "np.ndarray")
     with open(camera, "w") as f:
         f.write(data)
-    with open(camera, "r") as f:
+    with open(camera) as f:
         data = f.readlines()
     data.insert(0, "import numpy as np\n")
     with open(camera, "w") as f:

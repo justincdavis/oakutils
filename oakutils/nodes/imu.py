@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import depthai as dai
 
 
@@ -11,22 +9,22 @@ def create_imu(
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
     max_batch_reports: int = 10,
-    enable_accelerometer_raw: Optional[bool] = None,
-    enable_accelerometer: Optional[bool] = None,
-    enable_linear_acceleration: Optional[bool] = None,
-    enable_gravity: Optional[bool] = None,
-    enable_gyroscope_raw: Optional[bool] = None,
-    enable_gyroscope_calibrated: Optional[bool] = None,
-    enable_gyroscope_uncalibrated: Optional[bool] = None,
-    enable_magnetometer_raw: Optional[bool] = None,
-    enable_magnetometer_calibrated: Optional[bool] = None,
-    enable_magnetometer_uncalibrated: Optional[bool] = None,
-    enable_rotation_vector: Optional[bool] = None,
-    enable_game_rotation_vector: Optional[bool] = None,
-    enable_geomagnetic_rotation_vector: Optional[bool] = None,
-    enable_arvr_stabilized_rotation_vector: Optional[bool] = None,
-    enable_arvr_stabilized_game_rotation_vector: Optional[bool] = None,
-) -> Tuple[dai.node.IMU, dai.node.XLinkOut]:
+    enable_accelerometer_raw: bool | None = None,
+    enable_accelerometer: bool | None = None,
+    enable_linear_acceleration: bool | None = None,
+    enable_gravity: bool | None = None,
+    enable_gyroscope_raw: bool | None = None,
+    enable_gyroscope_calibrated: bool | None = None,
+    enable_gyroscope_uncalibrated: bool | None = None,
+    enable_magnetometer_raw: bool | None = None,
+    enable_magnetometer_calibrated: bool | None = None,
+    enable_magnetometer_uncalibrated: bool | None = None,
+    enable_rotation_vector: bool | None = None,
+    enable_game_rotation_vector: bool | None = None,
+    enable_geomagnetic_rotation_vector: bool | None = None,
+    enable_arvr_stabilized_rotation_vector: bool | None = None,
+    enable_arvr_stabilized_game_rotation_vector: bool | None = None,
+) -> tuple[dai.node.IMU, dai.node.XLinkOut]:
     """Creates a pipeline for the IMU.
     Sensors which use both gyroscope and accelerometer will default to slower rate.
     An in-depth explanation of the IMU can be found here:

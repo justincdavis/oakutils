@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import cv2
 import numpy as np
 import open3d as o3d
@@ -61,7 +59,7 @@ def get_point_cloud_from_depth_image(
     depth_scale: float = 1000.0,
     depth_trunc: float = 25000.0,
     stride: int = 1,
-    project_valid_depth_only: Optional[bool] = None,
+    project_valid_depth_only: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """Creates an o3d point cloud from a depth image.
 
@@ -103,10 +101,10 @@ def get_point_cloud_from_depth_image(
 
 def filter_point_cloud(
     pcd: o3d.geometry.PointCloud,
-    voxel_size: Optional[float] = 0.1,
-    nb_neighbors: Optional[int] = 30,
-    std_ratio: Optional[float] = 0.1,
-    downsample_first: Optional[bool] = None,
+    voxel_size: float | None = 0.1,
+    nb_neighbors: int | None = 30,
+    std_ratio: float | None = 0.1,
+    downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """Filters the point cloud by performing voxel downsampling and outlier removal.
 

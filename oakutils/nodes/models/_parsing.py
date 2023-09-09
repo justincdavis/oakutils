@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from typing import List, Tuple
 
 from ...blobs import models
 
@@ -34,7 +33,7 @@ def parse_kernel_size(kernel_size: int) -> bool:
     return valid
 
 
-def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
+def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
     """Checks if a name is valid againist the names of compiled models.
 
     Parameters
@@ -67,8 +66,8 @@ def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
 
 
 def get_candidates(
-    model_type: str, attributes: List[str]
-) -> List[Tuple[str, List[str], str]]:
+    model_type: str, attributes: list[str]
+) -> list[tuple[str, list[str], str]]:
     """Gets the list of candidate models for a given model type and attribute.
 
     Parameters

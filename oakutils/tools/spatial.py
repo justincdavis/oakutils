@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from typing import Callable, Optional, Tuple, Union
+from typing import Callable
 
 import depthai as dai
 import numpy as np
@@ -63,13 +63,13 @@ class HostSpatialsCalc:
 
         # parameters which get resolved on first run
         self._first_run: bool = True
-        self._mid_w: Optional[int] = None
-        self._mid_h: Optional[int] = None
-        self._f_mid_w: Optional[float] = None
-        self._f_mid_h: Optional[float] = None
-        self._HFOV: Optional[float] = None
-        self._i_HFOV: Optional[float] = None
-        self._i_angle: Optional[float] = None
+        self._mid_w: int | None = None
+        self._mid_h: int | None = None
+        self._f_mid_w: float | None = None
+        self._f_mid_h: float | None = None
+        self._HFOV: float | None = None
+        self._i_HFOV: float | None = None
+        self._i_angle: float | None = None
 
     @property
     def delta(self) -> int:
@@ -99,8 +99,8 @@ class HostSpatialsCalc:
         self._thresh_high = value
 
     def _check_input(
-        self, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], frame: np.ndarray
-    ) -> Tuple[int, int, int, int]:
+        self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
+    ) -> tuple[int, int, int, int]:
         """Checks if the input is valid, and constrains to the frame size."""
         xywh = 4
         xy = 2
@@ -116,10 +116,10 @@ class HostSpatialsCalc:
 
     def calc_spatials(
         self,
-        depth_data: Union[dai.ImgFrame, np.ndarray],
-        roi: Union[Tuple[int, int], Tuple[int, int, int, int]],
+        depth_data: dai.ImgFrame | np.ndarray,
+        roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,
-    ) -> Tuple[float, float, float, Tuple[int, int]]:
+    ) -> tuple[float, float, float, tuple[int, int]]:
         """Computes spatial coordinates of the ROI.
 
         Parameters
