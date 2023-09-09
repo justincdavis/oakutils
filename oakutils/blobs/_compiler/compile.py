@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import shutil
 from typing import Dict, List, Optional, Tuple, Union
@@ -17,7 +19,7 @@ def _compile(
         List[Tuple[Tuple[int, int, int], InputType]],
         Tuple[Tuple[int, int, int], InputType],
     ],
-    cache: bool = True,
+    cache: Optional[bool] = None,
     shaves: int = 6,
 ) -> str:
     """
@@ -47,6 +49,9 @@ def _compile(
     str
         The path to the compiled blob
     """
+    if cache is None:
+        cache = True
+
     # make the actual model instance
     model = model_type(**model_args)
     input_data = model_type.input_names()
@@ -107,11 +112,10 @@ def _compile(
     return shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
 
 
-
-def compile(
+def compile_model(
     model_type: AbstractModel,
     model_args: Dict,
-    cache: bool = True,
+    cache: Optional[bool] = None,
     shaves: int = 6,
     shape_mapping: Optional[Dict[InputType, Tuple[int, int, int]]] = None,
 ) -> str:
@@ -145,6 +149,9 @@ def compile(
     str
         The path to the compiled blob
     """
+    if cache is None:
+        cache = True
+
     input_data = model_type.input_names()
     dummy_input_shapes = []
     for _, input_type in input_data:

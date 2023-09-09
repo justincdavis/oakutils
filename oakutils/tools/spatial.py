@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 from typing import Callable, Optional, Tuple, Union
 
@@ -110,9 +112,11 @@ class HostSpatialsCalc:
         """
         Checks if the input is valid, and constrains to the frame size.
         """
-        if len(roi) == 4:
+        xywh = 4
+        xy = 2
+        if len(roi) == xywh:
             return roi
-        if len(roi) != 2:
+        if len(roi) != xy:
             raise ValueError(
                 "You have to pass either ROI (4 values) or point (2 values)!"
             )

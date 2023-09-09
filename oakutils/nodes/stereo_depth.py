@@ -1,4 +1,6 @@
-from typing import Tuple
+from __future__ import annotations
+
+from typing import Optional, Tuple
 
 import depthai as dai
 
@@ -20,22 +22,22 @@ def create_stereo_depth(
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool = True,
-    extended_disparity: bool = False,
-    subpixel: bool = False,
+    lr_check: Optional[bool] = None,
+    extended_disparity: Optional[bool] = None,
+    subpixel: Optional[bool] = None,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
     decimation_mode: dai.RawStereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool = False,
+    enable_spatial_filter: Optional[bool] = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool = False,
+    enable_speckle_filter: Optional[bool] = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool = False,
+    enable_temporal_filter: Optional[bool] = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
     temporal_mode: dai.RawStereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
@@ -157,6 +159,19 @@ def create_stereo_depth(
     dai.node.XLinkOut
         The rectified right xlink out node, has stream name "rectified_right"
     """
+    if lr_check is None:
+        lr_check = True
+    if extended_disparity is None:
+        extended_disparity = False
+    if subpixel is None:
+        subpixel = False
+    if enable_spatial_filter is None:
+        enable_spatial_filter = False
+    if enable_speckle_filter is None:
+        enable_speckle_filter = False
+    if enable_temporal_filter is None:
+        enable_temporal_filter = False
+
     left_cam, right_cam = create_left_right_cameras(
         pipeline=pipeline,
         resolution=resolution,
@@ -230,22 +245,22 @@ def create_stereo_depth_from_mono_cameras(
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool = True,
-    extended_disparity: bool = False,
-    subpixel: bool = False,
+    lr_check: Optional[bool] = None,
+    extended_disparity: Optional[bool] = None,
+    subpixel: Optional[bool] = None,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
     decimation_mode: dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool = False,
+    enable_spatial_filter: Optional[bool] = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool = False,
+    enable_speckle_filter: Optional[bool] = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool = False,
+    enable_temporal_filter: Optional[bool] = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
     temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
@@ -357,6 +372,18 @@ def create_stereo_depth_from_mono_cameras(
         If decimation_factor is not 1,2,3,4
     """
     # parse the inputs
+    if lr_check is None:
+        lr_check = True
+    if extended_disparity is None:
+        extended_disparity = False
+    if subpixel is None:
+        subpixel = False
+    if enable_spatial_filter is None:
+        enable_spatial_filter = False
+    if enable_speckle_filter is None:
+        enable_speckle_filter = False
+    if enable_temporal_filter is None:
+        enable_temporal_filter = False
     # all alpha parameters should be between 0.0 and 1.0
     if not 0.0 <= spatial_alpha <= 1.0:
         raise ValueError("spatial_alpha should be between 0.0 and 1.0")

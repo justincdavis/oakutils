@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional, Tuple
 
 import depthai as dai
@@ -9,7 +11,7 @@ def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
     preview_size: Tuple[int, int] = (640, 480),
-    set_interleaved: bool = False,
+    set_interleaved: Optional[bool] = None,
     fps: int = 30,
     brightness: int = 0,
     saturation: int = 0,
@@ -89,6 +91,9 @@ def create_color_camera(
     ValueError
         If the chroma_denoise is not between 0 and 4
     """
+    if set_interleaved is None:
+        set_interleaved = False
+        
     if fps < 0 or fps > 60:
         raise ValueError("fps must be between 0 and 60")
     if brightness < -10 or brightness > 10:

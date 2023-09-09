@@ -1,9 +1,4 @@
-from . import (
-    gaussian,
-    laplacian,
-    point_cloud,
-    sobel,
-)
+from . import gaussian, laplacian, point_cloud, sobel
 from .gaussian import create_gaussian
 from .laplacian import create_laplacian
 from .point_cloud import create_point_cloud

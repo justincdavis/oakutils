@@ -1,4 +1,6 @@
-from typing import Iterable, List, Tuple, Union
+from __future__ import annotations
+
+from typing import Iterable, List, Tuple, Union, Optional
 
 import torch
 
@@ -39,16 +41,15 @@ def _create_dummy_input(
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32
         )
-    elif input_type == InputType.FP16:
+    if input_type == InputType.FP16:
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32
         )
-    elif input_type == InputType.XYZ:
+    if input_type == InputType.XYZ:
         return torch.ones(
             (1, input_shape[1], input_shape[0], input_shape[2]), dtype=torch.float32
         )
-    else:
-        raise ValueError(f"Unknown input type: {input_type}")
+    raise ValueError(f"Unknown input type: {input_type}")
 
 
 def _create_multiple_dummy_input(
@@ -80,7 +81,7 @@ def _export_module_to_onnx(
     onnx_path: str,
     input_names: List[str],
     output_names: List[str],
-    verbose: bool = False,
+    verbose: Optional[bool] = None,
 ):
     """
     Runs torch.onnx.export with the given parameters
@@ -100,6 +101,9 @@ def _export_module_to_onnx(
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
+    if verbose is None:
+        verbose = False
+
     if verbose:
         print(f"Exporting model to {onnx_path}")
         print(f"Input names: {input_names}")
@@ -128,7 +132,7 @@ def export(
     onnx_path: str,
     input_names: List[str],
     output_names: List[str],
-    verbose: bool = False,
+    verbose: Optional[bool] = None,
 ):
     """
     Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx
@@ -148,6 +152,9 @@ def export(
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
+    if verbose is None:
+        verbose = False
+
     if verbose:
         print(dummy_input_shapes)
         print(type(dummy_input_shapes))

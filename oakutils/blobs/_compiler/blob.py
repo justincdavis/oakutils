@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import blobconverter
 
 from ..definitions import AbstractModel

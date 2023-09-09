@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import atexit
 from threading import Condition, Thread
 from typing import Optional, Tuple
@@ -28,7 +30,7 @@ class PointCloudVisualizer:
         self,
         window_name: str = "PointCloud",
         window_size: Tuple[int, int] = (1920, 1080),
-        use_threading: bool = True,
+        use_threading: Optional[bool] = None,
     ):
         """
         Creates a PointCloudVisualizer object.
@@ -42,6 +44,9 @@ class PointCloudVisualizer:
         use_threading : bool
             Whether to use threading for visualization. Defaults to True.
         """
+        if use_threading is None:
+            use_threading = True
+            
         self._pcd: Optional[o3d.geometry.PointCloud] = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
         self._R_camera_to_world = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]]).astype(

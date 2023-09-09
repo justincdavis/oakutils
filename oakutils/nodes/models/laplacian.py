@@ -1,4 +1,6 @@
-from typing import Tuple
+from __future__ import annotations
+
+from typing import Optional, Tuple
 
 import depthai as dai
 
@@ -11,8 +13,8 @@ def create_laplacian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     blur_kernel_size: int = 3,
-    use_blur: bool = False,
-    grayscale_out: bool = False,
+    use_blur: Optional[bool] = None,
+    grayscale_out: Optional[bool] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """
     Creates a laplacian model with a specified kernel size
@@ -53,11 +55,17 @@ def create_laplacian(
     ValueError
         If the kernel_size is invalid
     """
+    if use_blur is None:
+        use_blur = False
+    if grayscale_out is None:
+        grayscale_out = False
+
     model_type = "laplacian"
     if use_blur:
         model_type += "blur"
     if grayscale_out:
         model_type += "gray"
+        
     if use_blur:
         return _create_double_kernel_model(
             pipeline=pipeline,

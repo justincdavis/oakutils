@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple
 
 import kornia
@@ -117,7 +119,7 @@ class SobelGray(AbstractModel):
 
 class SobelBlurGray(AbstractModel):
     """
-    nn.Module wrapper for 
+    nn.Module wrapper for
     kornia.filters.sobel(kornia.filters.gaussian_blur2d),
       with grayscale output
     """

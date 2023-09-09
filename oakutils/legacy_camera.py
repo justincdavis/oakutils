@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import atexit
 from threading import Condition, Thread
 from typing import List, Optional, Tuple
@@ -9,11 +11,7 @@ import numpy as np
 import open3d as o3d
 
 from .calibration import CalibrationData, get_camera_calibration
-from .nodes import (
-    create_color_camera,
-    create_imu,
-    create_stereo_depth,
-)
+from .nodes import create_color_camera, create_imu, create_stereo_depth
 from .point_clouds import (
     PointCloudVisualizer,
     filter_point_cloud,
@@ -84,37 +82,37 @@ class Camera(sdk.OakCamera):
     def __init__(
         self,
         rgb_size: str = "1080p",
-        enable_rgb: bool = True,
+        enable_rgb: Optional[bool] = None,
         mono_size: str = "400p",
-        enable_mono: bool = True,
+        enable_mono: Optional[bool] = None,
         rgb_fps: int = 30,
         mono_fps: int = 60,
-        primary_mono_left: bool = True,
-        use_cv2_Q_matrix: bool = True,
-        compute_im3d_on_demand: bool = True,
-        compute_point_cloud_on_demand: bool = True,
+        primary_mono_left: Optional[bool] = None,
+        use_cv2_Q_matrix: Optional[bool] = None,
+        compute_im3d_on_demand: Optional[bool] = None,
+        compute_point_cloud_on_demand: Optional[bool] = None,
         display_size: Tuple[int, int] = (640, 400),
-        display_rgb: bool = False,
-        display_mono: bool = False,
-        display_depth: bool = False,
-        display_disparity: bool = True,
-        display_rectified: bool = False,
-        display_point_cloud: bool = False,
-        extended_disparity: bool = True,
-        subpixel: bool = False,
-        lr_check: bool = True,
+        display_rgb: Optional[bool] = None,
+        display_mono: Optional[bool] = None,
+        display_depth: Optional[bool] = None,
+        display_disparity: Optional[bool] = None,
+        display_rectified: Optional[bool] = None,
+        display_point_cloud: Optional[bool] = None,
+        extended_disparity: Optional[bool] = None,
+        subpixel: Optional[bool] = None,
+        lr_check: Optional[bool] = None,
         median_filter: Optional[int] = 7,
         stereo_confidence_threshold: int = 200,
-        stereo_speckle_filter_enable: bool = False,
+        stereo_speckle_filter_enable: Optional[bool] = None,
         stereo_speckle_filter_range: int = 60,
-        stereo_temporal_filter_enable: bool = True,
-        stereo_spatial_filter_enable: bool = True,
+        stereo_temporal_filter_enable: Optional[bool] = None,
+        stereo_spatial_filter_enable: Optional[bool] = None,
         stereo_spatial_filter_radius: int = 2,
         stereo_spatial_filter_num_iterations: int = 1,
         stereo_threshold_filter_min_range: int = 200,
         stereo_threshold_filter_max_range: int = 20000,
         stereo_decimation_filter_factor: int = 1,
-        enable_imu: bool = False,
+        enable_imu: Optional[bool] = None,
         imu_batch_report_threshold: int = 20,
         imu_max_batch_reports: int = 20,
         imu_accelerometer_refresh_rate: int = 400,
@@ -198,6 +196,45 @@ class Camera(sdk.OakCamera):
         imu_gyroscope_refresh_rate : int, optional
             IMU gyroscope refresh rate.
         """
+        if enable_rgb is None:
+            enable_rgb = True
+        if enable_mono is None:
+            enable_mono = True
+        if primary_mono_left is None:
+            primary_mono_left = True
+        if use_cv2_Q_matrix is None:
+            use_cv2_Q_matrix = True
+        if compute_im3d_on_demand is None:
+            compute_im3d_on_demand = True
+        if compute_point_cloud_on_demand is None:
+            compute_point_cloud_on_demand = True
+        if display_rgb is None:
+            display_rgb = False
+        if display_mono is None:
+            display_mono = False
+        if display_depth is None:
+            display_depth = False
+        if display_disparity is None:
+            display_disparity = False
+        if display_rectified is None:
+            display_rectified = False
+        if display_point_cloud is None:
+            display_point_cloud = False
+        if extended_disparity is None:
+            extended_disparity = True
+        if subpixel is None:
+            subpixel = False
+        if lr_check is None:
+            lr_check = True
+        if stereo_speckle_filter_enable is None:
+            stereo_speckle_filter_enable = False
+        if stereo_temporal_filter_enable is None:
+            stereo_temporal_filter_enable = True
+        if stereo_spatial_filter_enable is None:
+            stereo_spatial_filter_enable = True
+        if enable_imu is None:
+            enable_imu = False
+
         self._primary_mono_left = primary_mono_left
         self._use_cv2_Q_matrix = use_cv2_Q_matrix
 
@@ -527,7 +564,7 @@ class Camera(sdk.OakCamera):
         """
         return self._cam_thread.is_alive()
 
-    def start(self, block=True) -> None:
+    def start(self, block: Optional[bool] = None) -> None:
         """
         Starts the camera.
 
@@ -536,6 +573,8 @@ class Camera(sdk.OakCamera):
         block : bool, optional
             If True, blocks until the first set of data arrives. Defaults to False.
         """
+        if block is None:
+            block = True
         self._cam_thread.start()
         if block:
             self.wait_for_data()
@@ -740,7 +779,7 @@ class Camera(sdk.OakCamera):
             ] : self._calibration.primary.valid_region[2],
         ]
 
-    def compute_point_cloud(self, block=True) -> Optional[o3d.geometry.PointCloud]:
+    def compute_point_cloud(self, block: Optional[bool] = None) -> Optional[o3d.geometry.PointCloud]:
         """
         Compute a point cloud from the depth map.
 
@@ -754,6 +793,8 @@ class Camera(sdk.OakCamera):
         Optional[o3d.geometry.PointCloud]
             The computed point cloud, or None if no data is available.
         """
+        if block is None:
+            block = True
         if block:
             with self._data_condition:
                 self._data_condition.wait()
@@ -764,7 +805,7 @@ class Camera(sdk.OakCamera):
         return self._point_cloud
 
     def compute_im3d(
-        self, block=True
+        self, block: Optional[bool] = None
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
         """
         Compute 3D points from the disparity map.
@@ -780,6 +821,8 @@ class Camera(sdk.OakCamera):
             A tuple containing the depth map, disparity map, and left frame
             (if available).
         """
+        if block is None:
+            block = True
         if block:
             with self._data_condition:
                 self._data_condition.wait()

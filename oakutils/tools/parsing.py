@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional, Tuple
 
 import depthai as dai
@@ -21,30 +23,29 @@ def get_color_sensor_resolution_from_str(
     """
     if resolution == "720p":
         return dai.ColorCameraProperties.SensorResolution.THE_720_P
-    elif resolution == "800p":
+    if resolution == "800p":
         return dai.ColorCameraProperties.SensorResolution.THE_800_P
-    elif resolution == "1080p":
+    if resolution == "1080p":
         return dai.ColorCameraProperties.SensorResolution.THE_1080_P
-    elif resolution == "1200p":
+    if resolution == "1200p":
         return dai.ColorCameraProperties.SensorResolution.THE_1200_P
-    elif resolution == "5mp" or resolution == "5MP":
+    if resolution == "5mp" or resolution == "5MP":
         return dai.ColorCameraProperties.SensorResolution.THE_5_MP
-    elif resolution == "12mp" or resolution == "12MP":
+    if resolution == "12mp" or resolution == "12MP":
         return dai.ColorCameraProperties.SensorResolution.THE_12_MP
-    elif resolution == "13mp" or resolution == "13MP":
+    if resolution == "13mp" or resolution == "13MP":
         return dai.ColorCameraProperties.SensorResolution.THE_13_MP
-    elif resolution == "48mp" or resolution == "48MP":
+    if resolution == "48mp" or resolution == "48MP":
         return dai.ColorCameraProperties.SensorResolution.THE_48_MP
-    elif resolution == "4k" or resolution == "4K":
+    if resolution == "4k" or resolution == "4K":
         return dai.ColorCameraProperties.SensorResolution.THE_4_K
-    elif resolution == "5312x6000":
+    if resolution == "5312x6000":
         return dai.ColorCameraProperties.SensorResolution.THE_5312X6000
-    elif resolution == "1440x1080":
+    if resolution == "1440x1080":
         return dai.ColorCameraProperties.SensorResolution.THE_1440X1080
-    elif resolution == "4000x3000":
+    if resolution == "4000x3000":
         return dai.ColorCameraProperties.SensorResolution.THE_4000X3000
-    else:
-        raise ValueError("Invalid resolution in get_color_sensor_resolution_from_str")
+    raise ValueError("Invalid resolution in get_color_sensor_resolution_from_str")
 
 
 def get_tuple_from_color_sensor_resolution(
@@ -71,34 +72,33 @@ def get_tuple_from_color_sensor_resolution(
     # P resolutions
     if resolution == dai.ColorCameraProperties.SensorResolution.THE_720_P:
         return (1280, 720)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_800_P:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_800_P:
         return (1280, 800)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_1080_P:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_1080_P:
         return (1920, 1080)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_1200_P:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_1200_P:
         return (1920, 1200)
     # MP resolutions
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_5_MP:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_5_MP:
         return (2592, 1944)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_12_MP:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_12_MP:
         return (4056, 3040)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_13_MP:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_13_MP:
         return (4096, 3072)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_48_MP:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_48_MP:
         return (8000, 6000)
     # K resolutions
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_4_K:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_4_K:
         return (3840, 2160)
     # misc resolutions
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_5312X6000:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_5312X6000:
         return (5312, 6000)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_1440X1080:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_1440X1080:
         return (1440, 1080)
-    elif resolution == dai.ColorCameraProperties.SensorResolution.THE_4000X3000:
+    if resolution == dai.ColorCameraProperties.SensorResolution.THE_4000X3000:
         return (4000, 3000)
     # Anything else is not valid
-    else:
-        raise ValueError("Invalid resolution in get_tuple_from_color_sensor_resolution")
+    raise ValueError("Invalid resolution in get_tuple_from_color_sensor_resolution")
 
 
 def get_color_sensor_info_from_str(
@@ -140,16 +140,15 @@ def get_mono_sensor_resolution_from_str(
     """
     if resolution == "400p":
         return dai.MonoCameraProperties.SensorResolution.THE_400_P
-    elif resolution == "480p":
+    if resolution == "480p":
         return dai.MonoCameraProperties.SensorResolution.THE_480_P
-    elif resolution == "720p":
+    if resolution == "720p":
         return dai.MonoCameraProperties.SensorResolution.THE_720_P
-    elif resolution == "800p":
+    if resolution == "800p":
         return dai.MonoCameraProperties.SensorResolution.THE_800_P
-    elif resolution == "1200p":
+    if resolution == "1200p":
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
-    else:
-        raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_str")
+    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_str")
 
 
 def get_tuple_from_mono_sensor_resolution(
@@ -176,17 +175,16 @@ def get_tuple_from_mono_sensor_resolution(
     # P resolutions
     if resolution == dai.MonoCameraProperties.SensorResolution.THE_400_P:
         return (640, 400)
-    elif resolution == dai.MonoCameraProperties.SensorResolution.THE_480_P:
+    if resolution == dai.MonoCameraProperties.SensorResolution.THE_480_P:
         return (640, 480)
-    elif resolution == dai.MonoCameraProperties.SensorResolution.THE_720_P:
+    if resolution == dai.MonoCameraProperties.SensorResolution.THE_720_P:
         return (1280, 720)
-    elif resolution == dai.MonoCameraProperties.SensorResolution.THE_800_P:
+    if resolution == dai.MonoCameraProperties.SensorResolution.THE_800_P:
         return (1280, 800)
-    elif resolution == dai.MonoCameraProperties.SensorResolution.THE_1200_P:
+    if resolution == dai.MonoCameraProperties.SensorResolution.THE_1200_P:
         return (1920, 1200)
     # Anything else is not valid
-    else:
-        raise ValueError("Invalid resolution in get_tuple_from_mono_sensor_resolution")
+    raise ValueError("Invalid resolution in get_tuple_from_mono_sensor_resolution")
 
 
 def get_mono_sensor_info_from_str(
@@ -226,7 +224,8 @@ def get_median_filter_from_str(
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
     """
-    if int(str(dai.Version(dai.__version__)).split(".")[1]) >= 21:
+    minor_version = 21
+    if int(str(dai.Version(dai.__version__)).split(".")[1]) >= minor_version:
         median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
         median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
         median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
@@ -238,15 +237,14 @@ def get_median_filter_from_str(
         median_7 = dai.StereoDepthProperties.MedianFilter.MEDIAN_7x7
     if filter_size is None:
         return median_off
-    elif filter_size == 0:
+    if filter_size == 0:
         return median_off
-    elif filter_size == 3:
+    if filter_size == 3:
         return median_3
-    elif filter_size == 5:
+    if filter_size == 5:
         return median_5
-    elif filter_size == 7:
+    if filter_size == 7:
         return median_7
-    else:
-        raise ValueError(
-            "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
-        )
+    raise ValueError(
+        "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
+    )

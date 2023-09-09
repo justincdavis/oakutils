@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import atexit
 import time
 from collections import defaultdict
@@ -100,7 +102,8 @@ class DisplayManager:
         Parameters
         ----------
         data : Union[Tuple[str, np.ndarray], Iterable[str, np.ndarray]]
-            The data to update the display with. Can be a single tuple or an iterable of tuples.
+            The data to update the display with. Can be a single tuple or an
+            iterable of tuples.
         transform : Optional[Callable], optional
             A transform to call on each frame, by default None
             The transform should take in an np.ndarray and return an np.ndarray
@@ -137,7 +140,7 @@ def get_resolution_area(resolution: Tuple[int, int]) -> int:
 
 
 def order_resolutions(
-    resolutions: Iterable[Tuple[int, int]], reverse: bool = False
+    resolutions: Iterable[Tuple[int, int]], reverse: Optional[bool] = None
 ) -> Iterable[Tuple[int, int]]:
     """
     Orders the given resolutions from smallest to largest.
@@ -147,7 +150,7 @@ def order_resolutions(
     ----------
     resolutions : Iterable[Tuple[int, int]]
         The resolutions to order
-    reverse : bool, optional
+    reverse : Optional[bool], optional
         Whether or not to reverse the order, by default False
 
     Returns
@@ -155,6 +158,8 @@ def order_resolutions(
     Iterable[Tuple[int, int]]
         The ordered resolutions
     """
+    if reverse is None:
+        reverse = False
     return sorted(resolutions, key=get_resolution_area, reverse=reverse)
 
 

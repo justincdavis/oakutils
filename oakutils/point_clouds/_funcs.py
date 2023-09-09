@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional
 
 import cv2
@@ -24,7 +26,8 @@ def get_point_cloud_from_rgb_depth_image(
     camera_intrinsics : o3d.camera.PinholeCameraIntrinsic
         The camera intrinsics to use.
     depth_trunc : float, optional
-        Truncated depth values to this value. Defaults to 25000.0 to truncate depth values to 25 meters.
+        Truncated depth values to this value. Defaults to 25000.0 to truncate depth
+        values to 25 meters.
     depth_scale : float, optional
         Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
 
@@ -54,14 +57,13 @@ def get_point_cloud_from_rgb_depth_image(
     )
 
 
-
 def get_point_cloud_from_depth_image(
     depth_image: np.ndarray,
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_scale: float = 1000.0,
     depth_trunc: float = 25000.0,
     stride: int = 1,
-    project_valid_depth_only: bool = True,
+    project_valid_depth_only: Optional[bool] = None,
 ) -> o3d.geometry.PointCloud:
     """
     Creates an o3d point cloud from a depth image.
@@ -75,7 +77,8 @@ def get_point_cloud_from_depth_image(
     depth_scale : float, optional
         Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
     depth_trunc : float, optional
-        Truncated depth values to this value. Defaults to 25000.0 to truncate depth values to 25 meters.
+        Truncated depth values to this value. Defaults to 25000.0 to truncate depth
+          values to 25 meters.
     stride : int, optional
         Sampling factor to support coarse point cloud extraction. Defaults to 1.
     project_valid_depth_only : bool, optional
@@ -86,6 +89,9 @@ def get_point_cloud_from_depth_image(
     o3d.geometry.PointCloud
         The point cloud created from the depth image.
     """
+    if project_valid_depth_only is None:
+        project_valid_depth_only = True
+
     depth_o3d = o3d.geometry.Image(depth_image)
 
     return o3d.geometry.PointCloud.create_from_depth_image(
@@ -98,13 +104,12 @@ def get_point_cloud_from_depth_image(
     )
 
 
-
 def filter_point_cloud(
     pcd: o3d.geometry.PointCloud,
     voxel_size: Optional[float] = 0.1,
     nb_neighbors: Optional[int] = 30,
     std_ratio: Optional[float] = 0.1,
-    downsample_first: bool = True,
+    downsample_first: Optional[bool] = None,
 ) -> o3d.geometry.PointCloud:
     """
     Filters the point cloud by performing voxel downsampling and outlier removal.
@@ -121,13 +126,17 @@ def filter_point_cloud(
         The standard deviation ratio to use for outlier removal. Defaults to 0.1.
     downsample_first : bool, optional
         If True, performs voxel downsampling first, then outlier removal.
-        If False, performs outlier removal first, then voxel downsampling. Defaults to True.
+        If False, performs outlier removal first, then voxel downsampling.
+          Defaults to True.
 
     Returns
     -------
     o3d.geometry.PointCloud
         The filtered point cloud.
     """
+    if downsample_first is None:
+        downsample_first = True
+
     if downsample_first:
         if voxel_size is not None:
             pcd = pcd.voxel_down_sample(voxel_size=voxel_size)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
@@ -43,9 +45,8 @@ def input_type_to_str(inputtype: InputType) -> str:
     """
     if inputtype == InputType.FP16:
         return "FP16"
-    elif inputtype == InputType.U8:
+    if inputtype == InputType.U8:
         return "U8"
-    elif inputtype == InputType.XYZ:
+    if inputtype == InputType.XYZ:
         return "FP16"
-    else:
-        raise ValueError(f"Unknown input type: {inputtype}")
+    raise ValueError(f"Unknown input type: {inputtype}")

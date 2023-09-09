@@ -1,4 +1,6 @@
-from typing import Tuple
+from __future__ import annotations
+
+from typing import Optional, Tuple
 
 import depthai as dai
 
@@ -9,7 +11,7 @@ def create_gaussian(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     kernel_size: int = 3,
-    grayscale_out: bool = False,
+    grayscale_out: Optional[bool] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
     """
     Creates a gaussian model with a specified kernel size
@@ -43,6 +45,9 @@ def create_gaussian(
     ValueError
         If the kernel_size is invalid
     """
+    if grayscale_out is None:
+        grayscale_out = False
+        
     model_type = "laplacian"
     if grayscale_out:
         model_type += "gray"

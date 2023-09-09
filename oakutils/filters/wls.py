@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 from typing import Optional, Tuple
 
@@ -40,12 +42,12 @@ class WLSFilter:
         self._disp_levels: int = disp_levels
         self._depth_scale_left: Optional[float] = None
         self._depth_scale_right: Optional[float] = None
-        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(False)
+        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(use_confidence=False)
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
 
-    def filter(
-        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool = True
+    def filter_frame(
+        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: Optional[bool] = None
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Filters the disparity image.
@@ -66,6 +68,9 @@ class WLSFilter:
         np.ndarray
             The new depth image.
         """
+        if use_mono_left is None:
+            use_mono_left = True
+
         if self._depth_scale_left is None:
             self._depth_scale_left = self._data.baseline * (
                 disparity.shape[1]

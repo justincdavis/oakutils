@@ -1,4 +1,4 @@
-# pylint: disable=C0103
+from __future__ import annotations
 
 from typing import Optional, Tuple
 
@@ -264,7 +264,7 @@ def get_camera_calibration_primary_mono(
     device: Optional[dai.Device] = None,
     rgb_size: Tuple[int, int] = (1920, 1080),
     mono_size: Tuple[int, int] = (640, 400),
-    is_primary_mono_left: bool = True,
+    is_primary_mono_left: Optional[bool] = None,
 ) -> CalibrationData:
     """
     Requires available OAK device.
@@ -288,6 +288,8 @@ def get_camera_calibration_primary_mono(
     CalibrationData
         Object containing all the calibration data.
     """
+    if is_primary_mono_left is None:
+        is_primary_mono_left = True
     # load the data from get_camera_calibration
     data: CalibrationData = get_camera_calibration_basic(
         device=device, rgb_size=rgb_size, mono_size=mono_size
@@ -404,7 +406,7 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
 def get_camera_calibration(
     rgb_size: Tuple[int, int],
     mono_size: Tuple[int, int],
-    is_primary_mono_left: bool,
+    is_primary_mono_left: Optional[bool] = None,
     device: Optional[dai.Device] = None,
 ) -> CalibrationData:
     """
@@ -418,8 +420,9 @@ def get_camera_calibration(
         RGB camera resolution.
     mono_size : Tuple[int, int]
         Mono camera resolution.
-    is_primary_mono_left : bool
+    is_primary_mono_left : Optional[bool], optional
         Whether the primary mono camera is the left or right mono camera.
+        Defaults to True.
     device : Optional[dai.Device], optional
         DepthAI device object.
 
@@ -428,6 +431,8 @@ def get_camera_calibration(
     CalibrationData
         Object containing all the calibration data.
     """
+    if is_primary_mono_left is None:
+        is_primary_mono_left = True
     # get the data from get_camera_calibration_primary_mono
     data: CalibrationData = get_camera_calibration_primary_mono(
         device=device,
@@ -636,4 +641,3 @@ def get_camera_calibration(
         T_rgb_r=data.T_rgb_r,
         primary=primary,
     )
-

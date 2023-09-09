@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from typing import List, Tuple
 
@@ -119,10 +121,10 @@ def get_candidates(
     candidate_models = []
     if len(attributes) == 0:  # if no attributes are given, return all models
         return candidate_blobs
-    else:
-        for attribute in attributes:  # for each attribute
-            for name, attr_data, blob_path in candidate_blobs:  # for each model
-                if attribute in attr_data:  # if the attribute is not in the model
-                    candidate_models.append((name, attr_data, blob_path))
+
+    for attribute in attributes:  # for each attribute
+        for name, attr_data, blob_path in candidate_blobs:  # for each model
+            if attribute in attr_data:  # if the attribute is not in the model
+                candidate_models.append((name, attr_data, blob_path))
 
     return candidate_models

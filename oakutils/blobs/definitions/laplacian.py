@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple
 
 import kornia
@@ -117,7 +119,7 @@ class LaplacianBlur(AbstractModel):
 
 class LaplacianBlurGray(AbstractModel):
     """
-    nn.Module wrapper for kornia.filters.laplacian, 
+    nn.Module wrapper for kornia.filters.laplacian,
     with gaussian blur, that outputs grayscale
     """
 

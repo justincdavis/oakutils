@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 import blobconverter
 import onnx
 import onnxsim
@@ -30,7 +34,7 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
 
 
 def compile_onnx(
-    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify=True
+    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify: Optional[bool] = None
 ):
     """
     Compiles an ONNX model to a blob saved at the output path
@@ -47,6 +51,9 @@ def compile_onnx(
     AssertionError
         If the simplified model could not be validated
     """
+    if simplify is None:
+        simplify = True
+
     if simplify:
         simplify(model_path, output_path)
 
