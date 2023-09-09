@@ -3,6 +3,7 @@ from typing import List, Tuple, Optional
 import atexit
 
 import depthai as dai
+import depthai_sdk as sdk
 import numpy as np
 import cv2
 import open3d as o3d
@@ -18,11 +19,16 @@ from .nodes import (
     create_stereo_depth,
     create_imu,
 )
+from .tools.parsing import (
+    get_color_sensor_info_from_str,
+    get_mono_sensor_info_from_str,
+    get_median_filter_from_str,
+)
 
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera:
+class Camera(sdk.OakCamera):
     """
     Class for interfacing with the OAK-D camera.
 
@@ -205,43 +211,8 @@ class Camera:
 
         self._stereo_confidence_threshold = stereo_confidence_threshold
 
-        if rgb_size not in ["4k", "1080p"]:
-            raise ValueError('rgb_size must be one of "1080p" or "4k"')
-        else:
-            if rgb_size == "4k":
-                self._rgb_size = (
-                    3840,
-                    2160,
-                    dai.ColorCameraProperties.SensorResolution.THE_4_K,
-                )
-            elif rgb_size == "1080p":
-                self._rgb_size = (
-                    1920,
-                    1080,
-                    dai.ColorCameraProperties.SensorResolution.THE_1080_P,
-                )
-
-        if mono_size not in ["720p", "480p", "400p"]:
-            raise ValueError('mono_size must be one of "720p", "480p", or "400p"')
-        else:
-            if mono_size == "720p":
-                self._mono_size = (
-                    1280,
-                    720,
-                    dai.MonoCameraProperties.SensorResolution.THE_720_P,
-                )
-            elif mono_size == "480p":
-                self._mono_size = (
-                    640,
-                    480,
-                    dai.MonoCameraProperties.SensorResolution.THE_480_P,
-                )
-            elif mono_size == "400p":
-                self._mono_size = (
-                    640,
-                    400,
-                    dai.MonoCameraProperties.SensorResolution.THE_400_P,
-                )
+        self._rgb_size = get_color_sensor_info_from_str(rgb_size)
+        self._mono_size = get_mono_sensor_info_from_str(mono_size)
 
         if stereo_decimation_filter_factor == 2:
             # need to divide the mono height by 2
@@ -251,18 +222,7 @@ class Camera:
                 self._mono_size[2],
             )
 
-        if median_filter not in [0, 3, 5, 7] and median_filter is not None:
-            raise ValueError("Unsupported median filter size, use 0, 3, 5, 7, or None")
-        else:
-            self._median_filter = median_filter
-            if self._median_filter == 3:
-                self._median_filter = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
-            elif self._median_filter == 5:
-                self._median_filter = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
-            elif self._median_filter == 7:
-                self._median_filter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
-            else:
-                self._median_filter = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+        self._median_filter = get_median_filter_from_str(median_filter)
 
         self._calibration: CalibrationData = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),

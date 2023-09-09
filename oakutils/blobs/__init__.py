@@ -6,14 +6,14 @@ __all__ = [
 
 try:
     from . import definitions
+    from ._compiler import compile, compile_onnx
 
-    __all__.append("definitions")
-except ImportError:
-    pass
-
-try:
-    from ._compiler import compile
-
-    __all__.append("compile")
-except ImportError:
+    __all__ = [
+        "models",
+        "definitions",
+        "compile",
+        "compile_onnx",
+    ]
+except ImportError as e:
+    print(e)
     pass

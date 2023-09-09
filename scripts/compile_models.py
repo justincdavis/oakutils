@@ -144,6 +144,7 @@ def compiles_models():
         # handle imports first
         # f.write("import abc\n")
         f.write("import os\n")
+        f.write("import site\n")
         f.write("import sysconfig\n\n")
 
         # get the path to the blob folder
@@ -152,7 +153,9 @@ def compiles_models():
         )
 
         # get the site packages path
-        f.write("_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
+        f.write("_SITE_SITE_PACKAGES = site.getusersitepackages()\n")
+        f.write("_SYSCONFIG_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
+        f.write("_SITE_PACKAGES = _SITE_SITE_PACKAGES if os.name == 'posix' else _SYSCONFIG_SITE_PACKAGES\n")
 
         # get the path to the blob folder
         f.write(f"_BLOB_FOLDER = os.path.join(_SITE_PACKAGES, _RELATIVE_BLOB_FOLDER)\n")
@@ -204,5 +207,5 @@ def main():
 
 if __name__ == "__main__":
     SCRIPT_PATH = os.path.realpath(os.path.dirname(__file__))
-    MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "oakutils", "blobs", "models")
+    MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "src", "oakutils", "blobs", "models")
     main()

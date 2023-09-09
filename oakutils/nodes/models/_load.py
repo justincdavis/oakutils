@@ -118,6 +118,7 @@ def create_no_args_multi_link_model(
         reuse_messages=reuse_messages,
     )
 
+
 def create_no_args_model(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,

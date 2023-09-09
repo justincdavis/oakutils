@@ -13,15 +13,22 @@ Subpackages
    oakutils.nodes
    oakutils.point_clouds
    oakutils.tools
-   oakutils.utils
 
 Submodules
 ----------
 
-oakutils.camera module
-----------------------
+oakutils.api\_camera module
+---------------------------
 
-.. automodule:: oakutils.camera
+.. automodule:: oakutils.api_camera
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.sdk\_camera module
+---------------------------
+
+.. automodule:: oakutils.sdk_camera
    :members:
    :undoc-members:
    :show-inheritance:

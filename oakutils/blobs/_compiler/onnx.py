@@ -1,5 +1,6 @@
 import onnx
 import onnxsim
+import blobconverter
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5):
@@ -26,3 +27,34 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
     )
     assert check, "Simplified ONNX model could not be validated"
     onnx.save(model_simp, output_path)
+
+
+def compile_onnx(
+    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify=True
+):
+    """
+    Compiles an ONNX model to a blob saved at the output path
+
+    Parameters
+    ----------
+    model_path : str
+        The path to the model to compile
+    output_path : str
+        The path to save the compiled model to
+
+    Raises
+    ------
+    AssertionError
+        If the simplified model could not be validated
+    """
+    if simplify:
+        simplify(model_path, output_path)
+
+    blobconverter.from_onnx(
+        model=output_path,
+        output_dir=output_path,
+        data_type="FP16",
+        use_cache=False,
+        shaves=shaves,
+        version=version,
+    )

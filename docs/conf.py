@@ -17,7 +17,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join("..", "src")))
+sys.path.insert(0, os.path.abspath(os.path.join("..")))
 import oakutils
 
 # -- Project information -----------------------------------------------------
@@ -25,7 +25,7 @@ import oakutils
 project = "oakutils"
 copyright = "2023, Justin Davis"
 author = "Justin Davis"
-version = "0.1.0"
+version = "1.0.0"
 
 assert version == oakutils.__version__  # Make sure version is consistent
 

@@ -150,7 +150,7 @@ def export(
     if verbose:
         print(dummy_input_shapes)
         print(type(dummy_input_shapes))
-        
+
     if not isinstance(dummy_input_shapes, list):
         input_shape, input_type = dummy_input_shapes
         dummy_input = _create_dummy_input(input_shape, input_type)
