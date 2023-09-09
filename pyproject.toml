@@ -92,10 +92,7 @@ where = ["oakutils"]
 oakutils = ["*.blob"]
 
 [tool.ruff]
-# Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
-# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
-# McCabe complexity (`C901`) by default.
-select = ["A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
+select = ["W", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
 ignore = ["C901", "E501"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.

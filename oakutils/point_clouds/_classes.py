@@ -46,7 +46,7 @@ class PointCloudVisualizer:
         """
         if use_threading is None:
             use_threading = True
-            
+
         self._pcd: Optional[o3d.geometry.PointCloud] = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
         self._R_camera_to_world = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]]).astype(

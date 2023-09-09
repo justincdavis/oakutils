@@ -93,7 +93,7 @@ def create_color_camera(
     """
     if set_interleaved is None:
         set_interleaved = False
-        
+
     if fps < 0 or fps > 60:
         raise ValueError("fps must be between 0 and 60")
     if brightness < -10 or brightness > 10:

@@ -47,7 +47,7 @@ def create_gaussian(
     """
     if grayscale_out is None:
         grayscale_out = False
-        
+
     model_type = "laplacian"
     if grayscale_out:
         model_type += "gray"

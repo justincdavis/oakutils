@@ -65,7 +65,7 @@ def create_laplacian(
         model_type += "blur"
     if grayscale_out:
         model_type += "gray"
-        
+
     if use_blur:
         return _create_double_kernel_model(
             pipeline=pipeline,
