@@ -138,7 +138,6 @@ def overlay_depth_frame(
     blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(
         float
     ) + rgb_alpha * rgb_frame.astype(float)
-    blended_image = (255 * blended_image.astype(float) / blended_image.max()).astype(
+    return (255 * blended_image.astype(float) / blended_image.max()).astype(
         np.uint8
     )
-    return blended_image

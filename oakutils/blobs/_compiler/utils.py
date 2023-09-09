@@ -28,5 +28,4 @@ def dict_to_str(d: Dict) -> str:
             for k, v in d.items()
         ]
     )
-    rv = remove_suffix(rv, "_")
-    return rv
+    return remove_suffix(rv, "_")

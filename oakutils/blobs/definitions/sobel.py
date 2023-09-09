@@ -3,7 +3,7 @@ from typing import List, Tuple
 import kornia
 import torch
 
-from .abstract_model import AbstractModel, ModelType, InputType
+from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Sobel(AbstractModel):
@@ -117,7 +117,9 @@ class SobelGray(AbstractModel):
 
 class SobelBlurGray(AbstractModel):
     """
-    nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d), with grayscale output
+    nn.Module wrapper for 
+    kornia.filters.sobel(kornia.filters.gaussian_blur2d),
+      with grayscale output
     """
 
     def __init__(self, kernel_size: int = 3, sigma: float = 0.5):

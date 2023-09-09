@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import torch
 
-from .utils.types import ModelType, InputType
+from .utils.types import InputType, ModelType
 
 
 class AbstractModel(ABC, torch.nn.Module):

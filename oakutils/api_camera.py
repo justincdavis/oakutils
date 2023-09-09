@@ -1,28 +1,28 @@
-from threading import Thread, Condition
-from typing import List, Tuple, Optional
 import atexit
+from threading import Condition, Thread
+from typing import List, Optional, Tuple
 
+import cv2
 import depthai as dai
 import depthai_sdk as sdk
 import numpy as np
-import cv2
 import open3d as o3d
 
 from .calibration import CalibrationData, get_camera_calibration
-from .point_clouds import (
-    PointCloudVisualizer,
-    get_point_cloud_from_rgb_depth_image,
-    filter_point_cloud,
-)
 from .nodes import (
     create_color_camera,
-    create_stereo_depth,
     create_imu,
+    create_stereo_depth,
+)
+from .point_clouds import (
+    PointCloudVisualizer,
+    filter_point_cloud,
+    get_point_cloud_from_rgb_depth_image,
 )
 from .tools.parsing import (
     get_color_sensor_info_from_str,
-    get_mono_sensor_info_from_str,
     get_median_filter_from_str,
+    get_mono_sensor_info_from_str,
 )
 
 
@@ -777,7 +777,8 @@ class Camera(sdk.OakCamera):
         Returns
         -------
         Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]
-            A tuple containing the depth map, disparity map, and left frame (if available).
+            A tuple containing the depth map, disparity map, and left frame
+            (if available).
         """
         if block:
             with self._data_condition:

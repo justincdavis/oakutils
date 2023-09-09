@@ -1,5 +1,5 @@
-from typing import Optional, Tuple
 import math
+from typing import Optional, Tuple
 
 import cv2
 import numpy as np
@@ -16,8 +16,8 @@ class WLSFilter:
     def __init__(
         self,
         cam_data: StereoCalibrationData,
-        l: int = 8000,
-        s: float = 1.0,
+        lamb: int = 8000,
+        sigma: float = 1.0,
         disp_levels: int = 96,
     ):
         """
@@ -27,16 +27,16 @@ class WLSFilter:
         ----------
         cam_data : StereoCalibrationData
             The stereo calibration data.
-        l : int
+        lamb : int
             The lambda parameter for the WLS filter. Defaults to 8000.
-        s : float
+        sigma : float
             The sigma parameter for the WLS filter. Defaults to 1.0.
         disp_levels : int
             The number of disparity levels in the matcher. Defaults to 96.
         """
         self._data: StereoCalibrationData = cam_data
-        self._lambda: int = l
-        self._sigma: float = s
+        self._lambda: int = lamb
+        self._sigma: float = sigma
         self._disp_levels: int = disp_levels
         self._depth_scale_left: Optional[float] = None
         self._depth_scale_right: Optional[float] = None

@@ -93,7 +93,7 @@
 #                 "OakCamera has not been built yet. Failure in processing thread."
 #             )
 #         return self._oak
-    
+
 #     @property
 #     def device(self) -> dai.Device:
 #         """
@@ -176,7 +176,7 @@
 #         """
 #         if not self._built:
 #             self.build()
-        
+
 #         with self._start_condition:
 #             self._start_condition.notify()
 #         self._started = True

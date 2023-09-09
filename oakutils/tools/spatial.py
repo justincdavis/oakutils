@@ -1,8 +1,8 @@
-from typing import Union, Tuple, Callable, Optional
-
 import math
-import numpy as np
+from typing import Callable, Optional, Tuple, Union
+
 import depthai as dai
+import numpy as np
 
 from ..calibration import CalibrationData
 

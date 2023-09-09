@@ -1,12 +1,12 @@
-from typing import Union, Tuple, List, Optional, Dict
 import os
 import shutil
+from typing import Dict, List, Optional, Tuple, Union
 
 from ..definitions import AbstractModel, InputType
+from .blob import compile_blob
+from .onnx import simplify
 from .paths import get_cache_dir_path
 from .torch import export
-from .onnx import simplify
-from .blob import compile_blob
 from .utils import dict_to_str, remove_suffix
 
 
@@ -26,7 +26,8 @@ def _compile(
     Parameters
     ----------
     model : AbstractModel
-        The model class to compile. This should be just the type that returns an instance of the model.
+        The model class to compile. This should be just the type that returns an
+        instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
         Example: `model = oakutils.blobs.definitions.GaussianBlur`
         Example: `model = oakutils.blobs.definitions.PointCloud`
@@ -103,9 +104,8 @@ def _compile(
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
-    final_path = shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
+    return shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
 
-    return final_path
 
 
 def compile(
@@ -121,7 +121,8 @@ def compile(
     Parameters
     ----------
     model : AbstractModel
-        The model class to compile. This should be just the type that returns an instance of the model.
+        The model class to compile. This should be just the type that returns an
+        instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
         Example: `model = oakutils.blobs.definitions.GaussianBlur`
         Example: `model = oakutils.blobs.definitions.PointCloud`
@@ -132,7 +133,8 @@ def compile(
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
     shape_mapping : Optional[Dict[InputType, Tuple[int, int, int]]], optional
-        The shape mapping to convert InputTypes to resolutions based on the setup of the camera.
+        The shape mapping to convert InputTypes to resolutions based on the setup
+        of the camera.
         If None, then the default mapping is used, by default None
         Default mapping:
             InputType.FP16 -> (3, 480, 640)

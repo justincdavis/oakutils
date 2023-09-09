@@ -3,7 +3,7 @@ from typing import List, Tuple
 import kornia
 import torch
 
-from .abstract_model import AbstractModel, ModelType, InputType
+from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Laplacian(AbstractModel):
@@ -117,7 +117,8 @@ class LaplacianBlur(AbstractModel):
 
 class LaplacianBlurGray(AbstractModel):
     """
-    nn.Module wrapper for kornia.filters.laplacian, with gaussian blur, that outputs grayscale
+    nn.Module wrapper for kornia.filters.laplacian, 
+    with gaussian blur, that outputs grayscale
     """
 
     def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):

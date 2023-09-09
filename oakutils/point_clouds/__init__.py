@@ -1,10 +1,10 @@
+from ._classes import PointCloudVisualizer
 from ._funcs import (
-    get_point_cloud_from_rgb_depth_image,
-    get_point_cloud_from_depth_image,
     create_point_cloud_from_np,
     filter_point_cloud,
+    get_point_cloud_from_depth_image,
+    get_point_cloud_from_rgb_depth_image,
 )
-from ._classes import PointCloudVisualizer
 
 __all__ = [
     "get_point_cloud_from_rgb_depth_image",

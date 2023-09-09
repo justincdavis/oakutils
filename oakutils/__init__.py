@@ -1,4 +1,3 @@
-from .api_camera import Camera
 from . import (
     blobs,
     calibration,
@@ -7,6 +6,7 @@ from . import (
     point_clouds,
     tools,
 )
+from .api_camera import Camera
 
 __all__ = [
     "Camera",

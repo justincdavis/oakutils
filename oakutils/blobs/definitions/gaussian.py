@@ -3,7 +3,7 @@ from typing import List, Tuple
 import kornia
 import torch
 
-from .abstract_model import AbstractModel, ModelType, InputType
+from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Gaussian(AbstractModel):

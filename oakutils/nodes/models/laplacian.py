@@ -2,8 +2,8 @@ from typing import Tuple
 
 import depthai as dai
 
-from ._load import create_single_kernel_model as _create_single_kernel_model
 from ._load import create_double_kernel_model as _create_double_kernel_model
+from ._load import create_single_kernel_model as _create_single_kernel_model
 
 
 def create_laplacian(

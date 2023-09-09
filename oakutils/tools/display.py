@@ -1,8 +1,8 @@
-from typing import Optional, Dict, Union, Iterable, Tuple, Callable
-from threading import Thread
 import atexit
 import time
 from collections import defaultdict
+from threading import Thread
+from typing import Callable, Dict, Iterable, Optional, Tuple, Union
 
 import cv2
 import numpy as np

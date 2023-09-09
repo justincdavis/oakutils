@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional, Iterable, Union
+from typing import Iterable, List, Optional, Tuple, Union
 
 import depthai as dai
 
@@ -56,12 +56,12 @@ def create_model(
 
     try:
         name, attributes, path = potential_blobs[0]
-    except IndexError:
-        raise ValueError(
+    except IndexError as err:
+        raise ValueError from err(
             "Error acquiring model blob. Please check that all models are present in your installation through `dir(oakutils.blobs.models)`"
         )
 
-    streamname = f"{name}_".join([a for a in attributes])
+    streamname = f"{name}_".join(list(attributes))
     while streamname.endswith("_"):
         streamname = streamname[:-1]
     nn, nn_out = create_neural_network(

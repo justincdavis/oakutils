@@ -1,10 +1,10 @@
 # pylint: disable=C0103
 
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
+import cv2
 import depthai as dai
 import numpy as np
-import cv2
 import open3d as o3d
 
 from ._classes import (
@@ -16,7 +16,9 @@ from ._classes import (
 
 
 def get_camera_calibration_basic(
-    device: Optional[dai.Device] = None, rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)
+    device: Optional[dai.Device] = None,
+    rgb_size: Tuple[int, int] = (1920, 1080),
+    mono_size: Tuple[int, int] = (640, 400),
 ) -> CalibrationData:
     """
     Requires available OAK device.
@@ -242,7 +244,7 @@ def get_camera_calibration_basic(
             Q_right=create_q_matrix(fx_right, fy_right, cx_right, cy_right, baseline),
             baseline=baseline,
         )
-        data = CalibrationData(
+        return CalibrationData(
             rgb=rgb_data,
             left=left_data,
             right=right_data,
@@ -256,7 +258,6 @@ def get_camera_calibration_basic(
             T_rgb_l=T_rgb_l,
             T_rgb_r=T_rgb_r,
         )
-    return data
 
 
 def get_camera_calibration_primary_mono(
@@ -342,7 +343,7 @@ def get_camera_calibration_primary_mono(
             fx_primary, fy_primary, cx_primary, cy_primary, data.stereo.baseline
         ),
     )
-    new_data = CalibrationData(
+    return CalibrationData(
         left=data.left,
         right=data.right,
         rgb=data.rgb,
@@ -357,7 +358,6 @@ def get_camera_calibration_primary_mono(
         T_rgb_r=data.T_rgb_r,
         primary=primary_mono_data,
     )
-    return new_data
 
 
 def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float):
@@ -402,10 +402,14 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
 
 
 def get_camera_calibration(
-        rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool, device: Optional[dai.Device] = None
+    rgb_size: Tuple[int, int],
+    mono_size: Tuple[int, int],
+    is_primary_mono_left: bool,
+    device: Optional[dai.Device] = None,
 ) -> CalibrationData:
     """
-    Creates the full CalibrationData object, including the primary mono camera calibration data
+    Creates the full CalibrationData object, including the primary
+      mono camera calibration data
     and the optional calculated values for OpenCV compatibility.
 
     Parameters
@@ -617,7 +621,7 @@ def get_camera_calibration(
     )
 
     # create final CalibrationData object
-    new_data = CalibrationData(
+    return CalibrationData(
         rgb=rgb,
         left=left,
         right=right,
@@ -633,4 +637,3 @@ def get_camera_calibration(
         primary=primary,
     )
 
-    return new_data

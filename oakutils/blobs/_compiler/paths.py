@@ -1,6 +1,5 @@
 import os
 import sysconfig
-import shutil
 
 
 def get_site_packages_path() -> str:

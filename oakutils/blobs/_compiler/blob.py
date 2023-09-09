@@ -13,7 +13,8 @@ def compile_blob(
     Parameters
     ----------
     model_type : AbstractModel
-        The model class to compile. This should be just the type of the model being compiled.
+        The model class to compile. This should be just the type of the model
+        being compiled.
     onnx_path : str
         The path to the ONNX model
     output_path : str

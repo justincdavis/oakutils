@@ -48,12 +48,11 @@ def get_point_cloud_from_rgb_depth_image(
         rgb_o3d, depth_o3d, depth_trunc=depth_trunc, depth_scale=depth_scale
     )
 
-    pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
+    return o3d.geometry.PointCloud.create_from_rgbd_image(
         rgbd_image,
         camera_intrinsics,
     )
 
-    return pcd
 
 
 def get_point_cloud_from_depth_image(
@@ -89,7 +88,7 @@ def get_point_cloud_from_depth_image(
     """
     depth_o3d = o3d.geometry.Image(depth_image)
 
-    pcd = o3d.geometry.PointCloud.create_from_depth_image(
+    return o3d.geometry.PointCloud.create_from_depth_image(
         depth_o3d,
         camera_intrinsics,
         depth_scale=depth_scale,
@@ -98,7 +97,6 @@ def get_point_cloud_from_depth_image(
         project_valid_depth_only=project_valid_depth_only,
     )
 
-    return pcd
 
 
 def filter_point_cloud(

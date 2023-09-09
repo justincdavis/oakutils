@@ -1,6 +1,6 @@
-from typing import Optional, Tuple
 import atexit
-from threading import Thread, Condition
+from threading import Condition, Thread
+from typing import Optional, Tuple
 
 import numpy as np
 import open3d as o3d

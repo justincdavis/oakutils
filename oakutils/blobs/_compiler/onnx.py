@@ -1,6 +1,6 @@
+import blobconverter
 import onnx
 import onnxsim
-import blobconverter
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5):

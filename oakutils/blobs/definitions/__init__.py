@@ -1,9 +1,9 @@
 from .abstract_model import AbstractModel
-from .utils import InputType, ModelType
-from .laplacian import Laplacian, LaplacianGray, LaplacianBlur, LaplacianBlurGray
 from .gaussian import Gaussian, GaussianGray
-from .sobel import Sobel, SobelBlur, SobelBlurGray, SobelGray
+from .laplacian import Laplacian, LaplacianBlur, LaplacianBlurGray, LaplacianGray
 from .point_cloud import PointCloud
+from .sobel import Sobel, SobelBlur, SobelBlurGray, SobelGray
+from .utils import InputType, ModelType
 
 __all__ = [
     # abstract model and utils

@@ -1,9 +1,9 @@
 from typing import List, Tuple
 
-import torch
 import numpy as np
+import torch
 
-from .abstract_model import AbstractModel, ModelType, InputType
+from .abstract_model import AbstractModel, InputType, ModelType
 from .utils import convert_to_fp16
 
 

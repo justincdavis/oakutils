@@ -1,4 +1,4 @@
-from typing import Tuple, Union, List, Iterable
+from typing import Iterable, List, Tuple, Union
 
 import torch
 
@@ -34,7 +34,8 @@ def _create_dummy_input(
 
     if input_type == InputType.U8:
         # if we are using a single channel, should assume that it will be grayscale
-        # need to double the columns due to the way data is propagated through the pipeline
+        # need to double the columns due to the way data
+        # is propagated through the pipeline
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32
         )

@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Tuple, Optional, Union, Iterable
+from typing import Iterable, Optional, Tuple, Union
 
-import numpy as np
 import depthai as dai
+import numpy as np
 
 
 def create_neural_network(
@@ -135,8 +135,7 @@ def get_nn_bgr_frame(
         .reshape((3, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    frame = (frame * 255 + 127.5).astype(np.uint8)
-    return frame
+    return (frame * 255 + 127.5).astype(np.uint8)
 
 
 def get_nn_gray_frame(
@@ -163,5 +162,4 @@ def get_nn_gray_frame(
         .reshape((1, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    frame = (frame * 255 + 127.5).astype(np.uint8)
-    return frame
+    return (frame * 255 + 127.5).astype(np.uint8)
