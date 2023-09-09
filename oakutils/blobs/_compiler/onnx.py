@@ -8,8 +8,7 @@ import onnxsim
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5):
-    """
-    Simplifies a model using the onnxsim packages
+    """Simplifies a model using the onnxsim packages.
 
     Parameters
     ----------
@@ -36,8 +35,7 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
 def compile_onnx(
     model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify: Optional[bool] = None
 ):
-    """
-    Compiles an ONNX model to a blob saved at the output path
+    """Compiles an ONNX model to a blob saved at the output path.
 
     Parameters
     ----------

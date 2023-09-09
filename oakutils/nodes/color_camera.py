@@ -23,8 +23,7 @@ def create_color_camera(
     isp_scale: Optional[Tuple[int, int]] = None,
     isp_3a_fps: Optional[int] = None,
 ) -> dai.node.ColorCamera:
-    """
-    Creates a pipeline for the color camera.
+    """Creates a pipeline for the color camera.
     setVideoSize, setStillSize are both automatically called using the tuple from get_tuple_from_color_sensor_resolution.
 
     Parameters

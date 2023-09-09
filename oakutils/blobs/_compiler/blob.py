@@ -9,8 +9,7 @@ from ..definitions.utils.types import input_type_to_str
 def compile_blob(
     model_type: AbstractModel, onnx_path: str, output_path: str, shaves: int = 6
 ):
-    """
-    Compiles an ONNX model into a blob using the provided arguments.
+    """Compiles an ONNX model into a blob using the provided arguments.
 
     Parameters
     ----------

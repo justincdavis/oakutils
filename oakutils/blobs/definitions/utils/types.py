@@ -4,9 +4,7 @@ from enum import Enum
 
 
 class ModelType(Enum):
-    """
-    Represents the different arguments a model constructor can take.
-    """
+    """Represents the different arguments a model constructor can take."""
 
     NONE = 0
     KERNEL = 1
@@ -14,8 +12,7 @@ class ModelType(Enum):
 
 
 class InputType(Enum):
-    """
-    Represents the type of a given input to a model in the forward call
+    """Represents the type of a given input to a model in the forward call
     E.g. FP16, U8, etc.
     """
 
@@ -25,8 +22,7 @@ class InputType(Enum):
 
 
 def input_type_to_str(inputtype: InputType) -> str:
-    """
-    Convert an InputType to a string
+    """Convert an InputType to a string.
 
     Parameters
     ----------

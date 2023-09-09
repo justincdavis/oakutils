@@ -27,11 +27,10 @@ def create_imu(
     enable_arvr_stabilized_rotation_vector: Optional[bool] = None,
     enable_arvr_stabilized_game_rotation_vector: Optional[bool] = None,
 ) -> Tuple[dai.node.IMU, dai.node.XLinkOut]:
-    """
-    Creates a pipeline for the IMU.
+    """Creates a pipeline for the IMU.
     Sensors which use both gyroscope and accelerometer will default to slower rate.
     An in-depth explanation of the IMU can be found here:
-    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/
+    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/.
 
     Parameters
     ----------

@@ -10,8 +10,7 @@ from ..calibration import CalibrationData
 
 
 class HostSpatialsCalc:
-    """
-    Class for calculating spatial coordinates on the host.
+    """Class for calculating spatial coordinates on the host.
 
     Methods
     -------
@@ -40,8 +39,7 @@ class HostSpatialsCalc:
         thresh_low: int = 200,
         thresh_high: int = 30000,
     ):
-        """
-        Creates a HostSpatialsCalc object.
+        """Creates a HostSpatialsCalc object.
 
         Parameters
         ----------
@@ -75,9 +73,7 @@ class HostSpatialsCalc:
 
     @property
     def delta(self) -> int:
-        """
-        The delta parameter for the spatial coordinates calculation.
-        """
+        """The delta parameter for the spatial coordinates calculation."""
         return self._delta
 
     @delta.setter
@@ -86,9 +82,7 @@ class HostSpatialsCalc:
 
     @property
     def thresh_low(self) -> int:
-        """
-        The lower threshold for the spatial coordinates calculation.
-        """
+        """The lower threshold for the spatial coordinates calculation."""
         return self._thresh_low
 
     @thresh_low.setter
@@ -97,9 +91,7 @@ class HostSpatialsCalc:
 
     @property
     def thresh_high(self) -> int:
-        """
-        The upper threshold for the spatial coordinates calculation.
-        """
+        """The upper threshold for the spatial coordinates calculation."""
         return self._thresh_high
 
     @thresh_high.setter
@@ -109,9 +101,7 @@ class HostSpatialsCalc:
     def _check_input(
         self, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], frame: np.ndarray
     ) -> Tuple[int, int, int, int]:
-        """
-        Checks if the input is valid, and constrains to the frame size.
-        """
+        """Checks if the input is valid, and constrains to the frame size."""
         xywh = 4
         xy = 2
         if len(roi) == xywh:
@@ -130,8 +120,7 @@ class HostSpatialsCalc:
         roi: Union[Tuple[int, int], Tuple[int, int, int, int]],
         averaging_method: Callable = np.mean,
     ) -> Tuple[float, float, float, Tuple[int, int]]:
-        """
-        Computes spatial coordinates of the ROI.
+        """Computes spatial coordinates of the ROI.
 
         Parameters
         ----------
@@ -189,10 +178,10 @@ class HostSpatialsCalc:
         xmin, ymin, xmax, ymax = roi
 
         # Calculate the average depth in the ROI.
-        depthROI = depth_frame[ymin:ymax, xmin:xmax]
-        inRange = (self._thresh_low <= depthROI) & (depthROI <= self._thresh_high)
+        depth_roi = depth_frame[ymin:ymax, xmin:xmax]
+        in_range = (self._thresh_low <= depth_roi) & (depth_roi <= self._thresh_high)
 
-        averageDepth = averaging_method(depthROI[inRange])
+        avg_depth = averaging_method(depth_roi[in_range])
 
         centroid = (  # Get centroid of the ROI
             int((xmax + xmin) / 2),
@@ -206,8 +195,8 @@ class HostSpatialsCalc:
         angle_y = math.atan(self._i_angle * bb_y_pos)
 
         spatials = (
-            averageDepth,
-            averageDepth * math.tan(angle_x),
-            -averageDepth * math.tan(angle_y),
+            avg_depth,
+            avg_depth * math.tan(angle_x),
+            -avg_depth * math.tan(angle_y),
         )
         return *spatials, centroid

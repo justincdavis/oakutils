@@ -25,8 +25,7 @@ def create_image_manip(
     warp_transform_four_points: Optional[Tuple[List[dai.Point2f], bool]] = None,
     warp_transform_matrix_3x3: Optional[List[float]] = None,
 ) -> Tuple[dai.node.ImageManip, dai.node.XLinkOut]:
-    """
-    Creates an image manip node.
+    """Creates an image manip node.
 
     Parameters
     ----------
@@ -75,7 +74,6 @@ def create_image_manip(
         The output link, with stream name set to the parameter given.
         Default stream name is 'image_manip'.
     """
-
     manip = pipeline.create(dai.node.ImageManip)
     manip.initialConfig.setFrameType(frame_type)
 

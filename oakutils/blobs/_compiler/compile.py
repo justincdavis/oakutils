@@ -22,8 +22,7 @@ def _compile(
     cache: Optional[bool] = None,
     shaves: int = 6,
 ) -> str:
-    """
-    Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
@@ -119,8 +118,7 @@ def compile_model(
     shaves: int = 6,
     shape_mapping: Optional[Dict[InputType, Tuple[int, int, int]]] = None,
 ) -> str:
-    """
-    Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------

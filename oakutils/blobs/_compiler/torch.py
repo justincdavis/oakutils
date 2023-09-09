@@ -10,8 +10,7 @@ from ..definitions.utils import InputType
 def _create_dummy_input(
     input_shape: Tuple[int, int, int], input_type: InputType
 ) -> torch.Tensor:
-    """
-    Creates a dummy input based on the input_shape
+    """Creates a dummy input based on the input_shape.
 
     Parameters
     ----------
@@ -55,8 +54,7 @@ def _create_dummy_input(
 def _create_multiple_dummy_input(
     input_shapes: Iterable[Tuple[Tuple[int, int, int], InputType]]
 ) -> List[torch.Tensor]:
-    """
-    Creates a dummy input based on the input_shapes
+    """Creates a dummy input based on the input_shapes.
 
     Parameters
     ----------
@@ -83,8 +81,7 @@ def _export_module_to_onnx(
     output_names: List[str],
     verbose: Optional[bool] = None,
 ):
-    """
-    Runs torch.onnx.export with the given parameters
+    """Runs torch.onnx.export with the given parameters.
 
     Parameters
     ----------
@@ -134,8 +131,7 @@ def export(
     output_names: List[str],
     verbose: Optional[bool] = None,
 ):
-    """
-    Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx
+    """Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx.
 
     Parameters
     ----------

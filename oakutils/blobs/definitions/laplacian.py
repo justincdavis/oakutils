@@ -9,9 +9,7 @@ from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Laplacian(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.laplacian
-    """
+    """nn.Module wrapper for kornia.filters.laplacian."""
 
     def __init__(self, kernel_size: int = 3):
         super().__init__()
@@ -19,23 +17,17 @@ class Laplacian(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -43,9 +35,7 @@ class Laplacian(AbstractModel):
 
 
 class LaplacianGray(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.laplacian, with grayscale output
-    """
+    """nn.Module wrapper for kornia.filters.laplacian, with grayscale output."""
 
     def __init__(self, kernel_size: int = 3):
         super().__init__()
@@ -53,23 +43,17 @@ class LaplacianGray(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -79,9 +63,7 @@ class LaplacianGray(AbstractModel):
 
 
 class LaplacianBlur(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.laplacian, with gaussian blur
-    """
+    """nn.Module wrapper for kornia.filters.laplacian, with gaussian blur."""
 
     def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
         super().__init__()
@@ -91,23 +73,17 @@ class LaplacianBlur(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -118,9 +94,8 @@ class LaplacianBlur(AbstractModel):
 
 
 class LaplacianBlurGray(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.laplacian,
-    with gaussian blur, that outputs grayscale
+    """nn.Module wrapper for kornia.filters.laplacian,
+    with gaussian blur, that outputs grayscale.
     """
 
     def __init__(self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5):
@@ -131,23 +106,17 @@ class LaplacianBlurGray(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:

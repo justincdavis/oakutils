@@ -12,8 +12,7 @@ def create_point_cloud(
     xyz_link: dai.Node.Output,
     depth_link: dai.Node.Output,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a point_cloud model with a specified kernel size
+    """Creates a point_cloud model with a specified kernel size.
 
     Parameters
     ----------

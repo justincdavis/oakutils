@@ -18,8 +18,7 @@ def create_mono_camera(
     chroma_denoise: int = 1,
     isp_3a_fps: Optional[int] = None,
 ) -> dai.node.MonoCamera:
-    """
-    Creates a pipeline for the mono camera.
+    """Creates a pipeline for the mono camera.
 
     Parameters
     ----------
@@ -123,8 +122,7 @@ def create_left_right_cameras(
     chroma_denoise: int = 1,
     isp_3a_fps: Optional[int] = None,
 ) -> Tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
-    """
-    Wrapper function for creating the left and right mono cameras.
+    """Wrapper function for creating the left and right mono cameras.
 
     Parameters
     ----------

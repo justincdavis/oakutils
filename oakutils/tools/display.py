@@ -45,9 +45,7 @@ class _Display:
 
 
 class DisplayManager:
-    """
-    Used in the Camera class to display all the image streams.
-    """
+    """Used in the Camera class to display all the image streams."""
 
     def __init__(self, fps: int = 15, display_size: Tuple[int, int] = (640, 480)):
         self._displays: Dict[str, _Display] = {}
@@ -61,9 +59,7 @@ class DisplayManager:
             display.stop()
 
     def stop(self):
-        """
-        Stops the display manager.
-        """
+        """Stops the display manager."""
         self._stop()
 
     def _update(self, name: str, frame: np.ndarray):
@@ -79,8 +75,7 @@ class DisplayManager:
             self._displays[name](frame)
 
     def set_transform(self, name: str, transform: Callable):
-        """
-        Sets a transform for the given name.
+        """Sets a transform for the given name.
 
         Parameters
         ----------
@@ -96,8 +91,7 @@ class DisplayManager:
         data: Union[Tuple[str, np.ndarray], Iterable[Tuple[str, np.ndarray]]],
         transform: Optional[Callable] = None,
     ):
-        """
-        Updates the display with the given data.
+        """Updates the display with the given data.
 
         Parameters
         ----------
@@ -123,8 +117,7 @@ class DisplayManager:
 
 
 def get_resolution_area(resolution: Tuple[int, int]) -> int:
-    """
-    Gets the area of the given resolution.
+    """Gets the area of the given resolution.
 
     Parameters
     ----------
@@ -142,8 +135,7 @@ def get_resolution_area(resolution: Tuple[int, int]) -> int:
 def order_resolutions(
     resolutions: Iterable[Tuple[int, int]], reverse: Optional[bool] = None
 ) -> Iterable[Tuple[int, int]]:
-    """
-    Orders the given resolutions from smallest to largest.
+    """Orders the given resolutions from smallest to largest.
     If reverse is True, then it will order from largest to smallest.
 
     Parameters
@@ -164,8 +156,7 @@ def order_resolutions(
 
 
 def get_smaller_size(size1: Tuple[int, int], size2: Tuple[int, int]) -> Tuple[int, int]:
-    """
-    Gets the smaller size of the two given sizes.
+    """Gets the smaller size of the two given sizes.
 
     Parameters
     ----------

@@ -10,8 +10,7 @@ from .utils import convert_to_fp16
 
 
 def create_xyz(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
-    """
-    Creates a constant reprojection matrix for the given camera matrix and image size.
+    """Creates a constant reprojection matrix for the given camera matrix and image size.
     This is for generating the input to the point cloud generation model.
 
     Parameters
@@ -67,25 +66,19 @@ class PointCloud(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
     def output_names(cls):
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
-        depthFP16 = convert_to_fp16(depth)
-        return _depth_to_3d(depthFP16, xyz)
+        depth_fp16 = convert_to_fp16(depth)
+        return _depth_to_3d(depth_fp16, xyz)

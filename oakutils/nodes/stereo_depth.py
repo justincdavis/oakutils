@@ -55,8 +55,7 @@ def create_stereo_depth(
     dai.node.XLinkOut,
     dai.node.XLinkOut,
 ]:
-    """
-    Creates a stereo depth given only a pipeline object.
+    """Creates a stereo depth given only a pipeline object.
     Creates mono cameras for the left and right cameras using the create_left_right_cameras function.
 
     Parameters
@@ -276,8 +275,7 @@ def create_stereo_depth_from_mono_cameras(
     dai.node.XLinkOut,
     dai.node.XLinkOut,
 ]:
-    """
-    Creates a stereo depth node from a pipeline and two mono cameras.
+    """Creates a stereo depth node from a pipeline and two mono cameras.
 
     Parameters
     ----------

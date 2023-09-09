@@ -11,8 +11,7 @@ def remove_suffix(input_string: str, suffix: str) -> str:
 
 
 def dict_to_str(d: Dict) -> str:
-    """
-    Converts a dictionary to a string by combining the values with underscores.
+    """Converts a dictionary to a string by combining the values with underscores.
 
     Parameters
     ----------

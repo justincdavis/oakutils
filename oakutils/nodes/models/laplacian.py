@@ -16,8 +16,7 @@ def create_laplacian(
     use_blur: Optional[bool] = None,
     grayscale_out: Optional[bool] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a laplacian model with a specified kernel size
+    """Creates a laplacian model with a specified kernel size.
 
     Parameters
     ----------

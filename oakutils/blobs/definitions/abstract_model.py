@@ -15,23 +15,17 @@ class AbstractModel(ABC, torch.nn.Module):
     @classmethod
     @abstractmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         pass
 
     @classmethod
     @abstractmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         pass
 
     @classmethod
     @abstractmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         pass

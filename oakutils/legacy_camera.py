@@ -27,8 +27,7 @@ from .tools.parsing import (
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
 class Camera(sdk.OakCamera):
-    """
-    Class for interfacing with the OAK-D camera.
+    """Class for interfacing with the OAK-D camera.
 
     Attributes
     ----------
@@ -88,7 +87,7 @@ class Camera(sdk.OakCamera):
         rgb_fps: int = 30,
         mono_fps: int = 60,
         primary_mono_left: Optional[bool] = None,
-        use_cv2_Q_matrix: Optional[bool] = None,
+        use_cv2_q_matrix: Optional[bool] = None,
         compute_im3d_on_demand: Optional[bool] = None,
         compute_point_cloud_on_demand: Optional[bool] = None,
         display_size: Tuple[int, int] = (640, 400),
@@ -118,8 +117,7 @@ class Camera(sdk.OakCamera):
         imu_accelerometer_refresh_rate: int = 400,
         imu_gyroscope_refresh_rate: int = 400,
     ):
-        """
-        Initializes the camera object.
+        """Initializes the camera object.
 
         Parameters
         ----------
@@ -137,7 +135,7 @@ class Camera(sdk.OakCamera):
             FPS for the monochrome camera.
         primary_mono_left : bool, optional
             Whether the primary monochrome image is the left image or the right image.
-        use_cv2_Q_matrix : bool, optional
+        use_cv2_q_matrix : bool, optional
             Whether to use the cv2.Q matrix for disparity to depth conversion.
         compute_im3d_on_demand : bool, optional
             Whether to compute the IM3D on update.
@@ -202,8 +200,8 @@ class Camera(sdk.OakCamera):
             enable_mono = True
         if primary_mono_left is None:
             primary_mono_left = True
-        if use_cv2_Q_matrix is None:
-            use_cv2_Q_matrix = True
+        if use_cv2_q_matrix is None:
+            use_cv2_q_matrix = True
         if compute_im3d_on_demand is None:
             compute_im3d_on_demand = True
         if compute_point_cloud_on_demand is None:
@@ -236,7 +234,7 @@ class Camera(sdk.OakCamera):
             enable_imu = False
 
         self._primary_mono_left = primary_mono_left
-        self._use_cv2_Q_matrix = use_cv2_Q_matrix
+        self._use_cv2_q_matrix = use_cv2_q_matrix
 
         self._display_size = display_size
         self._display_rgb = display_rgb
@@ -267,8 +265,8 @@ class Camera(sdk.OakCamera):
             self._primary_mono_left,
         )
         self._Q = (
-            self._calibration.stereo.cv2_Q
-            if self._use_cv2_Q_matrix
+            self._calibration.stereo.Q_cv2
+            if self._use_cv2_q_matrix
             else self._calibration.stereo.Q_primary
         )
 
@@ -398,8 +396,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def calibration(self) -> CalibrationData:
-        """
-        Gets the calibration data.
+        """Gets the calibration data.
 
         Returns
         -------
@@ -410,8 +407,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def rgb(self) -> Optional[np.ndarray]:
-        """
-        Get the rectified RGB color frame.
+        """Get the rectified RGB color frame.
 
         Returns
         -------
@@ -422,8 +418,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_rgb(self) -> Optional[np.ndarray]:
-        """
-        Get the rectified RGB color frame.
+        """Get the rectified RGB color frame.
 
         Returns
         -------
@@ -434,8 +429,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def disparity(self) -> Optional[np.ndarray]:
-        """
-        Get the disparity frame.
+        """Get the disparity frame.
 
         Returns
         -------
@@ -446,8 +440,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def depth(self) -> Optional[np.ndarray]:
-        """
-        Get the depth frame.
+        """Get the depth frame.
 
         Returns
         -------
@@ -458,8 +451,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def left(self) -> Optional[np.ndarray]:
-        """
-        Get the left frame.
+        """Get the left frame.
 
         Returns
         -------
@@ -470,8 +462,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def right(self) -> Optional[np.ndarray]:
-        """
-        Get the right frame.
+        """Get the right frame.
 
         Returns
         -------
@@ -482,8 +473,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_left(self) -> Optional[np.ndarray]:
-        """
-        Gets the rectified left frame.
+        """Gets the rectified left frame.
 
         Returns
         -------
@@ -494,8 +484,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_right(self) -> Optional[np.ndarray]:
-        """
-        Gets the rectified right frame.
+        """Gets the rectified right frame.
 
         Returns
         -------
@@ -506,8 +495,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def im3d(self) -> Optional[np.ndarray]:
-        """
-        Gets the 3D image.
+        """Gets the 3D image.
 
         Returns
         -------
@@ -518,8 +506,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def point_cloud(self) -> Optional[o3d.geometry.PointCloud]:
-        """
-        Gets the point cloud.
+        """Gets the point cloud.
 
         Returns
         -------
@@ -530,8 +517,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def imu_pose(self) -> List[float]:
-        """
-        Gets the IMU pose in meters.
+        """Gets the IMU pose in meters.
 
         Returns
         -------
@@ -542,8 +528,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def imu_rotation(self) -> List[float]:
-        """
-        Gets the IMU rotation in radians.
+        """Gets the IMU rotation in radians.
 
         Returns
         -------
@@ -554,8 +539,7 @@ class Camera(sdk.OakCamera):
 
     @property
     def started(self) -> bool:
-        """
-        Returns True if the camera is started.
+        """Returns True if the camera is started.
 
         Returns
         -------
@@ -565,8 +549,7 @@ class Camera(sdk.OakCamera):
         return self._cam_thread.is_alive()
 
     def start(self, block: Optional[bool] = None) -> None:
-        """
-        Starts the camera.
+        """Starts the camera.
 
         Parameters
         ----------
@@ -580,9 +563,7 @@ class Camera(sdk.OakCamera):
             self.wait_for_data()
 
     def stop(self) -> None:
-        """
-        Stops the camera
-        """
+        """Stops the camera."""
         self._stopped = True
         try:
             self._cam_thread.join()
@@ -600,9 +581,7 @@ class Camera(sdk.OakCamera):
         cv2.destroyAllWindows()
 
     def wait_for_data(self) -> None:
-        """
-        Blocks until a full set of data has arrived from the camera
-        """
+        """Blocks until a full set of data has arrived from the camera."""
         with self._data_condition:
             self._data_condition.wait()
 
@@ -643,15 +622,11 @@ class Camera(sdk.OakCamera):
             self._point_cloud_vis.stop()
 
     def start_display(self) -> None:
-        """
-        Starts the display thread
-        """
+        """Starts the display thread."""
         self._display_thread.start()
 
     def stop_display(self) -> None:
-        """
-        Stops the display thread
-        """
+        """Stops the display thread."""
         self._display_stopped = True
         self._display_thread.join()
 
@@ -709,12 +684,12 @@ class Camera(sdk.OakCamera):
                             self._right_rect_frame = data.getCvFrame()
                         elif name == "imu":
                             packets = data.packets
-                            for imuPacket in packets:
-                                acceleroValues = imuPacket.acceleroMeter
-                                gyroValues = imuPacket.gyroscope
+                            for imu_packet in packets:
+                                acc_values = imu_packet.acceleroMeter
+                                gyro_values = imu_packet.gyroscope
 
-                                acclero_ts_device = acceleroValues.getTimestampDevice()
-                                gyro_ts_device = gyroValues.getTimestampDevice()
+                                acclero_ts_device = acc_values.getTimestampDevice()
+                                gyro_ts_device = gyro_values.getTimestampDevice()
 
                                 if base_accel_timestamp is None:
                                     base_accel_timestamp = acclero_ts_device
@@ -729,11 +704,11 @@ class Camera(sdk.OakCamera):
                                 ).total_seconds()
 
                                 ax, ay, az = (
-                                    acceleroValues.x,
-                                    acceleroValues.y,
-                                    acceleroValues.z,
+                                    acc_values.x,
+                                    acc_values.y,
+                                    acc_values.z,
                                 )
-                                gx, gy, gz = gyroValues.x, gyroValues.y, gyroValues.z
+                                gx, gy, gz = gyro_values.x, gyro_values.y, gyro_values.z
 
                                 # double integrate each ax, ay, az
                                 self._imu_pose[0] += ax * (accelero_ts**2)
@@ -780,8 +755,7 @@ class Camera(sdk.OakCamera):
         ]
 
     def compute_point_cloud(self, block: Optional[bool] = None) -> Optional[o3d.geometry.PointCloud]:
-        """
-        Compute a point cloud from the depth map.
+        """Compute a point cloud from the depth map.
 
         Parameters
         ----------
@@ -807,8 +781,7 @@ class Camera(sdk.OakCamera):
     def compute_im3d(
         self, block: Optional[bool] = None
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]:
-        """
-        Compute 3D points from the disparity map.
+        """Compute 3D points from the disparity map.
 
         Parameters
         ----------

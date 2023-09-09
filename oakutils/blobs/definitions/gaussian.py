@@ -9,9 +9,7 @@ from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Gaussian(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.gaussian_blur2d
-    """
+    """nn.Module wrapper for kornia.filters.gaussian_blur2d."""
 
     def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
         super().__init__()
@@ -20,23 +18,17 @@ class Gaussian(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -46,9 +38,7 @@ class Gaussian(AbstractModel):
 
 
 class GaussianGray(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output
-    """
+    """nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output."""
 
     def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
         super().__init__()
@@ -57,23 +47,17 @@ class GaussianGray(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:

@@ -15,8 +15,7 @@ def create_sobel(
     use_blur: Optional[bool] = None,
     grayscale_out: Optional[bool] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a sobel model with a specified kernel size
+    """Creates a sobel model with a specified kernel size.
 
     Parameters
     ----------

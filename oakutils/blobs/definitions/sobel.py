@@ -9,32 +9,24 @@ from .abstract_model import AbstractModel, InputType, ModelType
 
 
 class Sobel(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.sobel
-    """
+    """nn.Module wrapper for kornia.filters.sobel."""
 
     def __init__(self):
         super().__init__()
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -42,9 +34,7 @@ class Sobel(AbstractModel):
 
 
 class SobelBlur(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d)
-    """
+    """nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d)."""
 
     def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
         super().__init__()
@@ -53,23 +43,17 @@ class SobelBlur(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -83,32 +67,24 @@ class SobelBlur(AbstractModel):
 
 
 class SobelGray(AbstractModel):
-    """
-    nn.Module wrapper for kornia.filters.sobel, with grayscale output
-    """
+    """nn.Module wrapper for kornia.filters.sobel, with grayscale output."""
 
     def __init__(self):
         super().__init__()
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
@@ -118,10 +94,9 @@ class SobelGray(AbstractModel):
 
 
 class SobelBlurGray(AbstractModel):
-    """
-    nn.Module wrapper for
+    """nn.Module wrapper for
     kornia.filters.sobel(kornia.filters.gaussian_blur2d),
-      with grayscale output
+      with grayscale output.
     """
 
     def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
@@ -131,23 +106,17 @@ class SobelBlurGray(AbstractModel):
 
     @classmethod
     def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+        """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+        """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls) -> List[str]:
-        """
-        The names of the output tensors
-        """
+        """The names of the output tensors."""
         return ["output"]
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:

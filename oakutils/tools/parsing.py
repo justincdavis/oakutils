@@ -8,8 +8,7 @@ import depthai as dai
 def get_color_sensor_resolution_from_str(
     resolution: str,
 ) -> dai.ColorCameraProperties.SensorResolution:
-    """
-    Coverts a str to a SensorResolution
+    """Coverts a str to a SensorResolution.
 
     Parameters
     ----------
@@ -51,8 +50,7 @@ def get_color_sensor_resolution_from_str(
 def get_tuple_from_color_sensor_resolution(
     resolution: dai.ColorCameraProperties.SensorResolution,
 ) -> Tuple[int, int]:
-    """
-    Converts a SensorResolution to a tuple
+    """Converts a SensorResolution to a tuple.
 
     Parameters
     ----------
@@ -104,8 +102,7 @@ def get_tuple_from_color_sensor_resolution(
 def get_color_sensor_info_from_str(
     resolution: str,
 ) -> Tuple[int, int, dai.ColorCameraProperties.SensorResolution]:
-    """
-    Parses a resolution string into a tuple of (width, height, SensorResolution)
+    """Parses a resolution string into a tuple of (width, height, SensorResolution).
 
     Parameters
     ----------
@@ -125,8 +122,7 @@ def get_color_sensor_info_from_str(
 def get_mono_sensor_resolution_from_str(
     resolution: str,
 ) -> dai.MonoCameraProperties.SensorResolution:
-    """
-    Coverts a str to a SensorResolution
+    """Coverts a str to a SensorResolution.
 
     Parameters
     ----------
@@ -154,8 +150,7 @@ def get_mono_sensor_resolution_from_str(
 def get_tuple_from_mono_sensor_resolution(
     resolution: dai.MonoCameraProperties.SensorResolution,
 ) -> Tuple[int, int]:
-    """
-    Converts a SensorResolution to a tuple
+    """Converts a SensorResolution to a tuple.
 
     Parameters
     ----------
@@ -190,8 +185,7 @@ def get_tuple_from_mono_sensor_resolution(
 def get_mono_sensor_info_from_str(
     resolution: str,
 ) -> Tuple[int, int, dai.MonoCameraProperties.SensorResolution]:
-    """
-    Parses a resolution string into a tuple of (width, height, SensorResolution)
+    """Parses a resolution string into a tuple of (width, height, SensorResolution).
 
     Parameters
     ----------
@@ -211,8 +205,7 @@ def get_mono_sensor_info_from_str(
 def get_median_filter_from_str(
     filter_size: Optional[int],
 ) -> dai.StereoDepthProperties.MedianFilter:
-    """
-    Converts a str to a MedianFilter
+    """Converts a str to a MedianFilter.
 
     Parameters
     ----------

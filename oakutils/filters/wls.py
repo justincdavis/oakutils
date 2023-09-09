@@ -10,8 +10,7 @@ from ..calibration import StereoCalibrationData
 
 
 class WLSFilter:
-    """
-    A class for computing the weighted-least-squares filter,
+    """A class for computing the weighted-least-squares filter,
     on disparity images.
     """
 
@@ -22,8 +21,7 @@ class WLSFilter:
         sigma: float = 1.0,
         disp_levels: int = 96,
     ):
-        """
-        Creates a WLSFilter object.
+        """Creates a WLSFilter object.
 
         Parameters
         ----------
@@ -49,8 +47,7 @@ class WLSFilter:
     def filter_frame(
         self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: Optional[bool] = None
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Filters the disparity image.
+        """Filters the disparity image.
 
         Parameters
         ----------

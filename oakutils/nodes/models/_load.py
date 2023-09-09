@@ -16,8 +16,7 @@ def create_model(
     input_names: Optional[Iterable[str]] = None,
     reuse_messages: Optional[Iterable[Optional[bool]]] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Gets the model blob based on the attributes and creates a neural network node
+    """Gets the model blob based on the attributes and creates a neural network node.
 
     Parameters
     ----------
@@ -85,8 +84,7 @@ def create_no_args_multi_link_model(
     input_names: List[str],
     reuse_messages: List[Optional[bool]],
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a model with multiple input links
+    """Creates a model with multiple input links.
 
     Parameters
     ----------
@@ -126,8 +124,7 @@ def create_no_args_model(
     input_link: dai.Node.Output,
     model_name: str,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a model with no arguments
+    """Creates a model with no arguments.
 
     Parameters
     ----------
@@ -162,8 +159,7 @@ def create_single_kernel_model(
     model_name: str,
     kernel_size: int,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a model with a single kernel size
+    """Creates a model with a single kernel size.
 
     Parameters
     ----------
@@ -205,8 +201,7 @@ def create_double_kernel_model(
     kernel_size1: int,
     kernel_size2: int,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a model with a two kernel sizes
+    """Creates a model with a two kernel sizes.
 
     Parameters
     ----------

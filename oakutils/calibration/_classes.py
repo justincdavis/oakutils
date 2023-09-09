@@ -9,8 +9,7 @@ import open3d as o3d
 
 @dataclass(frozen=True)
 class MonoCalibrationData:
-    """
-    Class to store calibration data for a mono camera.
+    """Class to store calibration data for a mono camera.
 
     Attributes
     ----------
@@ -68,8 +67,7 @@ class MonoCalibrationData:
 
 @dataclass(frozen=True)
 class StereoCalibrationData:
-    """
-    Class to store calibration data for stereo cameras.
+    """Class to store calibration data for stereo cameras.
 
     Attributes
     ----------
@@ -138,9 +136,9 @@ class StereoCalibrationData:
     baseline: float
     primary: Optional[MonoCalibrationData] = None
     Q_primary: Optional[np.ndarray] = None
-    cv2_Q: Optional[np.ndarray] = None
-    cv2_R1: Optional[np.ndarray] = None
-    cv2_R2: Optional[np.ndarray] = None
+    Q_cv2: Optional[np.ndarray] = None
+    R1_cv2: Optional[np.ndarray] = None
+    R2_cv2: Optional[np.ndarray] = None
     P1: Optional[np.ndarray] = None
     P2: Optional[np.ndarray] = None
     valid_region_primary: Optional[Tuple[int, int, int, int]] = None
@@ -149,8 +147,7 @@ class StereoCalibrationData:
 
 @dataclass(frozen=True)
 class ColorCalibrationData:
-    """
-    Class to store calibration data for a color camera.
+    """Class to store calibration data for a color camera.
 
     Attributes
     ----------
@@ -202,8 +199,7 @@ class ColorCalibrationData:
 
 @dataclass(frozen=True)
 class CalibrationData:
-    """
-    An object to store calibration data for an entire OAK camera.
+    """An object to store calibration data for an entire OAK camera.
 
     Attributes
     ----------

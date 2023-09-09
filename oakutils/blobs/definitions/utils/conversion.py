@@ -4,8 +4,7 @@ import torch
 
 
 def convert_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
-    """
-    Converts a Uint8 tensor with double columns to a float16 tensor with single columns.
+    """Converts a Uint8 tensor with double columns to a float16 tensor with single columns.
 
     Parameters
     ----------

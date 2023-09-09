@@ -18,8 +18,7 @@ def create_neural_network(
     num_nce_per_inference_thread: Optional[int] = None,
     num_pool_frames: Optional[int] = None,
 ) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
-    """
-    Creates a neural network node.
+    """Creates a neural network node.
 
     Parameters
     ----------
@@ -116,8 +115,7 @@ def create_neural_network(
 def get_nn_bgr_frame(
     data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
 ) -> np.ndarray:
-    """
-    Takes the raw data output from a neural network execution and converts it to a BGR frame
+    """Takes the raw data output from a neural network execution and converts it to a BGR frame
     usable by cv2.
 
     Parameters
@@ -143,8 +141,7 @@ def get_nn_bgr_frame(
 def get_nn_gray_frame(
     data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
 ) -> np.ndarray:
-    """
-    Takes the raw data output from a neural network execution and converts it to a grayscale frame
+    """Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
 
     Parameters
