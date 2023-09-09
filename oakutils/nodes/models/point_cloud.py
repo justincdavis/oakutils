@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
 
 from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_point_cloud(

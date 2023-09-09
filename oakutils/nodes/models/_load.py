@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import Iterable
+from typing import TYPE_CHECKING, Iterable
 
-import depthai as dai
+from oakutils.nodes.neural_network import create_neural_network
 
-from ..neural_network import create_neural_network
 from ._parsing import get_candidates, parse_kernel_size
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_model(

@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 import cv2
 import numpy as np
-from typing_extensions import Self
 
-from ..calibration import StereoCalibrationData
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from oakutils.calibration import StereoCalibrationData
 
 
 class WLSFilter:

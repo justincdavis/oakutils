@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 import time
 from collections import defaultdict
 from threading import Thread
-from typing import Callable, Iterable
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import cv2
-import numpy as np
-from typing_extensions import Self
+
+if TYPE_CHECKING:
+    import numpy as np
+    from typing_extensions import Self
 
 
 class _Display:
@@ -29,10 +32,9 @@ class _Display:
 
     def stop(self: Self) -> None:
         self._stopped = True
-        try:
+        with contextlib.suppress(RuntimeError):
             self._thread.join()
-        except RuntimeError:
-            pass
+
 
     def _run(self: Self) -> None:
         while self._stopped:

@@ -4,7 +4,7 @@ from typing import Iterable
 
 import torch
 
-from ..definitions.utils import InputType
+from oakutils.blobs.definitions.utils import InputType
 
 
 def _create_dummy_input(

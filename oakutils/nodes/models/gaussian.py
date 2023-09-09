@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
 
 from ._load import create_single_kernel_model as _create_single_kernel_model
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_gaussian(

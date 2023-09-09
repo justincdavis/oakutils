@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import kornia
-import torch
-from typing_extensions import Self
 
 from .abstract_model import AbstractModel, InputType, ModelType
+
+if TYPE_CHECKING:
+    import torch
+    from typing_extensions import Self
 
 
 class Sobel(AbstractModel):

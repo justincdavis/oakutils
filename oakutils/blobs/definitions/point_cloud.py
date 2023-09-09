@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
-import torch
-from typing_extensions import Self
 
 from .abstract_model import AbstractModel, InputType, ModelType
 from .utils import convert_to_fp16
+
+if TYPE_CHECKING:
+    import torch
+    from typing_extensions import Self
 
 
 def create_xyz(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:

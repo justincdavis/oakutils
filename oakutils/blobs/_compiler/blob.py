@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import blobconverter
 
-from ..definitions import AbstractModel
-from ..definitions.utils.types import input_type_to_str
+from oakutils.blobs.definitions.utils.types import input_type_to_str
+
+if TYPE_CHECKING:
+    from oakutils.blobs.definitions import AbstractModel
 
 
 def compile_blob(

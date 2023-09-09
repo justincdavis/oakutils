@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from ...blobs import models
+from oakutils.blobs import models
 
 
 def parse_kernel_size(kernel_size: int) -> bool:
@@ -21,9 +21,7 @@ def parse_kernel_size(kernel_size: int) -> bool:
         True if the kernel size is valid, False otherwise
     """
     valid = False
-    if kernel_size % 2 == 0:
-        valid = False
-    elif kernel_size < 3 or kernel_size > 15:
+    if kernel_size % 2 == 0 or kernel_size < 3 or kernel_size > 15:
         valid = False
     else:
         valid = True

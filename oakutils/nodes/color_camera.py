@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import depthai as dai
 
-from ..tools import get_tuple_from_color_sensor_resolution
+from oakutils.tools import get_tuple_from_color_sensor_resolution
 
 
 def create_color_camera(

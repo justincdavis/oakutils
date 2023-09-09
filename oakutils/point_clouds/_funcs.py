@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import cv2
-import numpy as np
 import open3d as o3d
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 def get_point_cloud_from_rgb_depth_image(

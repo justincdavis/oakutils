@@ -61,8 +61,8 @@ def align_depth_to_rgb(
     rgb_image_pts = np.matmul(rgb_intrinsic, rgb_frame_ref_cloud_normalized)
     rgb_image_pts = rgb_image_pts.astype(np.int16)
     u_v_z = np.vstack((rgb_image_pts, rgb_frame_ref_cloud[2, :]))
-    lft = np.logical_and(0 <= u_v_z[0], u_v_z[0] < rgb_width)
-    rgt = np.logical_and(0 <= u_v_z[1], u_v_z[1] < rgb_height)
+    lft = np.logical_and(u_v_z[0] >= 0, u_v_z[0] < rgb_width)
+    rgt = np.logical_and(u_v_z[1] >= 0, u_v_z[1] < rgb_height)
     idx_bool = np.logical_and(lft, rgt)
     u_v_z_sampled = u_v_z[:, np.where(idx_bool)]
     y_idx = u_v_z_sampled[1].astype(int)

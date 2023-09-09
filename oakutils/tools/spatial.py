@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import math
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 import depthai as dai
 import numpy as np
-from typing_extensions import Self
 
-from ..calibration import CalibrationData
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from oakutils.calibration import CalibrationData
 
 
 class HostSpatialsCalc:

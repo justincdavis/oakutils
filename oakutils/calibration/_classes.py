@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-import numpy as np
-import open3d as o3d
+if TYPE_CHECKING:
+    import numpy as np
+    import open3d as o3d
 
 
 @dataclass(frozen=True)

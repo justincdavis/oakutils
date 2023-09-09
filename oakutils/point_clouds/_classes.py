@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import atexit
 from threading import Condition, Thread
+from typing import TYPE_CHECKING
 
 import numpy as np
 import open3d as o3d
-from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 
 class PointCloudVisualizer:

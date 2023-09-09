@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 from threading import Condition, Thread
+from typing import TYPE_CHECKING
 
 import cv2
 import depthai as dai
 import depthai_sdk as sdk
 import numpy as np
-import open3d as o3d
-from typing_extensions import Self
 
 from .calibration import CalibrationData, get_camera_calibration
 from .nodes import create_color_camera, create_imu, create_stereo_depth
@@ -22,6 +22,10 @@ from .tools.parsing import (
     get_median_filter_from_str,
     get_mono_sensor_info_from_str,
 )
+
+if TYPE_CHECKING:
+    import open3d as o3d
+    from typing_extensions import Self
 
 
 # KNOWN BUGS:
@@ -565,17 +569,15 @@ class Camera(sdk.OakCamera):
     def stop(self: Self) -> None:
         """Stops the camera."""
         self._stopped = True
-        try:
+        with contextlib.suppress(RuntimeError):
             self._cam_thread.join()
-        except RuntimeError:
-            pass
+
 
         # stop the displays
         self._display_stopped = True
-        try:
+        with contextlib.suppress(RuntimeError):
             self._display_thread.join()
-        except RuntimeError:
-            pass
+
 
         # close displays
         cv2.destroyAllWindows()

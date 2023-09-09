@@ -23,7 +23,7 @@ def dict_to_str(d: dict) -> str:
     """
     rv = "".join(
         [
-            f"{str(v)}x{str(v)}_" if "kernel_size" in k else f"{str(v)}_"
+            f"{v!s}x{v!s}_" if "kernel_size" in k else f"{v!s}_"
             for k, v in d.items()
         ]
     )

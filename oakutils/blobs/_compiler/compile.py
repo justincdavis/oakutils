@@ -3,7 +3,8 @@ from __future__ import annotations
 import os
 import shutil
 
-from ..definitions import AbstractModel, InputType
+from oakutils.blobs.definitions import AbstractModel, InputType
+
 from .blob import compile_blob
 from .onnx import simplify
 from .paths import get_cache_dir_path
