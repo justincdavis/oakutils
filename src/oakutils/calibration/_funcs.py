@@ -1,6 +1,6 @@
 # pylint: disable=C0103
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 import depthai as dai
 import numpy as np
@@ -16,14 +16,17 @@ from ._classes import (
 
 
 def get_camera_calibration_basic(
-    rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)
+    device: Optional[dai.Device] = None, rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)
 ) -> CalibrationData:
     """
     Requires available OAK device.
     Get camera calibration data from OAK-D device.
+    If device is not provided, dai.Device() will be used.
 
     Parameters
     ----------
+    device : Optional[dai.Device], optional
+        DepthAI device object.
     rgb_size : Tuple[int, int], optional
         RGB camera resolution.
     mono_size : Tuple[int, int], optional
@@ -34,7 +37,9 @@ def get_camera_calibration_basic(
     CalibrationData
         Object containing all the calibration data.
     """
-    with dai.Device() as device:
+    if device is None:
+        device = dai.Device()
+    with device:
         calib_data = device.readCalibration2()
 
         K_rgb = np.array(
@@ -255,6 +260,7 @@ def get_camera_calibration_basic(
 
 
 def get_camera_calibration_primary_mono(
+    device: Optional[dai.Device] = None,
     rgb_size: Tuple[int, int] = (1920, 1080),
     mono_size: Tuple[int, int] = (640, 400),
     is_primary_mono_left: bool = True,
@@ -267,6 +273,8 @@ def get_camera_calibration_primary_mono(
 
     Parameters
     ----------
+    device : Optional[dai.Device], optional
+        DepthAI device object.
     rgb_size : Tuple[int, int], optional
         RGB camera resolution.
     mono_size : Tuple[int, int], optional
@@ -281,7 +289,7 @@ def get_camera_calibration_primary_mono(
     """
     # load the data from get_camera_calibration
     data: CalibrationData = get_camera_calibration_basic(
-        rgb_size=rgb_size, mono_size=mono_size
+        device=device, rgb_size=rgb_size, mono_size=mono_size
     )
 
     K_primary = data.left.K if is_primary_mono_left else data.right.K
@@ -394,7 +402,7 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
 
 
 def get_camera_calibration(
-    rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool
+        rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool, device: Optional[dai.Device] = None
 ) -> CalibrationData:
     """
     Creates the full CalibrationData object, including the primary mono camera calibration data
@@ -408,6 +416,8 @@ def get_camera_calibration(
         Mono camera resolution.
     is_primary_mono_left : bool
         Whether the primary mono camera is the left or right mono camera.
+    device : Optional[dai.Device], optional
+        DepthAI device object.
 
     Returns
     -------
@@ -416,6 +426,7 @@ def get_camera_calibration(
     """
     # get the data from get_camera_calibration_primary_mono
     data: CalibrationData = get_camera_calibration_primary_mono(
+        device=device,
         rgb_size=rgb_size,
         mono_size=mono_size,
         is_primary_mono_left=is_primary_mono_left,
