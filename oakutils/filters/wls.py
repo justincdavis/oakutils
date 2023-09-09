@@ -4,6 +4,7 @@ import math
 
 import cv2
 import numpy as np
+from typing_extensions import Self
 
 from ..calibration import StereoCalibrationData
 
@@ -14,12 +15,12 @@ class WLSFilter:
     """
 
     def __init__(
-        self,
+        self: Self,
         cam_data: StereoCalibrationData,
         lamb: int = 8000,
         sigma: float = 1.0,
         disp_levels: int = 96,
-    ):
+    ) -> None:
         """Creates a WLSFilter object.
 
         Parameters
@@ -44,7 +45,7 @@ class WLSFilter:
         self._filter.setSigmaColor(self._sigma)
 
     def filter_frame(
-        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool | None = None
+        self: Self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool | None = None
     ) -> tuple[np.ndarray, np.ndarray]:
         """Filters the disparity image.
 

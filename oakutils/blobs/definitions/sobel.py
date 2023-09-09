@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import kornia
 import torch
+from typing_extensions import Self
 
 from .abstract_model import AbstractModel, InputType, ModelType
 
@@ -9,52 +10,52 @@ from .abstract_model import AbstractModel, InputType, ModelType
 class Sobel(AbstractModel):
     """nn.Module wrapper for kornia.filters.sobel."""
 
-    def __init__(self):
+    def __init__(self: Self) -> None:
         super().__init__()
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: Sobel) -> ModelType:
         """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: Sobel) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: Sobel) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.sobel(image)
 
 
 class SobelBlur(AbstractModel):
     """nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d)."""
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: SobelBlur) -> ModelType:
         """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: SobelBlur) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: SobelBlur) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.sobel(
             kornia.filters.gaussian_blur2d(
                 image,
@@ -67,25 +68,25 @@ class SobelBlur(AbstractModel):
 class SobelGray(AbstractModel):
     """nn.Module wrapper for kornia.filters.sobel, with grayscale output."""
 
-    def __init__(self):
+    def __init__(self: Self) -> None:
         super().__init__()
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: SobelGray) -> ModelType:
         """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: SobelGray) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: SobelGray) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         sobel = kornia.filters.sobel(image)
         normalized = kornia.enhance.normalize_min_max(sobel)
         return kornia.color.bgr_to_grayscale(normalized)
@@ -97,27 +98,27 @@ class SobelBlurGray(AbstractModel):
       with grayscale output.
     """
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: SobelBlurGray) -> ModelType:
         """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: SobelBlurGray) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: SobelBlurGray) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         sobel = kornia.filters.sobel(
             kornia.filters.gaussian_blur2d(
                 image,

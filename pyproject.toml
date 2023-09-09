@@ -92,7 +92,7 @@ where = ["oakutils"]
 oakutils = ["*.blob"]
 
 [tool.ruff]
-select = ["UP", "YTT", "W", "N", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
+select = ["ANN", "UP", "YTT", "W", "N", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
 ignore = ["C901", "E501"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.

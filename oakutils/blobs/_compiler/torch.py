@@ -80,7 +80,7 @@ def _export_module_to_onnx(
     input_names: list[str],
     output_names: list[str],
     verbose: bool | None = None,
-):
+) -> None:
     """Runs torch.onnx.export with the given parameters.
 
     Parameters
@@ -127,7 +127,7 @@ def export(
     input_names: list[str],
     output_names: list[str],
     verbose: bool | None = None,
-):
+) -> None:
     """Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx.
 
     Parameters

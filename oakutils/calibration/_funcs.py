@@ -358,7 +358,7 @@ def get_camera_calibration_primary_mono(
     )
 
 
-def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float):
+def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float) -> np.ndarray:
     """Create Q matrix for stereo depth map.
 
     Parameters

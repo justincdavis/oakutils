@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import kornia
 import torch
+from typing_extensions import Self
 
 from .abstract_model import AbstractModel, InputType, ModelType
 
@@ -9,27 +10,27 @@ from .abstract_model import AbstractModel, InputType, ModelType
 class Gaussian(AbstractModel):
     """nn.Module wrapper for kornia.filters.gaussian_blur2d."""
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: Gaussian) -> ModelType:
         """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: Gaussian) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: Gaussian) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         return kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
@@ -38,27 +39,27 @@ class Gaussian(AbstractModel):
 class GaussianGray(AbstractModel):
     """nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output."""
 
-    def __init__(self, kernel_size: int = 3, sigma: float = 0.5):
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: GaussianGray) -> ModelType:
         """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: GaussianGray) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls) -> list[str]:
+    def output_names(cls: GaussianGray) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )

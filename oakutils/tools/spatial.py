@@ -5,6 +5,7 @@ from typing import Callable
 
 import depthai as dai
 import numpy as np
+from typing_extensions import Self
 
 from ..calibration import CalibrationData
 
@@ -33,12 +34,12 @@ class HostSpatialsCalc:
     """
 
     def __init__(
-        self,
+        self: Self,
         data: CalibrationData,
         delta: int = 5,
         thresh_low: int = 200,
         thresh_high: int = 30000,
-    ):
+    ) -> None:
         """Creates a HostSpatialsCalc object.
 
         Parameters
@@ -72,34 +73,34 @@ class HostSpatialsCalc:
         self._i_angle: float | None = None
 
     @property
-    def delta(self) -> int:
+    def delta(self: Self) -> int:
         """The delta parameter for the spatial coordinates calculation."""
         return self._delta
 
     @delta.setter
-    def delta(self, value: int) -> None:
+    def delta(self: Self, value: int) -> None:
         self._delta = value
 
     @property
-    def thresh_low(self) -> int:
+    def thresh_low(self: Self) -> int:
         """The lower threshold for the spatial coordinates calculation."""
         return self._thresh_low
 
     @thresh_low.setter
-    def thresh_low(self, value: int) -> None:
+    def thresh_low(self: Self, value: int) -> None:
         self._thresh_low = value
 
     @property
-    def thresh_high(self) -> int:
+    def thresh_high(self: Self) -> int:
         """The upper threshold for the spatial coordinates calculation."""
         return self._thresh_high
 
     @thresh_high.setter
-    def thresh_high(self, value: int) -> None:
+    def thresh_high(self: Self, value: int) -> None:
         self._thresh_high = value
 
     def _check_input(
-        self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
+        self: Self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
     ) -> tuple[int, int, int, int]:
         """Checks if the input is valid, and constrains to the frame size."""
         xywh = 4
@@ -115,7 +116,7 @@ class HostSpatialsCalc:
         return (x - self._delta, y - self._delta, x + self._delta, y + self._delta)
 
     def calc_spatials(
-        self,
+        self: Self,
         depth_data: dai.ImgFrame | np.ndarray,
         roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 import torch
+from typing_extensions import Self
 
 from .abstract_model import AbstractModel, InputType, ModelType
 from .utils import convert_to_fp16
@@ -59,24 +60,24 @@ def _depth_to_3d(depth: torch.Tensor, xyz: torch.Tensor) -> torch.Tensor:
 
 
 class PointCloud(AbstractModel):
-    def __init__(self):
+    def __init__(self: Self) -> None:
         super().__init__()
 
     @classmethod
-    def model_type(cls) -> ModelType:
+    def model_type(cls: PointCloud) -> ModelType:
         """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls) -> list[tuple[str, InputType]]:
+    def input_names(cls: PointCloud) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
-    def output_names(cls):
+    def output_names(cls: PointCloud) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
+    def forward(self: Self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
         depth_fp16 = convert_to_fp16(depth)
         return _depth_to_3d(depth_fp16, xyz)

@@ -8,10 +8,11 @@ from typing import Callable, Iterable
 
 import cv2
 import numpy as np
+from typing_extensions import Self
 
 
 class _Display:
-    def __init__(self, name: str, fps: int = 15):
+    def __init__(self: Self, name: str, fps: int = 15) -> None:
         self._name = name
         self._fps = fps
         self._delay_time: float = 1 / fps
@@ -20,20 +21,20 @@ class _Display:
         self._thread = Thread(target=self._run)
         atexit.register(self.stop)
 
-    def __call__(self, frame: np.ndarray):
+    def __call__(self: Self, frame: np.ndarray) -> None:
         self._frame = frame
 
-    def __del__(self):
+    def __del__(self: Self) -> None:
         self.stop()
 
-    def stop(self):
+    def stop(self: Self) -> None:
         self._stopped = True
         try:
             self._thread.join()
         except RuntimeError:
             pass
 
-    def _run(self):
+    def _run(self: Self) -> None:
         while self._stopped:
             if self._frame is not None:
                 s = time.time()
@@ -47,22 +48,22 @@ class _Display:
 class DisplayManager:
     """Used in the Camera class to display all the image streams."""
 
-    def __init__(self, fps: int = 15, display_size: tuple[int, int] = (640, 480)):
+    def __init__(self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)) -> None:
         self._displays: dict[str, _Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size
         self._fps = fps
         atexit.register(self._stop)
 
-    def _stop(self):
+    def _stop(self: Self) -> None:
         for display in self._displays.values():
             display.stop()
 
-    def stop(self):
+    def stop(self: Self) -> None:
         """Stops the display manager."""
         self._stop()
 
-    def _update(self, name: str, frame: np.ndarray):
+    def _update(self: Self, name: str, frame: np.ndarray) -> None:
         if (
             frame.shape[1] != self._display_size[0]
             or frame.shape[0] != self._display_size[1]
@@ -74,7 +75,7 @@ class DisplayManager:
             self._displays[name] = _Display(name, self._fps)
             self._displays[name](frame)
 
-    def set_transform(self, name: str, transform: Callable):
+    def set_transform(self: Self, name: str, transform: Callable) -> None:
         """Sets a transform for the given name.
 
         Parameters
@@ -87,10 +88,10 @@ class DisplayManager:
         self._transforms[name] = transform
 
     def update(
-        self,
+        self: Self,
         data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]],
         transform: Callable | None = None,
-    ):
+    ) -> None:
         """Updates the display with the given data.
 
         Parameters
