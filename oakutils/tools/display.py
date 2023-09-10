@@ -35,7 +35,6 @@ class _Display:
         with contextlib.suppress(RuntimeError):
             self._thread.join()
 
-
     def _run(self: Self) -> None:
         while self._stopped:
             if self._frame is not None:
@@ -50,7 +49,9 @@ class _Display:
 class DisplayManager:
     """Used in the Camera class to display all the image streams."""
 
-    def __init__(self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)) -> None:
+    def __init__(
+        self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)
+    ) -> None:
         self._displays: dict[str, _Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size

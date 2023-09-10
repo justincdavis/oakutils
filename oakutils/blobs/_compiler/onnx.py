@@ -31,7 +31,11 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
 
 
 def compile_onnx(
-    model_path: str, output_path: str, shaves: int = 6, version: str = "2022.1", simplify: bool | None = None
+    model_path: str,
+    output_path: str,
+    shaves: int = 6,
+    version: str = "2022.1",
+    simplify: bool | None = None,
 ) -> None:
     """Compiles an ONNX model to a blob saved at the output path.
 

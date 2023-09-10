@@ -22,9 +22,6 @@ def dict_to_str(d: dict) -> str:
         The converted string
     """
     rv = "".join(
-        [
-            f"{v!s}x{v!s}_" if "kernel_size" in k else f"{v!s}_"
-            for k, v in d.items()
-        ]
+        [f"{v!s}x{v!s}_" if "kernel_size" in k else f"{v!s}_" for k, v in d.items()]
     )
     return remove_suffix(rv, "_")

@@ -572,12 +572,10 @@ class Camera(sdk.OakCamera):
         with contextlib.suppress(RuntimeError):
             self._cam_thread.join()
 
-
         # stop the displays
         self._display_stopped = True
         with contextlib.suppress(RuntimeError):
             self._display_thread.join()
-
 
         # close displays
         cv2.destroyAllWindows()
@@ -756,7 +754,9 @@ class Camera(sdk.OakCamera):
             ] : self._calibration.primary.valid_region[2],
         ]
 
-    def compute_point_cloud(self: Self, block: bool | None = None) -> o3d.geometry.PointCloud | None:
+    def compute_point_cloud(
+        self: Self, block: bool | None = None
+    ) -> o3d.geometry.PointCloud | None:
         """Compute a point cloud from the depth map.
 
         Parameters

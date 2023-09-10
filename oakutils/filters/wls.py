@@ -43,12 +43,17 @@ class WLSFilter:
         self._disp_levels: int = disp_levels
         self._depth_scale_left: float | None = None
         self._depth_scale_right: float | None = None
-        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(use_confidence=False)
+        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(
+            use_confidence=False
+        )
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
 
     def filter_frame(
-        self: Self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool | None = None
+        self: Self,
+        disparity: np.ndarray,
+        mono_frame: np.ndarray,
+        use_mono_left: bool | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Filters the disparity image.
 

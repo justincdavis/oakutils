@@ -68,7 +68,9 @@ class LaplacianGray(AbstractModel):
 class LaplacianBlur(AbstractModel):
     """nn.Module wrapper for kornia.filters.laplacian, with gaussian blur."""
 
-    def __init__(self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5) -> None:
+    def __init__(
+        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5
+    ) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._kernel_size2 = kernel_size2
@@ -101,7 +103,9 @@ class LaplacianBlurGray(AbstractModel):
     with gaussian blur, that outputs grayscale.
     """
 
-    def __init__(self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5) -> None:
+    def __init__(
+        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5
+    ) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._kernel_size2 = kernel_size2

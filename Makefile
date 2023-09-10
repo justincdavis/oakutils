@@ -1,10 +1,11 @@
-.PHONY: help install clean docs blobs test
+.PHONY: help install clean docs blobs test ci
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  install    to install the package"
 	@echo "  clean      to clean the directory tree"
 	@echo "  docs       to generate the documentation"
+	@echo "  ci 	    to run the CI workflows"
 	@echo "  blobs      to compile the models"
 	@echo "  stubs      to generate the stubs"
 	@echo "  test       to run the tests"
@@ -27,6 +28,12 @@ docs:
 
 blobs:
 	python3 scripts/compile_models.py
+
+ci:
+	./scripts/pyupgrade.sh
+	ruff ./oakutils --fix
+	isort oakutils
+	black oakutils --safe
 
 stubs:
 	python3 scripts/make_stubs.py
