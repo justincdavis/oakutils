@@ -1,15 +1,19 @@
-from typing import Union, Tuple, Callable, Optional
+from __future__ import annotations
 
 import math
-import numpy as np
-import depthai as dai
+from typing import TYPE_CHECKING, Callable
 
-from ..calibration import CalibrationData
+import depthai as dai
+import numpy as np
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from oakutils.calibration import CalibrationData
 
 
 class HostSpatialsCalc:
-    """
-    Class for calculating spatial coordinates on the host.
+    """Class for calculating spatial coordinates on the host.
 
     Methods
     -------
@@ -32,14 +36,13 @@ class HostSpatialsCalc:
     """
 
     def __init__(
-        self,
+        self: Self,
         data: CalibrationData,
         delta: int = 5,
         thresh_low: int = 200,
         thresh_high: int = 30000,
-    ):
-        """
-        Creates a HostSpatialsCalc object.
+    ) -> None:
+        """Creates a HostSpatialsCalc object.
 
         Parameters
         ----------
@@ -63,56 +66,50 @@ class HostSpatialsCalc:
 
         # parameters which get resolved on first run
         self._first_run: bool = True
-        self._mid_w: Optional[int] = None
-        self._mid_h: Optional[int] = None
-        self._f_mid_w: Optional[float] = None
-        self._f_mid_h: Optional[float] = None
-        self._HFOV: Optional[float] = None
-        self._i_HFOV: Optional[float] = None
-        self._i_angle: Optional[float] = None
+        self._mid_w: int | None = None
+        self._mid_h: int | None = None
+        self._f_mid_w: float | None = None
+        self._f_mid_h: float | None = None
+        self._HFOV: float | None = None
+        self._i_HFOV: float | None = None
+        self._i_angle: float | None = None
 
     @property
-    def delta(self) -> int:
-        """
-        The delta parameter for the spatial coordinates calculation.
-        """
+    def delta(self: Self) -> int:
+        """The delta parameter for the spatial coordinates calculation."""
         return self._delta
 
     @delta.setter
-    def delta(self, value: int) -> None:
+    def delta(self: Self, value: int) -> None:
         self._delta = value
 
     @property
-    def thresh_low(self) -> int:
-        """
-        The lower threshold for the spatial coordinates calculation.
-        """
+    def thresh_low(self: Self) -> int:
+        """The lower threshold for the spatial coordinates calculation."""
         return self._thresh_low
 
     @thresh_low.setter
-    def thresh_low(self, value: int) -> None:
+    def thresh_low(self: Self, value: int) -> None:
         self._thresh_low = value
 
     @property
-    def thresh_high(self) -> int:
-        """
-        The upper threshold for the spatial coordinates calculation.
-        """
+    def thresh_high(self: Self) -> int:
+        """The upper threshold for the spatial coordinates calculation."""
         return self._thresh_high
 
     @thresh_high.setter
-    def thresh_high(self, value: int) -> None:
+    def thresh_high(self: Self, value: int) -> None:
         self._thresh_high = value
 
     def _check_input(
-        self, roi: Union[Tuple[int, int], Tuple[int, int, int, int]], frame: np.ndarray
-    ) -> Tuple[int, int, int, int]:
-        """
-        Checks if the input is valid, and constrains to the frame size.
-        """
-        if len(roi) == 4:
+        self: Self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
+    ) -> tuple[int, int, int, int]:
+        """Checks if the input is valid, and constrains to the frame size."""
+        xywh = 4
+        xy = 2
+        if len(roi) == xywh:
             return roi
-        if len(roi) != 2:
+        if len(roi) != xy:
             raise ValueError(
                 "You have to pass either ROI (4 values) or point (2 values)!"
             )
@@ -121,13 +118,12 @@ class HostSpatialsCalc:
         return (x - self._delta, y - self._delta, x + self._delta, y + self._delta)
 
     def calc_spatials(
-        self,
-        depth_data: Union[dai.ImgFrame, np.ndarray],
-        roi: Union[Tuple[int, int], Tuple[int, int, int, int]],
+        self: Self,
+        depth_data: dai.ImgFrame | np.ndarray,
+        roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,
-    ) -> Tuple[float, float, float, Tuple[int, int]]:
-        """
-        Computes spatial coordinates of the ROI.
+    ) -> tuple[float, float, float, tuple[int, int]]:
+        """Computes spatial coordinates of the ROI.
 
         Parameters
         ----------
@@ -185,10 +181,10 @@ class HostSpatialsCalc:
         xmin, ymin, xmax, ymax = roi
 
         # Calculate the average depth in the ROI.
-        depthROI = depth_frame[ymin:ymax, xmin:xmax]
-        inRange = (self._thresh_low <= depthROI) & (depthROI <= self._thresh_high)
+        depth_roi = depth_frame[ymin:ymax, xmin:xmax]
+        in_range = (self._thresh_low <= depth_roi) & (depth_roi <= self._thresh_high)
 
-        averageDepth = averaging_method(depthROI[inRange])
+        avg_depth = averaging_method(depth_roi[in_range])
 
         centroid = (  # Get centroid of the ROI
             int((xmax + xmin) / 2),
@@ -202,8 +198,8 @@ class HostSpatialsCalc:
         angle_y = math.atan(self._i_angle * bb_y_pos)
 
         spatials = (
-            averageDepth,
-            averageDepth * math.tan(angle_x),
-            -averageDepth * math.tan(angle_y),
+            avg_depth,
+            avg_depth * math.tan(angle_x),
+            -avg_depth * math.tan(angle_y),
         )
         return *spatials, centroid

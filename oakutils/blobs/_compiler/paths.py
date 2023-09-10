@@ -1,11 +1,11 @@
+from __future__ import annotations
+
 import os
 import sysconfig
-import shutil
 
 
 def get_site_packages_path() -> str:
-    """
-    Gets the path to the site-packages folder.
+    """Gets the path to the site-packages folder.
 
     Returns
     -------
@@ -16,8 +16,7 @@ def get_site_packages_path() -> str:
 
 
 def get_oakutils_path() -> str:
-    """
-    Gets the path to the oakutils folder.
+    """Gets the path to the oakutils folder.
 
     Returns
     -------
@@ -28,8 +27,7 @@ def get_oakutils_path() -> str:
 
 
 def get_blobs_path() -> str:
-    """
-    Gets the path to the oakutils blobs folder.
+    """Gets the path to the oakutils blobs folder.
 
     Returns
     -------
@@ -40,8 +38,7 @@ def get_blobs_path() -> str:
 
 
 def get_cache_dir_path() -> str:
-    """
-    Gets the path to the oakutils blobs cache folder.
+    """Gets the path to the oakutils blobs cache folder.
 
     Returns
     -------
@@ -52,8 +49,7 @@ def get_cache_dir_path() -> str:
 
 
 def get_models_dir_path() -> str:
-    """
-    Gets the path to the oakutils blobs models folder.
+    """Gets the path to the oakutils blobs models folder.
 
     Returns
     -------

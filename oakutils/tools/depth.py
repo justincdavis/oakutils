@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import cv2
 import numpy as np
 
@@ -12,8 +14,7 @@ def align_depth_to_rgb(
     rgb_height: int,
     depth_scale: float = 1000.0,
 ) -> np.ndarray:
-    """
-    Aligns a depth image to an RGB image.
+    """Aligns a depth image to an RGB image.
 
     Parameters
     ----------
@@ -60,8 +61,8 @@ def align_depth_to_rgb(
     rgb_image_pts = np.matmul(rgb_intrinsic, rgb_frame_ref_cloud_normalized)
     rgb_image_pts = rgb_image_pts.astype(np.int16)
     u_v_z = np.vstack((rgb_image_pts, rgb_frame_ref_cloud[2, :]))
-    lft = np.logical_and(0 <= u_v_z[0], u_v_z[0] < rgb_width)
-    rgt = np.logical_and(0 <= u_v_z[1], u_v_z[1] < rgb_height)
+    lft = np.logical_and(u_v_z[0] >= 0, u_v_z[0] < rgb_width)
+    rgt = np.logical_and(u_v_z[1] >= 0, u_v_z[1] < rgb_height)
     idx_bool = np.logical_and(lft, rgt)
     u_v_z_sampled = u_v_z[:, np.where(idx_bool)]
     y_idx = u_v_z_sampled[1].astype(int)
@@ -74,10 +75,11 @@ def align_depth_to_rgb(
 
 
 def quantize_colormap_depth_frame(
-    frame: np.ndarray, depth_scale_factor: float = 2.0, apply_colormap: bool = True
+    frame: np.ndarray,
+    depth_scale_factor: float = 2.0,
+    apply_colormap: bool | None = None,
 ) -> np.ndarray:
-    """
-    Further quantize the depth image for nice visualization, and
+    """Further quantize the depth image for nice visualization, and
     apply a colormap for better visualization.
 
     Parameters
@@ -98,6 +100,8 @@ def quantize_colormap_depth_frame(
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
+    if apply_colormap is None:
+        apply_colormap = True
     quantized_depth = cv2.convertScaleAbs(
         frame.astype(float), alpha=255 / depth_scale_factor
     )
@@ -109,8 +113,7 @@ def quantize_colormap_depth_frame(
 def overlay_depth_frame(
     rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5
 ) -> np.ndarray:
-    """
-    Overlay the depth map on top of the RGB image.
+    """Overlay the depth map on top of the RGB image.
 
     Parameters
     ----------
@@ -138,7 +141,4 @@ def overlay_depth_frame(
     blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(
         float
     ) + rgb_alpha * rgb_frame.astype(float)
-    blended_image = (255 * blended_image.astype(float) / blended_image.max()).astype(
-        np.uint8
-    )
-    return blended_image
+    return (255 * blended_image.astype(float) / blended_image.max()).astype(np.uint8)

@@ -1,9 +1,12 @@
-from typing import Tuple
+from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
 
-from ._load import create_single_kernel_model as _create_single_kernel_model
 from ._load import create_double_kernel_model as _create_double_kernel_model
+from ._load import create_single_kernel_model as _create_single_kernel_model
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_laplacian(
@@ -11,11 +14,10 @@ def create_laplacian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     blur_kernel_size: int = 3,
-    use_blur: bool = False,
-    grayscale_out: bool = False,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a laplacian model with a specified kernel size
+    use_blur: bool | None = None,
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    """Creates a laplacian model with a specified kernel size.
 
     Parameters
     ----------
@@ -53,11 +55,17 @@ def create_laplacian(
     ValueError
         If the kernel_size is invalid
     """
+    if use_blur is None:
+        use_blur = False
+    if grayscale_out is None:
+        grayscale_out = False
+
     model_type = "laplacian"
     if use_blur:
         model_type += "blur"
     if grayscale_out:
         model_type += "gray"
+
     if use_blur:
         return _create_double_kernel_model(
             pipeline=pipeline,

@@ -1,20 +1,22 @@
-from typing import Tuple
+from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
 
 from ._load import create_no_args_model as _create_no_args_model
 from ._load import create_single_kernel_model as _create_single_kernel_model
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_sobel(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     blur_kernel_size: int = 3,
-    use_blur: bool = False,
-    grayscale_out: bool = False,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a sobel model with a specified kernel size
+    use_blur: bool | None = None,
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    """Creates a sobel model with a specified kernel size.
 
     Parameters
     ----------
@@ -48,11 +50,17 @@ def create_sobel(
     ValueError
         If the kernel_size is invalid
     """
+    if use_blur is None:
+        use_blur = False
+    if grayscale_out is None:
+        grayscale_out = False
+
     model_type = "sobel"
     if use_blur:
         model_type += "blur"
     if grayscale_out:
         model_type += "gray"
+
     if use_blur:
         return _create_single_kernel_model(
             pipeline=pipeline,

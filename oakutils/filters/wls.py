@@ -1,54 +1,61 @@
-from typing import Optional, Tuple
+from __future__ import annotations
+
 import math
+from typing import TYPE_CHECKING
 
 import cv2
 import numpy as np
 
-from ..calibration import StereoCalibrationData
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from oakutils.calibration import StereoCalibrationData
 
 
 class WLSFilter:
-    """
-    A class for computing the weighted-least-squares filter,
+    """A class for computing the weighted-least-squares filter,
     on disparity images.
     """
 
     def __init__(
-        self,
+        self: Self,
         cam_data: StereoCalibrationData,
-        l: int = 8000,
-        s: float = 1.0,
+        lamb: int = 8000,
+        sigma: float = 1.0,
         disp_levels: int = 96,
-    ):
-        """
-        Creates a WLSFilter object.
+    ) -> None:
+        """Creates a WLSFilter object.
 
         Parameters
         ----------
         cam_data : StereoCalibrationData
             The stereo calibration data.
-        l : int
+        lamb : int
             The lambda parameter for the WLS filter. Defaults to 8000.
-        s : float
+        sigma : float
             The sigma parameter for the WLS filter. Defaults to 1.0.
         disp_levels : int
             The number of disparity levels in the matcher. Defaults to 96.
         """
         self._data: StereoCalibrationData = cam_data
-        self._lambda: int = l
-        self._sigma: float = s
+        self._lambda: int = lamb
+        self._sigma: float = sigma
         self._disp_levels: int = disp_levels
-        self._depth_scale_left: Optional[float] = None
-        self._depth_scale_right: Optional[float] = None
-        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(False)
+        self._depth_scale_left: float | None = None
+        self._depth_scale_right: float | None = None
+        self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(
+            use_confidence=False
+        )
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
 
-    def filter(
-        self, disparity: np.ndarray, mono_frame: np.ndarray, use_mono_left: bool = True
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Filters the disparity image.
+    def filter_frame(
+        self: Self,
+        disparity: np.ndarray,
+        mono_frame: np.ndarray,
+        use_mono_left: bool | None = None,
+    ) -> tuple[np.ndarray, np.ndarray]:
+        """Filters the disparity image.
 
         Parameters
         ----------
@@ -66,6 +73,9 @@ class WLSFilter:
         np.ndarray
             The new depth image.
         """
+        if use_mono_left is None:
+            use_mono_left = True
+
         if self._depth_scale_left is None:
             self._depth_scale_left = self._data.baseline * (
                 disparity.shape[1]

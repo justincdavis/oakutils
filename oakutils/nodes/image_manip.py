@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, List
+from __future__ import annotations
 
 import depthai as dai
 
@@ -8,23 +8,22 @@ def create_image_manip(
     input_link: dai.Node.Output,
     frame_type: dai.RawImgFrame.Type,
     stream_name: str = "image_manip",
-    center_crop: Optional[Tuple[float, float]] = None,
-    color_map: Optional[dai.Colormap] = None,
-    crop_rect: Optional[Tuple[float, float, float, float]] = None,
-    crop_rotated_rect: Optional[Tuple[dai.RotatedRect, bool]] = None,
-    horizontal_flip: Optional[bool] = None,
-    keep_aspect_ratio: Optional[bool] = None,
-    resize: Optional[Tuple[int, int]] = None,
-    resize_thumbnail: Optional[Tuple[int, int, int, int, int]] = None,
-    rotation_degrees: Optional[float] = None,
-    rotation_radians: Optional[float] = None,
-    vertical_flip: Optional[bool] = None,
-    warp_border_fill_color: Optional[Tuple[int, int, int]] = None,
-    warp_transform_four_points: Optional[Tuple[List[dai.Point2f], bool]] = None,
-    warp_transform_matrix_3x3: Optional[List[float]] = None,
-) -> Tuple[dai.node.ImageManip, dai.node.XLinkOut]:
-    """
-    Creates an image manip node.
+    center_crop: tuple[float, float] | None = None,
+    color_map: dai.Colormap | None = None,
+    crop_rect: tuple[float, float, float, float] | None = None,
+    crop_rotated_rect: tuple[dai.RotatedRect, bool] | None = None,
+    horizontal_flip: bool | None = None,
+    keep_aspect_ratio: bool | None = None,
+    resize: tuple[int, int] | None = None,
+    resize_thumbnail: tuple[int, int, int, int, int] | None = None,
+    rotation_degrees: float | None = None,
+    rotation_radians: float | None = None,
+    vertical_flip: bool | None = None,
+    warp_border_fill_color: tuple[int, int, int] | None = None,
+    warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
+    warp_transform_matrix_3x3: list[float] | None = None,
+) -> tuple[dai.node.ImageManip, dai.node.XLinkOut]:
+    """Creates an image manip node.
 
     Parameters
     ----------
@@ -73,7 +72,6 @@ def create_image_manip(
         The output link, with stream name set to the parameter given.
         Default stream name is 'image_manip'.
     """
-
     manip = pipeline.create(dai.node.ImageManip)
     manip.initialConfig.setFrameType(frame_type)
 

@@ -1,15 +1,19 @@
-from typing import List, Tuple
+from __future__ import annotations
 
-import torch
+from typing import TYPE_CHECKING
+
 import numpy as np
 
-from .abstract_model import AbstractModel, ModelType, InputType
+from .abstract_model import AbstractModel, InputType, ModelType
 from .utils import convert_to_fp16
+
+if TYPE_CHECKING:
+    import torch
+    from typing_extensions import Self
 
 
 def create_xyz(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
-    """
-    Creates a constant reprojection matrix for the given camera matrix and image size.
+    """Creates a constant reprojection matrix for the given camera matrix and image size.
     This is for generating the input to the point cloud generation model.
 
     Parameters
@@ -60,30 +64,24 @@ def _depth_to_3d(depth: torch.Tensor, xyz: torch.Tensor) -> torch.Tensor:
 
 
 class PointCloud(AbstractModel):
-    def __init__(self):
+    def __init__(self: Self) -> None:
         super().__init__()
 
     @classmethod
-    def model_type(cls) -> ModelType:
-        """
-        The type of input this model takes
-        """
+    def model_type(cls: PointCloud) -> ModelType:
+        """The type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls) -> List[Tuple[str, InputType]]:
-        """
-        The names of the input tensors
-        """
+    def input_names(cls: PointCloud) -> list[tuple[str, InputType]]:
+        """The names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
-    def output_names(cls):
-        """
-        The names of the output tensors
-        """
+    def output_names(cls: PointCloud) -> list[str]:
+        """The names of the output tensors."""
         return ["output"]
 
-    def forward(self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
-        depthFP16 = convert_to_fp16(depth)
-        return _depth_to_3d(depthFP16, xyz)
+    def forward(self: Self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
+        depth_fp16 = convert_to_fp16(depth)
+        return _depth_to_3d(depth_fp16, xyz)

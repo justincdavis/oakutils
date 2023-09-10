@@ -1,10 +1,10 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
 class ModelType(Enum):
-    """
-    Represents the different arguments a model constructor can take.
-    """
+    """Represents the different arguments a model constructor can take."""
 
     NONE = 0
     KERNEL = 1
@@ -12,8 +12,7 @@ class ModelType(Enum):
 
 
 class InputType(Enum):
-    """
-    Represents the type of a given input to a model in the forward call
+    """Represents the type of a given input to a model in the forward call
     E.g. FP16, U8, etc.
     """
 
@@ -23,8 +22,7 @@ class InputType(Enum):
 
 
 def input_type_to_str(inputtype: InputType) -> str:
-    """
-    Convert an InputType to a string
+    """Convert an InputType to a string.
 
     Parameters
     ----------
@@ -43,9 +41,8 @@ def input_type_to_str(inputtype: InputType) -> str:
     """
     if inputtype == InputType.FP16:
         return "FP16"
-    elif inputtype == InputType.U8:
+    if inputtype == InputType.U8:
         return "U8"
-    elif inputtype == InputType.XYZ:
+    if inputtype == InputType.XYZ:
         return "FP16"
-    else:
-        raise ValueError(f"Unknown input type: {inputtype}")
+    raise ValueError(f"Unknown input type: {inputtype}")

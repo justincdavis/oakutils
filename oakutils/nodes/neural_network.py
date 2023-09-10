@@ -1,23 +1,24 @@
-from pathlib import Path
-from typing import Tuple, Optional, Union, Iterable
+from __future__ import annotations
 
-import numpy as np
+from pathlib import Path
+from typing import Iterable
+
 import depthai as dai
+import numpy as np
 
 
 def create_neural_network(
     pipeline: dai.Pipeline,
-    input_link: Union[dai.Node.Output, Iterable[dai.Node.Output]],
+    input_link: dai.Node.Output | Iterable[dai.Node.Output],
     blob_path: str,
     stream_name: str = "nn",
-    input_names: Optional[Union[str, Iterable[str]]] = None,
-    reuse_messages: Optional[Union[bool, Iterable[Optional[bool]]]] = None,
+    input_names: str | Iterable[str] | None = None,
+    reuse_messages: bool | Iterable[bool | None] | None = None,
     num_inference_threads: int = 2,
-    num_nce_per_inference_thread: Optional[int] = None,
-    num_pool_frames: Optional[int] = None,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
-    """
-    Creates a neural network node.
+    num_nce_per_inference_thread: int | None = None,
+    num_pool_frames: int | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
+    """Creates a neural network node.
 
     Parameters
     ----------
@@ -112,10 +113,9 @@ def create_neural_network(
 
 
 def get_nn_bgr_frame(
-    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
 ) -> np.ndarray:
-    """
-    Takes the raw data output from a neural network execution and converts it to a BGR frame
+    """Takes the raw data output from a neural network execution and converts it to a BGR frame
     usable by cv2.
 
     Parameters
@@ -135,15 +135,13 @@ def get_nn_bgr_frame(
         .reshape((3, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    frame = (frame * 255 + 127.5).astype(np.uint8)
-    return frame
+    return (frame * 255 + 127.5).astype(np.uint8)
 
 
 def get_nn_gray_frame(
-    data: Union[np.ndarray, dai.NNData], frame_size: Tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
 ) -> np.ndarray:
-    """
-    Takes the raw data output from a neural network execution and converts it to a grayscale frame
+    """Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
 
     Parameters
@@ -163,5 +161,4 @@ def get_nn_gray_frame(
         .reshape((1, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    frame = (frame * 255 + 127.5).astype(np.uint8)
-    return frame
+    return (frame * 255 + 127.5).astype(np.uint8)

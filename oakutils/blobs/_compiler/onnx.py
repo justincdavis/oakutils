@@ -1,11 +1,12 @@
+from __future__ import annotations
+
+import blobconverter
 import onnx
 import onnxsim
-import blobconverter
 
 
-def simplify(model_path: str, output_path: str, check_num: int = 5):
-    """
-    Simplifies a model using the onnxsim packages
+def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
+    """Simplifies a model using the onnxsim packages.
 
     Parameters
     ----------
@@ -30,10 +31,13 @@ def simplify(model_path: str, output_path: str, check_num: int = 5):
 
 
 def compile_onnx(
-    model_path: str, output_path: str, shaves: int = 6, version="2022.1", simplify=True
-):
-    """
-    Compiles an ONNX model to a blob saved at the output path
+    model_path: str,
+    output_path: str,
+    shaves: int = 6,
+    version: str = "2022.1",
+    simplify: bool | None = None,
+) -> None:
+    """Compiles an ONNX model to a blob saved at the output path.
 
     Parameters
     ----------
@@ -47,6 +51,9 @@ def compile_onnx(
     AssertionError
         If the simplified model could not be validated
     """
+    if simplify is None:
+        simplify = True
+
     if simplify:
         simplify(model_path, output_path)
 

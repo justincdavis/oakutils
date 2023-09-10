@@ -1,4 +1,4 @@
-from typing import Dict
+from __future__ import annotations
 
 
 # for 3.8 compatibility
@@ -8,9 +8,8 @@ def remove_suffix(input_string: str, suffix: str) -> str:
     return input_string
 
 
-def dict_to_str(d: Dict) -> str:
-    """
-    Converts a dictionary to a string by combining the values with underscores.
+def dict_to_str(d: dict) -> str:
+    """Converts a dictionary to a string by combining the values with underscores.
 
     Parameters
     ----------
@@ -23,10 +22,6 @@ def dict_to_str(d: Dict) -> str:
         The converted string
     """
     rv = "".join(
-        [
-            f"{str(v)}x{str(v)}_" if "kernel_size" in k else f"{str(v)}_"
-            for k, v in d.items()
-        ]
+        [f"{v!s}x{v!s}_" if "kernel_size" in k else f"{v!s}_" for k, v in d.items()]
     )
-    rv = remove_suffix(rv, "_")
-    return rv
+    return remove_suffix(rv, "_")

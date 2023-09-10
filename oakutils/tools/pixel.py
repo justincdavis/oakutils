@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import numpy as np
 
 
 def homogenous_pixel_coord(width: int, height: int) -> np.ndarray:
-    """
-    Pixel in homogenous coordinate
+    """Pixel in homogenous coordinate.
 
     Parameters
     ----------

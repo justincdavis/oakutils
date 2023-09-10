@@ -1,16 +1,16 @@
-# pylint: disable=C0103
+from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import TYPE_CHECKING
 
-import numpy as np
-import open3d as o3d
+if TYPE_CHECKING:
+    import numpy as np
+    import open3d as o3d
 
 
 @dataclass(frozen=True)
 class MonoCalibrationData:
-    """
-    Class to store calibration data for a mono camera.
+    """Class to store calibration data for a mono camera.
 
     Attributes
     ----------
@@ -48,7 +48,7 @@ class MonoCalibrationData:
         o3d pinhole camera intrinsic.
     """
 
-    size: Tuple[int, int]
+    size: tuple[int, int]
     K: np.ndarray
     D: np.ndarray
     fx: float
@@ -60,16 +60,15 @@ class MonoCalibrationData:
     R: np.ndarray
     T: np.ndarray
     H: np.ndarray
-    valid_region: Optional[Tuple[int, int, int, int]] = None
-    map_1: Optional[np.ndarray] = None
-    map_2: Optional[np.ndarray] = None
-    pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
+    valid_region: tuple[int, int, int, int] | None = None
+    map_1: np.ndarray | None = None
+    map_2: np.ndarray | None = None
+    pinhole: o3d.camera.PinholeCameraIntrinsic | None = None
 
 
 @dataclass(frozen=True)
 class StereoCalibrationData:
-    """
-    Class to store calibration data for stereo cameras.
+    """Class to store calibration data for stereo cameras.
 
     Attributes
     ----------
@@ -136,21 +135,20 @@ class StereoCalibrationData:
     Q_left: np.ndarray
     Q_right: np.ndarray
     baseline: float
-    primary: Optional[MonoCalibrationData] = None
-    Q_primary: Optional[np.ndarray] = None
-    cv2_Q: Optional[np.ndarray] = None
-    cv2_R1: Optional[np.ndarray] = None
-    cv2_R2: Optional[np.ndarray] = None
-    P1: Optional[np.ndarray] = None
-    P2: Optional[np.ndarray] = None
-    valid_region_primary: Optional[Tuple[int, int, int, int]] = None
-    pinhole_primary: Optional[o3d.camera.PinholeCameraIntrinsic] = None
+    primary: MonoCalibrationData | None = None
+    Q_primary: np.ndarray | None = None
+    Q_cv2: np.ndarray | None = None
+    R1_cv2: np.ndarray | None = None
+    R2_cv2: np.ndarray | None = None
+    P1: np.ndarray | None = None
+    P2: np.ndarray | None = None
+    valid_region_primary: tuple[int, int, int, int] | None = None
+    pinhole_primary: o3d.camera.PinholeCameraIntrinsic | None = None
 
 
 @dataclass(frozen=True)
 class ColorCalibrationData:
-    """
-    Class to store calibration data for a color camera.
+    """Class to store calibration data for a color camera.
 
     Attributes
     ----------
@@ -184,7 +182,7 @@ class ColorCalibrationData:
         o3d pinhole camera intrinsic.
     """
 
-    size: Tuple[int, int]
+    size: tuple[int, int]
     K: np.ndarray
     D: np.ndarray
     fx: float
@@ -193,17 +191,16 @@ class ColorCalibrationData:
     cy: float
     fov: float
     fov_rad: float
-    P: Optional[np.ndarray] = None
-    valid_region: Optional[Tuple[int, int, int, int]] = None
-    map_1: Optional[np.ndarray] = None
-    map_2: Optional[np.ndarray] = None
-    pinhole: Optional[o3d.camera.PinholeCameraIntrinsic] = None
+    P: np.ndarray | None = None
+    valid_region: tuple[int, int, int, int] | None = None
+    map_1: np.ndarray | None = None
+    map_2: np.ndarray | None = None
+    pinhole: o3d.camera.PinholeCameraIntrinsic | None = None
 
 
 @dataclass(frozen=True)
 class CalibrationData:
-    """
-    An object to store calibration data for an entire OAK camera.
+    """An object to store calibration data for an entire OAK camera.
 
     Attributes
     ----------
@@ -253,4 +250,4 @@ class CalibrationData:
     T_r_rgb: np.ndarray
     T_rgb_l: np.ndarray
     T_rgb_r: np.ndarray
-    primary: Optional[MonoCalibrationData] = None
+    primary: MonoCalibrationData | None = None

@@ -1,12 +1,12 @@
-from typing import List, Tuple
+from __future__ import annotations
+
 import os
 
-from ...blobs import models
+from oakutils.blobs import models
 
 
 def parse_kernel_size(kernel_size: int) -> bool:
-    """
-    Parses a kernel size to ensure it is valid
+    """Parses a kernel size to ensure it is valid.
 
     Parameters
     ----------
@@ -21,9 +21,7 @@ def parse_kernel_size(kernel_size: int) -> bool:
         True if the kernel size is valid, False otherwise
     """
     valid = False
-    if kernel_size % 2 == 0:
-        valid = False
-    elif kernel_size < 3 or kernel_size > 15:
+    if kernel_size % 2 == 0 or kernel_size < 3 or kernel_size > 15:
         valid = False
     else:
         valid = True
@@ -33,9 +31,8 @@ def parse_kernel_size(kernel_size: int) -> bool:
     return valid
 
 
-def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
-    """
-    Checks if a name is valid againist the names of compiled models
+def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
+    """Checks if a name is valid againist the names of compiled models.
 
     Parameters
     ----------
@@ -67,10 +64,9 @@ def _valid_model_names(model_type: str) -> Tuple[bool, List[str]]:
 
 
 def get_candidates(
-    model_type: str, attributes: List[str]
-) -> List[Tuple[str, List[str], str]]:
-    """
-    Gets the list of candidate models for a given model type and attribute
+    model_type: str, attributes: list[str]
+) -> list[tuple[str, list[str], str]]:
+    """Gets the list of candidate models for a given model type and attribute.
 
     Parameters
     ----------
@@ -119,10 +115,10 @@ def get_candidates(
     candidate_models = []
     if len(attributes) == 0:  # if no attributes are given, return all models
         return candidate_blobs
-    else:
-        for attribute in attributes:  # for each attribute
-            for name, attr_data, blob_path in candidate_blobs:  # for each model
-                if attribute in attr_data:  # if the attribute is not in the model
-                    candidate_models.append((name, attr_data, blob_path))
+
+    for attribute in attributes:  # for each attribute
+        for name, attr_data, blob_path in candidate_blobs:  # for each model
+            if attribute in attr_data:  # if the attribute is not in the model
+                candidate_models.append((name, attr_data, blob_path))
 
     return candidate_models

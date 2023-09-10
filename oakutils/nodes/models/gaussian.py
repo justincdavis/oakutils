@@ -1,18 +1,20 @@
-from typing import Tuple
+from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
 
 from ._load import create_single_kernel_model as _create_single_kernel_model
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_gaussian(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     kernel_size: int = 3,
-    grayscale_out: bool = False,
-) -> Tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
-    """
-    Creates a gaussian model with a specified kernel size
+    grayscale_out: bool | None = None,
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+    """Creates a gaussian model with a specified kernel size.
 
     Parameters
     ----------
@@ -43,6 +45,9 @@ def create_gaussian(
     ValueError
         If the kernel_size is invalid
     """
+    if grayscale_out is None:
+        grayscale_out = False
+
     model_type = "laplacian"
     if grayscale_out:
         model_type += "gray"

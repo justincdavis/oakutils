@@ -1,15 +1,16 @@
-from typing import Tuple, Union, List, Iterable
+from __future__ import annotations
+
+from typing import Iterable
 
 import torch
 
-from ..definitions.utils import InputType
+from oakutils.blobs.definitions.utils import InputType
 
 
 def _create_dummy_input(
-    input_shape: Tuple[int, int, int], input_type: InputType
+    input_shape: tuple[int, int, int], input_type: InputType
 ) -> torch.Tensor:
-    """
-    Creates a dummy input based on the input_shape
+    """Creates a dummy input based on the input_shape.
 
     Parameters
     ----------
@@ -34,27 +35,26 @@ def _create_dummy_input(
 
     if input_type == InputType.U8:
         # if we are using a single channel, should assume that it will be grayscale
-        # need to double the columns due to the way data is propagated through the pipeline
+        # need to double the columns due to the way data
+        # is propagated through the pipeline
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32
         )
-    elif input_type == InputType.FP16:
+    if input_type == InputType.FP16:
         return torch.ones(
             (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32
         )
-    elif input_type == InputType.XYZ:
+    if input_type == InputType.XYZ:
         return torch.ones(
             (1, input_shape[1], input_shape[0], input_shape[2]), dtype=torch.float32
         )
-    else:
-        raise ValueError(f"Unknown input type: {input_type}")
+    raise ValueError(f"Unknown input type: {input_type}")
 
 
 def _create_multiple_dummy_input(
-    input_shapes: Iterable[Tuple[Tuple[int, int, int], InputType]]
-) -> List[torch.Tensor]:
-    """
-    Creates a dummy input based on the input_shapes
+    input_shapes: Iterable[tuple[tuple[int, int, int], InputType]]
+) -> list[torch.Tensor]:
+    """Creates a dummy input based on the input_shapes.
 
     Parameters
     ----------
@@ -75,14 +75,13 @@ def _create_multiple_dummy_input(
 
 def _export_module_to_onnx(
     model_instance: torch.nn.Module,
-    dummy_input: Union[torch.Tensor, List[torch.Tensor]],
+    dummy_input: torch.Tensor | list[torch.Tensor],
     onnx_path: str,
-    input_names: List[str],
-    output_names: List[str],
-    verbose: bool = False,
-):
-    """
-    Runs torch.onnx.export with the given parameters
+    input_names: list[str],
+    output_names: list[str],
+    verbose: bool | None = None,
+) -> None:
+    """Runs torch.onnx.export with the given parameters.
 
     Parameters
     ----------
@@ -99,6 +98,9 @@ def _export_module_to_onnx(
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
+    if verbose is None:
+        verbose = False
+
     if verbose:
         print(f"Exporting model to {onnx_path}")
         print(f"Input names: {input_names}")
@@ -120,17 +122,14 @@ def _export_module_to_onnx(
 
 def export(
     model_instance: torch.nn.Module,
-    dummy_input_shapes: Union[
-        List[Tuple[Tuple[int, int, int], InputType]],
-        Tuple[Tuple[int, int, int], InputType],
-    ],
+    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]]
+    | tuple[tuple[int, int, int], InputType],
     onnx_path: str,
-    input_names: List[str],
-    output_names: List[str],
-    verbose: bool = False,
-):
-    """
-    Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx
+    input_names: list[str],
+    output_names: list[str],
+    verbose: bool | None = None,
+) -> None:
+    """Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx.
 
     Parameters
     ----------
@@ -147,6 +146,9 @@ def export(
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
+    if verbose is None:
+        verbose = False
+
     if verbose:
         print(dummy_input_shapes)
         print(type(dummy_input_shapes))

@@ -1,15 +1,15 @@
-from typing import Tuple, Optional
+from __future__ import annotations
 
 import depthai as dai
 
-from ..tools import get_tuple_from_color_sensor_resolution
+from oakutils.tools import get_tuple_from_color_sensor_resolution
 
 
 def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
-    preview_size: Tuple[int, int] = (640, 480),
-    set_interleaved: bool = False,
+    preview_size: tuple[int, int] = (640, 480),
+    set_interleaved: bool | None = None,
     fps: int = 30,
     brightness: int = 0,
     saturation: int = 0,
@@ -17,12 +17,11 @@ def create_color_camera(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_target_size: Optional[Tuple[int, int]] = None,
-    isp_scale: Optional[Tuple[int, int]] = None,
-    isp_3a_fps: Optional[int] = None,
+    isp_target_size: tuple[int, int] | None = None,
+    isp_scale: tuple[int, int] | None = None,
+    isp_3a_fps: int | None = None,
 ) -> dai.node.ColorCamera:
-    """
-    Creates a pipeline for the color camera.
+    """Creates a pipeline for the color camera.
     setVideoSize, setStillSize are both automatically called using the tuple from get_tuple_from_color_sensor_resolution.
 
     Parameters
@@ -89,6 +88,9 @@ def create_color_camera(
     ValueError
         If the chroma_denoise is not between 0 and 4
     """
+    if set_interleaved is None:
+        set_interleaved = False
+
     if fps < 0 or fps > 60:
         raise ValueError("fps must be between 0 and 60")
     if brightness < -10 or brightness > 10:

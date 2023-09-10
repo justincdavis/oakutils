@@ -60,8 +60,10 @@ compiler = [
 ]
 dev = [
     "oakutils[compiler]",
+    "pyupgrade",
     "black",
-    "pylint",
+    "isort",
+    "ruff",
     "mypy",
     "twine",
     "wheel",
@@ -89,3 +91,51 @@ where = ["oakutils"]
 
 [tool.setuptools.package-data]
 oakutils = ["*.blob"]
+
+[tool.ruff]
+select = ["SLOT", "RUF", "FURB", "PERF", "FLY", "PGH", "INT", "TCH", "TID", "SIM", "PYI", "PIE", "INP", "ISC", "ICN", "ANN", "UP", "YTT", "W", "N", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
+ignore = ["C901", "E501"]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+fix = true
+show-fixes = true
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+per-file-ignores = {}
+
+# Same as Black.
+line-length = 88
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8
+target-version = "py38"
+
+# Other options
+builtins = ["_"]

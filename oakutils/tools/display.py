@@ -1,37 +1,41 @@
-from typing import Optional, Dict, Union, Iterable, Tuple, Callable
-from threading import Thread
+from __future__ import annotations
+
 import atexit
+import contextlib
 import time
 from collections import defaultdict
+from threading import Thread
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import cv2
-import numpy as np
+
+if TYPE_CHECKING:
+    import numpy as np
+    from typing_extensions import Self
 
 
 class _Display:
-    def __init__(self, name: str, fps: int = 15):
+    def __init__(self: Self, name: str, fps: int = 15) -> None:
         self._name = name
         self._fps = fps
         self._delay_time: float = 1 / fps
-        self._frame: Optional[np.ndarray] = None
+        self._frame: np.ndarray | None = None
         self._stopped = False
         self._thread = Thread(target=self._run)
         atexit.register(self.stop)
 
-    def __call__(self, frame: np.ndarray):
+    def __call__(self: Self, frame: np.ndarray) -> None:
         self._frame = frame
 
-    def __del__(self):
+    def __del__(self: Self) -> None:
         self.stop()
 
-    def stop(self):
+    def stop(self: Self) -> None:
         self._stopped = True
-        try:
+        with contextlib.suppress(RuntimeError):
             self._thread.join()
-        except RuntimeError:
-            pass
 
-    def _run(self):
+    def _run(self: Self) -> None:
         while self._stopped:
             if self._frame is not None:
                 s = time.time()
@@ -43,28 +47,26 @@ class _Display:
 
 
 class DisplayManager:
-    """
-    Used in the Camera class to display all the image streams.
-    """
+    """Used in the Camera class to display all the image streams."""
 
-    def __init__(self, fps: int = 15, display_size: Tuple[int, int] = (640, 480)):
-        self._displays: Dict[str, _Display] = {}
-        self._transforms: Dict[str, Callable] = defaultdict(lambda: lambda x: x)
+    def __init__(
+        self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)
+    ) -> None:
+        self._displays: dict[str, _Display] = {}
+        self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size
         self._fps = fps
         atexit.register(self._stop)
 
-    def _stop(self):
+    def _stop(self: Self) -> None:
         for display in self._displays.values():
             display.stop()
 
-    def stop(self):
-        """
-        Stops the display manager.
-        """
+    def stop(self: Self) -> None:
+        """Stops the display manager."""
         self._stop()
 
-    def _update(self, name: str, frame: np.ndarray):
+    def _update(self: Self, name: str, frame: np.ndarray) -> None:
         if (
             frame.shape[1] != self._display_size[0]
             or frame.shape[0] != self._display_size[1]
@@ -76,9 +78,8 @@ class DisplayManager:
             self._displays[name] = _Display(name, self._fps)
             self._displays[name](frame)
 
-    def set_transform(self, name: str, transform: Callable):
-        """
-        Sets a transform for the given name.
+    def set_transform(self: Self, name: str, transform: Callable) -> None:
+        """Sets a transform for the given name.
 
         Parameters
         ----------
@@ -90,17 +91,17 @@ class DisplayManager:
         self._transforms[name] = transform
 
     def update(
-        self,
-        data: Union[Tuple[str, np.ndarray], Iterable[Tuple[str, np.ndarray]]],
-        transform: Optional[Callable] = None,
-    ):
-        """
-        Updates the display with the given data.
+        self: Self,
+        data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]],
+        transform: Callable | None = None,
+    ) -> None:
+        """Updates the display with the given data.
 
         Parameters
         ----------
         data : Union[Tuple[str, np.ndarray], Iterable[str, np.ndarray]]
-            The data to update the display with. Can be a single tuple or an iterable of tuples.
+            The data to update the display with. Can be a single tuple or an
+            iterable of tuples.
         transform : Optional[Callable], optional
             A transform to call on each frame, by default None
             The transform should take in an np.ndarray and return an np.ndarray
@@ -119,9 +120,8 @@ class DisplayManager:
                 self._update(name, self._transforms[name](frame))
 
 
-def get_resolution_area(resolution: Tuple[int, int]) -> int:
-    """
-    Gets the area of the given resolution.
+def get_resolution_area(resolution: tuple[int, int]) -> int:
+    """Gets the area of the given resolution.
 
     Parameters
     ----------
@@ -137,17 +137,16 @@ def get_resolution_area(resolution: Tuple[int, int]) -> int:
 
 
 def order_resolutions(
-    resolutions: Iterable[Tuple[int, int]], reverse: bool = False
-) -> Iterable[Tuple[int, int]]:
-    """
-    Orders the given resolutions from smallest to largest.
+    resolutions: Iterable[tuple[int, int]], reverse: bool | None = None
+) -> Iterable[tuple[int, int]]:
+    """Orders the given resolutions from smallest to largest.
     If reverse is True, then it will order from largest to smallest.
 
     Parameters
     ----------
     resolutions : Iterable[Tuple[int, int]]
         The resolutions to order
-    reverse : bool, optional
+    reverse : Optional[bool], optional
         Whether or not to reverse the order, by default False
 
     Returns
@@ -155,12 +154,13 @@ def order_resolutions(
     Iterable[Tuple[int, int]]
         The ordered resolutions
     """
+    if reverse is None:
+        reverse = False
     return sorted(resolutions, key=get_resolution_area, reverse=reverse)
 
 
-def get_smaller_size(size1: Tuple[int, int], size2: Tuple[int, int]) -> Tuple[int, int]:
-    """
-    Gets the smaller size of the two given sizes.
+def get_smaller_size(size1: tuple[int, int], size2: tuple[int, int]) -> tuple[int, int]:
+    """Gets the smaller size of the two given sizes.
 
     Parameters
     ----------

@@ -1,19 +1,25 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import blobconverter
 
-from ..definitions import AbstractModel
-from ..definitions.utils.types import input_type_to_str
+from oakutils.blobs.definitions.utils.types import input_type_to_str
+
+if TYPE_CHECKING:
+    from oakutils.blobs.definitions import AbstractModel
 
 
 def compile_blob(
     model_type: AbstractModel, onnx_path: str, output_path: str, shaves: int = 6
-):
-    """
-    Compiles an ONNX model into a blob using the provided arguments.
+) -> None:
+    """Compiles an ONNX model into a blob using the provided arguments.
 
     Parameters
     ----------
     model_type : AbstractModel
-        The model class to compile. This should be just the type of the model being compiled.
+        The model class to compile. This should be just the type of the model
+        being compiled.
     onnx_path : str
         The path to the ONNX model
     output_path : str

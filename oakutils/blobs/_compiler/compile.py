@@ -1,32 +1,32 @@
-from typing import Union, Tuple, List, Optional, Dict
+from __future__ import annotations
+
 import os
 import shutil
 
-from ..definitions import AbstractModel, InputType
+from oakutils.blobs.definitions import AbstractModel, InputType
+
+from .blob import compile_blob
+from .onnx import simplify
 from .paths import get_cache_dir_path
 from .torch import export
-from .onnx import simplify
-from .blob import compile_blob
 from .utils import dict_to_str, remove_suffix
 
 
 def _compile(
     model_type: AbstractModel,
-    model_args: Dict,
-    dummy_input_shapes: Union[
-        List[Tuple[Tuple[int, int, int], InputType]],
-        Tuple[Tuple[int, int, int], InputType],
-    ],
-    cache: bool = True,
+    model_args: dict,
+    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]]
+    | tuple[tuple[int, int, int], InputType],
+    cache: bool | None = None,
     shaves: int = 6,
 ) -> str:
-    """
-    Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
     model : AbstractModel
-        The model class to compile. This should be just the type that returns an instance of the model.
+        The model class to compile. This should be just the type that returns an
+        instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
         Example: `model = oakutils.blobs.definitions.GaussianBlur`
         Example: `model = oakutils.blobs.definitions.PointCloud`
@@ -46,6 +46,9 @@ def _compile(
     str
         The path to the compiled blob
     """
+    if cache is None:
+        cache = True
+
     # make the actual model instance
     model = model_type(**model_args)
     input_data = model_type.input_names()
@@ -103,25 +106,23 @@ def _compile(
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
-    final_path = shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
-
-    return final_path
+    return shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
 
 
-def compile(
+def compile_model(
     model_type: AbstractModel,
-    model_args: Dict,
-    cache: bool = True,
+    model_args: dict,
+    cache: bool | None = None,
     shaves: int = 6,
-    shape_mapping: Optional[Dict[InputType, Tuple[int, int, int]]] = None,
+    shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
 ) -> str:
-    """
-    Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
     model : AbstractModel
-        The model class to compile. This should be just the type that returns an instance of the model.
+        The model class to compile. This should be just the type that returns an
+        instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
         Example: `model = oakutils.blobs.definitions.GaussianBlur`
         Example: `model = oakutils.blobs.definitions.PointCloud`
@@ -132,7 +133,8 @@ def compile(
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
     shape_mapping : Optional[Dict[InputType, Tuple[int, int, int]]], optional
-        The shape mapping to convert InputTypes to resolutions based on the setup of the camera.
+        The shape mapping to convert InputTypes to resolutions based on the setup
+        of the camera.
         If None, then the default mapping is used, by default None
         Default mapping:
             InputType.FP16 -> (3, 480, 640)
@@ -143,6 +145,9 @@ def compile(
     str
         The path to the compiled blob
     """
+    if cache is None:
+        cache = True
+
     input_data = model_type.input_names()
     dummy_input_shapes = []
     for _, input_type in input_data:
