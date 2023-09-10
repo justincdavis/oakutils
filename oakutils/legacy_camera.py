@@ -325,7 +325,7 @@ class Camera(sdk.OakCamera):
 
         # creaate the nodes on the pipeline
         if enable_rgb:
-            cam = create_color_camera(
+            cam, xout_rgb = create_color_camera(
                 pipeline=self._pipeline,
                 resolution=self._rgb_size[2],
                 fps=rgb_fps,
@@ -344,9 +344,11 @@ class Camera(sdk.OakCamera):
             (
                 stereo,
                 left,
-                right,
                 xout_left,
+                right,
                 xout_right,
+                xout_synced_left,
+                xout_synced_right,
                 xout_depth,
                 xout_disparity,
                 xout_rect_left,
@@ -374,8 +376,8 @@ class Camera(sdk.OakCamera):
 
             self._streams.extend(
                 [
-                    "left",
-                    "right",
+                    "synced_left",
+                    "synced_right",
                     "depth",
                     "disparity",
                     "rectified_left",

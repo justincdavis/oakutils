@@ -156,6 +156,6 @@ class PointCloudVisualizer:
         Parameters
         ----------
         rot : np.ndarray
-            The rotation matrix.
+            The 3x3 rotation matrix.
         """
         self._R_camera_to_world = rot

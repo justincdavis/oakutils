@@ -45,7 +45,9 @@ def create_stereo_depth(
 ) -> tuple[
     dai.node.StereoDepth,
     dai.node.MonoCamera,
+    dai.node.XLinkOut,
     dai.node.MonoCamera,
+    dai.node.XLinkOut,
     dai.node.XLinkOut,
     dai.node.XLinkOut,
     dai.node.XLinkOut,
@@ -141,12 +143,16 @@ def create_stereo_depth(
         The stereo depth node
     dai.node.MonoCamera
         The left mono camera node
+    dai.node.XLinkOut
+        The left xlink out node, has stream name "left"
     dai.node.MonoCamera
         The right mono camera node
     dai.node.XLinkOut
-        The left xlink out node, has stream name "left"
-    dai.node.XLinkOut
         The right xlink out node, has stream name "right"
+    dai.node.XLinkOut
+        The left xlink out node, has stream name "synced_left"
+    dai.node.XLinkOut
+        The right xlink out node, has stream name "synced_right"
     dai.node.XLinkOut
         The depth xlink out node, has stream name "depth"
     dai.node.XLinkOut
@@ -169,7 +175,7 @@ def create_stereo_depth(
     if enable_temporal_filter is None:
         enable_temporal_filter = False
 
-    left_cam, right_cam = create_left_right_cameras(
+    left_cam, xout_left, right_cam, xout_right = create_left_right_cameras(
         pipeline=pipeline,
         resolution=resolution,
         fps=fps,
@@ -182,8 +188,8 @@ def create_stereo_depth(
     )
     (
         stereo,
-        xout_left,
-        xout_right,
+        xout_synced_left,
+        xout_synced_right,
         xout_depth,
         xout_disparity,
         xout_rect_left,
@@ -223,9 +229,11 @@ def create_stereo_depth(
     return (
         stereo,
         left_cam,
-        right_cam,
         xout_left,
+        right_cam,
         xout_right,
+        xout_synced_left,
+        xout_synced_right,
         xout_depth,
         xout_disparity,
         xout_rect_left,
@@ -346,9 +354,9 @@ def create_stereo_depth_from_mono_cameras(
     dai.node.StereoDepth
         The stereo depth node
     dai.node.XLinkOut
-        The left xlink out node, has stream name "left"
+        The left xlink out node, has stream name "synced_left"
     dai.node.XLinkOut
-        The right xlink out node, has stream name "right"
+        The right xlink out node, has stream name "synced_right"
     dai.node.XLinkOut
         The depth xlink out node, has stream name "depth"
     dai.node.XLinkOut
@@ -450,8 +458,8 @@ def create_stereo_depth_from_mono_cameras(
     xout_rect_right = pipeline.create(dai.node.XLinkOut)
 
     # set stream names
-    xout_left.setStreamName("left")
-    xout_right.setStreamName("right")
+    xout_left.setStreamName("synced_left")
+    xout_right.setStreamName("synced_right")
     xout_depth.setStreamName("depth")
     xout_disparity.setStreamName("disparity")
     xout_rect_left.setStreamName("rectified_left")

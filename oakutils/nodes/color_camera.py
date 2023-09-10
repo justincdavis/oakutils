@@ -9,6 +9,7 @@ def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
     preview_size: tuple[int, int] = (640, 480),
+    stream_name: str = "rgb",
     set_interleaved: bool | None = None,
     fps: int = 30,
     brightness: int = 0,
@@ -20,7 +21,7 @@ def create_color_camera(
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
     isp_3a_fps: int | None = None,
-) -> dai.node.ColorCamera:
+) -> tuple[dai.node.ColorCamera, dai.node.XLinkOut]:
     """Creates a pipeline for the color camera.
     setVideoSize, setStillSize are both automatically called using the tuple from get_tuple_from_color_sensor_resolution.
 
@@ -70,6 +71,9 @@ def create_color_camera(
     -------
     dai.node.ColorCamera
         The color camera node
+    dai.node.XLinkOut
+        The output node for the color camera raw stream
+        Has the stream name from argument, default is "rgb"
 
     Raises
     ------
@@ -135,4 +139,9 @@ def create_color_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
-    return cam
+    # create output
+    xout = pipeline.create(dai.node.XLinkOut)
+    xout.setStreamName(stream_name)
+    cam.video.link(xout.input)
+
+    return cam, xout

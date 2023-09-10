@@ -6,6 +6,7 @@ import depthai as dai
 def create_mono_camera(
     pipeline: dai.Pipeline,
     socket: dai.CameraBoardSocket,
+    stream_name: str | None = None,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
     fps: int = 60,
     brightness: int = 0,
@@ -15,7 +16,7 @@ def create_mono_camera(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = None,
-) -> dai.node.MonoCamera:
+) -> tuple[dai.node.MonoCamera, dai.node.XLinkOut]:
     """Creates a pipeline for the mono camera.
 
     Parameters
@@ -24,6 +25,9 @@ def create_mono_camera(
         The pipeline to add the mono camera to
     socket : dai.CameraBoardSocket
         The socket the camera is plugged into
+    stream_name : str, optional
+        The name of the output stream, by default None
+        If None, the stream name will be "left" or "right" depending on socket
     resolution : dai.MonoCameraProperties.SensorResolution, optional
         The resolution of the mono camera, by default dai.MonoCameraProperties.SensorResolution.THE_400_P
     fps: int, optional
@@ -55,9 +59,14 @@ def create_mono_camera(
     -------
     dai.node.MonoCamera
         The mono camera node
+    dai.node.XLinkOut
+        The output node for the mono camera
+        Has default stream name of "left" or "right" depending on socket
 
     Raises
     ------
+    ValueError
+        If the socket is not LEFT or RIGHT
     ValueError
         If the fps is not between 0 and 120
     ValueError
@@ -73,6 +82,14 @@ def create_mono_camera(
     ValueError
         If the chroma_denoise is not between 0 and 4
     """
+    if stream_name is None:
+        if socket == dai.CameraBoardSocket.LEFT:
+            stream_name = "left"
+        elif socket == dai.CameraBoardSocket.RIGHT:
+            stream_name = "right"
+        else:
+            raise ValueError("socket must be LEFT or RIGHT")
+        
     if fps < 0 or fps > 120:
         raise ValueError("fps must be between 0 and 120")
     if brightness < -10 or brightness > 10:
@@ -105,11 +122,17 @@ def create_mono_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
+    # create output
+    xout = pipeline.create(dai.node.XLinkOut)
+    xout.setStreamName(stream_name)
+    cam.out.link(xout.input)
+
     return cam
 
 
 def create_left_right_cameras(
     pipeline: dai.Pipeline,
+    stream_names: tuple[str, str] | None = None,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
     fps: int = 60,
     brightness: int = 0,
@@ -119,13 +142,16 @@ def create_left_right_cameras(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = None,
-) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
+) -> tuple[dai.node.MonoCamera, dai.node.XLinkOut, dai.node.MonoCamera, dai.node.XLinkOut]:
     """Wrapper function for creating the left and right mono cameras.
 
     Parameters
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the two mono cameras to
+    stream_names : tuple[str, str], optional
+        The names of the output streams, by default ("left", "right")
+        If None, the stream names will be "left" and "right"
     resolution : dai.MonoCameraProperties.SensorResolution, optional
         The resolution of the mono camera, by default dai.MonoCameraProperties.SensorResolution.THE_400_P
     fps: int, optional
@@ -157,11 +183,19 @@ def create_left_right_cameras(
     -------
     dai.node.MonoCamera
         The left mono camera node
+    dai.node.XLinkOut
+        The output node for the left mono camera
     dai.node.MonoCamera
         The right mono camera node
+    dai.node.XLinkOut
+        The output node for the right mono camera
     """
-    left_cam = create_mono_camera(
+    if stream_names is None:
+        stream_names = ("left", "right")
+    
+    left_cam, left_xout = create_mono_camera(
         pipeline=pipeline,
+        stream_name=stream_names[0],
         socket=dai.CameraBoardSocket.LEFT,
         resolution=resolution,
         fps=fps,
@@ -173,8 +207,9 @@ def create_left_right_cameras(
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
     )
-    right_cam = create_mono_camera(
+    right_cam, right_xout = create_mono_camera(
         pipeline=pipeline,
+        stream_name=stream_names[1],
         socket=dai.CameraBoardSocket.RIGHT,
         resolution=resolution,
         fps=fps,
@@ -187,4 +222,4 @@ def create_left_right_cameras(
         isp_3a_fps=isp_3a_fps,
     )
 
-    return left_cam, right_cam
+    return left_cam, left_xout, right_cam, right_xout

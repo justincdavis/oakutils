@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING
 
 import kornia
 
-from .abstract_model import AbstractModel, InputType, ModelType
+from .abstract_model import AbstractModel
+from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
     import torch
