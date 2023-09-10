@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from .abstract_model import AbstractModel, InputType, ModelType
-from .utils import convert_to_fp16
+from .abstract_model import AbstractModel
+from .utils import InputType, ModelType, convert_to_fp16
 
 if TYPE_CHECKING:
     import torch
