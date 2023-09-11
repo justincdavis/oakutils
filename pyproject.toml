@@ -83,14 +83,14 @@ push            = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
-"oakutils/__init__.py" = ["{version}"]
+"src/oakutils/__init__.py" = ["{version}"]
 "docs/conf.py" = ["{version}"]
 
 [tool.setuptools.packages.find]
-where = ["oakutils"]
+where = ["src"]
 
 [tool.setuptools.package-data]
-oakutils = ["*.blob"]
+oakutils = ["src/*.blob"]
 
 [tool.ruff]
 select = ["SLOT", "RUF", "FURB", "PERF", "FLY", "PGH", "INT", "TCH", "TID", "SIM", "PYI", "PIE", "INP", "ISC", "ICN", "ANN", "UP", "YTT", "W", "N", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]

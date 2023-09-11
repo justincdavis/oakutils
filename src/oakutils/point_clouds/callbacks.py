@@ -1,19 +1,24 @@
-import numpy as np
-import open3d as o3d
+from __future__ import annotations
 
-from ._funcs import get_point_cloud_from_rgb_depth_image, filter_point_cloud
+from typing import TYPE_CHECKING
+
+from ._funcs import filter_point_cloud, get_point_cloud_from_rgb_depth_image
+
+if TYPE_CHECKING:
+    import numpy as np
+    import open3d as o3d
 
 
 def create_point_cloud(
-        rgb: np.ndarray, 
-        depth: np.ndarray,
-        depth_trunc: float = 25000.0,
-        depth_scale: float = 1000.0,
-        filter_pc: bool | None = None,
-        voxel_size: float = 0.1,
-        nb_neighbors: int = 30,
-        std_ratio: float = 0.1,
-        downsample_first: bool | None = None,
+    rgb: np.ndarray,
+    depth: np.ndarray,
+    depth_trunc: float = 25000.0,
+    depth_scale: float = 1000.0,
+    filter_pc: bool | None = None,
+    voxel_size: float = 0.1,
+    nb_neighbors: int = 30,
+    std_ratio: float = 0.1,
+    downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """Creates a point cloud from a RGB and depth image.
 

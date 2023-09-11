@@ -17,18 +17,18 @@ Subpackages
 Submodules
 ----------
 
-oakutils.api\_camera module
----------------------------
+oakutils.camera module
+----------------------
 
-.. automodule:: oakutils.api_camera
+.. automodule:: oakutils.camera
    :members:
    :undoc-members:
    :show-inheritance:
 
-oakutils.sdk\_camera module
----------------------------
+oakutils.legacy\_camera module
+------------------------------
 
-.. automodule:: oakutils.sdk_camera
+.. automodule:: oakutils.legacy_camera
    :members:
    :undoc-members:
    :show-inheritance:

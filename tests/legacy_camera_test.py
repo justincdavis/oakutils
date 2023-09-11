@@ -1,6 +1,6 @@
 import unittest
 
-from oakutils import Camera
+from oakutils import LegacyCamera
 
 from _utils import check_method_timout
 
@@ -8,7 +8,7 @@ from _utils import check_method_timout
 class TestCamera(unittest.TestCase):
     def test_init(self):
         try:
-            _ = Camera()
+            _ = LegacyCamera()
         except RuntimeError as e:
             if "No available device" in str(e):
                 pass
@@ -16,7 +16,7 @@ class TestCamera(unittest.TestCase):
                 raise e
 
     def test_stop(self):
-        cam = Camera()
+        cam = LegacyCamera()
         cam.start(block=True)
 
         result = check_method_timout(cam.stop, "cam.stop", timeout=5)
@@ -26,7 +26,7 @@ class TestCamera(unittest.TestCase):
         cam.stop()
 
     def test_assignments(self):
-        cam = Camera(
+        cam = LegacyCamera(
             enable_rgb=True,
             enable_mono=True,
         )
