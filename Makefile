@@ -31,9 +31,9 @@ blobs:
 
 ci:
 	./scripts/pyupgrade.sh
-	ruff ./oakutils --fix
-	isort oakutils
-	black oakutils --safe
+	ruff ./src//oakutils --fix
+	isort src/oakutils
+	black src/oakutils --safe
 
 stubs:
 	python3 scripts/make_stubs.py
