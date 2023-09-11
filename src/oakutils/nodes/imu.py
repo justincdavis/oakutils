@@ -5,6 +5,7 @@ import depthai as dai
 
 def create_imu(
     pipeline: dai.Pipeline,
+    stream_name: bool | None = None,
     accelerometer_rate: int = 400,
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
@@ -34,12 +35,18 @@ def create_imu(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the IMU to
+    stream_name : str, optional
+        The name of the stream, by default "imu"
     accelerometer_rate : int, optional
         The rate of the accelerometer, by default 400
         Options are 100, 200, 400
     gyroscope_rate : int, optional
         The rate of the gyroscope, by default 400
         Options are 125, 250, 400
+    batch_report_threshold : int, optional
+        The batch report threshold, by default 1
+    max_batch_reports : int, optional
+        The maximum batch reports, by default 10
     enable_accelerometer_raw : bool, optional
         Enable accelerometer raw, by default False
     enable_accelerometer : bool, optional
@@ -85,6 +92,9 @@ def create_imu(
     ValueError
         If gyroscope_rate is not one of the following: 125, 250, 400
     """
+    if stream_name is None:
+        stream_name = "imu"
+
     if enable_accelerometer_raw is None:
         enable_accelerometer_raw = False
     if enable_accelerometer is None:
@@ -180,7 +190,7 @@ def create_imu(
     imu.setBatchReportThreshold(batch_report_threshold)
     imu.setMaxBatchReports(max_batch_reports)
 
-    xout_imu.setStreamName("imu")
+    xout_imu.setStreamName(stream_name)
 
     imu.out.link(xout_imu.input)
 
