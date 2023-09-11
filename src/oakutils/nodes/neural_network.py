@@ -11,13 +11,12 @@ def create_neural_network(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output | Iterable[dai.Node.Output],
     blob_path: str,
-    stream_name: str = "nn",
     input_names: str | Iterable[str] | None = None,
     reuse_messages: bool | Iterable[bool | None] | None = None,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut]:
+) -> dai.node.NeuralNetwork:
     """Creates a neural network node.
 
     Parameters
@@ -31,8 +30,6 @@ def create_neural_network(
     blob_path : str
         The path to the blob file to use for the neural network.
         Will be converted to a pathlib.Path.
-    stream_name : str, optional
-        The name of the stream, by default "nn"
     input_names : Optional[Union[str, Iterable[str]]], optional
         The names of the input links, by default None
         Must be the same length as input_link if Iterable
@@ -51,8 +48,6 @@ def create_neural_network(
     -------
     dai.node.NeuralNetwork
         The neural network node
-    dai.node.XLinkOut
-        The output link of the neural network node, stream name is default "nn"
     """
     if hasattr(input_link, "__iter__"):
         if input_names is None:
@@ -104,12 +99,7 @@ def create_neural_network(
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
 
-    # create the output link
-    xout_nn = pipeline.create(dai.node.XLinkOut)
-    xout_nn.setStreamName(stream_name)
-    nn.out.link(xout_nn.input)
-
-    return nn, xout_nn
+    return nn
 
 
 def get_nn_bgr_frame(

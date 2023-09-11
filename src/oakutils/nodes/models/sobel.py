@@ -15,7 +15,7 @@ def create_sobel(
     blur_kernel_size: int = 3,
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a sobel model with a specified kernel size.
 
     Parameters
@@ -40,10 +40,6 @@ def create_sobel(
     -------
     dai.node.NeuralNetwork
         The sobel node
-    dai.node.XLinkOut
-        The output link of the sobel node
-    str
-        The name of the stream, determined by the model_type and attributes
 
     Raises
     ------

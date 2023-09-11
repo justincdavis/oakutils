@@ -59,7 +59,7 @@ def create_point_cloud(
     pipeline: dai.Pipeline,
     xyz_link: dai.Node.Output,
     depth_link: dai.Node.Output,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a point_cloud model with a specified kernel size.
 
     Parameters
@@ -77,10 +77,6 @@ def create_point_cloud(
     -------
     dai.node.NeuralNetwork
         The point_cloud node
-    dai.node.XLinkOut
-        The output link of the point_cloud node
-    str
-        The name of the stream, determined by the model_type and attributes
 
     Raises
     ------

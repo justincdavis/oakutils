@@ -1,13 +1,15 @@
 import cv2
 import depthai as dai
 
-from oakutils.nodes import create_mono_camera
+from oakutils.nodes import create_mono_camera, create_xout
 
 pipeline = dai.Pipeline()
 
 # create the color camera node
-left, xout_left = create_mono_camera(pipeline, dai.CameraBoardSocket.LEFT)
-right, xout_right = create_mono_camera(pipeline, dai.CameraBoardSocket.RIGHT)
+left = create_mono_camera(pipeline, dai.CameraBoardSocket.LEFT)
+right = create_mono_camera(pipeline, dai.CameraBoardSocket.RIGHT)
+xout_left = create_xout(pipeline, left.out, "left")
+xout_right = create_xout(pipeline, right.out, "right")
 
 with dai.Device(pipeline) as device:
     lq: dai.DataOutputQueue = device.getOutputQueue("left")

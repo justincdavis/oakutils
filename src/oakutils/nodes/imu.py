@@ -5,7 +5,6 @@ import depthai as dai
 
 def create_imu(
     pipeline: dai.Pipeline,
-    stream_name: bool | None = None,
     accelerometer_rate: int = 400,
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
@@ -25,7 +24,7 @@ def create_imu(
     enable_geomagnetic_rotation_vector: bool | None = None,
     enable_arvr_stabilized_rotation_vector: bool | None = None,
     enable_arvr_stabilized_game_rotation_vector: bool | None = None,
-) -> tuple[dai.node.IMU, dai.node.XLinkOut]:
+) -> dai.node.IMU:
     """Creates a pipeline for the IMU.
     Sensors which use both gyroscope and accelerometer will default to slower rate.
     An in-depth explanation of the IMU can be found here:
@@ -35,8 +34,6 @@ def create_imu(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the IMU to
-    stream_name : str, optional
-        The name of the stream, by default "imu"
     accelerometer_rate : int, optional
         The rate of the accelerometer, by default 400
         Options are 100, 200, 400
@@ -82,8 +79,6 @@ def create_imu(
     -------
     dai.node.IMU
         The IMU node
-    dai.node.XLinkOut
-        The output node, with stream name "imu"
 
     Raises
     ------
@@ -92,9 +87,6 @@ def create_imu(
     ValueError
         If gyroscope_rate is not one of the following: 125, 250, 400
     """
-    if stream_name is None:
-        stream_name = "imu"
-
     if enable_accelerometer_raw is None:
         enable_accelerometer_raw = False
     if enable_accelerometer is None:
@@ -167,7 +159,6 @@ def create_imu(
         sensors.append(dai.IMUSensor.ARVR_STABILIZED_GAME_ROTATION_VECTOR)
 
     imu = pipeline.create(dai.node.IMU)
-    xout_imu = pipeline.create(dai.node.XLinkOut)
 
     # enable the sensors for each type in the sensors list
     for sensor in sensors:
@@ -190,8 +181,4 @@ def create_imu(
     imu.setBatchReportThreshold(batch_report_threshold)
     imu.setMaxBatchReports(max_batch_reports)
 
-    xout_imu.setStreamName(stream_name)
-
-    imu.out.link(xout_imu.input)
-
-    return imu, xout_imu
+    return imu

@@ -1,12 +1,13 @@
 import cv2
 import depthai as dai
 
-from oakutils.nodes import create_color_camera
+from oakutils.nodes import create_color_camera, create_xout
 
 pipeline = dai.Pipeline()
 
 # create the color camera node
-cam, xout_rgb = create_color_camera(pipeline, preview_size=(640, 480))
+cam = create_color_camera(pipeline, preview_size=(640, 480))
+xout_cam = create_xout(pipeline, cam.video, "rgb")
 
 with dai.Device(pipeline) as device:
     queue: dai.DataOutputQueue = device.getOutputQueue("rgb")

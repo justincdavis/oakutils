@@ -13,7 +13,7 @@ def create_gaussian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     grayscale_out: bool | None = None,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a gaussian model with a specified kernel size.
 
     Parameters
@@ -35,10 +35,6 @@ def create_gaussian(
     -------
     dai.node.NeuralNetwork
         The gaussian node
-    dai.node.XLinkOut
-        The output link of the gaussian node
-    str
-        The name of the stream, determined by the model_type and attributes
 
     Raises
     ------

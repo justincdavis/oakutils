@@ -1,26 +1,23 @@
 import cv2
 import depthai as dai
 
-from oakutils.nodes import create_color_camera, get_nn_bgr_frame
+from oakutils.nodes import create_color_camera, get_nn_bgr_frame, create_xout
 from oakutils.nodes.models import create_gaussian
 
 
 pipeline = dai.Pipeline()
 
 # create the color camera node
-cam, xout_cam = create_color_camera(pipeline, preview_size=(640, 480))
+cam = create_color_camera(pipeline, preview_size=(640, 480))
 
 # create neural network node
-lp, xout_lp, name = create_gaussian(pipeline, cam.preview, kernel_size=5)
+lp = create_gaussian(pipeline, cam.preview, kernel_size=5)
+xout_lp = create_xout(pipeline, lp.out, "gaussian")
 
 with dai.Device(pipeline) as device:
-    rgb_queue: dai.DataOutputQueue = device.getOutputQueue("rgb")
-    l_queue: dai.DataOutputQueue = device.getOutputQueue(name)
+    l_queue: dai.DataOutputQueue = device.getOutputQueue("gaussian")
 
     while True:
-        rgb_data = rgb_queue.get()
-        cv2.imshow("rgb", rgb_data.getCvFrame())
-
         l_data = l_queue.get()
         l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480))
 

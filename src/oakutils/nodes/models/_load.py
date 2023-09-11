@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Iterable
 
-from oakutils.nodes.neural_network import create_neural_network
-
+from ..neural_network import create_neural_network
 from ._parsing import get_candidates, parse_kernel_size
 
 if TYPE_CHECKING:
@@ -17,7 +16,7 @@ def create_model(
     attributes: list[str],
     input_names: Iterable[str] | None = None,
     reuse_messages: Iterable[bool | None] | None = None,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Gets the model blob based on the attributes and creates a neural network node.
 
     Parameters
@@ -58,7 +57,7 @@ def create_model(
     )
 
     try:
-        name, attributes, path = potential_blobs[0]
+        _, attributes, path = potential_blobs[0]
     except IndexError:
         base_str = "Error acquiring model blob."
         base_str += "Please check that all models are present in your installation through: "
@@ -67,19 +66,15 @@ def create_model(
             f"{base_str}\n Possible blobs: {potential_blobs}"
         )
 
-    streamname = f"{name}_".join(list(attributes))
-    while streamname.endswith("_"):
-        streamname = streamname[:-1]
-    nn, nn_out = create_neural_network(
+    nn = create_neural_network(
         pipeline=pipeline,
         input_link=input_link,
         blob_path=path,
-        stream_name=streamname,
         input_names=input_names,
         reuse_messages=reuse_messages,
     )
 
-    return nn, nn_out, streamname
+    return nn
 
 
 def create_no_args_multi_link_model(
@@ -88,7 +83,7 @@ def create_no_args_multi_link_model(
     model_name: str,
     input_names: list[str],
     reuse_messages: list[bool | None],
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a model with multiple input links.
 
     Parameters
@@ -109,10 +104,6 @@ def create_no_args_multi_link_model(
     -------
     dai.node.NeuralNetwork
         The model node
-    dai.node.XLinkOut
-        The output link of the model node
-    str
-        The name of the stream, determined by the model_type and attributes
     """
     return create_model(
         pipeline=pipeline,
@@ -128,7 +119,7 @@ def create_no_args_model(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     model_name: str,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a model with no arguments.
 
     Parameters
@@ -145,10 +136,6 @@ def create_no_args_model(
     -------
     dai.node.NeuralNetwork
         The model node
-    dai.node.XLinkOut
-        The output link of the model node
-    str
-        The name of the stream, determined by the model_type and attributes
     """
     return create_model(
         pipeline=pipeline,
@@ -163,7 +150,7 @@ def create_single_kernel_model(
     input_link: dai.Node.Output,
     model_name: str,
     kernel_size: int,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a model with a single kernel size.
 
     Parameters
@@ -182,10 +169,6 @@ def create_single_kernel_model(
     -------
     dai.node.NeuralNetwork
         The model node
-    dai.node.XLinkOut
-        The output link of the model node
-    str
-        The name of the stream, determined by the model_type and attributes
     """
     _ = parse_kernel_size(
         kernel_size
@@ -205,7 +188,7 @@ def create_double_kernel_model(
     model_name: str,
     kernel_size1: int,
     kernel_size2: int,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) ->dai.node.NeuralNetwork:
     """Creates a model with a two kernel sizes.
 
     Parameters
@@ -226,10 +209,6 @@ def create_double_kernel_model(
     -------
     dai.node.NeuralNetwork
         The model node
-    dai.node.XLinkOut
-        The output link of the model node
-    str
-        The name of the stream, determined by the model_type and attributes
     """
     _ = parse_kernel_size(
         kernel_size1

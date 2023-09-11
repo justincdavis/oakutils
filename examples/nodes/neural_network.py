@@ -7,6 +7,7 @@ from oakutils.nodes import (
     create_neural_network,
     get_nn_bgr_frame,
     get_nn_gray_frame,
+    create_xout,
 )
 
 
@@ -20,20 +21,23 @@ cam = create_color_camera(
 )
 
 # create the neural network node
-lp, xout_lp = create_neural_network(
-    pipeline, cam.preview, models.LAPLACIAN_15X15, stream_name="laplacian"
+lp = create_neural_network(
+    pipeline, cam.preview, models.LAPLACIAN_15X15
 )
+xout_lp = create_xout(pipeline, lp.out, "laplacian")
 
 # create another neural network node
-lp_gray, xout_lp_gray = create_neural_network(
-    pipeline, lp.passthrough, models.LAPLACIANGRAY_15X15, stream_name="laplacian_gray"
+lp_gray = create_neural_network(
+    pipeline, lp.passthrough, models.LAPLACIANGRAY_15X15
 )
+xout_lp_gray = create_xout(pipeline, lp_gray.out, "laplacian_gray")
 
 with dai.Device(pipeline) as device:
     lp_queue: dai.DataOutputQueue = device.getOutputQueue("laplacian")
     lp_gray_queue: dai.DataOutputQueue = device.getOutputQueue("laplacian_gray")
 
     while True:
+
         lp_data = lp_queue.get()
         lp_gray_data = lp_gray_queue.get()
 

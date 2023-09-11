@@ -7,7 +7,6 @@ def create_image_manip(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     frame_type: dai.RawImgFrame.Type,
-    stream_name: str = "image_manip",
     center_crop: tuple[float, float] | None = None,
     color_map: dai.Colormap | None = None,
     crop_rect: tuple[float, float, float, float] | None = None,
@@ -22,7 +21,7 @@ def create_image_manip(
     warp_border_fill_color: tuple[int, int, int] | None = None,
     warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
     warp_transform_matrix_3x3: list[float] | None = None,
-) -> tuple[dai.node.ImageManip, dai.node.XLinkOut]:
+) -> dai.node.ImageManip:
     """Creates an image manip node.
 
     Parameters
@@ -67,10 +66,7 @@ def create_image_manip(
     Returns
     -------
     dai.node.ImageManip
-        The image manip node.
-    dai.node.XLinkOut
-        The output link, with stream name set to the parameter given.
-        Default stream name is 'image_manip'.
+        The image manip node
     """
     manip = pipeline.create(dai.node.ImageManip)
     manip.initialConfig.setFrameType(frame_type)
@@ -106,8 +102,4 @@ def create_image_manip(
 
     input_link.link(manip.inputImage)
 
-    xout_manip = pipeline.create(dai.node.XLinkOut)
-    xout_manip.setStreamName(stream_name)
-    manip.out.link(xout_manip.input)
-
-    return manip, xout_manip
+    return manip

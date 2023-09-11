@@ -16,7 +16,7 @@ def create_laplacian(
     blur_kernel_size: int = 3,
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkOut, str]:
+) -> dai.node.NeuralNetwork:
     """Creates a laplacian model with a specified kernel size.
 
     Parameters
@@ -45,10 +45,6 @@ def create_laplacian(
     -------
     dai.node.NeuralNetwork
         The laplacian node
-    dai.node.XLinkOut
-        The output link of the laplacian node
-    str
-        The name of the stream, determined by the model_type and attributes
 
     Raises
     ------
