@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from functools import partial
 
 import numpy as np
+import depthai as dai
 
-from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model
-
-if TYPE_CHECKING:
-    import depthai as dai
+from ...calibration import CalibrationData
+from ..xin import create_xin
+from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model    
 
 
 def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
@@ -57,37 +58,51 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
 
 def create_point_cloud(
     pipeline: dai.Pipeline,
-    xyz_link: dai.Node.Output,
     depth_link: dai.Node.Output,
-) -> dai.node.NeuralNetwork:
+    calibration: CalibrationData,
+    input_stream_name: str = "xyz_to_pcl",
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
     """Creates a point_cloud model with a specified kernel size.
 
     Parameters
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the point_cloud to
-    xyz_link : dai.Node.Output
-        The output link of the xyz node
     depth_link : dai.Node.Output
         The output link of the depth node
         Example: stereo.depth
         Explicity pass the object without calling (i.e. not stereo.depth())
+    calibration : CalibrationData
+        The calibration data for the camera
+    input_stream_name : str, optional
+        The name of the input stream, by default "xyz_to_pcl"
 
     Returns
     -------
     dai.node.NeuralNetwork
         The point_cloud node
-
-    Raises
-    ------
-    ValueError
-        If the kernel_size is invalid
+    dai.node.XLinkIn
+        The input link to connect to the point_cloud node.
+    partial[dai.Device]
+        Function to pass the device, which will start the point cloud generation
     """
     model_type = "pointcloud"
-    return _create_no_args_multi_link_model(
+    xin = create_xin(pipeline, input_stream_name)
+    point_cloud_node = _create_no_args_multi_link_model(
         pipeline=pipeline,
-        input_link=[xyz_link, depth_link],
+        input_links=[xin.out, depth_link],
         model_name=model_type,
         input_names=["xyz", "depth"],
         reuse_messages=[True, None],
     )
+    point_cloud_node.inputs["xyz"].setReusePreviousMessage(True)
+
+    xyz = create_xyz_matrix(
+        calibration.left.size[0], calibration.left.size[1], calibration.left.K
+    )
+    def _start_point_cloud(device: dai.Device, xyz: np.ndarray) -> None:
+        buff = dai.Buffer()
+        buff.setData(xyz)
+        device.getInputQueue(input_stream_name).send(buff)
+
+    return point_cloud_node, xin, partial(_start_point_cloud, xyz=xyz)

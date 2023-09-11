@@ -53,6 +53,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
         "laplacianblurgray",
         "sobel",
         "sobelblur",
+        "pointcloud",
     ]
     valid_names.extend(
         [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names]

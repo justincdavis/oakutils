@@ -155,7 +155,7 @@ def get_nn_gray_frame(
 
 
 def get_nn_point_cloud(
-    data: dai.NNData, frame_size: tuple[int, int] = (640, 480)
+    data: dai.NNData, frame_size: tuple[int, int] = (640, 400)
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a point cloud
 
@@ -174,4 +174,4 @@ def get_nn_point_cloud(
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
-    return pcl_data.transpose(3, -1).T.astype(np.float64) / 1000.0
+    return pcl_data.reshape(3, -1).T.astype(np.float64) / 1000.0

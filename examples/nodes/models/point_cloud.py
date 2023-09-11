@@ -1,7 +1,7 @@
 import depthai as dai
 
 from oakutils.calibration import get_camera_calibration
-from oakutils.nodes import create_stereo_depth, get_nn_point_cloud
+from oakutils.nodes import create_stereo_depth, get_nn_point_cloud, create_xout
 from oakutils.nodes.models.point_cloud import create_xyz_matrix, create_point_cloud
 from oakutils.point_clouds import PointCloudVisualizer, create_point_cloud_from_np
 
@@ -23,26 +23,17 @@ out_nodes = create_stereo_depth(
 )
 depth = out_nodes[0]  # the first node from create_stero_depth is the depth node
 
-xyz_in = pipeline.createXLinkIn()
-xyz_in.setMaxDataSize(6144000)
-xyz_in.setStreamName("xyz")
-
-nn, xout_nn, nn_stream = create_point_cloud(
+pcl, xin_pcl, start_pcl = create_point_cloud(
     pipeline,
-    xyz_link=xyz_in.out,
-    input_link=depth.depth,
+    depth_link=depth.depth,
+    calibration=calibration,
 )
-nn.inputs["xyz"].setReusePreviousMessage(True)
+xout_pcl = create_xout(pipeline, pcl.out, "pcl")
 
 with dai.Device(pipeline) as device:
-    queue: dai.DataOutputQueue = device.getOutputQueue(nn_stream)
+    queue: dai.DataOutputQueue = device.getOutputQueue("pcl")
 
-    xyz = create_xyz_matrix(
-        calibration.left.size[0], calibration.left.size[1], calibration.left.K
-    )
-    buff = dai.Buffer()
-    buff.setData(xyz)
-    device.getInputQueue("xyz").send(buff)
+    start_pcl(device)
 
     while True:
         data = queue.get()
