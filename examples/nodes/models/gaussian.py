@@ -8,7 +8,7 @@ from oakutils.nodes.models import create_gaussian
 pipeline = dai.Pipeline()
 
 # create the color camera node
-cam = create_color_camera(pipeline, preview_size=(640, 480))
+cam, xout_cam = create_color_camera(pipeline, preview_size=(640, 480))
 
 # create neural network node
 lp, xout_lp, name = create_gaussian(pipeline, cam.preview, kernel_size=5)
