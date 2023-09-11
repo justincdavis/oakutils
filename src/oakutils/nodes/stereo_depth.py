@@ -42,11 +42,7 @@ def create_stereo_depth(
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-) -> tuple[
-    dai.node.StereoDepth,
-    dai.node.MonoCamera,
-    dai.node.MonoCamera,
-]:
+) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
     """Creates a stereo depth given only a pipeline object.
     Creates mono cameras for the left and right cameras using the create_left_right_cameras function.
 

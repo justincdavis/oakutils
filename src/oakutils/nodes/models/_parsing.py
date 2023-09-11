@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from ...blobs import models
+from oakutils.blobs import models
 
 
 def parse_kernel_size(kernel_size: int) -> bool:

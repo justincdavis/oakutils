@@ -75,9 +75,8 @@ def create_mono_camera(
     ValueError
         If the chroma_denoise is not between 0 and 4
     """
-    if socket is None:
-        if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
-            raise ValueError("socket must be LEFT or RIGHT")
+    if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
+        raise ValueError("socket must be LEFT or RIGHT")
 
     if fps < 0 or fps > 120:
         raise ValueError("fps must be between 0 and 120")
@@ -116,7 +115,6 @@ def create_mono_camera(
 
 def create_left_right_cameras(
     pipeline: dai.Pipeline,
-    stream_names: tuple[str, str] | None = None,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
     fps: int = 60,
     brightness: int = 0,
@@ -126,9 +124,7 @@ def create_left_right_cameras(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = None,
-) -> tuple[
-    dai.node.MonoCamera, dai.node.MonoCamera, 
-]:
+) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
     """Wrapper function for creating the left and right mono cameras.
 
     Parameters

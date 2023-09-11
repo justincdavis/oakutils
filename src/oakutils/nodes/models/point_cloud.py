@@ -1,14 +1,17 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 from functools import partial
+from typing import TYPE_CHECKING
 
-import numpy as np
 import depthai as dai
+import numpy as np
 
-from ...calibration import CalibrationData
-from ..xin import create_xin
-from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model    
+from oakutils.nodes.xin import create_xin
+
+from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model
+
+if TYPE_CHECKING:
+    from oakutils.calibration import CalibrationData
 
 
 def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
@@ -95,11 +98,12 @@ def create_point_cloud(
         input_names=["xyz", "depth"],
         reuse_messages=[True, None],
     )
-    point_cloud_node.inputs["xyz"].setReusePreviousMessage(True)
+    point_cloud_node.inputs["xyz"].setReusePreviousMessage(reusePreviousMessage=True)
 
     xyz = create_xyz_matrix(
         calibration.left.size[0], calibration.left.size[1], calibration.left.K
     )
+
     def _start_point_cloud(device: dai.Device, xyz: np.ndarray) -> None:
         buff = dai.Buffer()
         buff.setData(xyz)
