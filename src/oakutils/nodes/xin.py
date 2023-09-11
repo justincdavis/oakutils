@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_xin(
@@ -9,7 +12,7 @@ def create_xin(
     max_data_size: int = 6144000,
 ) -> dai.node.XLinkIn:
     """Creates an XLinkIn node.
-    
+
     Parameters
     ----------
     pipeline : dai.Pipeline
@@ -18,7 +21,7 @@ def create_xin(
         The name of the stream
     max_data_size : int, optional
         The maximum data size, by default 6144000 bytes
-    
+
     Returns
     -------
     dai.node.XLinkIn

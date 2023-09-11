@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def create_xout(
@@ -9,7 +12,7 @@ def create_xout(
     stream_name: str,
 ) -> dai.node.XLinkOut:
     """Creates an XLinkOut node.
-    
+
     Parameters
     ----------
     pipeline : dai.Pipeline
@@ -19,7 +22,7 @@ def create_xout(
         Example: cam_rgb.preview
     stream_name : str
         The name of the stream
-    
+
     Returns
     -------
     dai.node.XLinkOut

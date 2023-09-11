@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Iterable
 
-from ..neural_network import create_neural_network
+from oakutils.nodes.neural_network import create_neural_network
+
 from ._parsing import get_candidates, parse_kernel_size
 
 if TYPE_CHECKING:
@@ -48,7 +49,7 @@ def create_model(
 
     Raises
     ------
-    IndexError
+    ValueError
         If the kernel_size is invalid
     """
     potential_blobs = get_candidates(
@@ -58,23 +59,21 @@ def create_model(
 
     try:
         _, attributes, path = potential_blobs[0]
-    except IndexError:
+    except IndexError as err:
         base_str = "Error acquiring model blob."
-        base_str += "Please check that all models are present in your installation through: "
-        base_str += "`dir(oakutils.blobs.models)`"
-        raise IndexError(
-            f"{base_str}\n Possible blobs: {potential_blobs}"
+        base_str += (
+            "Please check that all models are present in your installation through: "
         )
+        base_str += "`dir(oakutils.blobs.models)`"
+        raise ValueError(f"{base_str}\n Possible blobs: {potential_blobs}") from err
 
-    nn = create_neural_network(
+    return create_neural_network(
         pipeline=pipeline,
         input_link=input_link,
         blob_path=path,
         input_names=input_names,
         reuse_messages=reuse_messages,
     )
-
-    return nn
 
 
 def create_no_args_multi_link_model(
@@ -188,7 +187,7 @@ def create_double_kernel_model(
     model_name: str,
     kernel_size1: int,
     kernel_size2: int,
-) ->dai.node.NeuralNetwork:
+) -> dai.node.NeuralNetwork:
     """Creates a model with a two kernel sizes.
 
     Parameters
