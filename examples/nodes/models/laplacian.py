@@ -21,9 +21,13 @@ lap, xout_lap, lap_stream = create_laplacian(
 )
 
 with dai.Device(pipeline) as device:
+    rgb_queue: dai.DataOutputQueue = device.getOutputQueue("rgb")
     lp_queue: dai.DataOutputQueue = device.getOutputQueue(lap_stream)
 
     while True:
+        rgb_data = rgb_queue.get()
+        cv2.imshow("rgb", rgb_data.getCvFrame())
+        
         lp_data = lp_queue.get()
         lp_frame = get_nn_bgr_frame(lp_data)
 

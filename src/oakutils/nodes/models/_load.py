@@ -49,7 +49,7 @@ def create_model(
 
     Raises
     ------
-    ValueError
+    IndexError
         If the kernel_size is invalid
     """
     potential_blobs = get_candidates(
@@ -59,9 +59,12 @@ def create_model(
 
     try:
         name, attributes, path = potential_blobs[0]
-    except IndexError as err:
-        raise ValueError from err(
-            "Error acquiring model blob. Please check that all models are present in your installation through `dir(oakutils.blobs.models)`"
+    except IndexError:
+        base_str = "Error acquiring model blob."
+        base_str += "Please check that all models are present in your installation through: "
+        base_str += "`dir(oakutils.blobs.models)`"
+        raise IndexError(
+            f"{base_str}\n Possible blobs: {potential_blobs}"
         )
 
     streamname = f"{name}_".join(list(attributes))

@@ -104,6 +104,8 @@ def get_candidates(
         path: str = os.path.basename(blob)  # drop the extension
         path = os.path.split(path)[-1]  # just the file name
         data = path.split("_")  # split into name and attributes
+        if len(data) == 1:  # if there are no extra attributes
+            data = data[0].split(".")  # split on the dot to ensure good name
         name = data[0]  # name is the first piece
         # if the name is not equal to the model_type, maybe gaussian_gray instead of gaussian
         if model_type != name:  # throw out if the case

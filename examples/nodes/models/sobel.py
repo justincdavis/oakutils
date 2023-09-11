@@ -18,9 +18,13 @@ sobel, xout_sobel, sobel_stream = create_sobel(
 )
 
 with dai.Device(pipeline) as device:
+    rgb_queue: dai.DataOutputQueue = device.getOutputQueue("rgb")
     queue: dai.DataOutputQueue = device.getOutputQueue(sobel_stream)
 
     while True:
+        rgb_data = rgb_queue.get()
+        cv2.imshow("rgb", rgb_data.getCvFrame())
+
         data = queue.get()
         frame = get_nn_bgr_frame(data)
 
