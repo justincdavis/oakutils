@@ -78,7 +78,7 @@ def compile_model(model_type: AbstractModel):
         # for 3.8 compatibility
         def remove_suffix(input_string, suffix):
             if suffix and input_string.endswith(suffix):
-                return input_string[:-len(suffix)]
+                return input_string[: -len(suffix)]
             return input_string
 
         # resolve the paths ahead of time for caching
@@ -86,7 +86,7 @@ def compile_model(model_type: AbstractModel):
             model_name = model_type.__name__
         except AttributeError:
             model_name = model_type.__class__.__name__
-        
+
         model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
         return model_name
 
@@ -155,7 +155,9 @@ def compiles_models():
         # get the site packages path
         f.write("_SITE_SITE_PACKAGES = site.getusersitepackages()\n")
         f.write("_SYSCONFIG_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
-        f.write("_SITE_PACKAGES = _SITE_SITE_PACKAGES if os.name == 'posix' else _SYSCONFIG_SITE_PACKAGES\n")
+        f.write(
+            "_SITE_PACKAGES = _SITE_SITE_PACKAGES if os.name == 'posix' else _SYSCONFIG_SITE_PACKAGES\n"
+        )
 
         # get the path to the blob folder
         f.write(f"_BLOB_FOLDER = os.path.join(_SITE_PACKAGES, _RELATIVE_BLOB_FOLDER)\n")
