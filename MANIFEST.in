@@ -1,1 +1,1 @@
-include oakutils/blobs/models/*.blob
+include src/oakutils/blobs/models/*.blob

@@ -11,7 +11,7 @@ help:
 	@echo "  test       to run the tests"
 
 install:
-	pip3 install .
+	pip3 install -g .
 
 clean: 
 	rm -rf build
@@ -23,7 +23,7 @@ clean:
 
 docs:
 	rm -rf docs/source/*
-	sphinx-apidoc -o docs/source/ oakutils/
+	sphinx-apidoc -o docs/source/ src/oakutils/
 	cd docs && make html
 
 blobs:
@@ -31,9 +31,9 @@ blobs:
 
 ci:
 	./scripts/pyupgrade.sh
-	ruff ./oakutils --fix
-	isort oakutils
-	black oakutils --safe
+	ruff ./src//oakutils --fix
+	isort src/oakutils
+	black src/oakutils --safe
 
 stubs:
 	python3 scripts/make_stubs.py

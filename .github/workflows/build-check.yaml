@@ -1,13 +1,5 @@
 name: PyPI Build
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+on: [ push, pull_request ]
 jobs:
   build_check:
     name: "Build oakutils package"
