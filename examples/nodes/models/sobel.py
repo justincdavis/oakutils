@@ -1,9 +1,8 @@
-import depthai as dai
 import cv2
+import depthai as dai
 
-from oakutils.nodes import get_nn_bgr_frame, create_color_camera, create_xout
+from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame
 from oakutils.nodes.models import create_sobel
-
 
 pipeline = dai.Pipeline()
 

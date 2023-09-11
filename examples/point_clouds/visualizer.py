@@ -3,7 +3,10 @@ import depthai as dai
 
 from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
-from oakutils.point_clouds import PointCloudVisualizer, get_point_cloud_from_rgb_depth_image
+from oakutils.point_clouds import (
+    PointCloudVisualizer,
+    get_point_cloud_from_rgb_depth_image,
+)
 
 pipeline = dai.Pipeline()
 pcv = PointCloudVisualizer()
@@ -40,4 +43,3 @@ with dai.Device(pipeline) as device:
         if cv2.waitKey(1) == ord("q"):
             break
     pcv.stop()
-    

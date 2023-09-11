@@ -1,10 +1,9 @@
 import depthai as dai
 
 from oakutils.calibration import get_camera_calibration
-from oakutils.nodes import create_stereo_depth, get_nn_point_cloud, create_xout
-from oakutils.nodes.models.point_cloud import create_xyz_matrix, create_point_cloud
+from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud
+from oakutils.nodes.models.point_cloud import create_point_cloud, create_xyz_matrix
 from oakutils.point_clouds import PointCloudVisualizer, create_point_cloud_from_np
-
 
 pipeline = dai.Pipeline()
 pcv = PointCloudVisualizer()

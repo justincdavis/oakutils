@@ -18,8 +18,8 @@ from .neural_network import (
     get_nn_point_cloud,
 )
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
-from .xout import create_xout
 from .xin import create_xin
+from .xout import create_xout
 
 __all__ = [
     "color_camera",
