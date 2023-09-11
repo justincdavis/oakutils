@@ -21,10 +21,11 @@ def print_calibration(calibration):
     print(f"Manual Left Q matrix: {calibration.stereo.Q_left}")
     print(f"Manual Right Q matrix: {calibration.stereo.Q_right}")
 
+
 # get it with the sdk
 with sdk.OakCamera() as oak:
     calibration = get_camera_calibration(
-        device=oak.device, 
+        device=oak.device,
         rgb_size=(1920, 1080),
         mono_size=(640, 400),
         is_primary_mono_left=True,

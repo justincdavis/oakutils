@@ -11,15 +11,15 @@ pcv = PointCloudVisualizer()
 
 # get the calibration
 calibration = get_camera_calibration(
-    rgb_size=(1920, 1080), 
-    mono_size=(640,400), 
+    rgb_size=(1920, 1080),
+    mono_size=(640, 400),
     is_primary_mono_left=True,  # make sure to set primary to same as align_socket
 )
 
 # create the color camera node
 out_nodes = create_stereo_depth(
-     pipeline,
-     align_socket=dai.CameraBoardSocket.LEFT,  # make sure this is same as primary for calibration
+    pipeline,
+    align_socket=dai.CameraBoardSocket.LEFT,  # make sure this is same as primary for calibration
 )
 depth = out_nodes[0]  # the first node from create_stero_depth is the depth node
 
@@ -28,16 +28,18 @@ xyz_in.setMaxDataSize(6144000)
 xyz_in.setStreamName("xyz")
 
 nn, xout_nn, nn_stream = create_point_cloud(
-      pipeline,
-      xyz_link=xyz_in.out,
-      input_link=depth.depth,
+    pipeline,
+    xyz_link=xyz_in.out,
+    input_link=depth.depth,
 )
 nn.inputs["xyz"].setReusePreviousMessage(True)
 
 with dai.Device(pipeline) as device:
     queue: dai.DataOutputQueue = device.getOutputQueue(nn_stream)
 
-    xyz = create_xyz_matrix(calibration.left.size[0], calibration.left.size[1], calibration.left.K)
+    xyz = create_xyz_matrix(
+        calibration.left.size[0], calibration.left.size[1], calibration.left.K
+    )
     buff = dai.Buffer()
     buff.setData(xyz)
     device.getInputQueue("xyz").send(buff)

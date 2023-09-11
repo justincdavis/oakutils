@@ -22,4 +22,3 @@ with dai.Device(pipeline) as device:
         left = queue.get()
 
         print(dir(left))
-

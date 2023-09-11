@@ -22,5 +22,5 @@ with dai.Device(pipeline) as device:
         l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480))
 
         cv2.imshow("gaussian frame", l_frame)
-        if cv2.waitKey(1) == ord('q'):
+        if cv2.waitKey(1) == ord("q"):
             break

@@ -1,7 +1,10 @@
 import cv2
 import depthai as dai
 
-from oakutils.nodes import create_stereo_depth_from_mono_cameras, create_left_right_cameras
+from oakutils.nodes import (
+    create_stereo_depth_from_mono_cameras,
+    create_left_right_cameras,
+)
 
 pipeline = dai.Pipeline()
 
@@ -12,12 +15,12 @@ left, xout_left, right, xout_right = create_left_right_cameras(
     fps=60,
 )
 right, xout_right = create_stereo_depth_from_mono_cameras(
-    pipeline, 
+    pipeline,
     left,
-    right, 
+    right,
     preset=dai.node.StereoDepth.PresetMode.HIGH_ACCURACY,
-    lr_check=True, 
-    extended_disparity=True, 
+    lr_check=True,
+    extended_disparity=True,
     subpixel=False,
     median_filter=dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
 )
