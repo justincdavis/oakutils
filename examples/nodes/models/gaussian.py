@@ -14,11 +14,14 @@ cam, xout_cam = create_color_camera(pipeline, preview_size=(640, 480))
 lp, xout_lp, name = create_gaussian(pipeline, cam.preview, kernel_size=5)
 
 with dai.Device(pipeline) as device:
+    rgb_queue: dai.DataOutputQueue = device.getOutputQueue("rgb")
     l_queue: dai.DataOutputQueue = device.getOutputQueue(name)
 
     while True:
-        l_data = l_queue.get()
+        rgb_data = rgb_queue.get()
+        cv2.imshow("rgb", rgb_data.getCvFrame())
 
+        l_data = l_queue.get()
         l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480))
 
         cv2.imshow("gaussian frame", l_frame)
