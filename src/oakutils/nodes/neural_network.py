@@ -102,6 +102,38 @@ def create_neural_network(
     return nn
 
 
+def get_nn_frame(
+    data: np.ndarray | dai.NNData,
+    channels: int,
+    frame_size: tuple[int, int] = (640, 480),
+) -> np.ndarray:
+    """Takes the raw data output from a neural network execution and converts it to a frame
+    usable by cv2.
+
+    Parameters
+    ----------
+    data : Union[np.ndarray, dai.NNData]
+        Raw data output from a neural network execution.
+    channels : int
+        The number of channels in the frame.
+    frame_size : tuple[int, int], optional
+        The size of the frame, by default (640, 480)
+
+    Returns
+    -------
+    np.ndarray
+        Frame usable by cv2.
+    """
+    if isinstance(data, dai.NNData):
+        data = data.getData()
+    frame = (
+        data.view(np.float16)
+        .reshape((channels, frame_size[1], frame_size[0]))
+        .transpose(1, 2, 0)
+    )
+    return frame.astype(np.uint8)
+
+
 def get_nn_bgr_frame(
     data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
 ) -> np.ndarray:
@@ -118,14 +150,7 @@ def get_nn_bgr_frame(
     np.ndarray
         BGR frame usable by cv2.
     """
-    if isinstance(data, dai.NNData):
-        data = data.getData()
-    frame = (
-        data.view(np.float16)
-        .reshape((3, frame_size[1], frame_size[0]))
-        .transpose(1, 2, 0)
-    )
-    return (frame * 255 + 127.5).astype(np.uint8)
+    return get_nn_frame(data=data, channels=3, frame_size=frame_size)
 
 
 def get_nn_gray_frame(
@@ -144,14 +169,7 @@ def get_nn_gray_frame(
     np.ndarray
         Grayscale frame usable by cv2.
     """
-    if isinstance(data, dai.NNData):
-        data = data.getData()
-    frame = (
-        data.view(np.float16)
-        .reshape((1, frame_size[1], frame_size[0]))
-        .transpose(1, 2, 0)
-    )
-    return (frame * 255 + 127.5).astype(np.uint8)
+    return get_nn_frame(data=data, channels=1, frame_size=frame_size)
 
 
 def get_nn_point_cloud(
