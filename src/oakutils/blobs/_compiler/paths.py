@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import site
 import sysconfig
 
 
@@ -12,7 +13,12 @@ def get_site_packages_path() -> str:
     str
         The path to the site-packages folder.
     """
-    return os.path.abspath(sysconfig.get_paths()["purelib"])
+    site_site_packages = site.getusersitepackages()
+    sysconfig_site_packages = sysconfig.get_paths()["purelib"]
+    site_packages = (
+        site_site_packages if os.name == "posix" else sysconfig_site_packages
+    )
+    return os.path.abspath(site_packages)
 
 
 def get_oakutils_path() -> str:
