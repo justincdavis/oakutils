@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable
 
+import cv2
 import depthai as dai
 import numpy as np
 
@@ -102,10 +103,61 @@ def create_neural_network(
     return nn
 
 
+def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.ndarray:
+    """Normalizes a frame.
+
+    Parameters
+    ----------
+    frame : np.ndarray
+        The frame to normalize.
+    factor : Optional[float, Callable], optional
+        The normalization factor.
+
+    Returns
+    -------
+    np.ndarray
+        The normalized frame.
+    """
+    if factor is None:
+        return frame
+    if isinstance(factor, float):
+        return frame * factor
+    return factor(frame)
+
+
+def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
+    """Resizes a frame.
+
+    Parameters
+    ----------
+    frame : np.ndarray
+        The frame to resize.
+    factor : Optional[float], optional
+        The resize factor.
+
+    Returns
+    -------
+    np.ndarray
+        The resized frame.
+    """
+    if factor is None:
+        return frame
+    return cv2.resize(
+        frame,
+        (0, 0),
+        fx=factor,
+        fy=factor,
+        interpolation=cv2.INTER_LINEAR,
+    )
+
+
 def get_nn_frame(
     data: np.ndarray | dai.NNData,
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
+    resize_factor: float | None = None,
+    normalization: float | Callable | None = None,
+    swap_rb: bool | None = None,
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a frame
     usable by cv2.
@@ -118,12 +170,28 @@ def get_nn_frame(
         The number of channels in the frame.
     frame_size : tuple[int, int], optional
         The size of the frame, by default (640, 480)
+        This is the size of the frame before any resizing is applied.
+        If frame_size is incorrect, an error will occur.
+    resize_factor : Optional[float], optional
+        The resize factor to apply to the frame, by default None
+    normalization : Optional[float, Callable], optional
+        The normalization to apply to the frame, by default None
+        If a float then the frame is multiplied by the float.
+        If a callable then the frame is passed to the callable and
+        set to the return value.
+        If resize_factor is less than 1.0, then normalization is applied
+        after resizing.
+    swap_rb : Optional[bool], optional
+        Whether to swap the red and blue channels, by default None
 
     Returns
     -------
     np.ndarray
         Frame usable by cv2.
     """
+    if swap_rb is None:
+        swap_rb = False
+
     if isinstance(data, dai.NNData):
         data = data.getData()
     frame = (
@@ -131,11 +199,23 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
+
+    if swap_rb:
+        frame = frame[:, :, ::-1]
+
+    if resize_factor is not None and resize_factor <= 1.0:
+        frame = _normalize(_resize(frame, resize_factor), normalization)
+    else:
+        frame = _resize(_normalize(frame, normalization), resize_factor)
+
     return frame.astype(np.uint8)
 
 
 def get_nn_bgr_frame(
-    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData,
+    frame_size: tuple[int, int] = (640, 480),
+    resize_factor: float | None = None,
+    normalization: float | Callable | None = None,
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a BGR frame
     usable by cv2.
@@ -144,17 +224,37 @@ def get_nn_bgr_frame(
     ----------
     data : Union[np.ndarray, dai.NNData]
         Raw data output from a neural network execution.
+    frame_size : tuple[int, int], optional
+        The size of the frame, by default (640, 480)
+    resize_factor : Optional[float], optional
+        The resize factor to apply to the frame, by default None
+    normalization : Optional[float, Callable], optional
+        The normalization to apply to the frame, by default None
+        If a float then the frame is multiplied by the float.
+        If a callable then the frame is passed to the callable and
+        set to the return value.
+        If resize_factor is less than 1.0, then normalization is applied
+        after resizing.
 
     Returns
     -------
     np.ndarray
         BGR frame usable by cv2.
     """
-    return get_nn_frame(data=data, channels=3, frame_size=frame_size)
+    return get_nn_frame(
+        data=data,
+        channels=3,
+        frame_size=frame_size,
+        resize_factor=resize_factor,
+        normalization=normalization,
+    )
 
 
 def get_nn_gray_frame(
-    data: np.ndarray | dai.NNData, frame_size: tuple[int, int] = (640, 480)
+    data: np.ndarray | dai.NNData,
+    frame_size: tuple[int, int] = (640, 480),
+    resize_factor: float | None = None,
+    normalization: float | Callable | None = None,
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
@@ -163,17 +263,36 @@ def get_nn_gray_frame(
     ----------
     data : Union[np.ndarray, dai.NNData]
         Raw data output from a neural network execution.
+    frame_size : tuple[int, int], optional
+        The size of the frame, by default (640, 480)
+    resize_factor : Optional[float], optional
+        The resize factor to apply to the frame, by default None
+    normalization : Optional[float, Callable], optional
+        The normalization to apply to the frame, by default None
+        If a float then the frame is multiplied by the float.
+        If a callable then the frame is passed to the callable and
+        set to the return value.
+        If resize_factor is less than 1.0, then normalization is applied
+        after resizing.
 
     Returns
     -------
     np.ndarray
         Grayscale frame usable by cv2.
     """
-    return get_nn_frame(data=data, channels=1, frame_size=frame_size)
+    return get_nn_frame(
+        data=data,
+        channels=1,
+        frame_size=frame_size,
+        resize_factor=resize_factor,
+        normalization=normalization,
+    )
 
 
 def get_nn_point_cloud(
-    data: dai.NNData, frame_size: tuple[int, int] = (640, 400)
+    data: dai.NNData,
+    frame_size: tuple[int, int] = (640, 400),
+    scale: float = 1000.0,
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a point cloud
 
@@ -182,7 +301,12 @@ def get_nn_point_cloud(
     data : dai.NNData
         Raw data output from a neural network execution.
     frame_size : tuple[int, int], optional
-        The size of the frame, by default (640, 480)
+        The size of the buffer, by default (640, 400)
+        Usually this will be the size of the depth frame.
+        Which inherits its shape from the MonoCamera resolutions.
+    scale: float, optional
+        The scale to apply to the point cloud, by default 1000.0
+        This will convert from mm to m.
 
     Returns
     -------
@@ -192,4 +316,4 @@ def get_nn_point_cloud(
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
-    return pcl_data.reshape(3, -1).T.astype(np.float64) / 1000.0
+    return pcl_data.reshape(3, -1).T.astype(np.float64) / scale
