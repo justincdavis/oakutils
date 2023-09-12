@@ -41,7 +41,7 @@ dependencies = [
     "depthai-sdk>=1.11.0",
     "numpy>=1.20",
     "open3d>=0.16",
-    "opencv-contrib-python>=4.5",
+    "opencv-contrib-python>=4.8",
     "typing_extensions>=4.0.0",
 ]
 
@@ -139,3 +139,36 @@ target-version = "py38"
 
 # Other options
 builtins = ["_"]
+
+[tool.mypy]
+python_version = "3.8"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/typings"
+warn_unused_configs = false
+warn_redundant_casts = false
+warn_unused_ignores = false
+strict_equality = false
+strict_concatenate = false
+check_untyped_defs = false
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+disallow_any_generics = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+no_implicit_reexport = false
+warn_return_any = false
+
+[[tool.mypy.overrides]]
+module = "open3d.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'
+
+[[tool.mypy.overrides]]
+module = "onnxsim.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'
+
+[[tool.mypy.overrides]]
+module = "blobconverter.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'

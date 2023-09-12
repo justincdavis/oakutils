@@ -69,7 +69,7 @@ def align_depth_to_rgb(
     x_idx = u_v_z_sampled[0].astype(int)
 
     # place the valid aligned points into a new depth image
-    aligned_depth_image = np.full((rgb_height, rgb_width), 0, dtype=np.uint16)
+    aligned_depth_image: np.ndarray = np.full((rgb_height, rgb_width), 0, dtype=np.uint16)
     aligned_depth_image[y_idx, x_idx] = u_v_z_sampled[3] * depth_scale
     return aligned_depth_image
 

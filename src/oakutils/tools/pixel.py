@@ -23,7 +23,7 @@ def homogenous_pixel_coord(width: int, height: int) -> np.ndarray:
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
-    x = np.linspace(0, width - 1, width).astype(int)
-    y = np.linspace(0, height - 1, height).astype(int)
+    x: np.ndarray = np.linspace(0, width - 1, width).astype(int)
+    y: np.ndarray = np.linspace(0, height - 1, height).astype(int)
     [x, y] = np.meshgrid(x, y)
     return np.vstack((x.flatten(), y.flatten(), np.ones_like(x.flatten())))

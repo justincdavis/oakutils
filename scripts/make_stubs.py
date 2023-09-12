@@ -85,6 +85,8 @@ def make_stubs(module):
 def main():
     for module in [
         open3d,
+        open3d.cpu,
+        open3d.cpu.pybind,
         open3d.camera,
         open3d.core,
         open3d.data,
@@ -96,6 +98,7 @@ def main():
         open3d.utility,
         open3d.visualization,
         onnxsim,
+        onnxsim.onnx_simplifier,
         blobconverter,
     ]:
         print(f"Making stubs for {get_name(module)}")
