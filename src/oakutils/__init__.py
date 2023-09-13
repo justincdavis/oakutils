@@ -1,8 +1,10 @@
 from . import blobs, calibration, filters, nodes, point_clouds, tools
 from .legacy_camera import Camera as LegacyCamera
+from .api_camera import Camera as ApiCamera
 
 __all__ = [
     "LegacyCamera",
+    "ApiCamera",
     "blobs",
     "calibration",
     "filters",
