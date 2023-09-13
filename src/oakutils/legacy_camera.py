@@ -11,7 +11,7 @@ import depthai_sdk as sdk
 import numpy as np
 
 from .calibration import CalibrationData, get_camera_calibration
-from .nodes import create_color_camera, create_imu, create_stereo_depth
+from .nodes import create_color_camera, create_imu, create_stereo_depth, create_xout
 from .point_clouds import (
     PointCloudVisualizer,
     filter_point_cloud,
@@ -325,15 +325,12 @@ class Camera(sdk.OakCamera):
 
         # creaate the nodes on the pipeline
         if enable_rgb:
-            cam, xout_rgb = create_color_camera(
+            cam = create_color_camera(
                 pipeline=self._pipeline,
                 resolution=self._rgb_size[2],
                 fps=rgb_fps,
             )
-            xout_rgb = self._pipeline.create(dai.node.XLinkOut)
-            xout_rgb.setStreamName("rgb")
-            cam.video.link(xout_rgb.input)
-
+            create_xout(self._pipeline, cam.video, "rgb")
             self._streams.extend(["rgb"])
         if enable_mono:
             align_socket = (
@@ -344,15 +341,7 @@ class Camera(sdk.OakCamera):
             (
                 stereo,
                 left,
-                xout_left,
                 right,
-                xout_right,
-                xout_synced_left,
-                xout_synced_right,
-                xout_depth,
-                xout_disparity,
-                xout_rect_left,
-                xout_rect_right,
             ) = create_stereo_depth(
                 pipeline=self._pipeline,
                 resolution=self._mono_size[2],
@@ -373,11 +362,17 @@ class Camera(sdk.OakCamera):
                 threshold_min_range=stereo_threshold_filter_min_range,
                 threshold_max_range=stereo_threshold_filter_max_range,
             )
+            create_xout(self._pipeline, stereo.syncedLeft, "left")
+            create_xout(self._pipeline, stereo.syncedRight, "right")
+            create_xout(self._pipeline, stereo.depth, "depth")
+            create_xout(self._pipeline, stereo.disparity, "disparity")
+            create_xout(self._pipeline, stereo.rectifiedLeft, "rectified_left")
+            create_xout(self._pipeline, stereo.rectifiedRight, "rectified_right")
 
             self._streams.extend(
                 [
-                    "synced_left",
-                    "synced_right",
+                    "left",
+                    "right",
                     "depth",
                     "disparity",
                     "rectified_left",
@@ -385,7 +380,7 @@ class Camera(sdk.OakCamera):
                 ]
             )
         if enable_imu:
-            imu, xout_imu = create_imu(
+            imu = create_imu(
                 pipeline=self._pipeline,
                 accel_range=self._imu_accelerometer_refresh_rate,
                 gyroscope_rate=self._imu_gyroscope_refresh_rate,
@@ -394,6 +389,7 @@ class Camera(sdk.OakCamera):
                 enable_accelerometer_raw=True,
                 enable_gyroscope_raw=True,
             )
+            create_xout(self._pipeline, imu.out, "imu")
 
             self._streams.extend(["imu"])
 
