@@ -3,7 +3,7 @@ import os
 import shutil
 import multiprocessing as mp
 
-from oakutils.blobs import compile
+from oakutils.blobs import compile_model as internal_compile_model
 from oakutils.blobs.definitions import AbstractModel, ModelType
 from oakutils.blobs.definitions import (
     Gaussian,
@@ -33,7 +33,7 @@ def delete_folder(folder_path: str):
 
 def _compile_model(model_type, model_arg):
     print(f"Compiling {model_type.__name__} with args {model_arg}")
-    model_path = compile(
+    model_path = internal_compile_model(
         model_type,
         model_arg,
     )
