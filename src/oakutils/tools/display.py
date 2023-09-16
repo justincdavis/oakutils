@@ -47,8 +47,17 @@ class _Display:
 
 
 class DisplayManager:
-    """Used in the Camera class to display all the image streams."""
-
+    """Used in the Camera class to display all the image streams.
+    
+    Methods
+    -------
+    stop()
+        Stops the display manager
+    set_transform(name: str, transform: Callable)
+        Sets a transform for the given name
+    update(data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]], transform: Callable | None = None)
+        Updates the display with the given data
+    """
     def __init__(
         self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)
     ) -> None:

@@ -15,11 +15,6 @@ if TYPE_CHECKING:
 class HostSpatialsCalc:
     """Class for calculating spatial coordinates on the host.
 
-    Methods
-    -------
-    calc_spatials(depth_frame: np.ndarray) -> np.ndarray
-        Calculates the spatial coordinates for the given depth frame.
-
     Attributes
     ----------
     delta : int
@@ -29,6 +24,11 @@ class HostSpatialsCalc:
         The lower threshold for the spatial coordinates calculation.
     thresh_high : int
         The upper threshold for the spatial coordinates calculation.
+
+    Methods
+    -------
+    calc_spatials(depth_frame: np.ndarray) -> np.ndarray
+        Calculates the spatial coordinates for the given depth frame.
 
     References
     ----------
@@ -194,8 +194,8 @@ class HostSpatialsCalc:
         bb_x_pos = centroid[0] - self._mid_w
         bb_y_pos = centroid[1] - self._mid_h
 
-        angle_x = math.atan(self._i_angle * bb_x_pos)
-        angle_y = math.atan(self._i_angle * bb_y_pos)
+        angle_x = math.atan2(self._i_angle * bb_x_pos)
+        angle_y = math.atan2(self._i_angle * bb_y_pos)
 
         spatials = (
             avg_depth,
