@@ -194,8 +194,6 @@ class Camera:
             # create a cache for queue results to enable multi queue callbacks
             data_cache = {name: None for name, _ in self._callbacks.items()}
 
-            print(data_cache)
-
             while not self._stopped:
                 # cache results
                 for name in data_cache:
