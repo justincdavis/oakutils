@@ -8,7 +8,7 @@ import depthai as dai
 import numpy as np
 
 from .nodes import create_color_camera, create_xout
-from .tools.parsing import get_color_resolution_from_tuple
+from .tools.parsing import get_color_sensor_resolution_from_tuple
 
 
 class Webcam:
@@ -27,7 +27,7 @@ class Webcam:
 
         # depthai stuff
         self._pipeline = dai.Pipeline()
-        dai_resolution = get_color_resolution_from_tuple(self._resolution)
+        dai_resolution = get_color_sensor_resolution_from_tuple(self._resolution)
         self._cam = create_color_camera(
             self._pipeline, resolution=dai_resolution, fps=self._fps
         )

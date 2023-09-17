@@ -97,7 +97,7 @@ def get_tuple_from_color_sensor_resolution(
     raise ValueError("Invalid resolution in get_tuple_from_color_sensor_resolution")
 
 
-def get_color_resolution_from_tuple(
+def get_color_sensor_resolution_from_tuple(
     resolution: tuple[int, int],
 ) -> dai.ColorCameraProperties.SensorResolution:
     """Converts a tuple to a SensorResolution.
@@ -191,6 +191,37 @@ def get_mono_sensor_resolution_from_str(
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
     raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_str")
 
+def get_mono_sensor_resolution_from_tuple(
+    resolution: tuple[int, int],
+) -> dai.MonoCameraProperties.SensorResolution:
+    """Converts a tuple to a SensorResolution.
+    
+    Parameters
+    ----------
+    resolution : tuple[int, int]
+        The resolution to convert
+        
+    Returns
+    -------
+    dai.MonoCameraProperties.SensorResolution
+        The SensorResolution
+    
+    Raises
+    ------
+    ValueError
+        If the resolution is invalid
+    """
+    if resolution == (640, 400):
+        return dai.MonoCameraProperties.SensorResolution.THE_400_P
+    if resolution == (640, 480):
+        return dai.MonoCameraProperties.SensorResolution.THE_480_P
+    if resolution == (1280, 720):
+        return dai.MonoCameraProperties.SensorResolution.THE_720_P
+    if resolution == (1280, 800):
+        return dai.MonoCameraProperties.SensorResolution.THE_800_P
+    if resolution == (1920, 1200):
+        return dai.MonoCameraProperties.SensorResolution.THE_1200_P
+    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_tuple")
 
 def get_tuple_from_mono_sensor_resolution(
     resolution: dai.MonoCameraProperties.SensorResolution,

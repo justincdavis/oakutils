@@ -11,6 +11,7 @@ import cv2
 
 if TYPE_CHECKING:
     import numpy as np
+    import depthai as dai
     from typing_extensions import Self
 
 
@@ -23,6 +24,16 @@ class _Display:
         self._stopped = False
         self._thread = Thread(target=self._run)
         atexit.register(self.stop)
+        self._thread.start()
+
+    @property
+    def fps(self: Self) -> int:
+        return self._fps
+    
+    @fps.setter
+    def fps(self: Self, fps: int) -> None:
+        self._fps = fps
+        self._delay_time: float = 1 / fps
 
     def __call__(self: Self, frame: np.ndarray) -> None:
         self._frame = frame
@@ -36,13 +47,14 @@ class _Display:
             self._thread.join()
 
     def _run(self: Self) -> None:
-        while self._stopped:
+        while not self._stopped:
             if self._frame is not None:
                 s = time.time()
                 cv2.imshow(self._name, self._frame)
                 self._frame = None
                 e = time.time()
                 cv2.waitKey(max(1, int((self._delay_time - (e - s)) * 1000)))
+            time.sleep(self._delay_time)
         cv2.destroyWindow(self._name)
 
 
@@ -60,13 +72,35 @@ class DisplayManager:
     """
 
     def __init__(
-        self: Self, fps: int = 15, display_size: tuple[int, int] = (640, 480)
+        self: Self, fps: int = 30, display_size: tuple[int, int] = (640, 480)
     ) -> None:
         self._displays: dict[str, _Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size
         self._fps = fps
         atexit.register(self._stop)
+
+    @property
+    def fps(self: Self) -> int:
+        """Returns the fps of the display manager.
+        
+        Returns
+        -------
+        int
+            The fps of the display manager"""
+        return self._fps
+    
+    @fps.setter
+    def fps(self: Self, fps: int) -> None:
+        """Sets the fps of the display manager.
+        
+        Parameters
+        ----------
+        fps : int
+            The fps to set the display manager to"""
+        self._fps = fps
+        for display in self._displays.values():
+            display.fps = fps
 
     def _stop(self: Self) -> None:
         for display in self._displays.values():
@@ -128,6 +162,26 @@ class DisplayManager:
                 self.set_transform(name, transform)
             for name, frame in data:
                 self._update(name, self._transforms[name](frame))
+
+    def callback(self: Self, name: str) -> Callable[[np.ndarray], None]:
+        """Returns a callback to be used with ImgFrame outputs from
+         queues. The callback will update the display with the given name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the output queue to add the callback to.
+
+        Returns
+        -------
+        Callable[[np.ndarray], None]
+            The callback to be used with the Camera class.
+        """
+
+        def callback(frame: dai.ImgFrame) -> None:
+            self._update(name, frame.getCvFrame())
+
+        return callback
 
 
 def get_resolution_area(resolution: tuple[int, int]) -> int:

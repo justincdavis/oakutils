@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from threading import Thread, Condition
 from typing import Tuple, Optional, Union, Dict, Callable, Iterable
 import atexit
@@ -27,11 +28,12 @@ class Camera:
 
         # handle attributes
         self._calibration: CalibrationData = get_camera_calibration(
-            rgb_size=self._color_size, mono_size=self._mono_size, primary_mono_left=self._primary_mono_left
+            rgb_size=self._color_size, mono_size=self._mono_size, is_primary_mono_left=self._primary_mono_left
         )
         self._callbacks: Dict[Union[str, Iterable[str]], Callable] = {}
-        self._pipeline: Optional[dai.Pipeline] = dai.Pipeline()
+        self._pipeline:dai.Pipeline = dai.Pipeline()
         self._is_built: bool = False
+        self._custom_device_calls: list[Callable[[dai.Device], None]] = []
 
         # handle custom displays directly for API stuff without visualize
         self._display_size: Tuple[int, int] = get_smaller_size(
@@ -51,10 +53,6 @@ class Camera:
 
         # register stop function
         atexit.register(self.stop)
-
-        # wait for the camera to be ready
-        with self._intialize_condition:
-            self._intialize_condition.wait()
 
     def __del__(self):
         self.stop()
@@ -140,22 +138,56 @@ class Camera:
         """
         self._callbacks[name] = callback
 
-    def _run(self):
-        with self._intialize_condition:
-            self._intialize_condition.notify()
+    def add_display(self, name: str):
+        """Adds a display callback for the given stream name. 
+          The stream should produce outputs of dai.ImgFrame from the
+          output queue.
+          
+        Parameters
+        ----------
+        name : str
+            The name of the output queue to add the callback to.
+        """
+        self.add_callback(name, self.displays.callback(name))
 
+    def add_device_call(self, call: Callable[[dai.Device], None]) -> None:
+        """Adds a device call to be run after the device is created.
+
+        Parameters
+        ----------
+        call : Callable[[dai.Device], None]
+            The call to add.
+
+        Raises
+        ------
+        RuntimeError
+            If the camera has already been started.
+        """
+        if self._started:
+            raise RuntimeError("Cannot add device call after camera has been started.")
+        self._custom_device_calls.append(call)
+
+    def _run(self):
         # wait for the start call, this allows user to define pipeline
         with self._start_condition:
             self._start_condition.wait()
 
         with dai.Device(self._pipeline) as device:
+            # run any custom devices calls added ahead of time
+            for custom in self._custom_device_calls:
+                custom(device)
+
             # get the output queues ahead of time
             queues = {
-                name: device.geatOutputQueue(name)
+                name: device.getOutputQueue(name)
                 for name, _ in self._callbacks.items()
             }
+
             # create a cache for queue results to enable multi queue callbacks
             data_cache = {name: None for name, _ in self._callbacks.items()}
+
+            print(data_cache)
+
             while not self._stopped:
                 # cache results
                 for name in data_cache.keys():
