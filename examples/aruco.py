@@ -10,8 +10,7 @@ def main():
     finder = ArucoFinder(
         cv2.aruco.DICT_4X4_100,
         0.05,
-        calibration.rgb.K,
-        calibration.rgb.D,
+        calibration.rgb
     )
 
     pipeline = dai.Pipeline()
@@ -25,8 +24,9 @@ def main():
             in_rgb = cam_queue.get()
             frame = in_rgb.getCvFrame()
             markers = finder.find(frame)
-            print(markers)
-            cv2.imshow("frame", frame)
+            for marker in markers:
+                print(marker)
+            cv2.imshow("frame", finder.draw(frame, markers))
             if cv2.waitKey(1) == ord("q"):
                 break
 

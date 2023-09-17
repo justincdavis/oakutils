@@ -85,7 +85,7 @@ class ArucoFinder:
         self: Self,
         image: np.ndarray,
         rectified: bool | None = None,
-    ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray]]:
+    ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
         """Finds the aruco markers in the image.
           Makes an assumption that there is a single marker for each id.
 
@@ -99,10 +99,10 @@ class ArucoFinder:
 
         Returns
         -------
-        list[tuple[int, np.ndarray, np.ndarray, np.ndarray]]
+        list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
-              rotation vector, and translation vector
+              rotation vector, translation vector, and corners
         """
         if rectified is None:
             rectified = False
@@ -129,6 +129,55 @@ class ArucoFinder:
             t_vector = tvec.T  # Get translation as a 3x1 vector
             t_matrix = np.block([[r_matrix, t_vector], [np.zeros((1, 3)), 1]])
 
-            ret_val.append((ids[idx][0], t_matrix, rvec, tvec))
+            ret_val.append((ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32)))
 
         return ret_val
+
+    def draw(
+        self: Self,
+        image: np.ndarray,
+        markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+    ) -> np.ndarray:
+        """Draws the detected markers onto the image.
+        
+        Parameters
+        ----------
+        image : np.ndarray
+            The image to draw the markers on
+        markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            The list of aruco markers found in the image
+            Each tuple contains the id, transformation matrix,
+              rotation vector, translation vector, and corners
+        
+        Returns
+        -------
+        np.ndarray
+            A copy of the image with the markers drawn on it
+        """
+        image = image.copy()
+        for marker in markers:
+            marker_id, H, rvec, tvec, corner = marker 
+            cv2.drawFrameAxes(
+                image,
+                self._K,
+                self._D,
+                rvec,
+                tvec,
+                self._marker_size,
+                3
+            )
+            cv2.polylines(image, corner, True, (0, 255, 0), 3)
+            cx = int((corner[0][0][0] + corner[0][2][0]) / 2)
+            cy = int((corner[0][0][1] + corner[0][2][1]) / 2)
+            cv2.putText(
+                image,
+                str(marker_id),
+                (cx, cy),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0, 255, 0),
+                3,
+            )
+
+        return image
+    
