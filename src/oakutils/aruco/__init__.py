@@ -1,5 +1,3 @@
 from .finder import ArucoFinder
 
-__all__ = [
-    "ArucoFinder"
-]
+__all__ = ["ArucoFinder"]

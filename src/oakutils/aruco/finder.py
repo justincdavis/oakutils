@@ -1,4 +1,4 @@
-from __future__ import __annotations__
+from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
@@ -13,17 +13,18 @@ if TYPE_CHECKING:
 
 class ArucoFinder:
     """Class for finding aruco markers in images and acquiring
-      transformation matrices to them
-      
-      Attributes
-      ----------
-      calibration : ColorCalibrationData, MonoCalibrationData, None
+    transformation matrices to them
 
-      Methods
-      -------
-      find(image: np.ndarray, rectified: bool | None = None)
-        Finds the aruco markers in the image
+    Attributes
+    ----------
+    calibration : ColorCalibrationData, MonoCalibrationData, None
+
+    Methods
+    -------
+    find(image: np.ndarray, rectified: bool | None = None)
+      Finds the aruco markers in the image
     """
+
     def __init__(
         self: Self,
         aruco_dist: int = cv2.aruco.DICT_4X4_100,
@@ -48,12 +49,8 @@ class ArucoFinder:
         self._marker_size = marker_size
         self._calibration = calibration
         if self._calibration is None:
-            self._K = (
-                np.zeros((3, 3), dtype=np.float32)
-            )
-            self._D = (
-                np.zeros((5, 1), dtype=np.float32)
-            )
+            self._K = np.zeros((3, 3), dtype=np.float32)
+            self._D = np.zeros((5, 1), dtype=np.float32)
         else:
             self._K = self._calibration.K
             self._D = self._calibration.D
@@ -68,11 +65,10 @@ class ArucoFinder:
             The calibration data used by the ArucoFinder
         """
         return self._calibration
-    
+
     @calibration.setter
     def calibration(
-        self: Self,
-        calibration: ColorCalibrationData | MonoCalibrationData
+        self: Self, calibration: ColorCalibrationData | MonoCalibrationData
     ) -> None:
         """Sets the calibration data used by the ArucoFinder
 
@@ -92,7 +88,7 @@ class ArucoFinder:
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray]]:
         """Finds the aruco markers in the image.
           Makes an assumption that there is a single marker for each id.
-        
+
         Parameters
         ----------
         image : np.ndarray
@@ -100,12 +96,12 @@ class ArucoFinder:
         rectified : bool, optional
             Whether or not the image is rectified, by default None
             If None will use the calibration data to undistort the image
-            
+
         Returns
         -------
         list[tuple[int, np.ndarray, np.ndarray, np.ndarray]]
             The list of aruco markers found in the image
-            Each tuple contains the id, transformation matrix, 
+            Each tuple contains the id, transformation matrix,
               rotation vector, and translation vector
         """
         if rectified is None:
@@ -136,4 +132,3 @@ class ArucoFinder:
             ret_val.append((ids[idx][0], t_matrix, rvec, tvec))
 
         return ret_val
-    

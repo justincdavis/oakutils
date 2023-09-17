@@ -1,19 +1,22 @@
 import cv2
 import depthai as dai
-import oakutils as oak
+from oakutils.aruco import ArucoFinder
+from oakutils.calibration import get_camera_calibration_basic
+from oakutils.nodes import create_color_camera, create_xout
 
 
 def main():
-    calibration = oak.calibration.get_camera_calibration()
-    finder = oak.aruco.ArucoFinder(
+    calibration = get_camera_calibration_basic()
+    finder = ArucoFinder(
         cv2.aruco.DICT_4X4_100,
         0.05,
-        calibration,
+        calibration.rgb.K,
+        calibration.rgb.D,
     )
 
     pipeline = dai.Pipeline()
-    cam = oak.nodes.create_color_camera(pipeline)
-    xout_cam = oak.nodes.create_xout(pipeline, cam.video, "rgb")
+    cam = create_color_camera(pipeline)
+    xout_cam = create_xout(pipeline, cam.video, "rgb")
 
     with dai.Device(pipeline) as device:
         cam_queue = device.getOutputQueue(name="rgb", maxSize=4, blocking=False)
@@ -26,3 +29,6 @@ def main():
             cv2.imshow("frame", frame)
             if cv2.waitKey(1) == ord("q"):
                 break
+
+if __name__ == "__main__":
+    main()
