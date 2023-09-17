@@ -1,14 +1,9 @@
-import numpy as np
-import depthai as dai
 from oakutils import ApiCamera
 from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout, get_nn_point_cloud
 from oakutils.nodes.models import create_point_cloud
 from oakutils.tools.parsing import get_color_sensor_resolution_from_tuple, get_mono_sensor_resolution_from_tuple
 from oakutils.point_clouds import create_point_cloud_from_np
 
-
-def display_callback(frame: dai.ImgFrame) -> np.ndarray:
-    return frame.getCvFrame()
 
 def main():
     rgb_resolution = (1920, 1080)
