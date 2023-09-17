@@ -1,8 +1,12 @@
 from . import aruco, blobs, calibration, filters, nodes, point_clouds, tools
+from .api_camera import Camera as ApiCamera
 from .legacy_camera import Camera as LegacyCamera
+from .webcam import Webcam
 
 __all__ = [
+    "ApiCamera",
     "LegacyCamera",
+    "Webcam",
     "aruco",
     "blobs",
     "calibration",
@@ -11,7 +15,7 @@ __all__ = [
     "point_clouds",
     "tools",
 ]
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)

@@ -129,7 +129,9 @@ class ArucoFinder:
             t_vector = tvec.T  # Get translation as a 3x1 vector
             t_matrix = np.block([[r_matrix, t_vector], [np.zeros((1, 3)), 1]])
 
-            ret_val.append((ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32)))
+            ret_val.append(
+                (ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32))
+            )
 
         return ret_val
 
@@ -139,7 +141,6 @@ class ArucoFinder:
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
         """Draws the detected markers onto the image.
-        
         Parameters
         ----------
         image : np.ndarray
@@ -148,7 +149,6 @@ class ArucoFinder:
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
-        
         Returns
         -------
         np.ndarray
@@ -156,17 +156,10 @@ class ArucoFinder:
         """
         image = image.copy()
         for marker in markers:
-            marker_id, H, rvec, tvec, corner = marker 
-            cv2.drawFrameAxes(
-                image,
-                self._K,
-                self._D,
-                rvec,
-                tvec,
-                self._marker_size,
-                3
-            )
-            cv2.polylines(image, corner, True, (0, 255, 0), 3)
+            marker_id, _, rvec, tvec, corner = marker
+            cv2.drawFrameAxes(image, self._K, self._D, rvec, tvec, self._marker_size, 3)
+            is_connected = True
+            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)
             cx = int((corner[0][0][0] + corner[0][2][0]) / 2)
             cy = int((corner[0][0][1] + corner[0][2][1]) / 2)
             cv2.putText(
@@ -180,4 +173,3 @@ class ArucoFinder:
             )
 
         return image
-    
