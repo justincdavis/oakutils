@@ -1,11 +1,14 @@
 from __future__ import __annotations__
 
-from typing_extensions import Self
+from typing import TYPE_CHECKING
 
 import cv2
 import numpy as np
 
-from ..calibration import ColorCalibrationData, MonoCalibrationData
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from oakutils.calibration import ColorCalibrationData, MonoCalibrationData
 
 
 class ArucoFinder:
