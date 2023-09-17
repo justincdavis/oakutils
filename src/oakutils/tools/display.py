@@ -10,8 +10,8 @@ from typing import TYPE_CHECKING, Callable, Iterable
 import cv2
 
 if TYPE_CHECKING:
-    import numpy as np
     import depthai as dai
+    import numpy as np
     from typing_extensions import Self
 
 
@@ -29,7 +29,7 @@ class _Display:
     @property
     def fps(self: Self) -> int:
         return self._fps
-    
+
     @fps.setter
     def fps(self: Self, fps: int) -> None:
         self._fps = fps
@@ -83,17 +83,17 @@ class DisplayManager:
     @property
     def fps(self: Self) -> int:
         """Returns the fps of the display manager.
-        
+
         Returns
         -------
         int
             The fps of the display manager"""
         return self._fps
-    
+
     @fps.setter
     def fps(self: Self, fps: int) -> None:
         """Sets the fps of the display manager.
-        
+
         Parameters
         ----------
         fps : int

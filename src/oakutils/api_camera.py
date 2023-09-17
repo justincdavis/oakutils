@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import logging
-from threading import Thread, Condition
-from typing import Tuple, Optional, Union, Dict, Callable, Iterable
 import atexit
+import contextlib
 from functools import partial
+from threading import Condition, Thread
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import depthai as dai
 
@@ -12,35 +12,43 @@ from .calibration import CalibrationData, get_camera_calibration
 from .point_clouds import PointCloudVisualizer
 from .tools.display import DisplayManager, get_smaller_size
 
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
 
 class Camera:
     def __init__(
-        self,
+        self: Self,
         # custom args, only related to configuration
-        primary_mono_left: bool = True,
-        color_size: Tuple[int, int] = (1920, 1080),
-        mono_size: Tuple[int, int] = (640, 400),
-    ):
+        primary_mono_left: bool | None = None,
+        color_size: tuple[int, int] = (1920, 1080),
+        mono_size: tuple[int, int] = (640, 400),
+    ) -> None:
+        if primary_mono_left is None:
+            primary_mono_left = True
+
         # store custom args
-        self._color_size: Tuple[int, int] = color_size
-        self._mono_size: Tuple[int, int] = mono_size
+        self._color_size: tuple[int, int] = color_size
+        self._mono_size: tuple[int, int] = mono_size
         self._primary_mono_left: bool = primary_mono_left
 
         # handle attributes
         self._calibration: CalibrationData = get_camera_calibration(
-            rgb_size=self._color_size, mono_size=self._mono_size, is_primary_mono_left=self._primary_mono_left
+            rgb_size=self._color_size,
+            mono_size=self._mono_size,
+            is_primary_mono_left=self._primary_mono_left,
         )
-        self._callbacks: Dict[Union[str, Iterable[str]], Callable] = {}
-        self._pipeline:dai.Pipeline = dai.Pipeline()
+        self._callbacks: dict[str | Iterable[str], Callable] = {}
+        self._pipeline: dai.Pipeline = dai.Pipeline()
         self._is_built: bool = False
         self._custom_device_calls: list[Callable[[dai.Device], None]] = []
 
         # handle custom displays directly for API stuff without visualize
-        self._display_size: Tuple[int, int] = get_smaller_size(
+        self._display_size: tuple[int, int] = get_smaller_size(
             self._color_size, self._mono_size
         )
-        self._displays: Optional[DisplayManager] = None
-        self._pcv: Optional[PointCloudVisualizer] = None
+        self._displays: DisplayManager | None = None
+        self._pcv: PointCloudVisualizer | None = None
 
         # thread for reading camera
         self._started = False
@@ -54,11 +62,11 @@ class Camera:
         # register stop function
         atexit.register(self.stop)
 
-    def __del__(self):
+    def __del__(self: Self) -> None:
         self.stop()
 
     @property
-    def pipeline(self) -> dai.Pipeline:
+    def pipeline(self: Self) -> dai.Pipeline:
         """
         Returns the pipeline. If the pipeline has not been built yet, a RuntimeError is raised.
         This is useful for adding custom nodes to the pipeline.
@@ -73,14 +81,14 @@ class Camera:
         return self._pipeline
 
     @property
-    def calibration(self) -> CalibrationData:
+    def calibration(self: Self) -> CalibrationData:
         """
         Returns the calibration data.
         """
         return self._calibration
 
     @property
-    def displays(self) -> DisplayManager:
+    def displays(self: Self) -> DisplayManager:
         """
         Returns the display manager.
         """
@@ -89,7 +97,7 @@ class Camera:
         return self._displays
 
     @property
-    def pcv(self) -> PointCloudVisualizer:
+    def pcv(self: Self) -> PointCloudVisualizer:
         """
         Returns the point cloud visualizer.
         """
@@ -97,11 +105,14 @@ class Camera:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
-    def start(self, blocking: bool = False):
+    def start(self: Self, blocking: bool | None = None) -> None:
         """
         Starts the camera. To be done after all api calls are made.
         Will build the pipeline if it has not been built yet.
         """
+        if blocking is None:
+            blocking = False
+
         with self._start_condition:
             self._start_condition.notify()
         self._started = True
@@ -110,7 +121,7 @@ class Camera:
             with self._stop_condition:
                 self._stop_condition.wait()
 
-    def stop(self):
+    def stop(self: Self) -> None:
         """
         Stops the camera.
         """
@@ -120,12 +131,10 @@ class Camera:
         with self._start_condition:
             self._start_condition.notify_all()
 
-        try:
+        with contextlib.suppress(RuntimeError):
             self._thread.join()
-        except RuntimeError:
-            pass
 
-    def add_callback(self, name: Union[str, Iterable[str]], callback: Callable):
+    def add_callback(self: Self, name: str | Iterable[str], callback: Callable) -> None:
         """
         Adds a callback to be run on the output queue with the given name.
 
@@ -138,11 +147,11 @@ class Camera:
         """
         self._callbacks[name] = callback
 
-    def add_display(self, name: str):
-        """Adds a display callback for the given stream name. 
+    def add_display(self: Self, name: str) -> None:
+        """Adds a display callback for the given stream name.
           The stream should produce outputs of dai.ImgFrame from the
           output queue.
-          
+
         Parameters
         ----------
         name : str
@@ -150,7 +159,7 @@ class Camera:
         """
         self.add_callback(name, self.displays.callback(name))
 
-    def add_device_call(self, call: Callable[[dai.Device], None]) -> None:
+    def add_device_call(self: Self, call: Callable[[dai.Device], None]) -> None:
         """Adds a device call to be run after the device is created.
 
         Parameters
@@ -167,7 +176,7 @@ class Camera:
             raise RuntimeError("Cannot add device call after camera has been started.")
         self._custom_device_calls.append(call)
 
-    def _run(self):
+    def _run(self: Self) -> None:
         # wait for the start call, this allows user to define pipeline
         with self._start_condition:
             self._start_condition.wait()
@@ -179,8 +188,7 @@ class Camera:
 
             # get the output queues ahead of time
             queues = {
-                name: device.getOutputQueue(name)
-                for name, _ in self._callbacks.items()
+                name: device.getOutputQueue(name) for name, _ in self._callbacks.items()
             }
 
             # create a cache for queue results to enable multi queue callbacks
@@ -190,7 +198,7 @@ class Camera:
 
             while not self._stopped:
                 # cache results
-                for name in data_cache.keys():
+                for name in data_cache:
                     data_cache[name] = queues[name].get()
                 # create callback partials
                 partials = []

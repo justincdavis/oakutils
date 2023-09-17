@@ -1,6 +1,6 @@
 from . import aruco, blobs, calibration, filters, nodes, point_clouds, tools
-from .legacy_camera import Camera as LegacyCamera
 from .api_camera import Camera as ApiCamera
+from .legacy_camera import Camera as LegacyCamera
 from .webcam import Webcam
 
 __all__ = [
