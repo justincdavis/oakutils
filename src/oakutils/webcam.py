@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 from threading import Thread, Condition
 
 import depthai as dai
@@ -39,13 +40,15 @@ class Webcam:
         self._started = False
         self._stopped: bool = False
         self._thread: Thread = Thread(target=self._run, daemon=True)
-        self._start_condition: Condition = Condition()
+        self._start_condition = Condition()
 
         # register stop function
         atexit.register(self.stop)
 
         # start the camera
         self._thread.start()
+        with self._start_condition:
+            self._start_condition.wait()
 
     def __del__(self):
         self.stop()
@@ -53,7 +56,8 @@ class Webcam:
     def stop(self) -> None:
         """Stop the camera."""
         self._stopped = True
-        self._thread.join()
+        with contextlib.suppress(RuntimeError):
+            self._thread.join()
 
     def read(self) -> tuple[bool, np.ndarray | None]:
         """Read a frame from the camera.
@@ -63,16 +67,8 @@ class Webcam:
         tuple[bool, np.ndarray]
             A tuple containing a boolean indicating if the frame was read successfully and the frame itself.
         """
-        if not self._thread.is_alive():
-            return False, None
-
-        # wait for the camera to be ready
-        if not self._started:
-            with self._start_condition:
-                self._start_condition.wait()
-
         # get data
-        return True, self._frame
+        return True if self._frame is not None else False, self._frame
     
     def _run(self) -> None:
         """Run the camera."""
@@ -80,13 +76,14 @@ class Webcam:
             # get data queues
             q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)
 
-            # notify that the camera is ready
-            with self._start_condition:
-                self._started = True
-                self._start_condition.notify_all()
-
             # loop until stopped
             while not self._stopped:
                 # get data
                 self._frame = q_camera.get().getCvFrame()
+
+                # notify that we have started
+                if not self._started:
+                    with self._start_condition:
+                        self._started = True
+                        self._start_condition.notify()
     
