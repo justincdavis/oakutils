@@ -11,7 +11,7 @@ help:
 	@echo "  test       to run the tests"
 
 install:
-	pip3 install -g .
+	pip3 install .
 
 clean: 
 	rm -rf build

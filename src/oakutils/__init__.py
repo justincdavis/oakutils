@@ -1,8 +1,9 @@
-from . import blobs, calibration, filters, nodes, point_clouds, tools
+from . import aruco, blobs, calibration, filters, nodes, point_clouds, tools
 from .legacy_camera import Camera as LegacyCamera
 
 __all__ = [
     "LegacyCamera",
+    "aruco",
     "blobs",
     "calibration",
     "filters",
