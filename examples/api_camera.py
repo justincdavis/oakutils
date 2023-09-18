@@ -1,7 +1,15 @@
 from oakutils import ApiCamera
-from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout, get_nn_point_cloud
+from oakutils.nodes import (
+    create_color_camera,
+    create_stereo_depth,
+    create_xout,
+    get_nn_point_cloud,
+)
 from oakutils.nodes.models import create_point_cloud
-from oakutils.tools.parsing import get_color_sensor_resolution_from_tuple, get_mono_sensor_resolution_from_tuple
+from oakutils.tools.parsing import (
+    get_color_sensor_resolution_from_tuple,
+    get_mono_sensor_resolution_from_tuple,
+)
 from oakutils.point_clouds import create_point_cloud_from_np
 
 
@@ -17,14 +25,20 @@ def main():
     )
     print("Camera Initialized")
 
-    cam = create_color_camera(oak.pipeline, resolution=get_color_sensor_resolution_from_tuple(rgb_resolution))
+    cam = create_color_camera(
+        oak.pipeline, resolution=get_color_sensor_resolution_from_tuple(rgb_resolution)
+    )
     xout_cam = create_xout(oak.pipeline, cam.video, "color")
-    stereo, left, right = create_stereo_depth(oak.pipeline, resolution=get_mono_sensor_resolution_from_tuple(mono_resolution))
+    stereo, left, right = create_stereo_depth(
+        oak.pipeline, resolution=get_mono_sensor_resolution_from_tuple(mono_resolution)
+    )
     xout_left = create_xout(oak.pipeline, stereo.rectifiedLeft, "left")
     xout_right = create_xout(oak.pipeline, stereo.rectifiedRight, "right")
     xout_depth = create_xout(oak.pipeline, stereo.depth, "depth")
     xout_disparity = create_xout(oak.pipeline, stereo.disparity, "disparity")
-    point_cloud, xin_xyz, start_pcl = create_point_cloud(oak.pipeline, stereo.depth, oak.calibration)
+    point_cloud, xin_xyz, start_pcl = create_point_cloud(
+        oak.pipeline, stereo.depth, oak.calibration
+    )
     xout_point_cloud = create_xout(oak.pipeline, point_cloud.out, "point_cloud")
 
     # add the basic displays
