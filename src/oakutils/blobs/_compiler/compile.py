@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 
+import torch
 from oakutils.blobs.definitions import AbstractModel, InputType
 
 from .blob import compile_blob
@@ -19,6 +20,7 @@ def _compile(
     | tuple[tuple[int, int, int], InputType],
     cache: bool | None = None,
     shaves: int = 6,
+    creation_func: callable = torch.rand,
 ) -> str:
     """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
@@ -34,12 +36,12 @@ def _compile(
         The arguments to pass to the model class
     dummy_input_shapes : Union[Iterable[Tuple[int, int, int]], Tuple[int, int, int]]
         The dummy input shapes to use for the export
-    input_names : List[str]
-        The names of the input tensors
-    output_names : List[str]
-        The names of the output tensors
     cache : bool, optional
         Whether or not to cache the blob, by default True
+    shaves : int, optional
+        The number of shaves to use for the blob, by default 6
+    creation_func : callable, optional
+        The function to use to create the dummy input, by default torch.rand
 
     Returns
     -------
@@ -96,6 +98,7 @@ def _compile(
         onnx_path=onnx_path,
         input_names=input_names,
         output_names=output_names,
+        creation_func=creation_func,
     )
 
     # second step, simplify the onnx model
@@ -115,6 +118,7 @@ def compile_model(
     cache: bool | None = None,
     shaves: int = 6,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
+    creation_func: callable = torch.rand,
 ) -> str:
     """Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
@@ -139,6 +143,9 @@ def compile_model(
         Default mapping:
             InputType.FP16 -> (3, 480, 640)
             InputType.U8 -> (1, 400, 640)
+    creation_func: callable, optional
+        The function to use to create the dummy input, by default torch.rand
+          Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
 
     Returns
     -------
@@ -169,4 +176,5 @@ def compile_model(
         dummy_input_shapes=dummy_input_shapes,
         cache=cache,
         shaves=shaves,
+        creation_func=creation_func,
     )
