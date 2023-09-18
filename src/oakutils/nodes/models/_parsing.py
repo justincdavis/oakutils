@@ -97,7 +97,7 @@ def get_candidates(
     for model in [d for d in dir(models) if not d.startswith("_")]:
         if model_type in model:
             blob_path = getattr(models, model)
-            potential_blobs.append(blob_path.upper())
+            potential_blobs.append(blob_path)
 
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
