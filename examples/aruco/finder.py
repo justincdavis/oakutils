@@ -7,11 +7,7 @@ from oakutils.nodes import create_color_camera, create_xout
 
 def main():
     calibration = get_camera_calibration_basic()
-    finder = ArucoFinder(
-        cv2.aruco.DICT_4X4_100,
-        0.05,
-        calibration.rgb
-    )
+    finder = ArucoFinder(cv2.aruco.DICT_4X4_100, 0.05, calibration.rgb)
 
     pipeline = dai.Pipeline()
     cam = create_color_camera(pipeline)
@@ -29,6 +25,7 @@ def main():
             cv2.imshow("frame", finder.draw(frame, markers))
             if cv2.waitKey(1) == ord("q"):
                 break
+
 
 if __name__ == "__main__":
     main()

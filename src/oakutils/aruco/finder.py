@@ -141,7 +141,10 @@ class ArucoFinder:
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
         """Draws the detected markers onto the image.
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7cb9fae161f9fd5b661d7e4b7239566563e107e
         Parameters
         ----------
         image : np.ndarray
@@ -150,7 +153,10 @@ class ArucoFinder:
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7cb9fae161f9fd5b661d7e4b7239566563e107e
         Returns
         -------
         np.ndarray
