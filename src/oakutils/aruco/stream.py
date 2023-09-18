@@ -24,7 +24,7 @@ class ArucoStream:
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
         buffersize: int = 5,
         max_age: int = 5,
-        alpha: float = 0.8,
+        alpha: float = 0.95,
     ) -> None:
         """Creates an ArucoStream object.
 
@@ -91,8 +91,6 @@ class ArucoStream:
               rotation vector, translation vector, and corners
         """
         detections = self._finder.find(image, rectified)
-        for detection in detections:
-            self._buffers[detection[0]].append(detection)
 
         # need to clear old detections, if an id hasnt been seen in awhile
         # need to empty its buffer
@@ -103,15 +101,20 @@ class ArucoStream:
 
         # perform exponential smoothing to get the new detections
         new_detections = []
-        for tag, transform, _, _, corners in detections:
+        for tag, og_transform, _, _, corners in detections:
+            transform = og_transform.copy()
             # past detections
             past = list(self._buffers[tag])
             for p in past:
                 past_transform = p[1]
                 transform = self._alpha1 * transform + self._alpha2 * past_transform
-            rvec, _ = cv2.Rodrigues(transform[:3, :3])[0]
+            rvec = cv2.Rodrigues(transform[:3, :3])[0]
             tvec = transform[:3, 3]
             new_detections.append((tag, transform, rvec, tvec, corners))
+
+        # update the buffers
+        for detection in detections:
+            self._buffers[detection[0]].append(detection)
 
         self._age += 1
 

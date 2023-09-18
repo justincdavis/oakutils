@@ -13,7 +13,7 @@ def main():
         calibration.rgb,
         5,
         5,
-        0.8,
+        0.95,
     )
 
     pipeline = dai.Pipeline()
