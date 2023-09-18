@@ -95,8 +95,11 @@ def get_candidates(
 
     potential_blobs = []
     for model in [d for d in dir(models) if not d.startswith("_")]:
+        # print(f"Looking for {model_type} in {model}")
         if model_type in model:
             blob_path = getattr(models, model)
+            # print(f"Found {model_type} in {model}")
+            # print(f"Blob path: {blob_path}")
             potential_blobs.append(blob_path)
 
     # parse the model names into 3 pieces, name, attribute, and extension
@@ -109,7 +112,8 @@ def get_candidates(
             data = data[0].split(".")  # split on the dot to ensure good name
         name = data[0]  # name is the first piece
         # if the name is not equal to the model_type, maybe gaussian_gray instead of gaussian
-        if model_type != name:  # throw out if the case
+        # print(f"Checking {name.upper()} against {model_type}")
+        if model_type != name.upper():  # throw out if the case
             continue
         data.pop(0)  # remove name from list
         data = [d.split("X")[0] for d in data]  # split NxN attributes into N
