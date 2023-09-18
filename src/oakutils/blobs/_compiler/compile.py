@@ -141,8 +141,9 @@ def compile_model(
         of the camera.
         If None, then the default mapping is used, by default None
         Default mapping:
-            InputType.FP16 -> (3, 480, 640)
-            InputType.U8 -> (1, 400, 640)
+            InputType.FP16 -> (640, 480, 3)
+            InputType.XYZ -> (640, 400, 3)
+            InputType.U8 -> (640, 400, 1)
     creation_func: callable, optional
         The function to use to create the dummy input, by default torch.rand
           Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
