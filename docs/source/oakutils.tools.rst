@@ -44,6 +44,14 @@ oakutils.tools.spatial module
    :undoc-members:
    :show-inheritance:
 
+oakutils.tools.transform module
+-------------------------------
+
+.. automodule:: oakutils.tools.transform
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

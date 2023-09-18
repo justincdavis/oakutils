@@ -60,6 +60,22 @@ oakutils.nodes.stereo\_depth module
    :undoc-members:
    :show-inheritance:
 
+oakutils.nodes.xin module
+-------------------------
+
+.. automodule:: oakutils.nodes.xin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.nodes.xout module
+--------------------------
+
+.. automodule:: oakutils.nodes.xout
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
