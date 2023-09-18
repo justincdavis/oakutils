@@ -105,8 +105,8 @@ def get_point_cloud_from_depth_image(
 
 def filter_point_cloud(
     pcd: o3d.geometry.PointCloud,
-    voxel_size: float | None = 0.1,
-    nb_neighbors: int | None = 30,
+    voxel_size: float | None = 0.01,
+    nb_neighbors: int | None = 50,
     std_ratio: float | None = 0.1,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
@@ -117,9 +117,9 @@ def filter_point_cloud(
     pcd : o3d.geometry.PointCloud
         The point cloud to filter.
     voxel_size : float or None, optional
-        The voxel size to use for downsampling. Defaults to 0.1.
+        The voxel size to use for downsampling. Defaults to 0.01.
     nb_neighbors : int or None, optional
-        The number of neighbors to use for outlier removal. Defaults to 30.
+        The number of neighbors to use for outlier removal. Defaults to 50.
     std_ratio : float or None, optional
         The standard deviation ratio to use for outlier removal. Defaults to 0.1.
     downsample_first : bool, optional
