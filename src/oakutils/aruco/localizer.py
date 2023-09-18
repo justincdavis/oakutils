@@ -1,19 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 from collections import deque
+from typing import TYPE_CHECKING
 
 import numpy as np
 
-from ..tools.transform import create_transform
+from oakutils.tools.transform import create_transform
 
 if TYPE_CHECKING:
-    import numpy as np
     from typing_extensions import Self
 
 
 class ArucoLocalizer:
     """Localizes the camera in the world using ArUco markers"""
+
     def __init__(
         self: Self,
         transforms: dict[int, np.ndarray],
@@ -22,7 +22,7 @@ class ArucoLocalizer:
         alpha: float = 0.95,
     ) -> None:
         """Creates a new ArucoLocalizer
-        
+
         Parameters
         ----------
         transforms : dict[int, np.ndarray]
@@ -47,18 +47,21 @@ class ArucoLocalizer:
             self.add_transform(tag, transform)
         self._last_transform = create_transform(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-    def add_transform(self: Self, id: int, transform: np.ndarray) -> None:
+    def add_transform(self: Self, tag: int, transform: np.ndarray) -> None:
         """Adds a transform to the localizer
-        
+
         Parameters
         ----------
-        id : int
+        tag : int
             The id of the marker to use
         transform : np.ndarray
             The transform from the camera to the marker"""
-        self._transforms[id] = transform
+        self._transforms[tag] = transform
 
-    def localize(self: Self, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]) -> np.ndarray:
+    def localize(
+        self: Self,
+        markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+    ) -> np.ndarray:
         """Localizes the camera in the world using ArUco markers
 
         Parameters
@@ -78,7 +81,7 @@ class ArucoLocalizer:
             if self._age > self._max_age:
                 self._buffer.clear()
             return self._last_transform
-        
+
         og_transform: np.ndarray = np.mean(transforms, axis=0)
         transform = og_transform.copy()
         for past_transform in reversed(list(self._buffer)):
@@ -89,4 +92,3 @@ class ArucoLocalizer:
         self._age = 0  # reset age since we found markers
 
         return transform
-    

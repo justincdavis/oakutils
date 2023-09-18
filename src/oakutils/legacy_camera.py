@@ -338,7 +338,11 @@ class Camera(sdk.OakCamera):
                 if self._primary_mono_left
                 else dai.CameraBoardSocket.RIGHT
             )
-            (stereo, left, right,) = create_stereo_depth(
+            (
+                stereo,
+                left,
+                right,
+            ) = create_stereo_depth(
                 pipeline=self._pipeline,
                 resolution=self._mono_size[2],
                 fps=mono_fps,
