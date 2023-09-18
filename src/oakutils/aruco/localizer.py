@@ -84,7 +84,7 @@ class ArucoLocalizer:
 
         og_transform: np.ndarray = np.mean(transforms, axis=0)
         transform = og_transform.copy()
-        for past_transform in reversed(list(self._buffer)):
+        for past_transform in list(self._buffer):
             transform = self._alpha1 * transform + self._alpha2 * past_transform
         self._last_transform = transform
         self._buffer.append(og_transform)
