@@ -156,7 +156,7 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = None,
+    normalization: float | Callable | None = 255.0,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """Takes the raw data output from a neural network execution and converts it to a frame
@@ -175,7 +175,7 @@ def get_nn_frame(
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
     normalization : Optional[float, Callable], optional
-        The normalization to apply to the frame, by default None
+        The normalization to apply to the frame, by default 255.0
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
         set to the return value.

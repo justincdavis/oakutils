@@ -25,7 +25,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         lp_data = lp_queue.get()
-        lp_frame = get_nn_bgr_frame(lp_data)
+        lp_frame = get_nn_bgr_frame(lp_data, normalization=255.0)
 
         cv2.imshow("laplacian frame", lp_frame)
         if cv2.waitKey(1) == ord("q"):

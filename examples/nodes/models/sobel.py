@@ -22,7 +22,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         data = queue.get()
-        frame = get_nn_bgr_frame(data)
+        frame = get_nn_bgr_frame(data, normalization=255.0)
 
         cv2.imshow("sobel frame", frame)
         if cv2.waitKey(1) == ord("q"):

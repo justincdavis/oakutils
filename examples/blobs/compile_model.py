@@ -12,35 +12,34 @@ from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
 from oakutils.nodes import create_neural_network, create_color_camera, create_xout, get_nn_bgr_frame
 
 
-class Laplacian(AbstractModel):
-    """nn.Module wrapper for kornia.filters.laplacian."""
+class Custom(AbstractModel):
+    """nn.Module wrapper for a custom operation."""
 
     def __init__(self: Self) -> None:
         super().__init__()
-        self._kernel_size = 3
 
     @classmethod
-    def model_type(cls: Laplacian) -> ModelType:
+    def model_type(cls: Custom) -> ModelType:
         """The type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Laplacian) -> list[tuple[str, InputType]]:
+    def input_names(cls: Custom) -> list[tuple[str, InputType]]:
         """The names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Laplacian) -> list[str]:
+    def output_names(cls: Custom) -> list[str]:
         """The names of the output tensors."""
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        return kornia.filters.laplacian(image, self._kernel_size)
+        return kornia.filters.laplacian(image, 7)
     
 
 def main():
     model_path = compile_model(
-        Laplacian,  # simply put the class definition here, but not a created version!
+        Custom,  # simply put the class definition here, but not a created version!
         # Sobel(),  # this is wrong!
         {},  # this model doesn't take any arguments, simply put an empty dict
         # If the model took arguments, you would put them here
@@ -108,10 +107,14 @@ def main():
 
         while True:
             data = queue.get()
-            frame = get_nn_bgr_frame(data, (300, 300))
+            frame = get_nn_bgr_frame(
+                data,  # the raw data packet, this will be a dai.NNData
+                (300, 300),  # make sure to match the size
+                normalization=255.0,  # this is how to multiply the data to get the correct values
+                # by default the outputs are normalized to [0-1] by OpenVINO (the actual compiler)
+                )
 
             cv2.imshow(streamname, frame)
-            print(frame)
             if cv2.waitKey(1) == ord("q"):
                 break
 
