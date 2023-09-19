@@ -24,6 +24,22 @@ GAUSSIAN_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Gaussian_3x3.blob'))
 GAUSSIAN_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Gaussian_5x5.blob'))
 GAUSSIAN_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Gaussian_7x7.blob'))
 GAUSSIAN_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Gaussian_9x9.blob'))
+HARRIS = os.path.abspath(os.path.join(_BLOB_FOLDER, 'Harris.blob'))
+HARRISBLURGRAY_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_11x11.blob'))
+HARRISBLURGRAY_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_13x13.blob'))
+HARRISBLURGRAY_15X15 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_15x15.blob'))
+HARRISBLURGRAY_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_3x3.blob'))
+HARRISBLURGRAY_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_5x5.blob'))
+HARRISBLURGRAY_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_7x7.blob'))
+HARRISBLURGRAY_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlurGray_9x9.blob'))
+HARRISBLUR_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_11x11.blob'))
+HARRISBLUR_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_13x13.blob'))
+HARRISBLUR_15X15 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_15x15.blob'))
+HARRISBLUR_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_3x3.blob'))
+HARRISBLUR_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_5x5.blob'))
+HARRISBLUR_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_7x7.blob'))
+HARRISBLUR_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisBlur_9x9.blob'))
+HARRISGRAY = os.path.abspath(os.path.join(_BLOB_FOLDER, 'HarrisGray.blob'))
 LAPLACIANBLURGRAY_11X11_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'LaplacianBlurGray_11x11_11x11.blob'))
 LAPLACIANBLURGRAY_11X11_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'LaplacianBlurGray_11x11_13x13.blob'))
 LAPLACIANBLURGRAY_11X11_15X15 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'LaplacianBlurGray_11x11_15x15.blob'))
@@ -188,6 +204,38 @@ GAUSSIAN_7X7 : str
     Absolute file path for GAUSSIAN_7X7 file
 GAUSSIAN_9X9 : str
     Absolute file path for GAUSSIAN_9X9 file
+HARRIS : str
+    Absolute file path for HARRIS file
+HARRISBLURGRAY_11X11 : str
+    Absolute file path for HARRISBLURGRAY_11X11 file
+HARRISBLURGRAY_13X13 : str
+    Absolute file path for HARRISBLURGRAY_13X13 file
+HARRISBLURGRAY_15X15 : str
+    Absolute file path for HARRISBLURGRAY_15X15 file
+HARRISBLURGRAY_3X3 : str
+    Absolute file path for HARRISBLURGRAY_3X3 file
+HARRISBLURGRAY_5X5 : str
+    Absolute file path for HARRISBLURGRAY_5X5 file
+HARRISBLURGRAY_7X7 : str
+    Absolute file path for HARRISBLURGRAY_7X7 file
+HARRISBLURGRAY_9X9 : str
+    Absolute file path for HARRISBLURGRAY_9X9 file
+HARRISBLUR_11X11 : str
+    Absolute file path for HARRISBLUR_11X11 file
+HARRISBLUR_13X13 : str
+    Absolute file path for HARRISBLUR_13X13 file
+HARRISBLUR_15X15 : str
+    Absolute file path for HARRISBLUR_15X15 file
+HARRISBLUR_3X3 : str
+    Absolute file path for HARRISBLUR_3X3 file
+HARRISBLUR_5X5 : str
+    Absolute file path for HARRISBLUR_5X5 file
+HARRISBLUR_7X7 : str
+    Absolute file path for HARRISBLUR_7X7 file
+HARRISBLUR_9X9 : str
+    Absolute file path for HARRISBLUR_9X9 file
+HARRISGRAY : str
+    Absolute file path for HARRISGRAY file
 LAPLACIANBLURGRAY_11X11_11X11 : str
     Absolute file path for LAPLACIANBLURGRAY_11X11_11X11 file
 LAPLACIANBLURGRAY_11X11_13X13 : str
@@ -463,6 +511,22 @@ __all__ = [
     'GAUSSIAN_5X5',
     'GAUSSIAN_7X7',
     'GAUSSIAN_9X9',
+    'HARRIS',
+    'HARRISBLURGRAY_11X11',
+    'HARRISBLURGRAY_13X13',
+    'HARRISBLURGRAY_15X15',
+    'HARRISBLURGRAY_3X3',
+    'HARRISBLURGRAY_5X5',
+    'HARRISBLURGRAY_7X7',
+    'HARRISBLURGRAY_9X9',
+    'HARRISBLUR_11X11',
+    'HARRISBLUR_13X13',
+    'HARRISBLUR_15X15',
+    'HARRISBLUR_3X3',
+    'HARRISBLUR_5X5',
+    'HARRISBLUR_7X7',
+    'HARRISBLUR_9X9',
+    'HARRISGRAY',
     'LAPLACIANBLURGRAY_11X11_11X11',
     'LAPLACIANBLURGRAY_11X11_13X13',
     'LAPLACIANBLURGRAY_11X11_15X15',

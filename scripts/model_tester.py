@@ -13,6 +13,7 @@ from oakutils.blobs import compile_model
 from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
 from oakutils.nodes import create_neural_network, create_color_camera, create_xout, get_nn_frame
 
+SHAVES = 6
 IMAGE_SIZE = (640, 480)
 
 class Custom(AbstractModel):
@@ -49,7 +50,7 @@ def main():
         shape_mapping={
             InputType.FP16: (*IMAGE_SIZE, 3)
         },
-        shaves=6,
+        shaves=SHAVES,
     )   
     pipeline = dai.Pipeline()
     cam = create_color_camera(
