@@ -1,15 +1,15 @@
 from .abstract_model import AbstractModel
+from .closing import Closing, ClosingBlur, ClosingBlurGray, ClosingGray
+from .dilation import Dilation, DilationBlur, DilationBlurGray, DilationGray
+from .erosion import Erosion, ErosionBlur, ErosionBlurGray, ErosionGray
 from .gaussian import Gaussian, GaussianGray
+from .gftt import GFTT, GFTTBlur, GFTTBlurGray, GFTTGray
+from .harris import Harris, HarrisBlur, HarrisBlurGray, HarrisGray
+from .hessian import Hessian, HessianBlur, HessianBlurGray, HessianGray
 from .laplacian import Laplacian, LaplacianBlur, LaplacianBlurGray, LaplacianGray
+from .opening import Opening, OpeningBlur, OpeningBlurGray, OpeningGray
 from .point_cloud import PointCloud
 from .sobel import Sobel, SobelBlur, SobelBlurGray, SobelGray
-from .closing import Closing, ClosingBlur, ClosingGray, ClosingBlurGray
-from .dilation import Dilation, DilationBlur, DilationGray, DilationBlurGray
-from .erosion import Erosion, ErosionBlur, ErosionGray, ErosionBlurGray
-from .opening import Opening, OpeningBlur, OpeningGray, OpeningBlurGray
-from .harris import Harris, HarrisBlur, HarrisGray, HarrisBlurGray
-from .hessian import Hessian, HessianBlur, HessianGray, HessianBlurGray
-from .gftt import GFTT, GFTTBlur, GFTTGray, GFTTBlurGray
 from .utils import InputType, ModelType, convert_to_fp16
 
 __all__ = [

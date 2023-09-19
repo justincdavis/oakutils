@@ -61,7 +61,9 @@ class OpeningGray(AbstractModel):
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        opening = kornia.morphology.opening(image, (self._kernel_size, self._kernel_size))
+        opening = kornia.morphology.opening(
+            image, (self._kernel_size, self._kernel_size)
+        )
         return kornia.color.bgr_to_grayscale(opening)
 
 
@@ -95,7 +97,9 @@ class OpeningBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.opening(gaussian, (self._kernel_size2, self._kernel_size2))
+        return kornia.morphology.opening(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
 
 
 class OpeningBlurGray(AbstractModel):
@@ -130,5 +134,7 @@ class OpeningBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        opening = kornia.morphology.opening(gaussian, (self._kernel_size2, self._kernel_size2))
+        opening = kornia.morphology.opening(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
         return kornia.color.bgr_to_grayscale(opening)

@@ -61,7 +61,9 @@ class ClosingGray(AbstractModel):
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        closing = kornia.morphology.closing(image, (self._kernel_size, self._kernel_size))
+        closing = kornia.morphology.closing(
+            image, (self._kernel_size, self._kernel_size)
+        )
         return kornia.color.bgr_to_grayscale(closing)
 
 
@@ -95,7 +97,9 @@ class ClosingBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.closing(gaussian, (self._kernel_size2, self._kernel_size2))
+        return kornia.morphology.closing(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
 
 
 class ClosingBlurGray(AbstractModel):
@@ -130,5 +134,7 @@ class ClosingBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        closing = kornia.morphology.closing(gaussian, (self._kernel_size2, self._kernel_size2))
+        closing = kornia.morphology.closing(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
         return kornia.color.bgr_to_grayscale(closing)

@@ -8,7 +8,9 @@ from oakutils.blobs.definitions.utils import InputType
 
 
 def _create_dummy_input(
-    input_shape: tuple[int, int, int], input_type: InputType, creation_func: callable = torch.rand
+    input_shape: tuple[int, int, int],
+    input_type: InputType,
+    creation_func: callable = torch.rand,
 ) -> torch.Tensor:
     """Creates a dummy input based on the input_shape.
 
@@ -57,7 +59,8 @@ def _create_dummy_input(
 
 
 def _create_multiple_dummy_input(
-    input_shapes: Iterable[tuple[tuple[int, int, int], InputType]], creation_func: callable = torch.rand
+    input_shapes: Iterable[tuple[tuple[int, int, int], InputType]],
+    creation_func: callable = torch.rand,
 ) -> list[torch.Tensor]:
     """Creates a dummy input based on the input_shapes.
 
