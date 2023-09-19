@@ -15,11 +15,23 @@ if TYPE_CHECKING:
 
 
 class ArucoStream:
-    """Class for filtering aruco marker detections as a continous stream."""
+    """Class for filtering aruco marker detections as a continous stream.
+    
+    Attributes
+    ----------
+    calibration : ColorCalibrationData, MonoCalibrationData, None
+        The calibration data to use for finding the transformation matrix
+        
+    Methods
+    -------
+    find(image: np.ndarray, rectified: bool | None = None)
+        Finds the aruco markers in the image
+    draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
+        Draws the detected markers onto the image"""
 
     def __init__(
         self: Self,
-        aruco_dist: int = cv2.aruco.DICT_4X4_100,
+        aruco_dict: int = cv2.aruco.DICT_4X4_100,
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
         buffersize: int = 5,
@@ -30,7 +42,7 @@ class ArucoStream:
 
         Parameters
         ----------
-        aruco_dist : int, optional
+        aruco_dict : int, optional
             The aruco dictionary to use for finding markers,
               by default cv2.aruco.DICT_4X4_100
         marker_size : float, optional
@@ -57,7 +69,7 @@ class ArucoStream:
         ValueError
             If alpha is not in range [0, 1]
         """
-        self._finder = ArucoFinder(aruco_dist, marker_size, calibration)
+        self._finder = ArucoFinder(aruco_dict, marker_size, calibration)
         self._buffers = defaultdict(lambda: deque(maxlen=buffersize))
         self._id_age = defaultdict(int)
         self._max_age = max_age

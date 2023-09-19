@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
+from .calibration import get_camera_calibration_basic, ColorCalibrationData
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
@@ -30,6 +31,11 @@ class Webcam:
         """
         self._resolution = resolution
         self._fps = fps
+
+        # get the calibration
+        self._calibration = get_camera_calibration_basic(
+            rgb_size=self._resolution,
+        )
 
         # depthai stuff
         self._pipeline = dai.Pipeline()
@@ -55,6 +61,17 @@ class Webcam:
         self._thread.start()
         with self._start_condition:
             self._start_condition.wait()
+
+    @property
+    def calibration(self: Self) -> ColorCalibrationData:
+        """Returns the calibration info for the camera
+
+        Returns
+        -------
+        ColorCalibrationData
+            The calibration info for the camera
+        """
+        return self._calibration.rgb
 
     def __del__(self: Self) -> None:
         self.stop()

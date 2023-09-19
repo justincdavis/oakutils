@@ -22,12 +22,14 @@ class ArucoFinder:
     Methods
     -------
     find(image: np.ndarray, rectified: bool | None = None)
-      Finds the aruco markers in the image
+        Finds the aruco markers in the image
+    draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
+        Draws the detected markers onto the image
     """
 
     def __init__(
         self: Self,
-        aruco_dist: int = cv2.aruco.DICT_4X4_100,
+        aruco_dict: int = cv2.aruco.DICT_4X4_100,
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
     ) -> None:
@@ -35,7 +37,7 @@ class ArucoFinder:
 
         Parameters
         ----------
-        aruco_dist : int, optional
+        aruco_dict : int, optional
             The aruco dictionary to use for finding markers,
               by default cv2.aruco.DICT_4X4_100
         marker_size : float, optional
@@ -45,7 +47,7 @@ class ArucoFinder:
               by default None
             Will utilize an identity matrix if not provided
         """
-        self._adict = cv2.aruco.getPredefinedDictionary(aruco_dist)
+        self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
         self._calibration = calibration
         if self._calibration is None:
