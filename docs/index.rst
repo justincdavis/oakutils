@@ -4,7 +4,7 @@ Welcome to oakutils's Documentation
 **oakutils** is an easy-to-use and robust library for interacting 
 easily with OAK cameras and the DepthAI API. It aims to bridge the gap 
 between DepthAI API and SDK allow with building in integration 
-with OpenCV and Open3D "out-of-the-box".
+with OpenCV and Open3D.
 
 Check out the :doc:`usage` section for further information, including
 how to :ref:`installation` the project.
@@ -22,6 +22,7 @@ Contents
    Home <self>
    Usage <usage>
    Installation <installation>
+   Compiling Custom Models and CV Functions <compiling>
    API <api>
 
 Indices and Tables
