@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
+import json
 
 import torch
 from oakutils.blobs.definitions import AbstractModel, InputType
@@ -38,6 +39,8 @@ def _compile(
         The dummy input shapes to use for the export
     cache : bool, optional
         Whether or not to cache the blob, by default True
+        Cache does not account for shave changes, so if you change the number of shaves
+        you will need to recompile the blob with cache set to False.
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
     creation_func : callable, optional
@@ -47,6 +50,11 @@ def _compile(
     -------
     str
         The path to the compiled blob
+
+    Raises
+    ------
+    RuntimeError
+        If there is an error compiling the blob
     """
     if cache is None:
         cache = True
@@ -91,6 +99,12 @@ def _compile(
     if cache and os.path.exists(final_blob_path):
         return final_blob_path
 
+    # if we are not caching, then remove the old blob
+    if not cache:
+        for p in [onnx_path, simplfiy_onnx_path, final_blob_path]:
+            if os.path.exists(p):
+                os.remove(p)
+
     # first step, export the torch model
     export(
         model_instance=model,
@@ -105,7 +119,16 @@ def _compile(
     simplify(onnx_path, simplfiy_onnx_path)
 
     # third step, compile the onnx model
-    compile_blob(model_type, simplfiy_onnx_path, blob_dir, shaves=shaves)
+    try:
+        compile_blob(model_type, simplfiy_onnx_path, blob_dir, shaves=shaves)
+    except json.JSONDecodeError as er:
+        base_str = "Error compiling blob. "
+        base_str += "Usually this is caused by a corrupted json file. "
+        base_str += "Try deleting the blobconverter cache directory and json file. "
+        base_str += "Then recompile the blob."
+        raise RuntimeError(
+            base_str
+        ) from er
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]

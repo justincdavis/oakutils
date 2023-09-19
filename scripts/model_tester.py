@@ -1,3 +1,7 @@
+"""
+This is a testing script for building custom operations for the OAK-D.
+Adjust the Custom class to your liking, and then run this script to test it out.
+"""
 from __future__ import annotations
 
 import torch
@@ -8,7 +12,6 @@ from typing_extensions import Self
 from oakutils.blobs import compile_model
 from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
 from oakutils.nodes import create_neural_network, create_color_camera, create_xout, get_nn_frame
-
 
 IMAGE_SIZE = (640, 480)
 

@@ -40,7 +40,7 @@ class Sobel(AbstractModel):
 class SobelBlur(AbstractModel):
     """nn.Module wrapper for kornia.filters.sobel(kornia.filters.gaussian_blur2d)."""
 
-    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
@@ -93,8 +93,7 @@ class SobelGray(AbstractModel):
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         sobel = kornia.filters.sobel(image)
-        normalized = kornia.enhance.normalize_min_max(sobel)
-        return kornia.color.bgr_to_grayscale(normalized)
+        return kornia.color.bgr_to_grayscale(sobel)
 
 
 class SobelBlurGray(AbstractModel):
@@ -103,7 +102,7 @@ class SobelBlurGray(AbstractModel):
       with grayscale output.
     """
 
-    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
@@ -131,5 +130,4 @@ class SobelBlurGray(AbstractModel):
                 (self._sigma, self._sigma),
             )
         )
-        normalized = kornia.enhance.normalize_min_max(sobel)
-        return kornia.color.bgr_to_grayscale(normalized)
+        return kornia.color.bgr_to_grayscale(sobel)

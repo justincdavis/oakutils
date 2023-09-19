@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class Gaussian(AbstractModel):
     """nn.Module wrapper for kornia.filters.gaussian_blur2d."""
 
-    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
@@ -44,7 +44,7 @@ class Gaussian(AbstractModel):
 class GaussianGray(AbstractModel):
     """nn.Module wrapper for kornia.filters.gaussian_blur2d, with grayscale output."""
 
-    def __init__(self: Self, kernel_size: int = 3, sigma: float = 0.5) -> None:
+    def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
         super().__init__()
         self._kernel_size = kernel_size
         self._sigma = sigma
@@ -68,5 +68,4 @@ class GaussianGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        normalized = kornia.enhance.normalize_min_max(gaussian)
-        return kornia.color.bgr_to_grayscale(normalized)
+        return kornia.color.bgr_to_grayscale(gaussian)

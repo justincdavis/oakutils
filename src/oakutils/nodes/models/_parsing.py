@@ -65,7 +65,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
 
 
 def get_candidates(
-    model_type: str, attributes: list[str]
+    model_type: str, attributes: list[str], shaves: int
 ) -> list[tuple[str, list[str], str]]:
     """Gets the list of candidate models for a given model type and attribute.
 
@@ -77,6 +77,8 @@ def get_candidates(
     attributes : List[str]
         The attribute to get candidates for.
         Examples of this are "kernel_size", etc.
+    shaves : int
+        The number of shaves to get candidates for.
 
     Returns
     -------
@@ -94,7 +96,8 @@ def get_candidates(
     model_type = model_type.upper()
 
     potential_blobs = []
-    for model in [d for d in dir(models) if not d.startswith("_")]:
+    model_module = getattr(models, f"shave{shaves}")
+    for model in [d for d in dir(model_module) if not d.startswith("_")]:
         # print(f"Looking for {model_type} in {model}")
         if model_type in model:
             blob_path = getattr(models, model)

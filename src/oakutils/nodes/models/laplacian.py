@@ -14,6 +14,7 @@ def create_laplacian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     blur_kernel_size: int = 3,
+    shaves: int = 1,
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -36,6 +37,9 @@ def create_laplacian(
         Only used when use_blur is True
         Must be an odd integer
         Must be between 3 and 15 (since these are the compiled model sizes)
+    shaves : int, optional
+        The number of shaves to use, by default 1
+        Must be between 1 and 6
     use_blur : bool, optional
         Whether or not to use a blur before the laplacian, by default False
     grayscale_out : bool, optional
@@ -69,10 +73,12 @@ def create_laplacian(
             model_name=model_type,
             kernel_size1=kernel_size,
             kernel_size2=blur_kernel_size,
+            shaves=shaves,
         )
     return _create_single_kernel_model(
         pipeline=pipeline,
         input_link=input_link,
         model_name=model_type,
         kernel_size=kernel_size,
+        shaves=shaves,
     )

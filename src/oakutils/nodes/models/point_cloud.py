@@ -64,6 +64,7 @@ def create_point_cloud(
     depth_link: dai.Node.Output,
     calibration: CalibrationData,
     input_stream_name: str = "xyz_to_pcl",
+    shaves: int = 4,
 ) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
     """Creates a point_cloud model with a specified kernel size.
 
@@ -79,6 +80,9 @@ def create_point_cloud(
         The calibration data for the camera
     input_stream_name : str, optional
         The name of the input stream, by default "xyz_to_pcl"
+    shaves : int, optional
+        The number of shaves to use, by default 4
+        Must be between 1 and 6
 
     Returns
     -------
@@ -97,6 +101,7 @@ def create_point_cloud(
         model_name=model_type,
         input_names=["xyz", "depth"],
         reuse_messages=[True, None],
+        shaves=shaves,
     )
     point_cloud_node.inputs["xyz"].setReusePreviousMessage(reusePreviousMessage=True)
 

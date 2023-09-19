@@ -12,6 +12,7 @@ def create_gaussian(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     kernel_size: int = 3,
+    shaves: int = 1,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
     """Creates a gaussian model with a specified kernel size.
@@ -28,6 +29,9 @@ def create_gaussian(
         The size of the gaussian kernel, by default 3
         Must be an odd integer
         Must be between 3 and 15 (since these are the compiled model sizes)
+    shaves : int, optional
+        The number of shaves to use, by default 1
+        Must be between 1 and 6
     grayscale_out : bool, optional
         Whether or not to use graycale output, by default False
 
@@ -52,4 +56,5 @@ def create_gaussian(
         input_link=input_link,
         model_name=model_type,
         kernel_size=kernel_size,
+        shaves=shaves,
     )

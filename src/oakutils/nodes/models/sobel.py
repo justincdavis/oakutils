@@ -13,6 +13,7 @@ def create_sobel(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     blur_kernel_size: int = 3,
+    shaves: int = 1,
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -31,6 +32,9 @@ def create_sobel(
         Only used when use_blur is True
         Must be an odd integer
         Must be between 3 and 15 (since these are the compiled model sizes)
+    shaves : int, optional
+        The number of shaves to use, by default 1
+        Must be between 1 and 6
     use_blur : bool, optional
         Whether or not to use a blur before the sobel, by default False
     grayscale_out : bool, optional
@@ -63,9 +67,11 @@ def create_sobel(
             input_link=input_link,
             model_name=model_type,
             kernel_size=blur_kernel_size,
+            shaves=shaves,
         )
     return _create_no_args_model(
         pipeline=pipeline,
         input_link=input_link,
         model_name=model_type,
+        shaves=shaves,
     )

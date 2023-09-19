@@ -62,15 +62,14 @@ class LaplacianGray(AbstractModel):
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         laplacian = kornia.filters.laplacian(image, self._kernel_size)
-        normalized = kornia.enhance.normalize_min_max(laplacian)
-        return kornia.color.bgr_to_grayscale(normalized)
+        return kornia.color.bgr_to_grayscale(laplacian)
 
 
 class LaplacianBlur(AbstractModel):
     """nn.Module wrapper for kornia.filters.laplacian, with gaussian blur."""
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5
+        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
     ) -> None:
         super().__init__()
         self._kernel_size = kernel_size
@@ -105,7 +104,7 @@ class LaplacianBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 0.5
+        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
     ) -> None:
         super().__init__()
         self._kernel_size = kernel_size
@@ -132,5 +131,4 @@ class LaplacianBlurGray(AbstractModel):
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
         laplacian = kornia.filters.laplacian(gaussian, self._kernel_size2)
-        normalized = kornia.enhance.normalize_min_max(laplacian)
-        return kornia.color.bgr_to_grayscale(normalized)
+        return kornia.color.bgr_to_grayscale(laplacian)
