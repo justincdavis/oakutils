@@ -1,1 +1,6 @@
-include src/oakutils/blobs/models/*.blob
+include src/oakutils/blobs/models/shave1/*.blob
+include src/oakutils/blobs/models/shave2/*.blob
+include src/oakutils/blobs/models/shave3/*.blob
+include src/oakutils/blobs/models/shave4/*.blob
+include src/oakutils/blobs/models/shave5/*.blob
+include src/oakutils/blobs/models/shave6/*.blob

@@ -42,6 +42,7 @@ def create_neural_network(
         The number of inference threads, by default 2
     num_nce_per_inference_thread : Optional[int], optional
         The number of NCEs per inference thread, by default None
+         NCE: Neural Compute Engine
     num_pool_frames : Optional[int], optional
         The number of pool frames, by default None
 

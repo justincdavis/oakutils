@@ -14,6 +14,7 @@ cam = create_color_camera(
 sobel = create_sobel(
     pipeline,
     input_link=cam.preview,
+    shaves=1,
 )
 xout_sobel = create_xout(pipeline, sobel.out, "sobel")
 

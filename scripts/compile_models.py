@@ -186,14 +186,14 @@ def compiles_models():
         HarrisBlur,
         HarrisGray,
         HarrisBlurGray,
-        # Hessian,
-        # HessianBlur,
-        # HessianGray,
-        # HessianBlurGray,
-        # GFTT,
-        # GFTTBlur,
-        # GFTTGray,
-        # GFTTBlurGray,
+        Hessian,
+        HessianBlur,
+        HessianGray,
+        HessianBlurGray,
+        GFTT,
+        GFTTBlur,
+        GFTTGray,
+        GFTTBlurGray,
     ]
     shaves =  [1, 2, 3, 4, 5, 6]
     for shave in shaves:
@@ -295,6 +295,8 @@ def compiles_models():
             f.write(f"    'shave{shave}',\n")
         f.write("]\n")
 
+def verify_blobs():
+    shaves = [1, 2, 3, 4, 5, 6]
     # verify that each shave folder has the same number of models
     num_files = []
     for shave in shaves:
@@ -311,11 +313,39 @@ def compiles_models():
             num_files.append(len(f.readlines()))
     assert len(set(num_files)) == 1, "Not all __init__.py files have the same number of models"
 
+def build_from_cache():
+    from oakutils.blobs._compiler.paths import get_cache_dir_path
+
+    cache_dir = get_cache_dir_path()
+    cache_dir = os.path.join(cache_dir, "blobs")
+    for modeltype in os.listdir(cache_dir):
+        modeltype_dir = os.path.join(cache_dir, modeltype)
+        for model in os.listdir(modeltype_dir):
+            data = model.split(".")  # removes the .blob
+            modelname, shaveinfo = data[0], data[1]
+            data = shaveinfo.split("_")  # splits into name and attributes
+            shaves = int(data[-1].replace("shave", ""))
+            modelname = modelname.split("_")[:-3]
+            strname = ""
+            for name in modelname:
+                strname += name + "_"
+            strname = strname[:-1]
+            shutil.copy(
+                os.path.join(modeltype_dir, model),
+                os.path.join(MODEL_FOLDER, f"shave{shaves}", strname + ".blob"),
+            )
+
 def main():
+    if BUILD_FROM_CACHE:
+        build_from_cache()
+        verify_blobs()
+        return
     compiles_models()
+    verify_blobs()
 
 
 if __name__ == "__main__":
+    BUILD_FROM_CACHE = True
     SCRIPT_PATH = os.path.realpath(os.path.dirname(__file__))
     MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "src", "oakutils", "blobs", "models")
     # create the model folder if it doesn't exist
