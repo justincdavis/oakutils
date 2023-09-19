@@ -16,12 +16,12 @@ if TYPE_CHECKING:
 
 class ArucoStream:
     """Class for filtering aruco marker detections as a continous stream.
-    
+
     Attributes
     ----------
     calibration : ColorCalibrationData, MonoCalibrationData, None
         The calibration data to use for finding the transformation matrix
-        
+
     Methods
     -------
     find(image: np.ndarray, rectified: bool | None = None)

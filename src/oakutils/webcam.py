@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
-from .calibration import get_camera_calibration_basic, ColorCalibrationData
+from .calibration import ColorCalibrationData, get_camera_calibration_basic
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
