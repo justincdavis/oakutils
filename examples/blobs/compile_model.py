@@ -34,7 +34,14 @@ class Custom(AbstractModel):
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        return kornia.filters.laplacian(image, 7)
+        return kornia.filters.laplacian(
+            kornia.filters.gaussian_blur2d(
+                image,
+                (5, 5),
+                (1.5, 1.5),
+            ),
+            7
+        )
     
 
 def main():
@@ -52,7 +59,8 @@ def main():
         shaves=6,  # this is the number of shaves to use for the model
         # shaves are the computational units onboard the OAK cameras
         # NOTE: adding more shaves does not always mean better performance!
-        # Luxonis recommends using 6 shaves for most models
+        # Luxonis recommends using 6 shaves for most models (actual models, not CV functions)
+        # CV functions can often use 1 or 2 shaves
         shape_mapping={
             InputType.FP16: (300, 300, 3),  # this is the shape of the input tensor
             # you can change this to match whatever shapes you want your model to take as input
@@ -107,6 +115,9 @@ def main():
 
         while True:
             data = queue.get()
+
+            # use the get_nn_bgr_frame helper to get a frame from the nn data
+            # if your network doesnt output an image define a custom helper
             frame = get_nn_bgr_frame(
                 data,  # the raw data packet, this will be a dai.NNData
                 (300, 300),  # make sure to match the size
