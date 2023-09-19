@@ -61,7 +61,9 @@ class ErosionGray(AbstractModel):
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        erosion = kornia.morphology.erosion(image, (self._kernel_size, self._kernel_size))
+        erosion = kornia.morphology.erosion(
+            image, (self._kernel_size, self._kernel_size)
+        )
         return kornia.color.bgr_to_grayscale(erosion)
 
 
@@ -95,7 +97,9 @@ class ErosionBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.erosion(gaussian, (self._kernel_size2, self._kernel_size2))
+        return kornia.morphology.erosion(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
 
 
 class ErosionBlurGray(AbstractModel):
@@ -130,5 +134,7 @@ class ErosionBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        erosion = kornia.morphology.erosion(gaussian, (self._kernel_size2, self._kernel_size2))
+        erosion = kornia.morphology.erosion(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
         return kornia.color.bgr_to_grayscale(erosion)

@@ -61,7 +61,9 @@ class DilationGray(AbstractModel):
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        dilation = kornia.morphology.dilation(image, (self._kernel_size, self._kernel_size))
+        dilation = kornia.morphology.dilation(
+            image, (self._kernel_size, self._kernel_size)
+        )
         return kornia.color.bgr_to_grayscale(dilation)
 
 
@@ -95,7 +97,9 @@ class DilationBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.dilation(gaussian, (self._kernel_size2, self._kernel_size2))
+        return kornia.morphology.dilation(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
 
 
 class DilationBlurGray(AbstractModel):
@@ -130,5 +134,7 @@ class DilationBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        dilation = kornia.morphology.dilation(gaussian, (self._kernel_size2, self._kernel_size2))
+        dilation = kornia.morphology.dilation(
+            gaussian, (self._kernel_size2, self._kernel_size2)
+        )
         return kornia.color.bgr_to_grayscale(dilation)

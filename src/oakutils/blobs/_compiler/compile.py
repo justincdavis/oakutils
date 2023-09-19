@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
-import json
 
 import torch
+
 from oakutils.blobs.definitions import AbstractModel, InputType
 
 from .blob import compile_blob
@@ -126,9 +127,7 @@ def _compile(
         base_str += "Usually this is caused by a corrupted json file. "
         base_str += "Try deleting the blobconverter cache directory and json file. "
         base_str += "Then recompile the blob."
-        raise RuntimeError(
-            base_str
-        ) from er
+        raise RuntimeError(base_str) from er
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]

@@ -309,7 +309,7 @@ def verify_blobs():
     for shave in shaves:
         shave_model_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
         init_final_path = os.path.join(shave_model_folder, "__init__.py")
-        with open(init_final_path, "r") as f:
+        with open(init_final_path) as f:
             num_files.append(len(f.readlines()))
     assert len(set(num_files)) == 1, "Not all __init__.py files have the same number of models"
 
