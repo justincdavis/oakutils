@@ -117,22 +117,27 @@ def compile_model(model_type: AbstractModel, shave: int):
         except AttributeError:
             model_name = model_type.__class__.__name__
 
-        model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
-        return model_name
+        model_name_arg = remove_suffix(f"{model_name}_{arg_str}", "_")
+        return model_name_arg
 
     shave_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
     # create the shave folder if it doesn't exist
     if not os.path.exists(shave_folder):
         os.makedirs(shave_folder)
-    model_name = get_model_name(model_type, model_args[0])
-    model_paths = [
-        os.path.join(shave_folder, f)
-        for f in os.listdir(shave_folder)
-        if model_name == f.replace(".blob", "")
-    ]
-    if len(model_paths) != 0:
-        print(f"Model {model_name} with {shave} shaves already exists, skipping...")
-        return
+
+    missing_model_args = []
+    for model_arg in model_args:
+        model_name_arg = get_model_name(model_type, model_arg)
+        model_paths = [
+            os.path.join(shave_folder, f)
+            for f in os.listdir(shave_folder)
+            if model_name_arg == f.replace(".blob", "")
+        ]
+        if len(model_paths) == 0:
+            missing_model_args.append(model_arg)
+        else:
+            print(f"Model {model_name_arg} with {shave} shaves already exists, skipping...")
+    model_args = missing_model_args       
 
     model_paths = []
     with mp.Pool() as pool:
@@ -177,10 +182,10 @@ def compiles_models():
         # OpeningBlur,
         # OpeningGray,
         # OpeningBlurGray,
-        # Harris,
-        # HarrisBlur,
-        # HarrisGray,
-        # HarrisBlurGray,
+        Harris,
+        HarrisBlur,
+        HarrisGray,
+        HarrisBlurGray,
         # Hessian,
         # HessianBlur,
         # HessianGray,
@@ -290,6 +295,21 @@ def compiles_models():
             f.write(f"    'shave{shave}',\n")
         f.write("]\n")
 
+    # verify that each shave folder has the same number of models
+    num_files = []
+    for shave in shaves:
+        shave_model_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
+        num_files.append(len(os.listdir(shave_model_folder)))
+    assert len(set(num_files)) == 1, "Not all shave folders have the same number of models"
+
+    # verify each __init__.py file has the same number of models
+    num_files = []
+    for shave in shaves:
+        shave_model_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
+        init_final_path = os.path.join(shave_model_folder, "__init__.py")
+        with open(init_final_path, "r") as f:
+            num_files.append(len(f.readlines()))
+    assert len(set(num_files)) == 1, "Not all __init__.py files have the same number of models"
 
 def main():
     compiles_models()
