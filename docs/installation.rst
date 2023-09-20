@@ -8,8 +8,8 @@ to install oakutils into a virtual environment. This will ensure that the
 oakutils dependencies are isolated from other Python projects you may be
 working on.
 
-Methods:
---------
+Methods
+^^^^^^^
 #. Pip:
 
    .. code-block:: console
@@ -24,8 +24,8 @@ Methods:
       $ cd oakutils
       $ pip3 install .
 
-Optional Dependencies:
-----------------------
+Optional Dependencies
+^^^^^^^^^^^^^^^^^^^^^
 #. compiler:
 
    .. code-block:: console

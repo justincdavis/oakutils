@@ -1,10 +1,7 @@
 Usage
 =====
 
-Using the camera
-----------------
-
-The oakutils module supports using the camera in a multitude of methods:
+The oakutils module supports using the OAK camera in a multitude of methods:
 
 - Using the `oakutils.ApiCamera` object:
 
@@ -106,3 +103,14 @@ The oakutils module supports using the camera in a multitude of methods:
 
             if cv2.waitKey(1) == ord('q'):
                break
+
+Generally speaking, using the `depthai_sdk` will be the least verbose option.
+Using the `depthai` library will be the most verbose option, but also the most
+flexible. Using the `oakutils` module will be somewhere in between, although `oakutils`
+covers all configuration parameters for nodes and functionality which it wraps. This
+allows the users to have better exposure to configuration parameters compared to the 
+API and SDK versions.
+
+However, the `oakutils` module is not a replacement for the `depthai` or `depthia_sdk` library.
+It is built to be inter-operable and to be used alongside these libraries while providing better
+interfacing with other third-party libraries such as: `opencv` and `open3d`.
