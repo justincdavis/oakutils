@@ -71,6 +71,7 @@ dev = [
     "sphinx",
     "sphinx-rtd-theme",
     "pyclean",
+    "pytest",
 ]
 
 [tool.bumpver]
