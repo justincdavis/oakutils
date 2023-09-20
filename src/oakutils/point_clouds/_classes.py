@@ -17,11 +17,11 @@ class PointCloudVisualizer:
     Methods
     -------
     stop()
-        Stops the visualizer.
+        Use to stop the visualizer.
     update(pcd: o3d.geometry.PointCloud)
-        Updates the point cloud to visualize.
+        Use to update the point cloud to visualize.
     update_rotation(R_camera_to_world: np.ndarray)
-        Updates the rotation matrix to use for the point cloud.
+        Use to update the rotation matrix to use for the point cloud.
 
     References
     ----------
@@ -34,7 +34,7 @@ class PointCloudVisualizer:
         window_size: tuple[int, int] = (1920, 1080),
         use_threading: bool | None = None,
     ) -> None:
-        """Creates a PointCloudVisualizer object.
+        """Use to create a PointCloudVisualizer object.
 
         Parameters
         ----------
@@ -67,7 +67,7 @@ class PointCloudVisualizer:
         atexit.register(self.stop)
 
     def _close(self: Self) -> None:
-        """Closes the visualizer."""
+        """Use to close the visualizer."""
         self._stopped = True
 
         if self._use_threading:
@@ -79,7 +79,7 @@ class PointCloudVisualizer:
                 self._vis.destroy_window()
 
     def _run(self: Self) -> None:
-        """The main loop of the visualizer when used with a thread."""
+        """Use to run main loop of the visualizer when used with a thread."""
         while not self._stopped:
             with self._update_condition:
                 self._update_condition.wait()
@@ -106,7 +106,7 @@ class PointCloudVisualizer:
         self._started = True
 
     def _update(self: Self) -> None:
-        """Updates the visualizer."""
+        """Use to update the visualizer."""
         if self._pcd is None:
             return
         self._pcd.rotate(
@@ -117,11 +117,11 @@ class PointCloudVisualizer:
         self._vis.update_renderer()
 
     def stop(self: Self) -> None:
-        """Stops the visualizer."""
+        """Use to stop the visualizer."""
         self._close()
 
     def update(self: Self, pcd: o3d.geometry.PointCloud) -> None:
-        """Updates the point cloud to visualize.
+        """Use to update the point cloud to visualize.
 
         Parameters
         ----------
@@ -151,7 +151,7 @@ class PointCloudVisualizer:
             self._update()
 
     def update_rotation(self: Self, rot: np.ndarray) -> None:
-        """Updates the rotation matrix of the point cloud.
+        """Use to update the rotation matrix of the point cloud.
 
         Parameters
         ----------

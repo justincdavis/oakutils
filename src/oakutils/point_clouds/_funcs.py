@@ -16,7 +16,7 @@ def get_point_cloud_from_rgb_depth_image(
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
 ) -> o3d.geometry.PointCloud:
-    """Creates an o3d point cloud from an RGB and a depth image.
+    """Use to create an o3d point cloud from an RGB and a depth image.
 
     Parameters
     ----------
@@ -65,7 +65,7 @@ def get_point_cloud_from_depth_image(
     stride: int = 1,
     project_valid_depth_only: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Creates an o3d point cloud from a depth image.
+    """Use to create an o3d point cloud from a depth image.
 
     Parameters
     ----------
@@ -110,7 +110,7 @@ def filter_point_cloud(
     std_ratio: float | None = 0.1,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Filters the point cloud by performing voxel downsampling and outlier removal.
+    """Use to filter the point cloud by performing voxel downsampling and outlier removal.
 
     Parameters
     ----------
@@ -151,12 +151,12 @@ def filter_point_cloud(
 
 def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
     """Convert a numpy array to an open3d point cloud.
-    The numpy array should be of shape (N, 3) or (N, 4) where N is the number of points.
 
     Parameters
     ----------
     pcl_data : np.ndarray
         The numpy array to convert.
+        Should be of shape (N, 3) or (N, 4) where N is the number of points.
 
     Returns
     -------
