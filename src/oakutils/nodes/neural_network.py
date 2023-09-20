@@ -295,7 +295,7 @@ def get_nn_point_cloud(
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
 ) -> np.ndarray:
-    """Takes the raw data output from a neural network execution and converts it to a point cloud
+    """Takes the raw data output from a neural network execution and converts it to a point cloud.
 
     Parameters
     ----------

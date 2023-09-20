@@ -27,7 +27,8 @@ class ArucoStream:
     find(image: np.ndarray, rectified: bool | None = None)
         Finds the aruco markers in the image
     draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
-        Draws the detected markers onto the image"""
+    Draws the detected markers onto the image
+    """
 
     def __init__(
         self: Self,
@@ -138,6 +139,7 @@ class ArucoStream:
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
         """Draws the detected markers onto the image.
+
         Parameters
         ----------
         image : np.ndarray
@@ -146,9 +148,10 @@ class ArucoStream:
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
+
         Returns
         -------
         np.ndarray
-            A copy of the image with the markers drawn on it
+            A copy of the image with the markers drawn on it.
         """
         return self._finder.draw(image, markers)

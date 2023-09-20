@@ -1,3 +1,10 @@
+"""Module for pixel coordinate tools.
+
+Functions
+---------
+homogenous_pixel_coord
+    Pixel in homogenous coordinate.
+"""
 from __future__ import annotations
 
 import numpy as np

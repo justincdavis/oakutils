@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class ArucoFinder:
     """Class for finding aruco markers in images and acquiring
-    transformation matrices to them
+    transformation matrices to them.
 
     Attributes
     ----------
@@ -33,7 +33,7 @@ class ArucoFinder:
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
     ) -> None:
-        """Initializes the ArucoFinder class
+        """Initializes the ArucoFinder class.
 
         Parameters
         ----------
@@ -59,7 +59,7 @@ class ArucoFinder:
 
     @property
     def calibration(self: Self) -> ColorCalibrationData | MonoCalibrationData | None:
-        """The calibration data used by the ArucoFinder
+        """The calibration data used by the ArucoFinder.
 
         Returns
         -------
@@ -72,7 +72,7 @@ class ArucoFinder:
     def calibration(
         self: Self, calibration: ColorCalibrationData | MonoCalibrationData
     ) -> None:
-        """Sets the calibration data used by the ArucoFinder
+        """Sets the calibration data used by the ArucoFinder.
 
         Parameters
         ----------

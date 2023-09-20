@@ -1,3 +1,10 @@
+"""Module defining a webcam class for reading frames from an OAK.
+
+Classes
+-------
+Webcam
+    A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
+"""
 from __future__ import annotations
 
 import atexit
@@ -17,6 +24,22 @@ if TYPE_CHECKING:
 
 
 class Webcam:
+    """A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
+
+    Attributes
+    ----------
+    calibration : ColorCalibrationData
+        The calibration info for the camera
+
+
+    Methods
+    -------
+    stop()
+        Stop the camera.
+    read()
+        Read a frame from the camera.
+    """
+
     def __init__(
         self: Self, resolution: tuple[int, int] = (1920, 1080), fps: int = 30
     ) -> None:
@@ -64,7 +87,7 @@ class Webcam:
 
     @property
     def calibration(self: Self) -> ColorCalibrationData:
-        """Returns the calibration info for the camera
+        """Returns the calibration info for the camera.
 
         Returns
         -------
@@ -74,6 +97,7 @@ class Webcam:
         return self._calibration.rgb
 
     def __del__(self: Self) -> None:
+        """Stop the camera when the object is deleted."""
         self.stop()
 
     def stop(self: Self) -> None:

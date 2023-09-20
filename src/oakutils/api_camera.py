@@ -67,8 +67,7 @@ class Camera:
 
     @property
     def pipeline(self: Self) -> dai.Pipeline:
-        """
-        Returns the pipeline. If the pipeline has not been built yet, a RuntimeError is raised.
+        """Returns the pipeline. If the pipeline has not been built yet, a RuntimeError is raised.
         This is useful for adding custom nodes to the pipeline.
 
         Raises
@@ -82,32 +81,25 @@ class Camera:
 
     @property
     def calibration(self: Self) -> CalibrationData:
-        """
-        Returns the calibration data.
-        """
+        """Returns the calibration data."""
         return self._calibration
 
     @property
     def displays(self: Self) -> DisplayManager:
-        """
-        Returns the display manager.
-        """
+        """Returns the display manager."""
         if self._displays is None:
             self._displays = DisplayManager(display_size=self._display_size)
         return self._displays
 
     @property
     def pcv(self: Self) -> PointCloudVisualizer:
-        """
-        Returns the point cloud visualizer.
-        """
+        """Returns the point cloud visualizer."""
         if self._pcv is None:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
     def start(self: Self, blocking: bool | None = None) -> None:
-        """
-        Starts the camera. To be done after all api calls are made.
+        """Starts the camera. To be done after all api calls are made.
         Will build the pipeline if it has not been built yet.
         """
         if blocking is None:
@@ -122,9 +114,7 @@ class Camera:
                 self._stop_condition.wait()
 
     def stop(self: Self) -> None:
-        """
-        Stops the camera.
-        """
+        """Stops the camera."""
         self._stopped = True
 
         # call conditions if system never started
@@ -135,8 +125,7 @@ class Camera:
             self._thread.join()
 
     def add_callback(self: Self, name: str | Iterable[str], callback: Callable) -> None:
-        """
-        Adds a callback to be run on the output queue with the given name.
+        """Adds a callback to be run on the output queue with the given name.
 
         Parameters
         ----------

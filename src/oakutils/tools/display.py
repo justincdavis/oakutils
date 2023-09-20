@@ -1,3 +1,19 @@
+"""Module for creating and using displays for visualization.
+
+Classes
+-------
+DisplayManager
+    Used to display multiple camera streams at once.
+
+Functions
+---------
+get_resolution_area
+    Gets the area of the given resolution.
+order_resolutions
+    Orders the given resolutions from smallest to largest.
+get_smaller_size
+    Gets the smaller size of the two given sizes.
+"""
 from __future__ import annotations
 
 import atexit
@@ -74,6 +90,15 @@ class DisplayManager:
     def __init__(
         self: Self, fps: int = 30, display_size: tuple[int, int] = (640, 480)
     ) -> None:
+        """Use to initialize a display manager.
+
+        Parameters
+        ----------
+        fps : int, optional
+            The fps of the display manager, by default 30
+        display_size : Tuple[int, int], optional
+            The size of the display, by default (640, 480)
+        """
         self._displays: dict[str, _Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size
@@ -87,17 +112,19 @@ class DisplayManager:
         Returns
         -------
         int
-            The fps of the display manager"""
+            The fps of the display manager
+        """
         return self._fps
 
     @fps.setter
     def fps(self: Self, fps: int) -> None:
-        """Sets the fps of the display manager.
+        """Use to set the fps of the display manager.
 
         Parameters
         ----------
         fps : int
-            The fps to set the display manager to"""
+            The fps to set the display manager to
+        """
         self._fps = fps
         for display in self._displays.values():
             display.fps = fps
@@ -107,7 +134,7 @@ class DisplayManager:
             display.stop()
 
     def stop(self: Self) -> None:
-        """Stops the display manager."""
+        """Use to stop the display manager."""
         self._stop()
 
     def _update(self: Self, name: str, frame: np.ndarray) -> None:
@@ -123,7 +150,9 @@ class DisplayManager:
             self._displays[name](frame)
 
     def set_transform(self: Self, name: str, transform: Callable) -> None:
-        """Sets a transform for the given name.
+        """Use to set a transform for the given name.
+
+        A transform should take in an np.ndarray and return an np.ndarray.
 
         Parameters
         ----------
@@ -139,7 +168,7 @@ class DisplayManager:
         data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]],
         transform: Callable | None = None,
     ) -> None:
-        """Updates the display with the given data.
+        """Use to update the display manager with the given data.
 
         Parameters
         ----------
@@ -164,8 +193,11 @@ class DisplayManager:
                 self._update(name, self._transforms[name](frame))
 
     def callback(self: Self, name: str) -> Callable[[np.ndarray], None]:
-        """Returns a callback to be used with ImgFrame outputs from
-         queues. The callback will update the display with the given name.
+        """Use to get a callback to be used with ImgFrame outputs.
+
+        The outputs come from queues from a depthai.Device. The callback
+        will update the display with the given name based on the data
+        from the ImgFrame.
 
         Parameters
         ----------
@@ -185,7 +217,7 @@ class DisplayManager:
 
 
 def get_resolution_area(resolution: tuple[int, int]) -> int:
-    """Gets the area of the given resolution.
+    """Use to get the area of the given resolution.
 
     Parameters
     ----------
@@ -203,8 +235,7 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
 def order_resolutions(
     resolutions: Iterable[tuple[int, int]], reverse: bool | None = None
 ) -> Iterable[tuple[int, int]]:
-    """Orders the given resolutions from smallest to largest.
-    If reverse is True, then it will order from largest to smallest.
+    """Use to order the given resolutions from smallest to largest.
 
     Parameters
     ----------
@@ -212,6 +243,7 @@ def order_resolutions(
         The resolutions to order
     reverse : Optional[bool], optional
         Whether or not to reverse the order, by default False
+        If reverse is True, then it will order from largest to smallest.
 
     Returns
     -------
@@ -224,7 +256,7 @@ def order_resolutions(
 
 
 def get_smaller_size(size1: tuple[int, int], size2: tuple[int, int]) -> tuple[int, int]:
-    """Gets the smaller size of the two given sizes.
+    """Use to get the smaller size of the two given sizes.
 
     Parameters
     ----------

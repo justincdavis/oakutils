@@ -1,3 +1,26 @@
+"""Module for converting between depthai types, tuples, and strings.
+
+Functions
+---------
+get_color_sensor_resolution_from_str
+    Use to convert a str to a SensorResolution.
+get_tuple_from_color_sensor_resolution
+    Use to convert a SensorResolution to a tuple.
+get_color_sensor_resolution_from_tuple
+    Use to convert a tuple to a SensorResolution.
+get_color_sensor_info_from_str
+    Use to parse a resolution string into a tuple of (width, height, SensorResolution).
+get_mono_sensor_resolution_from_str
+    Coverts a str to a SensorResolution.
+get_mono_sensor_resolution_from_tuple
+    Use to convert a tuple to a SensorResolution.
+get_tuple_from_mono_sensor_resolution
+    Use to convert a SensorResolution to a tuple.
+get_mono_sensor_info_from_str
+    Use to parse a resolution string into a tuple of (width, height, SensorResolution).
+get_median_filter_from_str
+    Use to convert a str to a MedianFilter.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -6,7 +29,7 @@ import depthai as dai
 def get_color_sensor_resolution_from_str(
     resolution: str,
 ) -> dai.ColorCameraProperties.SensorResolution:
-    """Coverts a str to a SensorResolution.
+    """Use to convert a str to a SensorResolution.
 
     Parameters
     ----------
@@ -48,7 +71,7 @@ def get_color_sensor_resolution_from_str(
 def get_tuple_from_color_sensor_resolution(
     resolution: dai.ColorCameraProperties.SensorResolution,
 ) -> tuple[int, int]:
-    """Converts a SensorResolution to a tuple.
+    """Use to convert a SensorResolution to a tuple.
 
     Parameters
     ----------
@@ -100,7 +123,7 @@ def get_tuple_from_color_sensor_resolution(
 def get_color_sensor_resolution_from_tuple(
     resolution: tuple[int, int],
 ) -> dai.ColorCameraProperties.SensorResolution:
-    """Converts a tuple to a SensorResolution.
+    """Use to convert a tuple to a SensorResolution.
 
     Parameters
     ----------
@@ -147,7 +170,7 @@ def get_color_sensor_resolution_from_tuple(
 def get_color_sensor_info_from_str(
     resolution: str,
 ) -> tuple[int, int, dai.ColorCameraProperties.SensorResolution]:
-    """Parses a resolution string into a tuple of (width, height, SensorResolution).
+    """Use to parse a resolution string into a tuple of (width, height, SensorResolution).
 
     Parameters
     ----------
@@ -195,7 +218,7 @@ def get_mono_sensor_resolution_from_str(
 def get_mono_sensor_resolution_from_tuple(
     resolution: tuple[int, int],
 ) -> dai.MonoCameraProperties.SensorResolution:
-    """Converts a tuple to a SensorResolution.
+    """Use to convert a tuple to a SensorResolution.
 
     Parameters
     ----------
@@ -228,7 +251,7 @@ def get_mono_sensor_resolution_from_tuple(
 def get_tuple_from_mono_sensor_resolution(
     resolution: dai.MonoCameraProperties.SensorResolution,
 ) -> tuple[int, int]:
-    """Converts a SensorResolution to a tuple.
+    """Use to convert a SensorResolution to a tuple.
 
     Parameters
     ----------
@@ -263,7 +286,7 @@ def get_tuple_from_mono_sensor_resolution(
 def get_mono_sensor_info_from_str(
     resolution: str,
 ) -> tuple[int, int, dai.MonoCameraProperties.SensorResolution]:
-    """Parses a resolution string into a tuple of (width, height, SensorResolution).
+    """Use to parse a resolution string into a tuple of (width, height, SensorResolution).
 
     Parameters
     ----------
@@ -283,7 +306,7 @@ def get_mono_sensor_info_from_str(
 def get_median_filter_from_str(
     filter_size: int | None,
 ) -> dai.StereoDepthProperties.MedianFilter:
-    """Converts a str to a MedianFilter.
+    """Use to convert a str to a MedianFilter.
 
     Parameters
     ----------
