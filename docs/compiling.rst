@@ -1,7 +1,7 @@
 .. _compiling:
 
-Compiling Custom Models and CV Functions:
-------------------------
+Compiling Custom Models and CV Functions
+----------------------------------------
 
 Note: This feature requires the compiler dependencies to be installed.  See the
 :ref:`installation` page for more information.
@@ -12,8 +12,8 @@ There are two primary ways to do this:
 1.  Use the `oakutils.blobs.compile_model` function to compile a single model defined as a torch.nn.Module.
 2.  Use the `oakutils.blobs.compile_onnx` function to compile a ONNX model from a file.
 
-Using the `compile_model`
-^^^^^^^^^^^^^^^^^^^^^^^^
+Using the `compile_model` function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -40,30 +40,30 @@ as it's input to compile. An example of such a class is shown below:
     class Gaussian(AbstractModel):
     """nn.Module wrapper for kornia.filters.gaussian_blur2d."""
 
-    def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
-        super().__init__()
-        self._kernel_size = kernel_size
-        self._sigma = sigma
+        def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
+            super().__init__()
+            self._kernel_size = kernel_size
+            self._sigma = sigma
 
-    @classmethod
-    def model_type(cls: Gaussian) -> ModelType:
-        """The type of input this model takes."""
-        return ModelType.KERNEL
+        @classmethod
+        def model_type(cls: Gaussian) -> ModelType:
+            """The type of input this model takes."""
+            return ModelType.KERNEL
 
-    @classmethod
-    def input_names(cls: Gaussian) -> list[tuple[str, InputType]]:
-        """The names of the input tensors."""
-        return [("input", InputType.FP16)]
+        @classmethod
+        def input_names(cls: Gaussian) -> list[tuple[str, InputType]]:
+            """The names of the input tensors."""
+            return [("input", InputType.FP16)]
 
-    @classmethod
-    def output_names(cls: Gaussian) -> list[str]:
-        """The names of the output tensors."""
-        return ["output"]
+        @classmethod
+        def output_names(cls: Gaussian) -> list[str]:
+            """The names of the output tensors."""
+            return ["output"]
 
-    def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
-        return kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
-        )
+        def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
+            return kornia.filters.gaussian_blur2d(
+                image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            )
 
 This definition of the Gaussian class will produce a blob which performs a gaussian blur
 using the kernel and sigma parameters specified in the constructor. 
@@ -74,21 +74,25 @@ input the model takes, the names of the input tensors, the names of the output t
 the arrangement of constructor parameters. This additional verbose definition allows
 the compilation of arbitrary models without having the need for custom functions or compilation steps.
 
-* `model_type` - This method returns a `ModelType` enum which specifies the style of parameters
-which the constructor takes. For user defined (non-distributed) models, setting this to `ModelType.NONE`
-is sufficient.
+1. `model_type` - 
+This method returns a `ModelType` enum which specifies the style of parameters
+which the constructor takes. For user defined (non-distributed) models, setting 
+this to `ModelType.NONE` is sufficient.
 
-* `input_names` - This method returns a list of tuples which specify the names of the input tensors
-and the type of input they take. The type of input is specified by the `InputType` enum. The `InputType`
-enum is used to determine the shape of the input tensors. This comes from the `shape_mapping` parameter
-in the `compile_model` function. 
+2. `input_names` - 
+This method returns a list of tuples which specify the names of the input tensors 
+and the type of input they take. The type of input is specified by the `InputType` enum. 
+The `InputType` enum is used to determine the shape of the input tensors. 
+This comes from the `shape_mapping` parameter in the `compile_model` function. 
 
-* `output_names` - This method returns a list of strings which specify the names of the output tensors.
-The output type is NOT determined at "compile time" and is determined when decoding the output.
-Some examples of this are: `from oakutils.nodes import get_nn_frame, get_nn_bgr_frame, get_nn_gray_frame`.
-Each function is called by the host (not OAK) when processing the xout frames in a buffer.
-An error in the decoding will typically result in a `ValueError` being raised, since the buffer
-does not fit into the allocated array size.
+3. `output_names` - 
+This method returns a list of strings which specify the names of the output tensors. 
+The output type is NOT determined at "compile time" and is determined when decoding 
+the output. Some examples of this are: 
+`from oakutils.nodes import get_nn_frame, get_nn_bgr_frame, get_nn_gray_frame`. 
+Each function is called by the host (not OAK) when processing the xout frames in a buffer. 
+An error in the decoding will typically result in a `ValueError` being raised, since 
+the buffer does not fit into the allocated array size.
 
 Given are the definitions of the three datatypes used in the above class:
 
@@ -126,6 +130,30 @@ Given are the definitions of the three datatypes used in the above class:
         NONE = 0
         KERNEL = 1
         DUAL_KERNEL = 2
+
+Using the `compile_onnx` function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    import oakutils.blobs import compile_onnx
+
+    def compile_onnx(
+        model_path: str,
+        output_path: str,
+        shaves: int = 6,
+        version: str = "2022.1",
+        simplify: bool | None = None,
+    ) -> None:
+
+The compile_onnx functions as a wrapper around the `blobconverter.from_onnx` function.
+It takes an ONNX model file and compiles it to a blob. The `output_path` parameter
+specifies the path to the output blob. The `shaves` parameter specifies the number
+of shaves to use for compilation. The `version` parameter specifies the version of
+OpenVINO to use for compilation. The `simplify` parameter specifies whether to
+simplify the model before compilation. Simplfication is done with the onnxsim package.
+
+This function is provided for convenience and is not as flexible as the `compile_model`.
 
 Defining Custom InputTypes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
