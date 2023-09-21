@@ -1,3 +1,11 @@
+"""
+Module for finding aruco markers in images and acquiring transformation matrices to them.
+
+Classes
+-------
+ArucoFinder
+    Use to find ArUco markers in an image.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -12,8 +20,8 @@ if TYPE_CHECKING:
 
 
 class ArucoFinder:
-    """Class for finding aruco markers in images and acquiring
-    transformation matrices to them.
+    """
+    Class for finding aruco markers in images and acquiring transformation matrices to them.
 
     Attributes
     ----------
@@ -33,7 +41,8 @@ class ArucoFinder:
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
     ) -> None:
-        """Initializes the ArucoFinder class.
+        """
+        Use to create the ArucoFinder class.
 
         Parameters
         ----------
@@ -59,7 +68,8 @@ class ArucoFinder:
 
     @property
     def calibration(self: Self) -> ColorCalibrationData | MonoCalibrationData | None:
-        """The calibration data used by the ArucoFinder.
+        """
+        The calibration data used by the ArucoFinder.
 
         Returns
         -------
@@ -72,7 +82,8 @@ class ArucoFinder:
     def calibration(
         self: Self, calibration: ColorCalibrationData | MonoCalibrationData
     ) -> None:
-        """Sets the calibration data used by the ArucoFinder.
+        """
+        Use to set the calibration data used by the ArucoFinder.
 
         Parameters
         ----------
@@ -88,8 +99,11 @@ class ArucoFinder:
         image: np.ndarray,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
-        """Finds the aruco markers in the image.
-          Makes an assumption that there is a single marker for each id.
+        """
+        Use to find the aruco markers in the image.
+
+        Note:
+        Makes an assumption that there is a single marker for each id.
 
         Parameters
         ----------
@@ -142,7 +156,8 @@ class ArucoFinder:
         image: np.ndarray,
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
-        """Draws the detected markers onto the image.
+        """
+        Use to draw the detected markers onto the image.
 
         Parameters
         ----------

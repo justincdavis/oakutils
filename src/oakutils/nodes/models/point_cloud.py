@@ -1,3 +1,13 @@
+"""
+Module for creating a point cloud model onboard.
+
+Functions
+---------
+create_xyz_matrix
+    Use to create a constant reprojection matrix for the given camera matrix and image size.
+create_point_cloud
+    Use to create a point_cloud model.
+"""
 from __future__ import annotations
 
 from functools import partial
@@ -15,7 +25,10 @@ if TYPE_CHECKING:
 
 
 def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
-    """Creates a constant reprojection matrix for the given camera matrix and image size.
+    """
+    Use to create a constant reprojection matrix for the given camera matrix and image size.
+
+    Note:
     This is for generating the input to the point cloud generation model.
 
     Parameters
@@ -66,7 +79,8 @@ def create_point_cloud(
     input_stream_name: str = "xyz_to_pcl",
     shaves: int = 4,
 ) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
-    """Creates a point_cloud model with a specified kernel size.
+    """
+    Use to create a point_cloud model with a specified kernel size.
 
     Parameters
     ----------

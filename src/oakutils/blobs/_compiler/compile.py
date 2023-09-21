@@ -24,11 +24,12 @@ def _compile(
     shaves: int = 6,
     creation_func: callable = torch.rand,
 ) -> str:
-    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """
+    Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
-    model : AbstractModel
+    model_type : AbstractModel
         The model class to compile. This should be just the type that returns an
         instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
@@ -142,11 +143,12 @@ def compile_model(
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
     creation_func: callable = torch.rand,
 ) -> str:
-    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """
+    Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
-    model : AbstractModel
+    model_type : AbstractModel
         The model class to compile. This should be just the type that returns an
         instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`

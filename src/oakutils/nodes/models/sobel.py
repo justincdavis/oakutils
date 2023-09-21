@@ -1,3 +1,11 @@
+"""
+Models for the sobel node.
+
+Functions
+---------
+create_sobel
+    Creates a sobel model as a node.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -17,7 +25,8 @@ def create_sobel(
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
-    """Creates a sobel model with a specified kernel size.
+    """
+    Use to create a sobel model with a specified kernel size.
 
     Parameters
     ----------

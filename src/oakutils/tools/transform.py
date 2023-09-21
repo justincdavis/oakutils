@@ -1,4 +1,5 @@
-"""Helper functions for creating transformation matrices.
+"""
+Helper functions for creating transformation matrices.
 
 This module contains helper functions for creating transformation matrices.
 These matrices can be used to transform points from one coordinate system to
@@ -17,7 +18,8 @@ import numpy as np
 
 
 def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarray:
-    """Use to create a rotation matrix from a rotation vector.
+    """
+    Use to create a rotation matrix from a rotation vector.
 
     Parameters
     ----------
@@ -61,7 +63,8 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
 
 
 def create_translation(delta_x: float, delta_y: float, delta_z: float) -> np.ndarray:
-    """Use to create a translation vector.
+    """
+    Use to create a translation vector.
 
     Parameters
     ----------
@@ -88,7 +91,8 @@ def create_transform(
     delta_y: float,
     delta_z: float,
 ) -> np.ndarray:
-    """Use to get transformation matrix from a rotation vector and translation vector.
+    """
+    Use to get transformation matrix from a rotation vector and translation vector.
 
     Parameters
     ----------

@@ -1,4 +1,5 @@
-"""Module for tools related to calculating spatials locations.
+"""
+Module for tools related to calculating spatials locations.
 
 Classes
 -------
@@ -20,7 +21,8 @@ if TYPE_CHECKING:
 
 
 class HostSpatialsCalc:
-    """Class for calculating spatial coordinates on the host.
+    """
+    Class for calculating spatial coordinates on the host.
 
     Attributes
     ----------
@@ -49,7 +51,8 @@ class HostSpatialsCalc:
         thresh_low: int = 200,
         thresh_high: int = 30000,
     ) -> None:
-        """Use to create a HostSpatialsCalc object.
+        """
+        Use to create a HostSpatialsCalc object.
 
         Parameters
         ----------
@@ -130,7 +133,8 @@ class HostSpatialsCalc:
         roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,
     ) -> tuple[float, float, float, tuple[int, int]]:
-        """Use to compute spatial coordinates of the ROI.
+        """
+        Use to compute spatial coordinates of the ROI.
 
         Parameters
         ----------

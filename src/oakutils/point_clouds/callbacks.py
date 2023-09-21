@@ -1,4 +1,5 @@
-"""Callbacks for point cloud creation and filtering.
+"""
+Callbacks for point cloud creation and filtering.
 
 Functions
 ---------
@@ -27,7 +28,8 @@ def create_point_cloud(
     std_ratio: float = 0.1,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Use to create a point cloud from a RGB and depth image.
+    """
+    Use to create a point cloud from a RGB and depth image.
 
     Parameters
     ----------

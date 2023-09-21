@@ -12,7 +12,8 @@ def _create_dummy_input(
     input_type: InputType,
     creation_func: callable = torch.rand,
 ) -> torch.Tensor:
-    """Creates a dummy input based on the input_shape.
+    """
+    Use to create a dummy input based on the input_shape.
 
     Parameters
     ----------
@@ -62,7 +63,8 @@ def _create_multiple_dummy_input(
     input_shapes: Iterable[tuple[tuple[int, int, int], InputType]],
     creation_func: callable = torch.rand,
 ) -> list[torch.Tensor]:
-    """Creates a dummy input based on the input_shapes.
+    """
+    Use to create a dummy input based on the input_shapes.
 
     Parameters
     ----------
@@ -92,7 +94,8 @@ def _export_module_to_onnx(
     output_names: list[str],
     verbose: bool | None = None,
 ) -> None:
-    """Runs torch.onnx.export with the given parameters.
+    """
+    Use to run torch.onnx.export with the given parameters.
 
     Parameters
     ----------
@@ -141,13 +144,14 @@ def export(
     creation_func: callable = torch.rand,
     verbose: bool | None = None,
 ) -> None:
-    """Creates dummy inputs based on the dummy_input_shapes and exports the model to onnx.
+    """
+    Use to create dummy inputs based on the dummy_input_shapes and exports the model to onnx.
 
     Parameters
     ----------
     model_instance : torch.nn.Module
         The model instance to export
-    dummY_input_shapes : Union[List[Tuple[int, int, int]], Tuple[int, int, int]]
+    dummy_input_shapes : Union[List[Tuple[int, int, int]], Tuple[int, int, int]]
         The dummy input shapes to use for the export
     onnx_path : str
         The path to save the onnx file to

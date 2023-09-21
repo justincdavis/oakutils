@@ -1,3 +1,22 @@
+"""
+Module for creating neural network nodes.
+
+Functions
+---------
+create_neural_network
+    Creates a neural network node.
+get_nn_frame
+    Takes the raw data output from a neural network execution and converts it to a frame
+    usable by cv2.
+get_nn_bgr_frame
+    Takes the raw data output from a neural network execution and converts it to a BGR frame
+    usable by cv2.
+get_nn_gray_frame
+    Takes the raw data output from a neural network execution and converts it to a grayscale frame
+    usable by cv2.
+get_nn_point_cloud
+    Takes the raw data output from a neural network execution and converts it to a point cloud.
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -18,7 +37,8 @@ def create_neural_network(
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
 ) -> dai.node.NeuralNetwork:
-    """Creates a neural network node.
+    """
+    Use to create a neural network node.
 
     Parameters
     ----------
@@ -105,7 +125,8 @@ def create_neural_network(
 
 
 def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.ndarray:
-    """Normalizes a frame.
+    """
+    Use to normalize a frame.
 
     Parameters
     ----------
@@ -127,7 +148,8 @@ def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.
 
 
 def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
-    """Resizes a frame.
+    """
+    Use to resize a frame.
 
     Parameters
     ----------
@@ -160,8 +182,8 @@ def get_nn_frame(
     normalization: float | Callable | None = 255.0,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
-    """Takes the raw data output from a neural network execution and converts it to a frame
-    usable by cv2.
+    """
+    Use to convert the raw data output from a neural network execution and return a frame.
 
     Parameters
     ----------
@@ -218,8 +240,8 @@ def get_nn_bgr_frame(
     resize_factor: float | None = None,
     normalization: float | Callable | None = None,
 ) -> np.ndarray:
-    """Takes the raw data output from a neural network execution and converts it to a BGR frame
-    usable by cv2.
+    """
+    Use to convert the raw data output from a neural network execution and return a BGR frame.
 
     Parameters
     ----------
@@ -257,8 +279,8 @@ def get_nn_gray_frame(
     resize_factor: float | None = None,
     normalization: float | Callable | None = None,
 ) -> np.ndarray:
-    """Takes the raw data output from a neural network execution and converts it to a grayscale frame
-    usable by cv2.
+    """
+    Use to convert the raw data output from a neural network execution and return a grayscale frame.
 
     Parameters
     ----------
@@ -295,7 +317,8 @@ def get_nn_point_cloud(
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
 ) -> np.ndarray:
-    """Takes the raw data output from a neural network execution and converts it to a point cloud.
+    """
+    Use to convert the raw data output from a neural network execution and converts it to a point cloud.
 
     Parameters
     ----------

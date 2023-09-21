@@ -6,7 +6,8 @@ from oakutils.blobs import models
 
 
 def parse_kernel_size(kernel_size: int) -> bool:
-    """Parses a kernel size to ensure it is valid.
+    """
+    Use to parse a kernel size to ensure it is valid.
 
     Parameters
     ----------
@@ -32,7 +33,8 @@ def parse_kernel_size(kernel_size: int) -> bool:
 
 
 def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
-    """Checks if a name is valid againist the names of compiled models.
+    """
+    Use to check if a name is valid againist the names of compiled models.
 
     Parameters
     ----------
@@ -67,7 +69,8 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
 def get_candidates(
     model_type: str, attributes: list[str], shaves: int
 ) -> list[tuple[str, list[str], str]]:
-    """Gets the list of candidate models for a given model type and attribute.
+    """
+    Use to get the list of candidate models for a given model type and attribute.
 
     Parameters
     ----------

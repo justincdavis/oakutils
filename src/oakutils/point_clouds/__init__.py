@@ -1,4 +1,5 @@
-"""Moudule for creating, filtering, and visualizing point clouds.
+"""
+Moudule for creating, filtering, and visualizing point clouds.
 
 Submoudles
 ----------

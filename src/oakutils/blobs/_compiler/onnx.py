@@ -6,7 +6,8 @@ import onnxsim
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
-    """Simplifies a model using the onnxsim packages.
+    """
+    Simplifies a model using the onnxsim packages.
 
     Parameters
     ----------
@@ -37,7 +38,8 @@ def compile_onnx(
     version: str = "2022.1",
     simplify: bool | None = None,
 ) -> None:
-    """Compiles an ONNX model to a blob saved at the output path.
+    """
+    Compiles an ONNX model to a blob saved at the output path.
 
     Parameters
     ----------
@@ -45,6 +47,12 @@ def compile_onnx(
         The path to the model to compile
     output_path : str
         The path to save the compiled model to
+    shaves : int, optional
+        The number of shaves to use, by default 6
+    version : str, optional
+        The version of blobconverter to use, by default "2022.1"
+    simplify : bool, optional
+        Whether or not to simplify the model before compiling, by default True
 
     Raises
     ------

@@ -1,4 +1,5 @@
-"""Module for creating and using displays for visualization.
+"""
+Module for creating and using displays for visualization.
 
 Classes
 -------
@@ -75,7 +76,8 @@ class _Display:
 
 
 class DisplayManager:
-    """Used in the Camera class to display all the image streams.
+    """
+    Used in the Camera class to display all the image streams.
 
     Methods
     -------
@@ -90,7 +92,8 @@ class DisplayManager:
     def __init__(
         self: Self, fps: int = 30, display_size: tuple[int, int] = (640, 480)
     ) -> None:
-        """Use to initialize a display manager.
+        """
+        Use to initialize a display manager.
 
         Parameters
         ----------
@@ -107,7 +110,8 @@ class DisplayManager:
 
     @property
     def fps(self: Self) -> int:
-        """Returns the fps of the display manager.
+        """
+        Returns the fps of the display manager.
 
         Returns
         -------
@@ -118,7 +122,8 @@ class DisplayManager:
 
     @fps.setter
     def fps(self: Self, fps: int) -> None:
-        """Use to set the fps of the display manager.
+        """
+        Use to set the fps of the display manager.
 
         Parameters
         ----------
@@ -150,7 +155,8 @@ class DisplayManager:
             self._displays[name](frame)
 
     def set_transform(self: Self, name: str, transform: Callable) -> None:
-        """Use to set a transform for the given name.
+        """
+        Use to set a transform for the given name.
 
         A transform should take in an np.ndarray and return an np.ndarray.
 
@@ -168,7 +174,8 @@ class DisplayManager:
         data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]],
         transform: Callable | None = None,
     ) -> None:
-        """Use to update the display manager with the given data.
+        """
+        Use to update the display manager with the given data.
 
         Parameters
         ----------
@@ -193,7 +200,8 @@ class DisplayManager:
                 self._update(name, self._transforms[name](frame))
 
     def callback(self: Self, name: str) -> Callable[[np.ndarray], None]:
-        """Use to get a callback to be used with ImgFrame outputs.
+        """
+        Use to get a callback to be used with ImgFrame outputs.
 
         The outputs come from queues from a depthai.Device. The callback
         will update the display with the given name based on the data
@@ -217,7 +225,8 @@ class DisplayManager:
 
 
 def get_resolution_area(resolution: tuple[int, int]) -> int:
-    """Use to get the area of the given resolution.
+    """
+    Use to get the area of the given resolution.
 
     Parameters
     ----------
@@ -235,7 +244,8 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
 def order_resolutions(
     resolutions: Iterable[tuple[int, int]], reverse: bool | None = None
 ) -> Iterable[tuple[int, int]]:
-    """Use to order the given resolutions from smallest to largest.
+    """
+    Use to order the given resolutions from smallest to largest.
 
     Parameters
     ----------
@@ -256,7 +266,8 @@ def order_resolutions(
 
 
 def get_smaller_size(size1: tuple[int, int], size2: tuple[int, int]) -> tuple[int, int]:
-    """Use to get the smaller size of the two given sizes.
+    """
+    Use to get the smaller size of the two given sizes.
 
     Parameters
     ----------

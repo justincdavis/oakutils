@@ -1,3 +1,11 @@
+"""
+Module for creating gaussian models.
+
+Functions
+---------
+create_gaussian
+    Creates a gaussian model with a specified kernel size.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -15,7 +23,8 @@ def create_gaussian(
     shaves: int = 1,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
-    """Creates a gaussian model with a specified kernel size.
+    """
+    Use to create a gaussian model with a specified kernel size.
 
     Parameters
     ----------

@@ -12,7 +12,8 @@ if TYPE_CHECKING:
 
 
 class PointCloudVisualizer:
-    """A class to visualize open3d point clouds.
+    """
+    A class to visualize open3d point clouds.
 
     Methods
     -------
@@ -34,7 +35,8 @@ class PointCloudVisualizer:
         window_size: tuple[int, int] = (1920, 1080),
         use_threading: bool | None = None,
     ) -> None:
-        """Use to create a PointCloudVisualizer object.
+        """
+        Use to create a PointCloudVisualizer object.
 
         Parameters
         ----------
@@ -121,7 +123,8 @@ class PointCloudVisualizer:
         self._close()
 
     def update(self: Self, pcd: o3d.geometry.PointCloud) -> None:
-        """Use to update the point cloud to visualize.
+        """
+        Use to update the point cloud to visualize.
 
         Parameters
         ----------
@@ -151,7 +154,8 @@ class PointCloudVisualizer:
             self._update()
 
     def update_rotation(self: Self, rot: np.ndarray) -> None:
-        """Use to update the rotation matrix of the point cloud.
+        """
+        Use to update the rotation matrix of the point cloud.
 
         Parameters
         ----------

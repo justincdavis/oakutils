@@ -19,7 +19,8 @@ def create_model(
     input_names: Iterable[str] | None = None,
     reuse_messages: Iterable[bool | None] | None = None,
 ) -> dai.node.NeuralNetwork:
-    """Gets the model blob based on the attributes and creates a neural network node.
+    """
+    Use to get the model blob based on the attributes and creates a neural network node.
 
     Parameters
     ----------
@@ -88,7 +89,8 @@ def create_no_args_multi_link_model(
     input_names: list[str],
     reuse_messages: list[bool | None],
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with multiple input links.
+    """
+    Use to create a model with multiple input links.
 
     Parameters
     ----------
@@ -128,7 +130,8 @@ def create_no_args_model(
     model_name: str,
     shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with no arguments.
+    """
+    Use to create a model with no arguments.
 
     Parameters
     ----------
@@ -163,7 +166,8 @@ def create_single_kernel_model(
     kernel_size: int,
     shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with a single kernel size.
+    """
+    Use to create a model with a single kernel size.
 
     Parameters
     ----------
@@ -205,7 +209,8 @@ def create_double_kernel_model(
     kernel_size2: int,
     shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with a two kernel sizes.
+    """
+    Use to create a model with a two kernel sizes.
 
     Parameters
     ----------

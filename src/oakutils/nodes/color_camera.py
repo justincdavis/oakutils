@@ -1,3 +1,11 @@
+"""
+Module for creating a color camera node in the pipeline.
+
+Functions
+---------
+create_color_camera
+    Creates a pipeline for the color camera.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -21,11 +29,16 @@ def create_color_camera(
     isp_scale: tuple[int, int] | None = None,
     isp_3a_fps: int | None = 15,
 ) -> dai.node.ColorCamera:
-    """Creates a pipeline for the color camera.
+    """
+    Use to create a pipeline for the color camera.
+
+    Note:
     setVideoSize, setStillSize are both automatically called using the tuple from get_tuple_from_color_sensor_resolution.
 
     Parameters
     ----------
+    pipeline : dai.Pipeline
+        The pipeline to add the color camera to
     resolution : dai.ColorCameraProperties.SensorResolution, optional
         The resolution of the color camera, by default dai.ColorCameraProperties.SensorResolution.THE_1080_P
     preview_size : Tuple[int, int], optional

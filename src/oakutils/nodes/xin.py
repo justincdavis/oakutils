@@ -1,4 +1,5 @@
-"""Module for creating and using depthai Xin nodes.
+"""
+Module for creating and using depthai Xin nodes.
 
 Functions
 ---------
@@ -18,7 +19,8 @@ def create_xin(
     stream_name: str,
     max_data_size: int = 6144000,
 ) -> dai.node.XLinkIn:
-    """Use to create an XLinkIn node.
+    """
+    Use to create an XLinkIn node.
 
     Parameters
     ----------

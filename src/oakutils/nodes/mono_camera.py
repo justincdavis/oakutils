@@ -1,3 +1,13 @@
+"""
+Module for creating mono camera nodes.
+
+Functions
+---------
+create_mono_camera
+    Creates a pipeline for the mono camera.
+create_left_right_cameras
+    Wrapper function for creating the left and right mono cameras.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -16,7 +26,8 @@ def create_mono_camera(
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
 ) -> dai.node.MonoCamera:
-    """Creates a pipeline for the mono camera.
+    """
+    Use to create a pipeline for the mono camera.
 
     Parameters
     ----------
@@ -126,7 +137,8 @@ def create_left_right_cameras(
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = None,
 ) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
-    """Wrapper function for creating the left and right mono cameras.
+    """
+    Use to create the left and right mono cameras.
 
     Parameters
     ----------

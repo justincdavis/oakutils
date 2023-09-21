@@ -1,4 +1,5 @@
-"""Module defining a webcam class for reading frames from an OAK.
+"""
+Module defining a webcam class for reading frames from an OAK.
 
 Classes
 -------
@@ -24,7 +25,8 @@ if TYPE_CHECKING:
 
 
 class Webcam:
-    """A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
+    """
+    A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 
     Attributes
     ----------
@@ -43,7 +45,8 @@ class Webcam:
     def __init__(
         self: Self, resolution: tuple[int, int] = (1920, 1080), fps: int = 30
     ) -> None:
-        """Create a new Webcam object.
+        """
+        Create a new Webcam object.
 
         Parameters
         ----------
@@ -87,7 +90,8 @@ class Webcam:
 
     @property
     def calibration(self: Self) -> ColorCalibrationData:
-        """Returns the calibration info for the camera.
+        """
+        Returns the calibration info for the camera.
 
         Returns
         -------
@@ -107,7 +111,8 @@ class Webcam:
             self._thread.join()
 
     def read(self: Self) -> tuple[bool, np.ndarray | None]:
-        """Read a frame from the camera.
+        """
+        Read a frame from the camera.
 
         Returns
         -------

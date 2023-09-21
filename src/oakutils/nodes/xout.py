@@ -1,4 +1,5 @@
-"""Module for creating and using depthai Xout nodes.
+"""
+Module for creating and using depthai Xout nodes.
 
 Functions
 ---------
@@ -18,7 +19,8 @@ def create_xout(
     input_link: dai.Node.Output,
     stream_name: str,
 ) -> dai.node.XLinkOut:
-    """Use to create an XLinkOut node.
+    """
+    Use to create an XLinkOut node.
 
     Parameters
     ----------

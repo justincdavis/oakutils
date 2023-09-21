@@ -1,4 +1,5 @@
-"""Tools for working with the OAK devices.
+"""
+Tools for working with the OAK devices.
 
 Submodules
 ----------

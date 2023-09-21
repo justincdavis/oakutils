@@ -6,7 +6,8 @@ import sysconfig
 
 
 def get_site_packages_path() -> str:
-    """Gets the path to the site-packages folder.
+    """
+    Use to get the path to the site-packages folder.
 
     Returns
     -------
@@ -22,7 +23,8 @@ def get_site_packages_path() -> str:
 
 
 def get_oakutils_path() -> str:
-    """Gets the path to the oakutils folder.
+    """
+    Use to get the path to the oakutils folder.
 
     Returns
     -------
@@ -33,7 +35,8 @@ def get_oakutils_path() -> str:
 
 
 def get_blobs_path() -> str:
-    """Gets the path to the oakutils blobs folder.
+    """
+    Use to get the path to the oakutils blobs folder.
 
     Returns
     -------
@@ -44,7 +47,8 @@ def get_blobs_path() -> str:
 
 
 def get_cache_dir_path() -> str:
-    """Gets the path to the oakutils blobs cache folder.
+    """
+    Use to get the path to the oakutils blobs cache folder.
 
     Returns
     -------
@@ -55,7 +59,8 @@ def get_cache_dir_path() -> str:
 
 
 def get_models_dir_path() -> str:
-    """Gets the path to the oakutils blobs models folder.
+    """
+    Use to get the path to the oakutils blobs models folder.
 
     Returns
     -------

@@ -1,3 +1,11 @@
+"""
+Module for filtering aruco marker detections as a continous stream.
+
+Classes
+-------
+ArucoStream
+    Use to filter aruco marker detections as a continous stream.
+"""
 from __future__ import annotations
 
 from collections import defaultdict, deque
@@ -15,7 +23,8 @@ if TYPE_CHECKING:
 
 
 class ArucoStream:
-    """Class for filtering aruco marker detections as a continous stream.
+    """
+    Class for filtering aruco marker detections as a continous stream.
 
     Attributes
     ----------
@@ -39,7 +48,8 @@ class ArucoStream:
         max_age: int = 5,
         alpha: float = 0.95,
     ) -> None:
-        """Creates an ArucoStream object.
+        """
+        Use to create an ArucoStream object.
 
         Parameters
         ----------
@@ -84,9 +94,11 @@ class ArucoStream:
         image: np.ndarray,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
-        """Finds the aruco markers in the image.
-          Makes an assumption that there is a single marker for each id.
-          Performs positons filtering to smooth the results.
+        """
+        Use to find the aruco markers in the image and perform filtering.
+
+        Note:
+        Makes an assumption that there is a single marker for each id.
 
         Parameters
         ----------
@@ -138,7 +150,8 @@ class ArucoStream:
         image: np.ndarray,
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
-        """Draws the detected markers onto the image.
+        """
+        Use to draw the detected markers onto the image.
 
         Parameters
         ----------
