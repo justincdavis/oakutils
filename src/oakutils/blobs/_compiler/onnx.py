@@ -36,7 +36,7 @@ def compile_onnx(
     output_path: str,
     shaves: int = 6,
     version: str = "2022.1",
-    simplify: bool | None = None,
+    simplify_model: bool | None = None,
 ) -> None:
     """
     Compiles an ONNX model to a blob saved at the output path.
@@ -51,7 +51,7 @@ def compile_onnx(
         The number of shaves to use, by default 6
     version : str, optional
         The version of blobconverter to use, by default "2022.1"
-    simplify : bool, optional
+    simplify_model : bool, optional
         Whether or not to simplify the model before compiling, by default True
 
     Raises
@@ -59,10 +59,10 @@ def compile_onnx(
     AssertionError
         If the simplified model could not be validated
     """
-    if simplify is None:
-        simplify = True
+    if simplify_model is None:
+        simplify_model = True
 
-    if simplify:
+    if simplify_model:
         simplify(model_path, output_path)
 
     blobconverter.from_onnx(
