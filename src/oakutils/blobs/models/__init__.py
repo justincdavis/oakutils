@@ -3,11 +3,11 @@
 """
 Module for compiled models.
 
-Note
------
+Note:
+----
 This module is auto-generated
 
-Attributes
+Attributes:
 ----------
 shave1 : module
     Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
@@ -21,21 +21,16 @@ shave5 : module
     Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
 shave6 : module
     Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+
 """
 
-from . import shave1
-from . import shave2
-from . import shave3
-from . import shave4
-from . import shave5
-from . import shave6
-
+from . import shave1, shave2, shave3, shave4, shave5, shave6
 
 __all__ = [
-    'shave1',
-    'shave2',
-    'shave3',
-    'shave4',
-    'shave5',
-    'shave6',
+    "shave1",
+    "shave2",
+    "shave3",
+    "shave4",
+    "shave5",
+    "shave6",
 ]
