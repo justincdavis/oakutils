@@ -48,3 +48,17 @@ def test_models_shave_equal():
         print(f"   Found {len(contents)} models in {shave_module}")
         lengths.append(len(contents))
     assert len(set(lengths)) == 1
+
+
+def test_models_shaves_equivalent():
+    """Tests all the shave modules have the same models"""
+    assert os.path.exists(models.__file__)
+    shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
+    print(f"Found {len(shave_modules)} shave modules -> {shave_modules}")
+    contents = []
+    for shave_module in shave_modules:
+        print(f"Searching {shave_module}")
+        assert os.path.exists(shave_module.__file__)
+        contents.append([c for c in dir(shave_module)])
+    for data in zip(*contents):
+        assert len(set(data)) == 1
