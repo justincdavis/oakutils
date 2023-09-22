@@ -1,6 +1,6 @@
 name: Unit Tests - Windows
 
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   build:
