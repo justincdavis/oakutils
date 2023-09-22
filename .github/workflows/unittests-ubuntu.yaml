@@ -26,5 +26,5 @@ jobs:
 
       - name: Run unit tests
         run: |
-          python3 -m pytest -s tests/*
+          ./scripts/run_tests.sh
   
