@@ -34,7 +34,7 @@ classifiers = [
     "Intended Audience :: Information Technology",
     "Typing :: Typed",
 ]
-requires-python=">=3.8, <=3.10"
+requires-python=">=3.8, <3.11"
 dependencies = [
     "depthai>=2.20",
     "depthai-sdk>=1.11.0",
