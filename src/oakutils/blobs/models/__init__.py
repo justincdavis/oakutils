@@ -32,10 +32,10 @@ from . import shave6
 
 
 __all__ = [
-    'shave1',
-    'shave2',
-    'shave3',
-    'shave4',
-    'shave5',
-    'shave6',
+    "shave1",
+    "shave2",
+    "shave3",
+    "shave4",
+    "shave5",
+    "shave6",
 ]

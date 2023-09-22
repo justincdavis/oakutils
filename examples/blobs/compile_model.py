@@ -9,7 +9,12 @@ import depthai as dai
 from typing_extensions import Self
 from oakutils.blobs import compile_model
 from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
-from oakutils.nodes import create_neural_network, create_color_camera, create_xout, get_nn_bgr_frame
+from oakutils.nodes import (
+    create_neural_network,
+    create_color_camera,
+    create_xout,
+    get_nn_bgr_frame,
+)
 
 
 class Custom(AbstractModel):
@@ -40,9 +45,9 @@ class Custom(AbstractModel):
                 (5, 5),
                 (1.5, 1.5),
             ),
-            7
+            7,
         )
-    
+
 
 def main():
     model_path = compile_model(
@@ -53,7 +58,7 @@ def main():
         # For example, if the model took a kernel size and sigma, you would put:
         # {"kernel_size": 3, "sigma": 0.5}
         cache=False,  # this will cache the model in ~/site-packages/oakutils/blobs/_cache
-        # if the model is compiled again, it will instead look in the cache for an 
+        # if the model is compiled again, it will instead look in the cache for an
         # already compiled version. Set to True to check for the model, False recompile always
         # cache=True,
         shaves=6,  # this is the number of shaves to use for the model
@@ -73,7 +78,7 @@ def main():
         },
         # to use default provide nothing
         # shape_mapping=None,
-        creation_func=torch.ones, # this is the function used to create the "dummy" tensor
+        creation_func=torch.ones,  # this is the function used to create the "dummy" tensor
         # the dummy tensor is the data used by torch's tracer to generate the model graph
         # such that we can export it to onnx
         # the default is torch.rand, which creates a random tensor
@@ -95,13 +100,16 @@ def main():
     # create the rgb cam to get some data
     cam = create_color_camera(
         pipeline,
-        preview_size=(300, 300),  # use the preview size to get an image that matches the model
+        preview_size=(
+            300,
+            300,
+        ),  # use the preview size to get an image that matches the model
         # this is important since the resize will be done on hardware onboard the camera
         # and the normal resolution has set dimensions which do not match the models
     )
     # add the sobel model to the pipeline
     custom_network = create_neural_network(
-        pipeline, 
+        pipeline,
         cam.preview,  # use the preview stream as the input
         model_path,  # our compiled model path from compile_model
     )
@@ -123,11 +131,12 @@ def main():
                 (300, 300),  # make sure to match the size
                 normalization=255.0,  # this is how to multiply the data to get the correct values
                 # by default the outputs are normalized to [0-1] by OpenVINO (the actual compiler)
-                )
+            )
 
             cv2.imshow(streamname, frame)
             if cv2.waitKey(1) == ord("q"):
                 break
+
 
 if __name__ == "__main__":
     main()
