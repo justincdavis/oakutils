@@ -186,14 +186,14 @@ def compiles_models():
         HarrisBlur,
         HarrisGray,
         HarrisBlurGray,
-        # Hessian,
-        # HessianBlur,
-        # HessianGray,
-        # HessianBlurGray,
-        # GFTT,
-        # GFTTBlur,
-        # GFTTGray,
-        # GFTTBlurGray,
+        Hessian,
+        HessianBlur,
+        HessianGray,
+        HessianBlurGray,
+        GFTT,
+        GFTTBlur,
+        GFTTGray,
+        GFTTBlurGray,
     ]
     shaves =  [1, 2, 3, 4, 5, 6]
     for shave in shaves:
@@ -352,13 +352,14 @@ def main():
     if BUILD_FROM_CACHE:
         build_from_cache()
         verify_blobs()
-        return
-    compiles_models()
-    verify_blobs()
+    if BUILD_FROM_DEFINITIONS:
+        compiles_models()
+        verify_blobs()
 
 
 if __name__ == "__main__":
-    BUILD_FROM_CACHE = False
+    BUILD_FROM_CACHE = True
+    BUILD_FROM_DEFINITIONS = True
     SCRIPT_PATH = os.path.realpath(os.path.dirname(__file__))
     MODEL_FOLDER = os.path.join(SCRIPT_PATH, "..", "src", "oakutils", "blobs", "models")
     # create the model folder if it doesn't exist
