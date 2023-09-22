@@ -231,8 +231,7 @@ def compiles_models():
             # handle imports first
             # f.write("import abc\n")
             f.write("import os\n")
-            f.write("import site\n")
-            f.write("import sysconfig\n\n")
+            f.write("import pkg_resources\n\n")
 
             # get the path to the blob folder
             f.write(
@@ -240,14 +239,10 @@ def compiles_models():
             )
 
             # get the site packages path
-            f.write("_SITE_SITE_PACKAGES = site.getusersitepackages()\n")
-            f.write("_SYSCONFIG_SITE_PACKAGES = sysconfig.get_paths()['purelib']\n")
-            f.write(
-                "_SITE_PACKAGES = _SITE_SITE_PACKAGES if os.name == 'posix' else _SYSCONFIG_SITE_PACKAGES\n"
-            )
+            f.write("_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils')\n")
 
             # get the path to the blob folder
-            f.write(f"_BLOB_FOLDER = os.path.join(_SITE_PACKAGES, _RELATIVE_BLOB_FOLDER)\n")
+            f.write(f"_BLOB_FOLDER = os.path.join(_PACKAGE_LOCATION, _RELATIVE_BLOB_FOLDER)\n")
 
             # add a space
             f.write("\n")
