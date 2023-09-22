@@ -239,7 +239,7 @@ def compiles_models():
             )
 
             # get the site packages path
-            f.write("_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils')\n")
+            f.write("_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils').location\n")
 
             # get the path to the blob folder
             f.write(f"_BLOB_FOLDER = os.path.join(_PACKAGE_LOCATION, _RELATIVE_BLOB_FOLDER)\n")

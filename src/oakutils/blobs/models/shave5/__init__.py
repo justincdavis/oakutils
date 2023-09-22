@@ -334,7 +334,7 @@ import os
 import pkg_resources
 
 _RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs', 'models', 'shave5')
-_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils')
+_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils').location
 _BLOB_FOLDER = os.path.join(_PACKAGE_LOCATION, _RELATIVE_BLOB_FOLDER)
 
 GAUSSIANGRAY_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, 'GaussianGray_11x11.blob'))
