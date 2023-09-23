@@ -39,4 +39,4 @@ stubs:
 	python3 scripts/make_stubs.py
 
 test:
-	python3 -m unittest discover -s tests -p '*_test.py'
+	python3 -m pytest -s tests/*

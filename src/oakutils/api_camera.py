@@ -1,3 +1,11 @@
+"""
+Module for creating custom pipelines using a lightweight callback based class.
+
+Classes
+-------
+Camera
+    A lightweight class for creating custom pipelines using callbacks.
+"""
 from __future__ import annotations
 
 import atexit
@@ -17,6 +25,34 @@ if TYPE_CHECKING:
 
 
 class Camera:
+    """
+    A lightweight class for creating custom pipelines using callbacks.
+
+    Attributes
+    ----------
+    pipeline:
+        The pipeline for the camera
+    calibration : CalibrationData
+        The calibration info for the camera
+    displays : DisplayManager
+        The display manager for the camera
+    pcv : PointCloudVisualizer
+        The point cloud visualizer for the camera
+
+    Methods
+    -------
+    start(blocking=False)
+        Start the camera.
+    stop()
+        Stop the camera.
+    add_callback(name, callback)
+        Add a callback to the camera.
+    add_display(name)
+        Add a display callback to the camera.
+    add_device_call(call)
+        Add a device call to the camera.
+    """
+
     def __init__(
         self: Self,
         # custom args, only related to configuration
@@ -24,6 +60,18 @@ class Camera:
         color_size: tuple[int, int] = (1920, 1080),
         mono_size: tuple[int, int] = (640, 400),
     ) -> None:
+        """
+        Use to create an instance of the camera.
+
+        Parameters
+        ----------
+        primary_mono_left : bool, optional
+            Whether the primary mono camera is on the left or not, by default None
+        color_size : tuple[int, int], optional
+            The size of the color camera, by default (1920, 1080)
+        mono_size : tuple[int, int], optional
+            The size of the mono camera, by default (640, 400)
+        """
         if primary_mono_left is None:
             primary_mono_left = True
 
@@ -63,13 +111,13 @@ class Camera:
         atexit.register(self.stop)
 
     def __del__(self: Self) -> None:
+        """Use to stop the camera."""
         self.stop()
 
     @property
     def pipeline(self: Self) -> dai.Pipeline:
         """
-        Returns the pipeline. If the pipeline has not been built yet, a RuntimeError is raised.
-        This is useful for adding custom nodes to the pipeline.
+        Use to get the pipeline. This is useful for adding custom nodes to the pipeline.
 
         Raises
         ------
@@ -82,34 +130,25 @@ class Camera:
 
     @property
     def calibration(self: Self) -> CalibrationData:
-        """
-        Returns the calibration data.
-        """
+        """Use to get the calibration data."""
         return self._calibration
 
     @property
     def displays(self: Self) -> DisplayManager:
-        """
-        Returns the display manager.
-        """
+        """Use to get the display manager."""
         if self._displays is None:
             self._displays = DisplayManager(display_size=self._display_size)
         return self._displays
 
     @property
     def pcv(self: Self) -> PointCloudVisualizer:
-        """
-        Returns the point cloud visualizer.
-        """
+        """Use to get the point cloud visualizer."""
         if self._pcv is None:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
     def start(self: Self, blocking: bool | None = None) -> None:
-        """
-        Starts the camera. To be done after all api calls are made.
-        Will build the pipeline if it has not been built yet.
-        """
+        """Use to start the camera. To be done after all api calls are made."""
         if blocking is None:
             blocking = False
 
@@ -122,9 +161,7 @@ class Camera:
                 self._stop_condition.wait()
 
     def stop(self: Self) -> None:
-        """
-        Stops the camera.
-        """
+        """Use to stop the camera."""
         self._stopped = True
 
         # call conditions if system never started
@@ -136,7 +173,7 @@ class Camera:
 
     def add_callback(self: Self, name: str | Iterable[str], callback: Callable) -> None:
         """
-        Adds a callback to be run on the output queue with the given name.
+        Use to add a callback to be run on the output queue with the given name.
 
         Parameters
         ----------
@@ -148,9 +185,8 @@ class Camera:
         self._callbacks[name] = callback
 
     def add_display(self: Self, name: str) -> None:
-        """Adds a display callback for the given stream name.
-          The stream should produce outputs of dai.ImgFrame from the
-          output queue.
+        """
+        Use to add a display callback for the given stream name.
 
         Parameters
         ----------
@@ -160,7 +196,8 @@ class Camera:
         self.add_callback(name, self.displays.callback(name))
 
     def add_device_call(self: Self, call: Callable[[dai.Device], None]) -> None:
-        """Adds a device call to be run after the device is created.
+        """
+        Use to add a device call to be run after the device is created.
 
         Parameters
         ----------

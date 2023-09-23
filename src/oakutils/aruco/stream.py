@@ -1,3 +1,11 @@
+"""
+Module for filtering aruco marker detections as a continous stream.
+
+Classes
+-------
+ArucoStream
+    Use to filter aruco marker detections as a continous stream.
+"""
 from __future__ import annotations
 
 from collections import defaultdict, deque
@@ -15,22 +23,37 @@ if TYPE_CHECKING:
 
 
 class ArucoStream:
-    """Class for filtering aruco marker detections as a continous stream."""
+    """
+    Class for filtering aruco marker detections as a continous stream.
+
+    Attributes
+    ----------
+    calibration : ColorCalibrationData, MonoCalibrationData, None
+        The calibration data to use for finding the transformation matrix
+
+    Methods
+    -------
+    find(image: np.ndarray, rectified: bool | None = None)
+        Finds the aruco markers in the image
+    draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
+    Draws the detected markers onto the image
+    """
 
     def __init__(
         self: Self,
-        aruco_dist: int = cv2.aruco.DICT_4X4_100,
+        aruco_dict: int = cv2.aruco.DICT_4X4_100,
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
         buffersize: int = 5,
         max_age: int = 5,
         alpha: float = 0.95,
     ) -> None:
-        """Creates an ArucoStream object.
+        """
+        Use to create an ArucoStream object.
 
         Parameters
         ----------
-        aruco_dist : int, optional
+        aruco_dict : int, optional
             The aruco dictionary to use for finding markers,
               by default cv2.aruco.DICT_4X4_100
         marker_size : float, optional
@@ -57,7 +80,7 @@ class ArucoStream:
         ValueError
             If alpha is not in range [0, 1]
         """
-        self._finder = ArucoFinder(aruco_dist, marker_size, calibration)
+        self._finder = ArucoFinder(aruco_dict, marker_size, calibration)
         self._buffers = defaultdict(lambda: deque(maxlen=buffersize))
         self._id_age = defaultdict(int)
         self._max_age = max_age
@@ -71,9 +94,11 @@ class ArucoStream:
         image: np.ndarray,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
-        """Finds the aruco markers in the image.
-          Makes an assumption that there is a single marker for each id.
-          Performs positons filtering to smooth the results.
+        """
+        Use to find the aruco markers in the image and perform filtering.
+
+        Note:
+        Makes an assumption that there is a single marker for each id.
 
         Parameters
         ----------
@@ -125,7 +150,9 @@ class ArucoStream:
         image: np.ndarray,
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
-        """Draws the detected markers onto the image.
+        """
+        Use to draw the detected markers onto the image.
+
         Parameters
         ----------
         image : np.ndarray
@@ -134,9 +161,10 @@ class ArucoStream:
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
+
         Returns
         -------
         np.ndarray
-            A copy of the image with the markers drawn on it
+            A copy of the image with the markers drawn on it.
         """
         return self._finder.draw(image, markers)

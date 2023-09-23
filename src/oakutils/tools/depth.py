@@ -1,3 +1,15 @@
+"""
+Tools for working with depth images.
+
+Functions
+---------
+align_depth_to_rgb
+    Use to align a depth image to an RGB image.
+quantize_colormap_depth_frame
+    Further quantize the depth image for nice visualization.
+overlay_depth_frame
+    Overlay the depth map on top of the RGB image.
+"""
 from __future__ import annotations
 
 import cv2
@@ -14,7 +26,8 @@ def align_depth_to_rgb(
     rgb_height: int,
     depth_scale: float = 1000.0,
 ) -> np.ndarray:
-    """Aligns a depth image to an RGB image.
+    """
+    Use to align a depth image to an RGB image.
 
     Parameters
     ----------
@@ -79,8 +92,8 @@ def quantize_colormap_depth_frame(
     depth_scale_factor: float = 2.0,
     apply_colormap: bool | None = None,
 ) -> np.ndarray:
-    """Further quantize the depth image for nice visualization, and
-    apply a colormap for better visualization.
+    """
+    Further quantize the depth image for nice visualization.
 
     Parameters
     ----------
@@ -113,7 +126,8 @@ def quantize_colormap_depth_frame(
 def overlay_depth_frame(
     rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5
 ) -> np.ndarray:
-    """Overlay the depth map on top of the RGB image.
+    """
+    Overlay the depth map on top of the RGB image.
 
     Parameters
     ----------

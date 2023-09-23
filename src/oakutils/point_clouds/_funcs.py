@@ -16,7 +16,8 @@ def get_point_cloud_from_rgb_depth_image(
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
 ) -> o3d.geometry.PointCloud:
-    """Creates an o3d point cloud from an RGB and a depth image.
+    """
+    Use to create an o3d point cloud from an RGB and a depth image.
 
     Parameters
     ----------
@@ -65,7 +66,8 @@ def get_point_cloud_from_depth_image(
     stride: int = 1,
     project_valid_depth_only: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Creates an o3d point cloud from a depth image.
+    """
+    Use to create an o3d point cloud from a depth image.
 
     Parameters
     ----------
@@ -105,21 +107,22 @@ def get_point_cloud_from_depth_image(
 
 def filter_point_cloud(
     pcd: o3d.geometry.PointCloud,
-    voxel_size: float | None = 0.1,
-    nb_neighbors: int | None = 30,
+    voxel_size: float | None = 0.01,
+    nb_neighbors: int | None = 50,
     std_ratio: float | None = 0.1,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Filters the point cloud by performing voxel downsampling and outlier removal.
+    """
+    Use to filter the point cloud by performing voxel downsampling and outlier removal.
 
     Parameters
     ----------
     pcd : o3d.geometry.PointCloud
         The point cloud to filter.
     voxel_size : float or None, optional
-        The voxel size to use for downsampling. Defaults to 0.1.
+        The voxel size to use for downsampling. Defaults to 0.01.
     nb_neighbors : int or None, optional
-        The number of neighbors to use for outlier removal. Defaults to 30.
+        The number of neighbors to use for outlier removal. Defaults to 50.
     std_ratio : float or None, optional
         The standard deviation ratio to use for outlier removal. Defaults to 0.1.
     downsample_first : bool, optional
@@ -150,13 +153,14 @@ def filter_point_cloud(
 
 
 def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
-    """Convert a numpy array to an open3d point cloud.
-    The numpy array should be of shape (N, 3) or (N, 4) where N is the number of points.
+    """
+    Convert a numpy array to an open3d point cloud.
 
     Parameters
     ----------
     pcl_data : np.ndarray
         The numpy array to convert.
+        Should be of shape (N, 3) or (N, 4) where N is the number of points.
 
     Returns
     -------

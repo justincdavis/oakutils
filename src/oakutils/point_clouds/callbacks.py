@@ -1,3 +1,11 @@
+"""
+Callbacks for point cloud creation and filtering.
+
+Functions
+---------
+create_point_cloud
+    Use to create a point cloud from a RGB and depth image.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -20,7 +28,8 @@ def create_point_cloud(
     std_ratio: float = 0.1,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
-    """Creates a point cloud from a RGB and depth image.
+    """
+    Use to create a point cloud from a RGB and depth image.
 
     Parameters
     ----------

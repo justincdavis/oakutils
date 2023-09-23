@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   oakutils.aruco
    oakutils.blobs
    oakutils.calibration
    oakutils.filters
@@ -17,10 +18,10 @@ Subpackages
 Submodules
 ----------
 
-oakutils.camera module
-----------------------
+oakutils.api\_camera module
+---------------------------
 
-.. automodule:: oakutils.camera
+.. automodule:: oakutils.api_camera
    :members:
    :undoc-members:
    :show-inheritance:
@@ -29,6 +30,14 @@ oakutils.legacy\_camera module
 ------------------------------
 
 .. automodule:: oakutils.legacy_camera
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.webcam module
+----------------------
+
+.. automodule:: oakutils.webcam
    :members:
    :undoc-members:
    :show-inheritance:

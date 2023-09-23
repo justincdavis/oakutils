@@ -1,3 +1,11 @@
+"""
+Module for finding aruco markers in images and acquiring transformation matrices to them.
+
+Classes
+-------
+ArucoFinder
+    Use to find ArUco markers in an image.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -12,8 +20,8 @@ if TYPE_CHECKING:
 
 
 class ArucoFinder:
-    """Class for finding aruco markers in images and acquiring
-    transformation matrices to them
+    """
+    Class for finding aruco markers in images and acquiring transformation matrices to them.
 
     Attributes
     ----------
@@ -22,20 +30,23 @@ class ArucoFinder:
     Methods
     -------
     find(image: np.ndarray, rectified: bool | None = None)
-      Finds the aruco markers in the image
+        Finds the aruco markers in the image
+    draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
+        Draws the detected markers onto the image
     """
 
     def __init__(
         self: Self,
-        aruco_dist: int = cv2.aruco.DICT_4X4_100,
+        aruco_dict: int = cv2.aruco.DICT_4X4_100,
         marker_size: float = 0.05,
         calibration: ColorCalibrationData | MonoCalibrationData | None = None,
     ) -> None:
-        """Initializes the ArucoFinder class
+        """
+        Use to create the ArucoFinder class.
 
         Parameters
         ----------
-        aruco_dist : int, optional
+        aruco_dict : int, optional
             The aruco dictionary to use for finding markers,
               by default cv2.aruco.DICT_4X4_100
         marker_size : float, optional
@@ -45,7 +56,7 @@ class ArucoFinder:
               by default None
             Will utilize an identity matrix if not provided
         """
-        self._adict = cv2.aruco.getPredefinedDictionary(aruco_dist)
+        self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
         self._calibration = calibration
         if self._calibration is None:
@@ -57,7 +68,8 @@ class ArucoFinder:
 
     @property
     def calibration(self: Self) -> ColorCalibrationData | MonoCalibrationData | None:
-        """The calibration data used by the ArucoFinder
+        """
+        The calibration data used by the ArucoFinder.
 
         Returns
         -------
@@ -70,7 +82,8 @@ class ArucoFinder:
     def calibration(
         self: Self, calibration: ColorCalibrationData | MonoCalibrationData
     ) -> None:
-        """Sets the calibration data used by the ArucoFinder
+        """
+        Use to set the calibration data used by the ArucoFinder.
 
         Parameters
         ----------
@@ -86,8 +99,11 @@ class ArucoFinder:
         image: np.ndarray,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
-        """Finds the aruco markers in the image.
-          Makes an assumption that there is a single marker for each id.
+        """
+        Use to find the aruco markers in the image.
+
+        Note:
+        Makes an assumption that there is a single marker for each id.
 
         Parameters
         ----------
@@ -140,27 +156,22 @@ class ArucoFinder:
         image: np.ndarray,
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
-        """Draws the detected markers onto the image.
-        <<<<<<< HEAD
+        """
+        Use to draw the detected markers onto the image.
 
-        =======
-        >>>>>>> e7cb9fae161f9fd5b661d7e4b7239566563e107e
-                Parameters
-                ----------
-                image : np.ndarray
-                    The image to draw the markers on
-                markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
-                    The list of aruco markers found in the image
-                    Each tuple contains the id, transformation matrix,
-                      rotation vector, translation vector, and corners
-        <<<<<<< HEAD
+        Parameters
+        ----------
+        image : np.ndarray
+            The image to draw the markers on
+        markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            The list of aruco markers found in the image
+            Each tuple contains the id, transformation matrix,
+                rotation vector, translation vector, and corners
 
-        =======
-        >>>>>>> e7cb9fae161f9fd5b661d7e4b7239566563e107e
-                Returns
-                -------
-                np.ndarray
-                    A copy of the image with the markers drawn on it
+        Returns
+        -------
+        np.ndarray
+            A copy of the image with the markers drawn on it
         """
         image = image.copy()
         for marker in markers:

@@ -1,3 +1,13 @@
+"""
+Module for creating stereo depth nodes.
+
+Functions
+---------
+create_stereo_depth
+    Creates a stereo depth given only a pipeline object.
+create_stereo_depth_from_mono_cameras
+    Creates a stereo depth node from a pipeline and two mono cameras.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -43,7 +53,10 @@ def create_stereo_depth(
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
 ) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
-    """Creates a stereo depth given only a pipeline object.
+    """
+    Use to create a stereo depth given only a pipeline object.
+
+    Note:
     Creates mono cameras for the left and right cameras using the create_left_right_cameras function.
 
     Parameters
@@ -229,7 +242,8 @@ def create_stereo_depth_from_mono_cameras(
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
 ) -> dai.node.StereoDepth:
-    """Creates a stereo depth node from a pipeline and two mono cameras.
+    """
+    Use to create a stereo depth node from a pipeline and two mono cameras.
 
     Parameters
     ----------

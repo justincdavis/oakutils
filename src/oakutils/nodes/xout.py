@@ -1,3 +1,11 @@
+"""
+Module for creating and using depthai Xout nodes.
+
+Functions
+---------
+create_xout
+    Use to create an xout node
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -11,7 +19,8 @@ def create_xout(
     input_link: dai.Node.Output,
     stream_name: str,
 ) -> dai.node.XLinkOut:
-    """Creates an XLinkOut node.
+    """
+    Use to create an XLinkOut node.
 
     Parameters
     ----------

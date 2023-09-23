@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class MonoCalibrationData:
-    """Class to store calibration data for a mono camera.
+    """
+    Class to store calibration data for a mono camera.
 
     Attributes
     ----------
@@ -68,7 +69,8 @@ class MonoCalibrationData:
 
 @dataclass(frozen=True)
 class StereoCalibrationData:
-    """Class to store calibration data for stereo cameras.
+    """
+    Class to store calibration data for stereo cameras.
 
     Attributes
     ----------
@@ -148,7 +150,8 @@ class StereoCalibrationData:
 
 @dataclass(frozen=True)
 class ColorCalibrationData:
-    """Class to store calibration data for a color camera.
+    """
+    Class to store calibration data for a color camera.
 
     Attributes
     ----------
@@ -200,7 +203,8 @@ class ColorCalibrationData:
 
 @dataclass(frozen=True)
 class CalibrationData:
-    """An object to store calibration data for an entire OAK camera.
+    """
+    An object to store calibration data for an entire OAK camera.
 
     Attributes
     ----------

@@ -18,9 +18,13 @@ def get_camera_calibration_basic(
     rgb_size: tuple[int, int] = (1920, 1080),
     mono_size: tuple[int, int] = (640, 400),
 ) -> CalibrationData:
-    """Requires available OAK device.
-    Get camera calibration data from OAK-D device.
-    If device is not provided, dai.Device() will be used.
+    """
+    Use to get camera calibration data from OAK-D device.
+
+    Note
+    ----
+        Requires available OAK device.
+        If device is not provided, dai.Device() will be used.
 
     Parameters
     ----------
@@ -263,10 +267,12 @@ def get_camera_calibration_primary_mono(
     mono_size: tuple[int, int] = (640, 400),
     is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:
-    """Requires available OAK device.
-    Get the calibration data for both RGB and mono cameras, as well as produce the
-    primary mono camera calibration data. The primary mono camera is the one that has
-    the depth aligned to it. The other mono camera is the secondary mono camera.
+    """
+    Use to get the calibration data for both RGB and mono cameras and primary mono camera.
+
+    Note
+    ----
+        Requires available OAK device.
 
     Parameters
     ----------
@@ -361,7 +367,8 @@ def get_camera_calibration_primary_mono(
 def create_q_matrix(
     fx: float, fy: float, cx: float, cy: float, baseline: float
 ) -> np.ndarray:
-    """Create Q matrix for stereo depth map.
+    """
+    Use to create Q matrix for stereo depth map.
 
     Parameters
     ----------
@@ -381,14 +388,14 @@ def create_q_matrix(
     np.ndarray
         Q matrix for stereo depth map.
 
-    Notes
-    -----
-    This uses the OpenCV formula for Q matrix, with an alpha value of 0.
-    Thus, the Q matrix is:
-    [[1, 0, 0, -cx],
-    [0, 1, 0, -cy],
-    [0, 0, 0, (fx + fy) / 2],
-    [0, 0, -1 / baseline, 0]]
+    Note
+    ----
+        This uses the OpenCV formula for Q matrix, with an alpha value of 0.
+        Thus, the Q matrix is:
+        [[1, 0, 0, -cx],
+        [0, 1, 0, -cy],
+        [0, 0, 0, (fx + fy) / 2],
+        [0, 0, -1 / baseline, 0]]
     """
     return np.array(
         [
@@ -406,9 +413,13 @@ def get_camera_calibration(
     is_primary_mono_left: bool | None = None,
     device: dai.Device | None = None,
 ) -> CalibrationData:
-    """Creates the full CalibrationData object, including the primary
-      mono camera calibration data
-    and the optional calculated values for OpenCV compatibility.
+    """
+    Use to create the full CalibrationData object.
+
+    This includes the calibration data for the RGB camera, the left mono camera,
+    the right mono camera, and the primary mono camera.
+    As well as all OpenCV and Open3D compatible data for each camera.
+
 
     Parameters
     ----------

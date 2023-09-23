@@ -1,3 +1,11 @@
+"""
+Module for localizing the camera in the world using ArUco markers.
+
+Classes
+-------
+ArucoLocalizer
+    Use to localize the camera in the world using ArUco markers.
+"""
 from __future__ import annotations
 
 from collections import deque
@@ -12,7 +20,16 @@ if TYPE_CHECKING:
 
 
 class ArucoLocalizer:
-    """Localizes the camera in the world using ArUco markers"""
+    """
+    Localizes the camera in the world using ArUco markers.
+
+    Methods
+    -------
+    add_transform(tag: int, transform: np.ndarray)
+        Use to add a transform to the localizer.
+    localize(markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
+        Use to localize the camera in the world using ArUco markers.
+    """
 
     def __init__(
         self: Self,
@@ -21,7 +38,8 @@ class ArucoLocalizer:
         max_age: int = 5,
         alpha: float = 0.95,
     ) -> None:
-        """Creates a new ArucoLocalizer
+        """
+        Use to create a new ArucoLocalizer.
 
         Parameters
         ----------
@@ -35,7 +53,8 @@ class ArucoLocalizer:
                 by default 5
         alpha : float, optional
             The alpha value to use for exponential smoothing,
-                by default 0.95, must be in range [0, 1]"""
+        by default 0.95, must be in range [0, 1]
+        """
         self._transforms: dict[int, np.ndarray] = {}
         if alpha < 0.0 or alpha > 1.0:
             raise ValueError("alpha must be in range [0, 1]")
@@ -48,21 +67,24 @@ class ArucoLocalizer:
         self._last_transform = create_transform(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
     def add_transform(self: Self, tag: int, transform: np.ndarray) -> None:
-        """Adds a transform to the localizer
+        """
+        Use to add a transform to the localizer.
 
         Parameters
         ----------
         tag : int
             The id of the marker to use
         transform : np.ndarray
-            The transform from the camera to the marker"""
+            The transform from the camera to the marker
+        """
         self._transforms[tag] = transform
 
     def localize(
         self: Self,
         markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
-        """Localizes the camera in the world using ArUco markers
+        """
+        Use to localize the camera in the world using ArUco markers.
 
         Parameters
         ----------

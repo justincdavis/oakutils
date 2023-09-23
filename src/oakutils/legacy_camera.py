@@ -1,3 +1,11 @@
+"""
+Module for interacting with the OAK-D enabling easy access to the RGB, depth, and IMU sensors.
+
+Classes
+-------
+Camera
+    Class for interfacing with the OAK-D camera with fixed pipeline.
+"""
 from __future__ import annotations
 
 import atexit
@@ -31,7 +39,8 @@ if TYPE_CHECKING:
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
 class Camera(sdk.OakCamera):
-    """Class for interfacing with the OAK-D camera.
+    """
+    Class for interfacing with the OAK-D camera.
 
     Attributes
     ----------
@@ -121,7 +130,8 @@ class Camera(sdk.OakCamera):
         imu_accelerometer_refresh_rate: int = 400,
         imu_gyroscope_refresh_rate: int = 400,
     ) -> None:
-        """Initializes the camera object.
+        """
+        Use to create the camera object.
 
         Parameters
         ----------
@@ -398,7 +408,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def calibration(self: Self) -> CalibrationData:
-        """Gets the calibration data.
+        """
+        Gets the calibration data.
 
         Returns
         -------
@@ -409,7 +420,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def rgb(self: Self) -> np.ndarray | None:
-        """Get the rectified RGB color frame.
+        """
+        Get the rectified RGB color frame.
 
         Returns
         -------
@@ -420,7 +432,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_rgb(self: Self) -> np.ndarray | None:
-        """Get the rectified RGB color frame.
+        """
+        Get the rectified RGB color frame.
 
         Returns
         -------
@@ -431,7 +444,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def disparity(self: Self) -> np.ndarray | None:
-        """Get the disparity frame.
+        """
+        Get the disparity frame.
 
         Returns
         -------
@@ -442,7 +456,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def depth(self: Self) -> np.ndarray | None:
-        """Get the depth frame.
+        """
+        Get the depth frame.
 
         Returns
         -------
@@ -453,7 +468,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def left(self: Self) -> np.ndarray | None:
-        """Get the left frame.
+        """
+        Get the left frame.
 
         Returns
         -------
@@ -464,7 +480,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def right(self: Self) -> np.ndarray | None:
-        """Get the right frame.
+        """
+        Get the right frame.
 
         Returns
         -------
@@ -475,7 +492,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_left(self: Self) -> np.ndarray | None:
-        """Gets the rectified left frame.
+        """
+        Gets the rectified left frame.
 
         Returns
         -------
@@ -486,7 +504,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def rectified_right(self: Self) -> np.ndarray | None:
-        """Gets the rectified right frame.
+        """
+        Gets the rectified right frame.
 
         Returns
         -------
@@ -497,7 +516,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def im3d(self: Self) -> np.ndarray | None:
-        """Gets the 3D image.
+        """
+        Gets the 3D image.
 
         Returns
         -------
@@ -508,7 +528,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def point_cloud(self: Self) -> o3d.geometry.PointCloud | None:
-        """Gets the point cloud.
+        """
+        Gets the point cloud.
 
         Returns
         -------
@@ -519,7 +540,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def imu_pose(self: Self) -> list[float]:
-        """Gets the IMU pose in meters.
+        """
+        Gets the IMU pose in meters.
 
         Returns
         -------
@@ -530,7 +552,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def imu_rotation(self: Self) -> list[float]:
-        """Gets the IMU rotation in radians.
+        """
+        Gets the IMU rotation in radians.
 
         Returns
         -------
@@ -541,7 +564,8 @@ class Camera(sdk.OakCamera):
 
     @property
     def started(self: Self) -> bool:
-        """Returns True if the camera is started.
+        """
+        Returns True if the camera is started.
 
         Returns
         -------
@@ -551,7 +575,8 @@ class Camera(sdk.OakCamera):
         return self._cam_thread.is_alive()
 
     def start(self: Self, block: bool | None = None) -> None:
-        """Starts the camera.
+        """
+        Use to start the camera.
 
         Parameters
         ----------
@@ -565,7 +590,7 @@ class Camera(sdk.OakCamera):
             self.wait_for_data()
 
     def stop(self: Self) -> None:
-        """Stops the camera."""
+        """Use to stop the camera."""
         self._stopped = True
         with contextlib.suppress(RuntimeError):
             self._cam_thread.join()
@@ -620,11 +645,11 @@ class Camera(sdk.OakCamera):
             self._point_cloud_vis.stop()
 
     def start_display(self: Self) -> None:
-        """Starts the display thread."""
+        """Use to start the display thread."""
         self._display_thread.start()
 
     def stop_display(self: Self) -> None:
-        """Stops the display thread."""
+        """Use to stop the display thread."""
         self._display_stopped = True
         self._display_thread.join()
 
@@ -755,7 +780,8 @@ class Camera(sdk.OakCamera):
     def compute_point_cloud(
         self: Self, block: bool | None = None
     ) -> o3d.geometry.PointCloud | None:
-        """Compute a point cloud from the depth map.
+        """
+        Compute a point cloud from the depth map.
 
         Parameters
         ----------
@@ -781,7 +807,8 @@ class Camera(sdk.OakCamera):
     def compute_im3d(
         self: Self, block: bool | None = None
     ) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None]:
-        """Compute 3D points from the disparity map.
+        """
+        Compute 3D points from the disparity map.
 
         Parameters
         ----------

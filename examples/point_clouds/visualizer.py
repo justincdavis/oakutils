@@ -6,6 +6,7 @@ from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 from oakutils.point_clouds import (
     PointCloudVisualizer,
     get_point_cloud_from_rgb_depth_image,
+    filter_point_cloud,
 )
 
 pipeline = dai.Pipeline()
@@ -27,16 +28,27 @@ with dai.Device(pipeline) as device:
     rgb_q: dai.DataOutputQueue = device.getOutputQueue("rgb")
     depth_q: dai.DataOutputQueue = device.getOutputQueue("depth")
 
+    counter = 0  # maintain a counter since always updating the visual is expensive
     while True:
         in_rgb = rgb_q.get()
         in_depth = depth_q.get()
         rgb_frame = in_rgb.getCvFrame()
         depth_frame = in_depth.getFrame()
 
-        point_cloud = get_point_cloud_from_rgb_depth_image(
-            rgb_frame, depth_frame, calibration.primary.pinhole
-        )
-        pcv.update(point_cloud)
+        counter += 1
+        if counter == 3:
+            point_cloud = get_point_cloud_from_rgb_depth_image(
+                rgb_frame, depth_frame, calibration.primary.pinhole
+            )
+            point_cloud = filter_point_cloud(
+                point_cloud,
+                voxel_size=0.01,
+                nb_neighbors=60,
+                std_ratio=0.1,
+                downsample_first=False,
+            )
+            pcv.update(point_cloud)
+            counter = 0
 
         cv2.imshow("rgb", rgb_frame)
         cv2.imshow("depth", depth_frame)

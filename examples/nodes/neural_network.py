@@ -35,12 +35,12 @@ with dai.Device(pipeline) as device:
         lp_data = lp_queue.get()
         lp_gray_data = lp_gray_queue.get()
 
-        lp_frame = get_nn_bgr_frame(lp_data)
+        lp_frame = get_nn_bgr_frame(lp_data, normalization=255.0)
 
         # also do this
         lp_gray_data = lp_gray_data.getData()
 
-        lp_gray_frame = get_nn_gray_frame(lp_gray_data)
+        lp_gray_frame = get_nn_gray_frame(lp_gray_data, normalization=255.0)
 
         cv2.imshow("lp frame", lp_frame)
         if cv2.waitKey(1) == ord("q"):

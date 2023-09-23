@@ -1,3 +1,13 @@
+"""
+Module for creating a point cloud model onboard.
+
+Functions
+---------
+create_xyz_matrix
+    Use to create a constant reprojection matrix for the given camera matrix and image size.
+create_point_cloud
+    Use to create a point_cloud model.
+"""
 from __future__ import annotations
 
 from functools import partial
@@ -15,7 +25,10 @@ if TYPE_CHECKING:
 
 
 def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.ndarray:
-    """Creates a constant reprojection matrix for the given camera matrix and image size.
+    """
+    Use to create a constant reprojection matrix for the given camera matrix and image size.
+
+    Note:
     This is for generating the input to the point cloud generation model.
 
     Parameters
@@ -64,8 +77,10 @@ def create_point_cloud(
     depth_link: dai.Node.Output,
     calibration: CalibrationData,
     input_stream_name: str = "xyz_to_pcl",
+    shaves: int = 4,
 ) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
-    """Creates a point_cloud model with a specified kernel size.
+    """
+    Use to create a point_cloud model with a specified kernel size.
 
     Parameters
     ----------
@@ -79,6 +94,9 @@ def create_point_cloud(
         The calibration data for the camera
     input_stream_name : str, optional
         The name of the input stream, by default "xyz_to_pcl"
+    shaves : int, optional
+        The number of shaves to use, by default 4
+        Must be between 1 and 6
 
     Returns
     -------
@@ -97,6 +115,7 @@ def create_point_cloud(
         model_name=model_type,
         input_names=["xyz", "depth"],
         reuse_messages=[True, None],
+        shaves=shaves,
     )
     point_cloud_node.inputs["xyz"].setReusePreviousMessage(reusePreviousMessage=True)
 
