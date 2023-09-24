@@ -1,8 +1,8 @@
-from typing import Tuple
+from __future__ import annotations
 
+import cv2
 import depthai as dai
 import numpy as np
-import cv2
 import open3d as o3d
 
 from ._classes import (
@@ -14,14 +14,18 @@ from ._classes import (
 
 
 def get_camera_calibration_basic(
-    rgb_size: Tuple[int, int] = (1920, 1080), mono_size: Tuple[int, int] = (640, 400)
+    device: dai.Device | None = None,
+    rgb_size: tuple[int, int] = (1920, 1080),
+    mono_size: tuple[int, int] = (640, 400),
 ) -> CalibrationData:
-    """
-    Requires available OAK device.
+    """Requires available OAK device.
     Get camera calibration data from OAK-D device.
+    If device is not provided, dai.Device() will be used.
 
     Parameters
     ----------
+    device : Optional[dai.Device], optional
+        DepthAI device object.
     rgb_size : Tuple[int, int], optional
         RGB camera resolution.
     mono_size : Tuple[int, int], optional
@@ -32,56 +36,61 @@ def get_camera_calibration_basic(
     CalibrationData
         Object containing all the calibration data.
     """
-    with dai.Device() as device:
+    if device is None:
+        device = dai.Device()
+    with device:
         calib_data = device.readCalibration2()
 
-        K_rgb = np.array(
+        k_rgb = np.array(
             calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.RGB, rgb_size[0], rgb_size[1]
             )
         )
-        D_rgb = np.array(
+        d_rgb = np.array(
             calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB)
         )
-        fx_rgb = K_rgb[0][0]
-        fy_rgb = K_rgb[1][1]
-        cx_rgb = K_rgb[0][2]
-        cy_rgb = K_rgb[1][2]
+        fx_rgb = k_rgb[0][0]
+        fy_rgb = k_rgb[1][1]
+        cx_rgb = k_rgb[0][2]
+        cy_rgb = k_rgb[1][2]
 
-        K_left = np.array(
+        k_left = np.array(
             calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.LEFT, mono_size[0], mono_size[1]
             )
         )
-        fx_left = K_left[0][0]
-        fy_left = K_left[1][1]
-        cx_left = K_left[0][2]
-        cy_left = K_left[1][2]
-        K_right = np.array(
+        fx_left = k_left[0][0]
+        fy_left = k_left[1][1]
+        cx_left = k_left[0][2]
+        cy_left = k_left[1][2]
+        k_right = np.array(
             calib_data.getCameraIntrinsics(
                 dai.CameraBoardSocket.RIGHT, mono_size[0], mono_size[1]
             )
         )
 
-        fx_right = K_right[0][0]
-        fy_right = K_right[1][1]
-        cx_right = K_right[0][2]
-        cy_right = K_right[1][2]
-        D_left = np.array(
+        fx_right = k_right[0][0]
+        fy_right = k_right[1][1]
+        cx_right = k_right[0][2]
+        cy_right = k_right[1][2]
+        d_left = np.array(
             calib_data.getDistortionCoefficients(dai.CameraBoardSocket.LEFT)
         )
-        D_right = np.array(
+        d_right = np.array(
             calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT)
         )
 
         rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
+        rgb_fov_rad = np.deg2rad(rgb_fov)
         left_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
+        left_fov_rad = np.deg2rad(left_fov)
         right_fov = calib_data.getFov(dai.CameraBoardSocket.RIGHT)
+        right_fov_rad = np.deg2rad(right_fov)
 
-        R1 = np.array(calib_data.getStereoLeftRectificationRotation())
-        R2 = np.array(calib_data.getStereoRightRectificationRotation())
+        r1 = np.array(calib_data.getStereoLeftRectificationRotation())
+        r2 = np.array(calib_data.getStereoRightRectificationRotation())
 
-        T1 = (
+        t1 = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.LEFT,
@@ -90,7 +99,7 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
-        T2 = (
+        t2 = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RIGHT,
@@ -99,7 +108,7 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
-        T_l_rgb = (
+        t_l_rgb = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.LEFT,
@@ -108,7 +117,7 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
-        T_r_rgb = (
+        t_r_rgb = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RIGHT,
@@ -117,7 +126,7 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
-        T_rgb_l = (
+        t_rgb_l = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RGB,
@@ -126,7 +135,7 @@ def get_camera_calibration_basic(
             )
             / 100
         )  # convert to meters
-        T_rgb_r = (
+        t_rgb_r = (
             np.array(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RGB,
@@ -136,8 +145,8 @@ def get_camera_calibration_basic(
             / 100
         )  # convert to meters
 
-        H_left = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_left))
-        H_right = np.matmul(np.matmul(K_right, R1), np.linalg.inv(K_right))
+        h_left = np.matmul(np.matmul(k_right, r1), np.linalg.inv(k_left))
+        h_right = np.matmul(np.matmul(k_right, r1), np.linalg.inv(k_right))
 
         l2r_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
@@ -180,56 +189,59 @@ def get_camera_calibration_basic(
 
         rgb_data = ColorCalibrationData(
             size=rgb_size,
-            K=K_rgb,
-            D=D_rgb,
+            K=k_rgb,
+            D=d_rgb,
             fx=fx_rgb,
             fy=fy_rgb,
             cx=cx_rgb,
             cy=cy_rgb,
             fov=rgb_fov,
+            fov_rad=rgb_fov_rad,
         )
         left_data = MonoCalibrationData(
             size=mono_size,
-            K=K_left,
-            D=D_left,
+            K=k_left,
+            D=d_left,
             fx=fx_left,
             fy=fy_left,
             cx=cx_left,
             cy=cy_left,
             fov=left_fov,
-            R=R1,
-            T=T1,
-            H=H_left,
+            fov_rad=left_fov_rad,
+            R=r1,
+            T=t1,
+            H=h_left,
         )
         right_data = MonoCalibrationData(
             size=mono_size,
-            K=K_right,
-            D=D_right,
+            K=k_right,
+            D=d_right,
             fx=fx_right,
             fy=fy_right,
             cx=cx_right,
             cy=cy_right,
             fov=right_fov,
-            R=R2,
-            T=T2,
-            H=H_right,
+            fov_rad=right_fov_rad,
+            R=r2,
+            T=t2,
+            H=h_right,
         )
         stereo_data = StereoCalibrationData(
             left=left_data,
             right=right_data,
-            R1=R1,
-            R2=R2,
-            T1=T1,
-            T2=T2,
-            H_left=H_left,
-            H_right=H_right,
+            R1=r1,
+            R2=r2,
+            T1=t1,
+            T2=t2,
+            H_left=h_left,
+            H_right=h_right,
             l2r_extrinsic=l2r_extrinsic,
             r2l_extrinsic=r2l_extrinsic,
             Q_left=create_q_matrix(fx_left, fy_left, cx_left, cy_left, -1.0 * baseline),
             Q_right=create_q_matrix(fx_right, fy_right, cx_right, cy_right, baseline),
             baseline=baseline,
         )
-        data = CalibrationData(
+        return CalibrationData(
             rgb=rgb_data,
             left=left_data,
             right=right_data,
@@ -238,27 +250,28 @@ def get_camera_calibration_basic(
             r2rgb_extrinsic=r2rgb_extrinsic,
             rgb2l_extrinsic=rgb2l_extrinsic,
             rgb2r_extrinsic=rgb2r_extrinsic,
-            T_l_rgb=T_l_rgb,
-            T_r_rgb=T_r_rgb,
-            T_rgb_l=T_rgb_l,
-            T_rgb_r=T_rgb_r,
+            T_l_rgb=t_l_rgb,
+            T_r_rgb=t_r_rgb,
+            T_rgb_l=t_rgb_l,
+            T_rgb_r=t_rgb_r,
         )
-    return data
 
 
 def get_camera_calibration_primary_mono(
-    rgb_size: Tuple[int, int] = (1920, 1080),
-    mono_size: Tuple[int, int] = (640, 400),
-    is_primary_mono_left: bool = True,
+    device: dai.Device | None = None,
+    rgb_size: tuple[int, int] = (1920, 1080),
+    mono_size: tuple[int, int] = (640, 400),
+    is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:
-    """
-    Requires available OAK device.
+    """Requires available OAK device.
     Get the calibration data for both RGB and mono cameras, as well as produce the
     primary mono camera calibration data. The primary mono camera is the one that has
     the depth aligned to it. The other mono camera is the secondary mono camera.
 
     Parameters
     ----------
+    device : Optional[dai.Device], optional
+        DepthAI device object.
     rgb_size : Tuple[int, int], optional
         RGB camera resolution.
     mono_size : Tuple[int, int], optional
@@ -271,19 +284,23 @@ def get_camera_calibration_primary_mono(
     CalibrationData
         Object containing all the calibration data.
     """
+    if is_primary_mono_left is None:
+        is_primary_mono_left = True
     # load the data from get_camera_calibration
     data: CalibrationData = get_camera_calibration_basic(
-        rgb_size=rgb_size, mono_size=mono_size
+        device=device, rgb_size=rgb_size, mono_size=mono_size
     )
 
-    K_primary = data.left.K if is_primary_mono_left else data.right.K
-    D_primary = data.left.D if is_primary_mono_left else data.right.D
+    k_primary = data.left.K if is_primary_mono_left else data.right.K
+    d_primary = data.left.D if is_primary_mono_left else data.right.D
     fx_primary = data.left.fx if is_primary_mono_left else data.right.fx
     fy_primary = data.left.fy if is_primary_mono_left else data.right.fy
     cx_primary = data.left.cx if is_primary_mono_left else data.right.cx
     cy_primary = data.left.cy if is_primary_mono_left else data.right.cy
-    R_primary = data.stereo.R1 if is_primary_mono_left else data.stereo.R2
-    T_primary = data.stereo.T1 if is_primary_mono_left else data.stereo.T2
+    fov_primary = data.left.fov if is_primary_mono_left else data.right.fov
+    fov_rad_primary = data.left.fov_rad if is_primary_mono_left else data.right.fov_rad
+    r_primary = data.stereo.R1 if is_primary_mono_left else data.stereo.R2
+    t_primary = data.stereo.T1 if is_primary_mono_left else data.stereo.T2
     primary_extrinsic = (
         data.stereo.l2r_extrinsic if is_primary_mono_left else data.stereo.r2l_extrinsic
     )
@@ -291,15 +308,16 @@ def get_camera_calibration_primary_mono(
     # create the primary mono camera calibration data
     primary_mono_data = MonoCalibrationData(
         size=mono_size,
-        K=K_primary,
-        D=D_primary,
+        K=k_primary,
+        D=d_primary,
         fx=fx_primary,
         fy=fy_primary,
         cx=cx_primary,
         cy=cy_primary,
-        fov=data.left.fov,
-        R=R_primary,
-        T=T_primary,
+        fov=fov_primary,
+        fov_rad=fov_rad_primary,
+        R=r_primary,
+        T=t_primary,
         H=primary_extrinsic,
     )
 
@@ -323,7 +341,7 @@ def get_camera_calibration_primary_mono(
             fx_primary, fy_primary, cx_primary, cy_primary, data.stereo.baseline
         ),
     )
-    new_data = CalibrationData(
+    return CalibrationData(
         left=data.left,
         right=data.right,
         rgb=data.rgb,
@@ -338,12 +356,12 @@ def get_camera_calibration_primary_mono(
         T_rgb_r=data.T_rgb_r,
         primary=primary_mono_data,
     )
-    return new_data
 
 
-def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float):
-    """
-    Create Q matrix for stereo depth map.
+def create_q_matrix(
+    fx: float, fy: float, cx: float, cy: float, baseline: float
+) -> np.ndarray:
+    """Create Q matrix for stereo depth map.
 
     Parameters
     ----------
@@ -383,10 +401,13 @@ def create_q_matrix(fx: float, fy: float, cx: float, cy: float, baseline: float)
 
 
 def get_camera_calibration(
-    rgb_size: Tuple[int, int], mono_size: Tuple[int, int], is_primary_mono_left: bool
+    rgb_size: tuple[int, int],
+    mono_size: tuple[int, int],
+    is_primary_mono_left: bool | None = None,
+    device: dai.Device | None = None,
 ) -> CalibrationData:
-    """
-    Creates the full CalibrationData object, including the primary mono camera calibration data
+    """Creates the full CalibrationData object, including the primary
+      mono camera calibration data
     and the optional calculated values for OpenCV compatibility.
 
     Parameters
@@ -395,24 +416,38 @@ def get_camera_calibration(
         RGB camera resolution.
     mono_size : Tuple[int, int]
         Mono camera resolution.
-    is_primary_mono_left : bool
+    is_primary_mono_left : Optional[bool], optional
         Whether the primary mono camera is the left or right mono camera.
+        Defaults to True.
+    device : Optional[dai.Device], optional
+        DepthAI device object.
 
     Returns
     -------
     CalibrationData
         Object containing all the calibration data.
     """
+    if is_primary_mono_left is None:
+        is_primary_mono_left = True
     # get the data from get_camera_calibration_primary_mono
     data: CalibrationData = get_camera_calibration_primary_mono(
+        device=device,
         rgb_size=rgb_size,
         mono_size=mono_size,
         is_primary_mono_left=is_primary_mono_left,
     )
     assert data.primary is not None  # help mypy
 
+    q_primary = create_q_matrix(
+        data.primary.fx,
+        data.primary.fy,
+        data.primary.cx,
+        data.primary.cy,
+        data.stereo.baseline,
+    )
+
     # run cv2.getOptimalNewCameraMatrix for RGB cam
-    P_rgb, valid_region_rgb = cv2.getOptimalNewCameraMatrix(
+    p_rgb, valid_region_rgb = cv2.getOptimalNewCameraMatrix(
         data.rgb.K,
         data.rgb.D,
         rgb_size,
@@ -423,7 +458,7 @@ def get_camera_calibration(
         data.rgb.K,
         data.rgb.D,
         None,
-        P_rgb,
+        p_rgb,
         rgb_size,
         cv2.CV_16SC2,
     )
@@ -446,7 +481,8 @@ def get_camera_calibration(
         cx=data.rgb.cx,
         cy=data.rgb.cy,
         fov=data.rgb.fov,
-        P=P_rgb,
+        fov_rad=data.rgb.fov_rad,
+        P=p_rgb,
         valid_region=valid_region_rgb,
         map_1=map_rgb_1,
         map_2=map_rgb_2,
@@ -455,11 +491,11 @@ def get_camera_calibration(
 
     # run stereoRectify and initUndistortRectifyMap for left and right mono cams
     (
-        cv2_R1,
-        cv2_R2,
-        P1,
-        P2,
-        cv2_Q,
+        cv2_r1,
+        cv2_r2,
+        p1,
+        p2,
+        cv2_q,
         valid_region_left,
         valid_region_right,
     ) = cv2.stereoRectify(
@@ -474,16 +510,16 @@ def get_camera_calibration(
     map_left_1, map_left_2 = cv2.initUndistortRectifyMap(
         data.left.K,
         data.left.D,
-        cv2_R1,
-        P1,
+        cv2_r1,
+        p1,
         mono_size,
         cv2.CV_16SC2,
     )
     map_right_1, map_right_2 = cv2.initUndistortRectifyMap(
         data.right.K,
         data.right.D,
-        cv2_R2,
-        P2,
+        cv2_r2,
+        p2,
         mono_size,
         cv2.CV_16SC2,
     )
@@ -522,6 +558,7 @@ def get_camera_calibration(
         cx=data.left.cx,
         cy=data.left.cy,
         fov=data.left.fov,
+        fov_rad=data.left.fov_rad,
         R=data.left.R,
         T=data.left.T,
         H=data.left.H,
@@ -539,6 +576,7 @@ def get_camera_calibration(
         cx=data.right.cx,
         cy=data.right.cy,
         fov=data.right.fov,
+        fov_rad=data.right.fov_rad,
         R=data.right.R,
         T=data.right.T,
         H=data.right.H,
@@ -556,6 +594,7 @@ def get_camera_calibration(
         cx=data.primary.cx,
         cy=data.primary.cy,
         fov=data.primary.fov,
+        fov_rad=data.primary.fov_rad,
         R=data.primary.R,
         T=data.primary.T,
         H=data.primary.H,
@@ -581,17 +620,18 @@ def get_camera_calibration(
         Q_right=data.stereo.Q_right,
         baseline=data.stereo.baseline,
         primary=primary,
-        cv2_Q=cv2_Q,
-        cv2_R1=cv2_R1,
-        cv2_R2=cv2_R2,
-        P1=P1,
-        P2=P2,
+        Q_primary=q_primary,
+        Q_cv2=cv2_q,
+        R1_cv2=cv2_r1,
+        R2_cv2=cv2_r2,
+        P1=p1,
+        P2=p2,
         valid_region_primary=valid_region_primary,
         pinhole_primary=pinhole_primary,
     )
 
     # create final CalibrationData object
-    new_data = CalibrationData(
+    return CalibrationData(
         rgb=rgb,
         left=left,
         right=right,
@@ -606,5 +646,3 @@ def get_camera_calibration(
         T_rgb_r=data.T_rgb_r,
         primary=primary,
     )
-
-    return new_data

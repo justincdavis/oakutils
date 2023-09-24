@@ -1,4 +1,4 @@
-from typing import Tuple
+from __future__ import annotations
 
 import depthai as dai
 
@@ -14,9 +14,9 @@ def create_mono_camera(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
+    isp_3a_fps: int | None = None,
 ) -> dai.node.MonoCamera:
-    """
-    Creates a pipeline for the mono camera.
+    """Creates a pipeline for the mono camera.
 
     Parameters
     ----------
@@ -46,6 +46,10 @@ def create_mono_camera(
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
         Valid values are 0 ... 4
+    isp_3a_fps: Optional[int], optional
+        The fps of how often the 3a algorithms will run, by default None
+        Reducing this can help with performance onboard the device.
+        A common value to reduce CPU usage on device is 15.
 
     Returns
     -------
@@ -54,6 +58,8 @@ def create_mono_camera(
 
     Raises
     ------
+    ValueError
+        If the socket is not LEFT or RIGHT
     ValueError
         If the fps is not between 0 and 120
     ValueError
@@ -69,6 +75,9 @@ def create_mono_camera(
     ValueError
         If the chroma_denoise is not between 0 and 4
     """
+    if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
+        raise ValueError("socket must be LEFT or RIGHT")
+
     if fps < 0 or fps > 120:
         raise ValueError("fps must be between 0 and 120")
     if brightness < -10 or brightness > 10:
@@ -98,6 +107,9 @@ def create_mono_camera(
     cam.setResolution(resolution)
     cam.setFps(fps)
 
+    if isp_3a_fps is not None:
+        cam.setIsp3aFps(isp_3a_fps)
+
     return cam
 
 
@@ -111,9 +123,9 @@ def create_left_right_cameras(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-) -> Tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
-    """
-    Wrapper function for creating the left and right mono cameras.
+    isp_3a_fps: int | None = None,
+) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
+    """Wrapper function for creating the left and right mono cameras.
 
     Parameters
     ----------
@@ -141,13 +153,21 @@ def create_left_right_cameras(
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
         Valid values are 0 ... 4
+    isp_3a_fps: Optional[int], optional
+        The fps of how often the 3a algorithms will run, by default None
+        Reducing this can help with performance onboard the device.
+        A common value to reduce CPU usage on device is 15.
 
     Returns
     -------
     dai.node.MonoCamera
         The left mono camera node
+    dai.node.XLinkOut
+        The output node for the left mono camera
     dai.node.MonoCamera
         The right mono camera node
+    dai.node.XLinkOut
+        The output node for the right mono camera
     """
     left_cam = create_mono_camera(
         pipeline=pipeline,
@@ -160,6 +180,7 @@ def create_left_right_cameras(
         sharpness=sharpness,
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
+        isp_3a_fps=isp_3a_fps,
     )
     right_cam = create_mono_camera(
         pipeline=pipeline,
@@ -172,6 +193,7 @@ def create_left_right_cameras(
         sharpness=sharpness,
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
+        isp_3a_fps=isp_3a_fps,
     )
 
     return left_cam, right_cam

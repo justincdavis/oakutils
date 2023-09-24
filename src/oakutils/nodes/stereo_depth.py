@@ -1,4 +1,4 @@
-from typing import Tuple
+from __future__ import annotations
 
 import depthai as dai
 
@@ -20,41 +20,30 @@ def create_stereo_depth(
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool = True,
-    extended_disparity: bool = False,
-    subpixel: bool = False,
+    lr_check: bool | None = None,
+    extended_disparity: bool | None = None,
+    subpixel: bool | None = None,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
     decimation_mode: dai.RawStereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool = False,
+    enable_spatial_filter: bool | None = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool = False,
+    enable_speckle_filter: bool | None = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool = False,
+    enable_temporal_filter: bool | None = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
     temporal_mode: dai.RawStereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-) -> Tuple[
-    dai.node.StereoDepth,
-    dai.node.MonoCamera,
-    dai.node.MonoCamera,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-]:
-    """
-    Creates a stereo depth given only a pipeline object.
+) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
+    """Creates a stereo depth given only a pipeline object.
     Creates mono cameras for the left and right cameras using the create_left_right_cameras function.
 
     Parameters
@@ -144,19 +133,20 @@ def create_stereo_depth(
         The left mono camera node
     dai.node.MonoCamera
         The right mono camera node
-    dai.node.XLinkOut
-        The left xlink out node, has stream name "left"
-    dai.node.XLinkOut
-        The right xlink out node, has stream name "right"
-    dai.node.XLinkOut
-        The depth xlink out node, has stream name "depth"
-    dai.node.XLinkOut
-        The disparity xlink out node, has stream name "disparity"
-    dai.node.XLinkOut
-        The rectified left xlink out node, has stream name "rectified_left"
-    dai.node.XLinkOut
-        The rectified right xlink out node, has stream name "rectified_right"
     """
+    if lr_check is None:
+        lr_check = True
+    if extended_disparity is None:
+        extended_disparity = False
+    if subpixel is None:
+        subpixel = False
+    if enable_spatial_filter is None:
+        enable_spatial_filter = False
+    if enable_speckle_filter is None:
+        enable_speckle_filter = False
+    if enable_temporal_filter is None:
+        enable_temporal_filter = False
+
     left_cam, right_cam = create_left_right_cameras(
         pipeline=pipeline,
         resolution=resolution,
@@ -168,15 +158,7 @@ def create_stereo_depth(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
     )
-    (
-        stereo,
-        xout_left,
-        xout_right,
-        xout_depth,
-        xout_disparity,
-        xout_rect_left,
-        xout_rect_right,
-    ) = create_stereo_depth_from_mono_cameras(
+    stereo = create_stereo_depth_from_mono_cameras(
         pipeline=pipeline,
         left=left_cam,
         right=right_cam,
@@ -212,12 +194,6 @@ def create_stereo_depth(
         stereo,
         left_cam,
         right_cam,
-        xout_left,
-        xout_right,
-        xout_depth,
-        xout_disparity,
-        xout_rect_left,
-        xout_rect_right,
     )
 
 
@@ -230,39 +206,30 @@ def create_stereo_depth_from_mono_cameras(
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
     median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool = True,
-    extended_disparity: bool = False,
-    subpixel: bool = False,
+    lr_check: bool | None = None,
+    extended_disparity: bool | None = None,
+    subpixel: bool | None = None,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
     decimation_mode: dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool = False,
+    enable_spatial_filter: bool | None = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool = False,
+    enable_speckle_filter: bool | None = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool = False,
+    enable_temporal_filter: bool | None = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
     temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-) -> Tuple[
-    dai.node.StereoDepth,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-    dai.node.XLinkOut,
-]:
-    """
-    Creates a stereo depth node from a pipeline and two mono cameras.
+) -> dai.node.StereoDepth:
+    """Creates a stereo depth node from a pipeline and two mono cameras.
 
     Parameters
     ----------
@@ -334,18 +301,6 @@ def create_stereo_depth_from_mono_cameras(
     -------
     dai.node.StereoDepth
         The stereo depth node
-    dai.node.XLinkOut
-        The left xlink out node, has stream name "left"
-    dai.node.XLinkOut
-        The right xlink out node, has stream name "right"
-    dai.node.XLinkOut
-        The depth xlink out node, has stream name "depth"
-    dai.node.XLinkOut
-        The disparity xlink out node, has stream name "disparity"
-    dai.node.XLinkOut
-        The rectified left xlink out node, has stream name "rectified_left"
-    dai.node.XLinkOut
-        The rectified right xlink out node, has stream name "rectified_right"
 
     Raises
     ------
@@ -357,6 +312,18 @@ def create_stereo_depth_from_mono_cameras(
         If decimation_factor is not 1,2,3,4
     """
     # parse the inputs
+    if lr_check is None:
+        lr_check = True
+    if extended_disparity is None:
+        extended_disparity = False
+    if subpixel is None:
+        subpixel = False
+    if enable_spatial_filter is None:
+        enable_spatial_filter = False
+    if enable_speckle_filter is None:
+        enable_speckle_filter = False
+    if enable_temporal_filter is None:
+        enable_temporal_filter = False
     # all alpha parameters should be between 0.0 and 1.0
     if not 0.0 <= spatial_alpha <= 1.0:
         raise ValueError("spatial_alpha should be between 0.0 and 1.0")
@@ -418,39 +385,9 @@ def create_stereo_depth_from_mono_cameras(
     # write back the config
     stereo.initialConfig.set(config)
 
-    # xout links
-    xout_left = pipeline.create(dai.node.XLinkOut)
-    xout_right = pipeline.create(dai.node.XLinkOut)
-    xout_depth = pipeline.create(dai.node.XLinkOut)
-    xout_disparity = pipeline.create(dai.node.XLinkOut)
-    xout_rect_left = pipeline.create(dai.node.XLinkOut)
-    xout_rect_right = pipeline.create(dai.node.XLinkOut)
-
-    # set stream names
-    xout_left.setStreamName("left")
-    xout_right.setStreamName("right")
-    xout_depth.setStreamName("depth")
-    xout_disparity.setStreamName("disparity")
-    xout_rect_left.setStreamName("rectified_left")
-    xout_rect_right.setStreamName("rectified_right")
-
     # link nodes
     left.out.link(stereo.left)
     right.out.link(stereo.right)
-    stereo.syncedLeft.link(xout_left.input)
-    stereo.syncedRight.link(xout_right.input)
-    stereo.depth.link(xout_depth.input)
-    stereo.disparity.link(xout_disparity.input)
-    stereo.rectifiedLeft.link(xout_rect_left.input)
-    stereo.rectifiedRight.link(xout_rect_right.input)
 
     # return data
-    return (
-        stereo,
-        xout_left,
-        xout_right,
-        xout_depth,
-        xout_disparity,
-        xout_rect_left,
-        xout_rect_right,
-    )
+    return stereo

@@ -1,21 +1,16 @@
-from .camera import Camera
-from . import (
-    calibration,
-    point_clouds,
-    blobs,
-    nodes,
-    tools,
-)
+from . import blobs, calibration, filters, nodes, point_clouds, tools
+from .legacy_camera import Camera as LegacyCamera
 
 __all__ = [
-    "Camera",
-    "calibration",
-    "point_clouds",
+    "LegacyCamera",
     "blobs",
+    "calibration",
+    "filters",
     "nodes",
+    "point_clouds",
     "tools",
 ]
-__version__ = "0.0.4"
+__version__ = "1.0.1"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)

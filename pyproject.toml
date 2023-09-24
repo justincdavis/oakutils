@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oakutils"
-version = "0.0.4"
+version = "1.0.1"
 authors = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
@@ -38,9 +38,11 @@ classifiers = [
 requires-python=">=3.8"
 dependencies = [
     "depthai>=2.20",
+    "depthai-sdk>=1.11.0",
     "numpy>=1.20",
     "open3d>=0.16",
-    "opencv-python>=4.5",
+    "opencv-contrib-python>=4.8",
+    "typing_extensions>=4.0.0",
 ]
 
 [project.urls]
@@ -48,25 +50,31 @@ dependencies = [
 "Bug Tracker" = "https://github.com/justincdavis/oakutils/issues"
 
 [project.optional-dependencies]
-dev = [
-    "black",
-    "pylint",
-    "mypy",
-    "twine",
-    "wheel",
-    "bumpver",
+compiler = [
     "kornia",
     "torch",
     "onnx>=1.12.0",
     "onnxruntime",
     "onnxsim",
-    "openvino-dev[pytorch,onnx]",
+    "blobconverter==1.4.2",
+]
+dev = [
+    "oakutils[compiler]",
+    "pyupgrade",
+    "black",
+    "isort",
+    "ruff",
+    "mypy",
+    "twine",
+    "wheel",
+    "bumpver",
     "sphinx",
     "sphinx-rtd-theme",
+    "pyclean",
 ]
 
 [tool.bumpver]
-current_version = "0.0.4"
+current_version = "1.0.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true
@@ -82,4 +90,85 @@ push            = false
 where = ["src"]
 
 [tool.setuptools.package-data]
-oakutils = ["*.blob"]
+oakutils = ["src/*.blob"]
+
+[tool.ruff]
+select = ["SLOT", "RUF", "FURB", "PERF", "FLY", "PGH", "INT", "TCH", "TID", "SIM", "PYI", "PIE", "INP", "ISC", "ICN", "ANN", "UP", "YTT", "W", "N", "A", "E", "F", "I", "BLE", "B", "FBT", "C4", "FA", "SLF", "RET", "ARG", "NPY"]
+ignore = ["C901", "E501"]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+fix = true
+show-fixes = true
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+per-file-ignores = {}
+
+# Same as Black.
+line-length = 88
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8
+target-version = "py38"
+
+# Other options
+builtins = ["_"]
+
+[tool.mypy]
+python_version = "3.8"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/typings"
+warn_unused_configs = false
+warn_redundant_casts = false
+warn_unused_ignores = false
+strict_equality = false
+strict_concatenate = false
+check_untyped_defs = false
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+disallow_any_generics = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+no_implicit_reexport = false
+warn_return_any = false
+
+[[tool.mypy.overrides]]
+module = "open3d.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'
+
+[[tool.mypy.overrides]]
+module = "onnxsim.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'
+
+[[tool.mypy.overrides]]
+module = "blobconverter.*"
+ignore_missing_imports = true
+disable_error_code = 'attr-defined'

@@ -3,6 +3,8 @@ import os
 import shutil
 
 import open3d
+import onnxsim
+import blobconverter
 
 
 def get_name(module):
@@ -11,6 +13,14 @@ def get_name(module):
     except AttributeError:
         return module
 
+def move_stubs(name: str):
+    # moves stubs from out to typings
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", name))
+    shutil.move(
+        os.path.join(os.path.dirname(__file__), "..", "out", name),
+        os.path.join(os.path.dirname(__file__), "..", "typings", name),
+    )
+
 def move_open3d_stubs():
     # moves stubs from out to typings
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"))
@@ -18,6 +28,7 @@ def move_open3d_stubs():
         os.path.join(os.path.dirname(__file__), "..", "out", "open3d"),
         os.path.join(os.path.dirname(__file__), "..", "typings", "open3d"),
     )
+
 
 def delete_folder(folder_path: str):
     """
@@ -52,13 +63,13 @@ def fix_open3d_stub_syntax():
     # resolve syntax issues
     path = os.path.join(os.path.dirname(__file__), "..", "typings", "open3d")
     camera = os.path.join(path, "camera", "__init__.pyi")
-    with open(camera, "r") as f:
+    with open(camera) as f:
         data = f.read()
     data = data.replace("3x3 numpy array", "np.ndarray")
     data = data.replace("4x4 numpy array", "np.ndarray")
     with open(camera, "w") as f:
         f.write(data)
-    with open(camera, "r") as f:
+    with open(camera) as f:
         data = f.readlines()
     data.insert(0, "import numpy as np\n")
     with open(camera, "w") as f:
@@ -74,6 +85,8 @@ def make_stubs(module):
 def main():
     for module in [
         open3d,
+        open3d.cpu,
+        open3d.cpu.pybind,
         open3d.camera,
         open3d.core,
         open3d.data,
@@ -84,17 +97,24 @@ def main():
         open3d.t,
         open3d.utility,
         open3d.visualization,
+        onnxsim,
+        onnxsim.onnx_simplifier,
+        blobconverter,
     ]:
         print(f"Making stubs for {get_name(module)}")
         make_stubs(module)
 
     fix_open3d_stubs()
-
     move_open3d_stubs()
-
     fix_open3d_stub_syntax()
 
+    # move all other stubs
+    for file in os.listdir(os.path.join(os.path.dirname(__file__), "..", "out")):
+        if file != "open3d":
+            move_stubs(file)
+
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
+
 
 if __name__ == "__main__":
     main()

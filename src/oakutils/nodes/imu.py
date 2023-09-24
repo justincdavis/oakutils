@@ -1,4 +1,4 @@
-from typing import Tuple
+from __future__ import annotations
 
 import depthai as dai
 
@@ -9,27 +9,26 @@ def create_imu(
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
     max_batch_reports: int = 10,
-    enable_accelerometer_raw: bool = False,
-    enable_accelerometer: bool = False,
-    enable_linear_acceleration: bool = False,
-    enable_gravity: bool = False,
-    enable_gyroscope_raw: bool = False,
-    enable_gyroscope_calibrated: bool = False,
-    enable_gyroscope_uncalibrated: bool = False,
-    enable_magnetometer_raw: bool = False,
-    enable_magnetometer_calibrated: bool = False,
-    enable_magnetometer_uncalibrated: bool = False,
-    enable_rotation_vector: bool = False,
-    enable_game_rotation_vector: bool = False,
-    enable_geomagnetic_rotation_vector: bool = False,
-    enable_arvr_stabilized_rotation_vector: bool = False,
-    enable_arvr_stabilized_game_rotation_vector: bool = False,
-) -> Tuple[dai.node.IMU, dai.node.XLinkOut]:
-    """
-    Creates a pipeline for the IMU.
+    enable_accelerometer_raw: bool | None = None,
+    enable_accelerometer: bool | None = None,
+    enable_linear_acceleration: bool | None = None,
+    enable_gravity: bool | None = None,
+    enable_gyroscope_raw: bool | None = None,
+    enable_gyroscope_calibrated: bool | None = None,
+    enable_gyroscope_uncalibrated: bool | None = None,
+    enable_magnetometer_raw: bool | None = None,
+    enable_magnetometer_calibrated: bool | None = None,
+    enable_magnetometer_uncalibrated: bool | None = None,
+    enable_rotation_vector: bool | None = None,
+    enable_game_rotation_vector: bool | None = None,
+    enable_geomagnetic_rotation_vector: bool | None = None,
+    enable_arvr_stabilized_rotation_vector: bool | None = None,
+    enable_arvr_stabilized_game_rotation_vector: bool | None = None,
+) -> dai.node.IMU:
+    """Creates a pipeline for the IMU.
     Sensors which use both gyroscope and accelerometer will default to slower rate.
     An in-depth explanation of the IMU can be found here:
-    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/
+    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/.
 
     Parameters
     ----------
@@ -41,6 +40,10 @@ def create_imu(
     gyroscope_rate : int, optional
         The rate of the gyroscope, by default 400
         Options are 125, 250, 400
+    batch_report_threshold : int, optional
+        The batch report threshold, by default 1
+    max_batch_reports : int, optional
+        The maximum batch reports, by default 10
     enable_accelerometer_raw : bool, optional
         Enable accelerometer raw, by default False
     enable_accelerometer : bool, optional
@@ -76,8 +79,6 @@ def create_imu(
     -------
     dai.node.IMU
         The IMU node
-    dai.node.XLinkOut
-        The output node, with stream name "imu"
 
     Raises
     ------
@@ -86,6 +87,37 @@ def create_imu(
     ValueError
         If gyroscope_rate is not one of the following: 125, 250, 400
     """
+    if enable_accelerometer_raw is None:
+        enable_accelerometer_raw = False
+    if enable_accelerometer is None:
+        enable_accelerometer = False
+    if enable_linear_acceleration is None:
+        enable_linear_acceleration = False
+    if enable_gravity is None:
+        enable_gravity = False
+    if enable_gyroscope_raw is None:
+        enable_gyroscope_raw = False
+    if enable_gyroscope_calibrated is None:
+        enable_gyroscope_calibrated = False
+    if enable_gyroscope_uncalibrated is None:
+        enable_gyroscope_uncalibrated = False
+    if enable_magnetometer_raw is None:
+        enable_magnetometer_raw = False
+    if enable_magnetometer_calibrated is None:
+        enable_magnetometer_calibrated = False
+    if enable_magnetometer_uncalibrated is None:
+        enable_magnetometer_uncalibrated = False
+    if enable_rotation_vector is None:
+        enable_rotation_vector = False
+    if enable_game_rotation_vector is None:
+        enable_game_rotation_vector = False
+    if enable_geomagnetic_rotation_vector is None:
+        enable_geomagnetic_rotation_vector = False
+    if enable_arvr_stabilized_rotation_vector is None:
+        enable_arvr_stabilized_rotation_vector = False
+    if enable_arvr_stabilized_game_rotation_vector is None:
+        enable_arvr_stabilized_game_rotation_vector = False
+
     if accelerometer_rate not in [100, 200, 400]:
         raise ValueError(
             "accelerometer_rate must be one of the following: 100, 200, 400"
@@ -127,7 +159,6 @@ def create_imu(
         sensors.append(dai.IMUSensor.ARVR_STABILIZED_GAME_ROTATION_VECTOR)
 
     imu = pipeline.create(dai.node.IMU)
-    xout_imu = pipeline.create(dai.node.XLinkOut)
 
     # enable the sensors for each type in the sensors list
     for sensor in sensors:
@@ -150,8 +181,4 @@ def create_imu(
     imu.setBatchReportThreshold(batch_report_threshold)
     imu.setMaxBatchReports(max_batch_reports)
 
-    xout_imu.setStreamName("imu")
-
-    imu.out.link(xout_imu.input)
-
-    return imu, xout_imu
+    return imu
