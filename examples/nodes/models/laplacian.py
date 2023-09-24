@@ -17,6 +17,7 @@ lap = create_laplacian(
     kernel_size=7,
     blur_kernel_size=3,
     use_blur=True,
+    shaves=3,
 )
 xout_lap = create_xout(pipeline, lap.out, "laplacian")
 
@@ -25,7 +26,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         lp_data = lp_queue.get()
-        lp_frame = get_nn_bgr_frame(lp_data)
+        lp_frame = get_nn_bgr_frame(lp_data, normalization=255.0)
 
         cv2.imshow("laplacian frame", lp_frame)
         if cv2.waitKey(1) == ord("q"):

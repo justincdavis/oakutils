@@ -1,3 +1,11 @@
+"""
+Module for creating IMU nodes.
+
+Functions
+---------
+create_imu
+    Creates a node for the IMU.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -25,10 +33,11 @@ def create_imu(
     enable_arvr_stabilized_rotation_vector: bool | None = None,
     enable_arvr_stabilized_game_rotation_vector: bool | None = None,
 ) -> dai.node.IMU:
-    """Creates a pipeline for the IMU.
+    """
+    Use to create a node for the IMU.
+
+    Note:
     Sensors which use both gyroscope and accelerometer will default to slower rate.
-    An in-depth explanation of the IMU can be found here:
-    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/.
 
     Parameters
     ----------
@@ -86,6 +95,10 @@ def create_imu(
         If accelerometer_rate is not one of the following: 100, 200, 400
     ValueError
         If gyroscope_rate is not one of the following: 125, 250, 400
+
+    References
+    ----------
+    https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/
     """
     if enable_accelerometer_raw is None:
         enable_accelerometer_raw = False

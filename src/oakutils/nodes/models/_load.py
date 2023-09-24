@@ -15,10 +15,12 @@ def create_model(
     input_link: dai.Node.Output | Iterable[dai.Node.Output],
     model_name: str,
     attributes: list[str],
+    shaves: int,
     input_names: Iterable[str] | None = None,
     reuse_messages: Iterable[bool | None] | None = None,
 ) -> dai.node.NeuralNetwork:
-    """Gets the model blob based on the attributes and creates a neural network node.
+    """
+    Use to get the model blob based on the attributes and creates a neural network node.
 
     Parameters
     ----------
@@ -32,6 +34,8 @@ def create_model(
         The name of the model to use
     attributes : List[str]
         The attributes of the model to use
+    shaves : int
+        The number of shaves to use
     input_names : Optional[Iterable[str]], optional
         The names of the input layers, by default None
         If None, will use the default input names for the model
@@ -55,6 +59,7 @@ def create_model(
     potential_blobs = get_candidates(
         model_type=model_name,
         attributes=attributes,
+        shaves=shaves,
     )
 
     try:
@@ -80,10 +85,12 @@ def create_no_args_multi_link_model(
     pipeline: dai.Pipeline,
     input_links: list[dai.Node.Output],
     model_name: str,
+    shaves: int,
     input_names: list[str],
     reuse_messages: list[bool | None],
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with multiple input links.
+    """
+    Use to create a model with multiple input links.
 
     Parameters
     ----------
@@ -94,6 +101,8 @@ def create_no_args_multi_link_model(
         Example: [cam_rgb.preview, cam_left.preview]
     model_name : str
         The name of the model to use
+    shaves : int
+        The number of shaves to use
     input_names : List[str]
         The names of the input layers
     reuse_messages : List[Optional[bool]]
@@ -109,6 +118,7 @@ def create_no_args_multi_link_model(
         input_link=input_links,
         model_name=model_name,
         attributes=[],
+        shaves=shaves,
         input_names=input_names,
         reuse_messages=reuse_messages,
     )
@@ -118,8 +128,10 @@ def create_no_args_model(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     model_name: str,
+    shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with no arguments.
+    """
+    Use to create a model with no arguments.
 
     Parameters
     ----------
@@ -130,6 +142,8 @@ def create_no_args_model(
         Example: cam_rgb.preview
     model_name : str
         The name of the model to use
+    shaves : int
+        The number of shaves to use
 
     Returns
     -------
@@ -141,6 +155,7 @@ def create_no_args_model(
         input_link=input_link,
         model_name=model_name,
         attributes=[],
+        shaves=shaves,
     )
 
 
@@ -149,8 +164,10 @@ def create_single_kernel_model(
     input_link: dai.Node.Output,
     model_name: str,
     kernel_size: int,
+    shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with a single kernel size.
+    """
+    Use to create a model with a single kernel size.
 
     Parameters
     ----------
@@ -163,6 +180,8 @@ def create_single_kernel_model(
         The name of the model to use
     kernel_size : int
         The size of the kernel to use
+    shaves : int
+        The number of shaves to use
 
     Returns
     -------
@@ -178,6 +197,7 @@ def create_single_kernel_model(
         input_link=input_link,
         model_name=model_name,
         attributes=attributes,
+        shaves=shaves,
     )
 
 
@@ -187,8 +207,10 @@ def create_double_kernel_model(
     model_name: str,
     kernel_size1: int,
     kernel_size2: int,
+    shaves: int,
 ) -> dai.node.NeuralNetwork:
-    """Creates a model with a two kernel sizes.
+    """
+    Use to create a model with a two kernel sizes.
 
     Parameters
     ----------
@@ -203,6 +225,8 @@ def create_double_kernel_model(
         The size of the kernel to use
     kernel_size2 : int
         The size of the kernel to use
+    shaves : int
+        The number of shaves to use
 
     Returns
     -------
@@ -221,4 +245,5 @@ def create_double_kernel_model(
         input_link=input_link,
         model_name=model_name,
         attributes=attributes,
+        shaves=shaves,
     )

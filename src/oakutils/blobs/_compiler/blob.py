@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 def compile_blob(
     model_type: AbstractModel, onnx_path: str, output_path: str, shaves: int = 6
 ) -> None:
-    """Compiles an ONNX model into a blob using the provided arguments.
+    """
+    Compiles an ONNX model into a blob using the provided arguments.
 
     Parameters
     ----------

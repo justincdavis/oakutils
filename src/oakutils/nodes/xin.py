@@ -1,3 +1,11 @@
+"""
+Module for creating and using depthai Xin nodes.
+
+Functions
+---------
+create_xin
+    Use to create an xin node
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -11,7 +19,8 @@ def create_xin(
     stream_name: str,
     max_data_size: int = 6144000,
 ) -> dai.node.XLinkIn:
-    """Creates an XLinkIn node.
+    """
+    Use to create an XLinkIn node.
 
     Parameters
     ----------

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
+
+import torch
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 
@@ -19,12 +22,14 @@ def _compile(
     | tuple[tuple[int, int, int], InputType],
     cache: bool | None = None,
     shaves: int = 6,
+    creation_func: callable = torch.rand,
 ) -> str:
-    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """
+    Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
-    model : AbstractModel
+    model_type : AbstractModel
         The model class to compile. This should be just the type that returns an
         instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
@@ -34,17 +39,24 @@ def _compile(
         The arguments to pass to the model class
     dummy_input_shapes : Union[Iterable[Tuple[int, int, int]], Tuple[int, int, int]]
         The dummy input shapes to use for the export
-    input_names : List[str]
-        The names of the input tensors
-    output_names : List[str]
-        The names of the output tensors
     cache : bool, optional
         Whether or not to cache the blob, by default True
+        Cache does not account for shave changes, so if you change the number of shaves
+        you will need to recompile the blob with cache set to False.
+    shaves : int, optional
+        The number of shaves to use for the blob, by default 6
+    creation_func : callable, optional
+        The function to use to create the dummy input, by default torch.rand
 
     Returns
     -------
     str
         The path to the compiled blob
+
+    Raises
+    ------
+    RuntimeError
+        If there is an error compiling the blob
     """
     if cache is None:
         cache = True
@@ -89,6 +101,12 @@ def _compile(
     if cache and os.path.exists(final_blob_path):
         return final_blob_path
 
+    # if we are not caching, then remove the old blob
+    if not cache:
+        for p in [onnx_path, simplfiy_onnx_path, final_blob_path]:
+            if os.path.exists(p):
+                os.remove(p)
+
     # first step, export the torch model
     export(
         model_instance=model,
@@ -96,13 +114,21 @@ def _compile(
         onnx_path=onnx_path,
         input_names=input_names,
         output_names=output_names,
+        creation_func=creation_func,
     )
 
     # second step, simplify the onnx model
     simplify(onnx_path, simplfiy_onnx_path)
 
     # third step, compile the onnx model
-    compile_blob(model_type, simplfiy_onnx_path, blob_dir, shaves=shaves)
+    try:
+        compile_blob(model_type, simplfiy_onnx_path, blob_dir, shaves=shaves)
+    except json.JSONDecodeError as er:
+        base_str = "Error compiling blob. "
+        base_str += "Usually this is caused by a corrupted json file. "
+        base_str += "Try deleting the blobconverter cache directory and json file. "
+        base_str += "Then recompile the blob."
+        raise RuntimeError(base_str) from er
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
@@ -115,12 +141,14 @@ def compile_model(
     cache: bool | None = None,
     shaves: int = 6,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
+    creation_func: callable = torch.rand,
 ) -> str:
-    """Compiles a given torch.nn.Module class into a blob using the provided arguments.
+    """
+    Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
     Parameters
     ----------
-    model : AbstractModel
+    model_type : AbstractModel
         The model class to compile. This should be just the type that returns an
         instance of the model.
         Example: `model = lambda: torchvision.models.mobilenet_v2(pretrained=True)`
@@ -137,8 +165,12 @@ def compile_model(
         of the camera.
         If None, then the default mapping is used, by default None
         Default mapping:
-            InputType.FP16 -> (3, 480, 640)
-            InputType.U8 -> (1, 400, 640)
+            InputType.FP16 -> (640, 480, 3)
+            InputType.XYZ -> (640, 400, 3)
+            InputType.U8 -> (640, 400, 1)
+    creation_func: callable, optional
+        The function to use to create the dummy input, by default torch.rand
+          Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
 
     Returns
     -------
@@ -169,4 +201,5 @@ def compile_model(
         dummy_input_shapes=dummy_input_shapes,
         cache=cache,
         shaves=shaves,
+        creation_func=creation_func,
     )

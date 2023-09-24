@@ -1,22 +1,30 @@
 from __future__ import annotations
 
 import os
+import site
 import sysconfig
 
 
 def get_site_packages_path() -> str:
-    """Gets the path to the site-packages folder.
+    """
+    Use to get the path to the site-packages folder.
 
     Returns
     -------
     str
         The path to the site-packages folder.
     """
-    return os.path.abspath(sysconfig.get_paths()["purelib"])
+    site_site_packages = site.getusersitepackages()
+    sysconfig_site_packages = sysconfig.get_paths()["purelib"]
+    site_packages = (
+        site_site_packages if os.name == "posix" else sysconfig_site_packages
+    )
+    return os.path.abspath(site_packages)
 
 
 def get_oakutils_path() -> str:
-    """Gets the path to the oakutils folder.
+    """
+    Use to get the path to the oakutils folder.
 
     Returns
     -------
@@ -27,7 +35,8 @@ def get_oakutils_path() -> str:
 
 
 def get_blobs_path() -> str:
-    """Gets the path to the oakutils blobs folder.
+    """
+    Use to get the path to the oakutils blobs folder.
 
     Returns
     -------
@@ -38,7 +47,8 @@ def get_blobs_path() -> str:
 
 
 def get_cache_dir_path() -> str:
-    """Gets the path to the oakutils blobs cache folder.
+    """
+    Use to get the path to the oakutils blobs cache folder.
 
     Returns
     -------
@@ -49,7 +59,8 @@ def get_cache_dir_path() -> str:
 
 
 def get_models_dir_path() -> str:
-    """Gets the path to the oakutils blobs models folder.
+    """
+    Use to get the path to the oakutils blobs models folder.
 
     Returns
     -------

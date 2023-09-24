@@ -1,3 +1,11 @@
+"""
+Module for tools related to calculating spatials locations.
+
+Classes
+-------
+HostSpatialsCalc
+    Class for calculating spatial coordinates on the host.
+"""
 from __future__ import annotations
 
 import math
@@ -13,12 +21,8 @@ if TYPE_CHECKING:
 
 
 class HostSpatialsCalc:
-    """Class for calculating spatial coordinates on the host.
-
-    Methods
-    -------
-    calc_spatials(depth_frame: np.ndarray) -> np.ndarray
-        Calculates the spatial coordinates for the given depth frame.
+    """
+    Class for calculating spatial coordinates on the host.
 
     Attributes
     ----------
@@ -29,6 +33,11 @@ class HostSpatialsCalc:
         The lower threshold for the spatial coordinates calculation.
     thresh_high : int
         The upper threshold for the spatial coordinates calculation.
+
+    Methods
+    -------
+    calc_spatials(depth_frame: np.ndarray) -> np.ndarray
+        Calculates the spatial coordinates for the given depth frame.
 
     References
     ----------
@@ -42,7 +51,8 @@ class HostSpatialsCalc:
         thresh_low: int = 200,
         thresh_high: int = 30000,
     ) -> None:
-        """Creates a HostSpatialsCalc object.
+        """
+        Use to create a HostSpatialsCalc object.
 
         Parameters
         ----------
@@ -104,7 +114,7 @@ class HostSpatialsCalc:
     def _check_input(
         self: Self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
     ) -> tuple[int, int, int, int]:
-        """Checks if the input is valid, and constrains to the frame size."""
+        """Use to check if the input is valid, and constrains to the frame size."""
         xywh = 4
         xy = 2
         if len(roi) == xywh:
@@ -123,7 +133,8 @@ class HostSpatialsCalc:
         roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,
     ) -> tuple[float, float, float, tuple[int, int]]:
-        """Computes spatial coordinates of the ROI.
+        """
+        Use to compute spatial coordinates of the ROI.
 
         Parameters
         ----------
@@ -194,8 +205,8 @@ class HostSpatialsCalc:
         bb_x_pos = centroid[0] - self._mid_w
         bb_y_pos = centroid[1] - self._mid_h
 
-        angle_x = math.atan(self._i_angle * bb_x_pos)
-        angle_y = math.atan(self._i_angle * bb_y_pos)
+        angle_x = math.atan2(self._i_angle * bb_x_pos)
+        angle_y = math.atan2(self._i_angle * bb_y_pos)
 
         spatials = (
             avg_depth,

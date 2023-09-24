@@ -18,7 +18,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         l_data = l_queue.get()
-        l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480))
+        l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
 
         cv2.imshow("gaussian frame", l_frame)
         if cv2.waitKey(1) == ord("q"):

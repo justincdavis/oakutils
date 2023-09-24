@@ -1,3 +1,13 @@
+"""
+Module for creating mono camera nodes.
+
+Functions
+---------
+create_mono_camera
+    Creates a pipeline for the mono camera.
+create_left_right_cameras
+    Wrapper function for creating the left and right mono cameras.
+"""
 from __future__ import annotations
 
 import depthai as dai
@@ -14,9 +24,10 @@ def create_mono_camera(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: int | None = None,
+    isp_3a_fps: int | None = 15,
 ) -> dai.node.MonoCamera:
-    """Creates a pipeline for the mono camera.
+    """
+    Use to create a pipeline for the mono camera.
 
     Parameters
     ----------
@@ -47,9 +58,10 @@ def create_mono_camera(
         The chroma denoise of the mono camera, by default 1
         Valid values are 0 ... 4
     isp_3a_fps: Optional[int], optional
-        The fps of how often the 3a algorithms will run, by default None
+        The fps of how often the 3a algorithms will run, by default 15
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
+        Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
 
     Returns
     -------
@@ -125,7 +137,8 @@ def create_left_right_cameras(
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = None,
 ) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
-    """Wrapper function for creating the left and right mono cameras.
+    """
+    Use to create the left and right mono cameras.
 
     Parameters
     ----------

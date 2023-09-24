@@ -1,3 +1,12 @@
+"""
+Module for using the WLS filter on disparity images.
+
+Classes
+-------
+WLSFilter
+    A class for computing the weighted-least-squares filter,
+    on disparity images.
+"""
 from __future__ import annotations
 
 import math
@@ -13,9 +22,7 @@ if TYPE_CHECKING:
 
 
 class WLSFilter:
-    """A class for computing the weighted-least-squares filter,
-    on disparity images.
-    """
+    """A class for computing the weighted-least-squares filter on disparity images."""
 
     def __init__(
         self: Self,
@@ -24,7 +31,8 @@ class WLSFilter:
         sigma: float = 1.0,
         disp_levels: int = 96,
     ) -> None:
-        """Creates a WLSFilter object.
+        """
+        Use to create a WLSFilter object.
 
         Parameters
         ----------
@@ -55,7 +63,8 @@ class WLSFilter:
         mono_frame: np.ndarray,
         use_mono_left: bool | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Filters the disparity image.
+        """
+        Use to filter the disparity image.
 
         Parameters
         ----------

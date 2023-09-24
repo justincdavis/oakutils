@@ -1,3 +1,11 @@
+"""
+Module for creating image manip nodes.
+
+Functions
+---------
+create_image_manip
+    Creates an image manip node.
+"""
 from __future__ import annotations
 
 from typing import Sequence
@@ -24,7 +32,8 @@ def create_image_manip(
     warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
     warp_transform_matrix_3x3: list[float] | None = None,
 ) -> dai.node.ImageManip:
-    """Creates an image manip node.
+    """
+    Use to create an image manip node.
 
     Parameters
     ----------
