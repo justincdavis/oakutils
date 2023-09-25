@@ -158,17 +158,11 @@ disallow_untyped_defs = false
 no_implicit_reexport = false
 warn_return_any = false
 
+# ignore cv2, open3d, blobconverter
 [[tool.mypy.overrides]]
-module = "open3d.*"
-ignore_missing_imports = true
-disable_error_code = 'attr-defined'
-
-[[tool.mypy.overrides]]
-module = "onnxsim.*"
-ignore_missing_imports = true
-disable_error_code = 'attr-defined'
-
-[[tool.mypy.overrides]]
-module = "blobconverter.*"
-ignore_missing_imports = true
-disable_error_code = 'attr-defined'
+module = [  
+    'cv2',
+    'open3d',
+    'blobconverter',
+]
+ignore_errors = true
