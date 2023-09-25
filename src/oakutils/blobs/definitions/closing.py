@@ -46,7 +46,9 @@ class Closing(AbstractModel):
             The size of the kernel to use, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: Closing) -> ModelType:
@@ -72,7 +74,7 @@ class Closing(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        return kornia.morphology.closing(image, (self._kernel_size, self._kernel_size))
+        return kornia.morphology.closing(image, self._kernel)
 
 
 class ClosingGray(AbstractModel):
@@ -95,7 +97,9 @@ class ClosingGray(AbstractModel):
             The size of the kernel to use, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: ClosingGray) -> ModelType:
@@ -122,7 +126,7 @@ class ClosingGray(AbstractModel):
             The input tensor to run the model on
         """
         closing = kornia.morphology.closing(
-            image, (self._kernel_size, self._kernel_size)
+            image, self._kernel
         )
         return kornia.color.bgr_to_grayscale(closing)
 
@@ -153,8 +157,10 @@ class ClosingBlur(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -185,7 +191,7 @@ class ClosingBlur(AbstractModel):
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
         return kornia.morphology.closing(
-            gaussian, (self._kernel_size2, self._kernel_size2)
+            gaussian, self._kernel
         )
 
 
@@ -215,8 +221,10 @@ class ClosingBlurGray(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -247,6 +255,6 @@ class ClosingBlurGray(AbstractModel):
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
         closing = kornia.morphology.closing(
-            gaussian, (self._kernel_size2, self._kernel_size2)
+            gaussian, self._kernel
         )
         return kornia.color.bgr_to_grayscale(closing)
