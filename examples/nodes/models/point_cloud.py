@@ -3,7 +3,11 @@ import depthai as dai
 from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud
 from oakutils.nodes.models.point_cloud import create_point_cloud, create_xyz_matrix
-from oakutils.point_clouds import PointCloudVisualizer, create_point_cloud_from_np, filter_point_cloud
+from oakutils.point_clouds import (
+    PointCloudVisualizer,
+    create_point_cloud_from_np,
+    filter_point_cloud,
+)
 
 pipeline = dai.Pipeline()
 pcv = PointCloudVisualizer()
@@ -45,4 +49,3 @@ with dai.Device(pipeline) as device:
             pcl = filter_point_cloud(pcl)
             pcv.update(pcl)
             counter = 0
-

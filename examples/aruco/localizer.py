@@ -8,15 +8,17 @@ from oakutils.calibration import get_camera_calibration_basic
 from oakutils.nodes import create_color_camera, create_xout
 from oakutils.tools.transform import create_transform
 
+
 def draw_coordinate_axes(ax, H, label):
-    p = H[0:3, 3] # Origin of the coordinate frame
-    ux = H @ np.array([1,0,0,1]) # Tip of the x axis
-    uy = H @ np.array([0,1,0,1]) # Tip of the y axis
-    uz = H @ np.array([0,0,1,1]) # Tip of the z axis
-    ax.plot(xs=[p[0], ux[0]], ys=[p[1], ux[1]], zs=[p[2], ux[2]], c='r') # x axis
-    ax.plot(xs=[p[0], uy[0]], ys=[p[1], uy[1]], zs=[p[2], uy[2]], c='g') # y axis
-    ax.plot(xs=[p[0], uz[0]], ys=[p[1], uz[1]], zs=[p[2], uz[2]], c='b') # z axis
-    ax.text(p[0], p[1], p[2], label) # Also draw the label of the coordinate frame
+    p = H[0:3, 3]  # Origin of the coordinate frame
+    ux = H @ np.array([1, 0, 0, 1])  # Tip of the x axis
+    uy = H @ np.array([0, 1, 0, 1])  # Tip of the y axis
+    uz = H @ np.array([0, 0, 1, 1])  # Tip of the z axis
+    ax.plot(xs=[p[0], ux[0]], ys=[p[1], ux[1]], zs=[p[2], ux[2]], c="r")  # x axis
+    ax.plot(xs=[p[0], uy[0]], ys=[p[1], uy[1]], zs=[p[2], uy[2]], c="g")  # y axis
+    ax.plot(xs=[p[0], uz[0]], ys=[p[1], uz[1]], zs=[p[2], uz[2]], c="b")  # z axis
+    ax.text(p[0], p[1], p[2], label)  # Also draw the label of the coordinate frame
+
 
 def main():
     calibration = get_camera_calibration_basic()
@@ -30,13 +32,13 @@ def main():
     )
     # uses these markers: http://jevois.org/moddoc/DemoArUco/screenshot2.png
     marker_locations = {
-            42: create_transform(0.0, 0.0, 0.0, -1.0, 0.5, 0.0),
-            18: create_transform(0.0, 0.0, 0.0, 0.0, 0.5, 0.0),
-            12: create_transform(0.0, 0.0, 0.0, 1.0, 0.5, 0.0),
-            23: create_transform(0.0, 0.0, 0.0, -1.0, -0.5, 0.0),
-            43: create_transform(0.0, 0.0, 0.0, 0.0, -0.5, 0.0),
-            5: create_transform(0.0, 0.0, 0.0, 1.0, -0.5, 0.0),
-        }
+        42: create_transform(0.0, 0.0, 0.0, -1.0, 0.5, 0.0),
+        18: create_transform(0.0, 0.0, 0.0, 0.0, 0.5, 0.0),
+        12: create_transform(0.0, 0.0, 0.0, 1.0, 0.5, 0.0),
+        23: create_transform(0.0, 0.0, 0.0, -1.0, -0.5, 0.0),
+        43: create_transform(0.0, 0.0, 0.0, 0.0, -0.5, 0.0),
+        5: create_transform(0.0, 0.0, 0.0, 1.0, -0.5, 0.0),
+    }
     localizer = ArucoLocalizer(
         marker_locations,
         5,
@@ -50,10 +52,10 @@ def main():
 
     # create plot
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_zlabel("z")
     plt.ion()
     plt.show()
     counter = 0
@@ -69,7 +71,7 @@ def main():
 
             for tag, H in marker_locations.items():
                 draw_coordinate_axes(ax, H, str(tag))
-            draw_coordinate_axes(ax, transform, 'Camera')
+            draw_coordinate_axes(ax, transform, "Camera")
 
             plt.draw()
             plt.pause(0.001)

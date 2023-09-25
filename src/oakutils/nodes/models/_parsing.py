@@ -48,6 +48,18 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
     """
     valid_names = [
         "gaussian",
+        "gftt",
+        "gfttblur",
+        "gfttgray",
+        "gfttblurgray",
+        "harris",
+        "harrisblur",
+        "harrisgray",
+        "harrisblurgray",
+        "hessian",
+        "hessianblur",
+        "hessiangray",
+        "hessianblurgray",
         "laplacian",
         "gaussiangray",
         "laplaciangray",
