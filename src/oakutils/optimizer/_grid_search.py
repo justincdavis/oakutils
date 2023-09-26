@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, Callable, Any
+from typing import Callable, Any
 
-if TYPE_CHECKING:
-    import depthai as dai
+import depthai as dai
 
 
 def grid_search(

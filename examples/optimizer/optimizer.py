@@ -5,15 +5,14 @@ import depthai as dai
 from oakutils.calibration import get_camera_calibration_basic
 from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 from oakutils.nodes.models import create_point_cloud
-from oakutils.optimizer import Optimizer
-from oakutils.optimizer.objective import highest_fps, lowest_avg_latency, lowest_latency
+from oakutils.optimizer import Optimizer, highest_fps, lowest_avg_latency, lowest_latency
 
 
 def pipeline_func(pipeline: dai.Pipeline, args: dict[str, Any]) -> list[Callable[[dai.Device], None]]:
     # generate onboard nodes
     color_cam = create_color_camera(pipeline, fps=args["color_fps"])
     stereo, left, right = create_stereo_depth(pipeline, fps=args["mono_fps"])
-    pcl, xin_pcl, start_pcl = create_point_cloud(pipeline, stereo.depth, args["calibration"], args["pcl_shaves"])
+    pcl, xin_pcl, start_pcl = create_point_cloud(pipeline, stereo.depth, args["calibration"], shaves=args["pcl_shaves"])
     # create xout streams
     xout_color = create_xout(pipeline, color_cam.preview, "color")
     xout_pcl = create_xout(pipeline, pcl.out, "pcl")

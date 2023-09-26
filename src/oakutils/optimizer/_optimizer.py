@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import time
 import itertools
-from typing import TYPE_CHECKING, Callable, Any
+from typing import Callable, Any
+from collections import deque
 
 import depthai as dai
+from typing_extensions import Self
 
 from ._grid_search import grid_search
-
-if TYPE_CHECKING:
-    from typing_extensions import Self
-
+    
 
 class Optimizer:
     """Class for optimizing a pipeline onboard an OAK camera."""
@@ -18,7 +17,7 @@ class Optimizer:
     def __init__(
         self: Self,
         algorithm: str = "grid",
-        measure_time: float = 10.0,
+        max_measure_time: float = 10.0,
         measure_trials: int = 1,
     ) -> None:
         """Use to create an instance of the class.
@@ -27,7 +26,7 @@ class Optimizer:
         ----------
         algorithm : str, optional
             The algorithm to use for optimization, by default "grid"
-        measure_time : float, optional
+        max_measure_time : float, optional
             The amount of time to measure the pipeline for, by default 10.0
         measure_trials : int, optional
             The number of times to measure the pipeline, by default 1
@@ -41,7 +40,7 @@ class Optimizer:
             raise ValueError(f"Invalid algorithm {algorithm}")
         if algorithm == "grid":
             self._algorithm = grid_search
-        self._measure_time = measure_time
+        self._max_measure_time = max_measure_time
         self._measure_trials = measure_trials
 
     def measure(
@@ -80,7 +79,8 @@ class Optimizer:
         all_latencies: list[dict[str, float]] = []
 
         # run each measure trial
-        for _ in range(self._measure_trials):
+        for trial in range(self._measure_trials):
+            # print(f"Running trial {trial + 1} of {self._measure_trials}")
             # create the pipeline
             pipeline: dai.Pipeline = dai.Pipeline()
             device_funcs = pipeline_func(pipeline, pipeline_args)
@@ -100,20 +100,29 @@ class Optimizer:
                 queue_names: list[str] = device.getOutputQueueNames()
                 for queue in queue_names:
                     data_times[queue] = []
-                queues = [device.getOutputQueue(q) for q in queue_names]
+                queues: dict = {q: device.getOutputQueue(q) for q in queue_names}
 
                 # run pipelines
+                past_length = 10
+                past = deque(maxlen=past_length)
+                t0 = time.perf_counter()
                 while not stopped:
-                    t0 = time.perf_counter()
-                    for queue in queues:
+                    t1 = time.perf_counter()
+                    for queue_name, queue in queues.items():
                         data = queue.get()
-                        data_times[queue].append(
+                        data_times[queue_name].append(
                             (dai.Clock.now() - data.getTimestamp()).total_seconds()
                             * 1000
                         )
-                    elapsed = time.perf_counter() - t0
-                    cycle_times.append(elapsed)
-                    stopped = elapsed > self._measure_time
+                    t2 = time.perf_counter()
+                    cycle_time = t2 - t1
+                    cycle_times.append(cycle_time)
+                    past.append(cycle_time)
+                    elapsed = t2 - t0
+                    # print(f"   Elapsed: {elapsed:.2f}s")
+                    stopped1 = elapsed > self._max_measure_time
+                    stopped2 = (sum(past) / past_length) == cycle_time
+                    stopped = stopped1 or stopped2
 
             # compute average latency
             avg_latencies: dict[str, float] = {}
