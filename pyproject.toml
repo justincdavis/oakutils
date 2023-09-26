@@ -42,6 +42,7 @@ dependencies = [
     "open3d>=0.16",
     "opencv-contrib-python>=4.5",
     "typing_extensions>=4.0.0",
+    "setuptools",
 ]
 
 [project.urls]
