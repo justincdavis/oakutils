@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+import logging
 import time
 from collections import deque
 from typing import TYPE_CHECKING, Any, Callable
@@ -11,6 +12,8 @@ from ._grid_search import grid_search
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+_log = logging.getLogger(__name__)
 
 
 class Optimizer:
@@ -100,8 +103,8 @@ class Optimizer:
         all_latencies: list[dict[str, float]] = []
 
         # run each measure trial
-        for _ in range(self._measure_trials):
-            print(f"Running trial {_ + 1} of {self._measure_trials}")
+        for trial in range(self._measure_trials):
+            _log.debug(f"Running trial {trial + 1} of {self._measure_trials}")
             # create the pipeline
             pipeline: dai.Pipeline = dai.Pipeline()
             device_funcs = pipeline_func(pipeline, pipeline_args)
@@ -136,7 +139,7 @@ class Optimizer:
                     t1 = time.perf_counter()
                     # handle data
                     for queue_name, queue in queues.items():
-                        print(f"      {queue_name}")
+                        _log.debug(f"      {queue_name}")
                         data = queue.get()
                         if counter >= self._warmup_cycles:
                             ts: float = (dai.Clock.now() - data.getTimestamp()).total_seconds() * 1000  # type: ignore[attr-defined, call-arg]
@@ -150,7 +153,7 @@ class Optimizer:
                     cycle_times.append(cycle_time)
                     past.append(cycle_time)
                     elapsed = t2 - t0
-                    print(f"   Elapsed: {elapsed:.2f}s")
+                    _log.debug(f"Trial: {trial + 1}, Elapsed: {elapsed:.2f}s")
                     stopped1 = elapsed > self._max_measure_time
                     stopped2 = (
                         max(past) - min(past) < self._stability_threshold
@@ -170,16 +173,17 @@ class Optimizer:
             latencies.append(avg_latency)
             all_latencies.append(avg_latencies)
 
-        print("Computing average stats")
+        _log.debug(
+            f"Done measuring, computing results on {self._measure_trials} trials"
+        )
         # compute average fps
         avg_fps = sum(fps) / len(fps)
         avg_latencies_final = sum(latencies) / len(latencies)
         avg_all_latencies: dict[str, float] = {}
         for key in all_latencies[0]:
-            print(f"   {key}")
+            _log.debug(f"   {key}")
             key_data = [latency[key] for latency in all_latencies]
             avg_all_latencies[key] = sum(key_data) / len(key_data)
-        print("Done")
 
         return avg_fps, avg_latencies_final, avg_all_latencies
 

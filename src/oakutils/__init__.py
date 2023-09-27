@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """
 Package for Python utilities for the OpenCV AI Kit (OAK-D) and related hardware.
 
@@ -34,6 +35,51 @@ LegacyCamera
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 """
+# setup the logger before importing anything else
+import logging
+
+
+# Created from answer by Dennis at:
+# https://stackoverflow.com/questions/7621897/python-logging-module-globally
+def _setup_logger() -> None:
+    # get logging level environment variable
+    import os
+
+    level = os.getenv("OAKUTILS_LOG_LEVEL")
+    if level == "DEBUG":
+        level = logging.DEBUG
+    elif level == "INFO":
+        level = logging.INFO
+    elif level == "WARNING":
+        level = logging.WARNING
+    elif level == "ERROR":
+        level = logging.ERROR
+    elif level == "CRITICAL":
+        level = logging.CRITICAL
+    else:
+        level = logging.WARNING
+
+    # create logger
+    logger = logging.getLogger(__package__)
+    logger.setLevel(level)
+
+    # create console handler and set level to debug
+    ch = logging.StreamHandler()
+    ch.setLevel(level)
+
+    # create formatter
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+
+    # add formatter to ch
+    ch.setFormatter(formatter)
+
+    # add ch to logger
+    logger.addHandler(ch)
+
+
+_setup_logger()
+
+
 from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
 from .api_camera import Camera as ApiCamera
 from .legacy_camera import Camera as LegacyCamera

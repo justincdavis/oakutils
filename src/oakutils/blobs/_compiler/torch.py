@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
 from typing import Iterable
 
 import torch
 
 from oakutils.blobs.definitions.utils import InputType
+
+_log = logging.getLogger(__name__)
 
 
 def _create_dummy_input(
@@ -110,17 +113,17 @@ def _export_module_to_onnx(
     output_names : List[str]
         The names of the output tensors
     verbose : bool, optional
-        Whether to print out information about the export, by default False
+        Whether to _log.debug out information about the export, by default False
     """
     if verbose is None:
         verbose = False
 
     if verbose:
-        print(f"Exporting model to {onnx_path}")
-        print(f"Input names: {input_names}")
-        print(f"Output names: {output_names}")
+        _log.debug(f"Exporting model to {onnx_path}")
+        _log.debug(f"Input names: {input_names}")
+        _log.debug(f"Output names: {output_names}")
         for dummy_input_tensor in dummy_input:
-            print(f"Dummy input shape: {dummy_input_tensor.shape}")
+            _log.debug(f"Dummy input shape: {dummy_input_tensor.shape}")
 
     torch.onnx.export(
         model_instance,
@@ -163,14 +166,14 @@ def export(
         The function to use to create the tensor, by default torch.rand
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     verbose : bool, optional
-        Whether to print out information about the export, by default False
+        Whether to _log.debug out information about the export, by default False
     """
     if verbose is None:
         verbose = False
 
     if verbose:
-        print(dummy_input_shapes)
-        print(type(dummy_input_shapes))
+        _log.debug(dummy_input_shapes)
+        _log.debug(type(dummy_input_shapes))
 
     if not isinstance(dummy_input_shapes, list):
         input_shape, input_type = dummy_input_shapes

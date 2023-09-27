@@ -19,12 +19,15 @@ get_nn_point_cloud
 """
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Callable, Sized
 
 import cv2
 import depthai as dai
 import numpy as np
+
+_log = logging.getLogger(__name__)
 
 
 def create_neural_network(
@@ -191,15 +194,15 @@ def create_neural_network(
             if blocking is not None:
                 nn.inputs[name].setBlocking(blocking)
 
-    # if hasattr(input_link, "__len__"):
-    #     for name, i in nn.inputs.items():
-    #         print(
-    #             f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
-    #         )
-    # else:
-    #     print(
-    #         f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
-    #     )
+    if hasattr(input_link, "__len__"):
+        for name, i in nn.inputs.items():
+            _log.debug(
+                f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
+            )
+    else:
+        _log.debug(
+            f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
+        )
 
     return nn
 
