@@ -23,9 +23,9 @@ def main():
     calibration = get_camera_calibration_basic()
     optim = Optimizer()
     args = {
-        "color_fps": [10, 30],
-        "mono_fps": [30, 60],
-        "pcl_shaves": [1, 2, 3, 4, 5, 6],
+        "color_fps": [30],
+        "mono_fps": [60],
+        "pcl_shaves": [1, 6],
         "calibration": [calibration],
     }  # should find the highest fps + highest shave for all
     best_args_fps = optim.optimize(
@@ -33,19 +33,22 @@ def main():
         pipeline_args=args,
         objective_func=highest_fps,
     )
-    print("Best args for highest fps:", best_args_fps)
+    print("Best args for highest fps:")
+    print(f"{best_args_fps['color_fps']} fps color, {best_args_fps['mono_fps']} fps mono, {best_args_fps['pcl_shaves']} pcl shaves")
     best_args_avg_latency = optim.optimize(
         pipeline_func=pipeline_func, 
         pipeline_args=args,
         objective_func=lowest_avg_latency,
     )
-    print("Best args for lowest avg latency:", best_args_avg_latency)
+    print("Best args for lowest avg latency:")
+    print(f"{best_args_avg_latency['color_fps']} fps color, {best_args_avg_latency['mono_fps']} fps mono, {best_args_avg_latency['pcl_shaves']} pcl shaves")
     best_args_latency = optim.optimize(
         pipeline_func=pipeline_func, 
         pipeline_args=args,
         objective_func=partial(lowest_latency, stream="pcl"),  # use partial to fill in stream name
     )
-    print("Best args for lowest pcl latency:", best_args_latency)
+    print("Best args for lowest pcl latency:")
+    print(f"{best_args_latency['color_fps']} fps color, {best_args_latency['mono_fps']} fps mono, {best_args_latency['pcl_shaves']} pcl shaves")
 
 if __name__ == "__main__":
     main()

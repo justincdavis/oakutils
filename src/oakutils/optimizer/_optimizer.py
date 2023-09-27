@@ -20,7 +20,7 @@ class Optimizer:
         max_measure_time: float = 10.0,
         measure_trials: int = 1,
         warmup_cycles: int = 10,
-        stability_threshold: float = 0.005,
+        stability_threshold: float = 0.002,
         stability_length: int = 10,
     ) -> None:
         """Use to create an instance of the class.
@@ -39,7 +39,7 @@ class Optimizer:
         stability_threshold : float, optional
             The threshold for stability, seconds difference between the max
             and min cycle time during measurement. If the difference is less than
-            this threshold, the measurement will stop, by default 0.005 (5 millisecond)
+            this threshold, the measurement will stop, by default 0.002 (2 millisecond)
         stability_length : int, optional
             The number of cycles to check for stability, by default 15
             A higher number will typically increase the accuracy of the measurement,
@@ -117,7 +117,7 @@ class Optimizer:
                 queue_names: list[str] = device.getOutputQueueNames()
                 for queue in queue_names:
                     data_times[queue] = []
-                queues: dict = {q: device.getOutputQueue(name=q) for q in queue_names}
+                queues: dict = {q: device.getOutputQueue(name=q, maxSize=3, blocking=False) for q in queue_names}
 
                 # run pipelines
                 past = deque(maxlen=self._stability_length)

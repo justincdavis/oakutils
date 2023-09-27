@@ -112,7 +112,7 @@ def create_neural_network(
                     "input_link and reuse_messages must be the same length if both are iterables"
                 )
         else:
-            reuse_messages = [None for _ in len(input_link)]
+            reuse_messages = [None for _ in range(len(input_link))]
         if input_sizes is not None:
             if not hasattr(input_sizes, "__iter__"):
                 raise ValueError(
@@ -123,7 +123,7 @@ def create_neural_network(
                     "input_link and input_sizes must be the same length if both are iterables"
                 )
         else:
-            input_sizes = [1 for _ in len(input_link)]
+            input_sizes = [1 for _ in range(len(input_link))]
         if input_blocking is not None:
             if not hasattr(input_blocking, "__iter__"):
                 raise ValueError(
@@ -134,7 +134,7 @@ def create_neural_network(
                     "input_link and input_blocking must be the same length if both are iterables"
                 )
         else:
-            input_blocking = [False for _ in len(input_link)]
+            input_blocking = [False for _ in range(len(input_link))]
     else:
         if reuse_messages is None:
             reuse_messages = None
@@ -186,6 +186,10 @@ def create_neural_network(
                 nn.inputs[name].setQueueSize(size)
             if blocking is not None:
                 nn.inputs[name].setBlocking(blocking)
+
+    print(f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}")
+    for name, i in nn.inputs.items():
+        print(f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}")
 
     return nn
 
