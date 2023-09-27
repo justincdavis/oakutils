@@ -35,7 +35,7 @@ def create_neural_network(
     input_sizes: int | Sized[int] | None = None,
     input_blocking: bool | Sized[bool] | None = None,
     reuse_messages: bool | Sized[bool | None] | None = None,
-    num_inference_threads: int = 1,
+    num_inference_threads: int = 0,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
 ) -> dai.node.NeuralNetwork:

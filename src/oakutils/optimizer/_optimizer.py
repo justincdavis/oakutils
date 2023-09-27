@@ -122,7 +122,7 @@ class Optimizer:
                 for queue in queue_names:
                     data_times[queue] = []
                 queues: dict = {
-                    q: device.getOutputQueue(name=q, maxSize=3, blocking=False)
+                    q: device.getOutputQueue(name=q, maxSize=1, blocking=False)
                     for q in queue_names
                 }
 
