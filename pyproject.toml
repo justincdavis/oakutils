@@ -163,6 +163,7 @@ warn_return_any = false
 module = [  
     'cv2',
     'open3d',
+    'onnxsim',
     'blobconverter',
 ]
 ignore_errors = true

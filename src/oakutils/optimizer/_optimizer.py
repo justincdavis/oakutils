@@ -66,7 +66,7 @@ class Optimizer:
     def measure(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]
+            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
         ],
         pipeline_args: dict[str, Any],
     ) -> tuple[float, float, dict[str, float]]:
@@ -118,16 +118,16 @@ class Optimizer:
                 for func in device_funcs:
                     func(device)
                 # gather queues and allocate lists
-                queue_names: list[str] = device.getOutputQueueNames()
-                for queue in queue_names:
-                    data_times[queue] = []
-                queues: dict = {
-                    q: device.getOutputQueue(name=q, maxSize=1, blocking=False)
+                queue_names: list[str] = device.getOutputQueueNames()  # type: ignore[attr-defined]
+                for q_name in queue_names:
+                    data_times[q_name] = []
+                queues: dict[str, dai.DataOutputQueue] = {
+                    q: device.getOutputQueue(name=q, maxSize=1, blocking=False)  # type: ignore[attr-defined]
                     for q in queue_names
                 }
 
                 # run pipelines
-                past = deque(maxlen=self._stability_length)
+                past: deque[float] = deque(maxlen=self._stability_length)
                 counter = 0
                 t0 = time.perf_counter()
                 while not stopped:
@@ -139,10 +139,8 @@ class Optimizer:
                         print(f"      {queue_name}")
                         data = queue.get()
                         if counter >= self._warmup_cycles:
-                            data_times[queue_name].append(
-                                (dai.Clock.now() - data.getTimestamp()).total_seconds()
-                                * 1000
-                            )
+                            ts: float = (dai.Clock.now() - data.getTimestamp()).total_seconds() * 1000  # type: ignore[attr-defined, call-arg]
+                            data_times[queue_name].append(ts)
                     # handle cycles
                     if counter < self._warmup_cycles:
                         continue
@@ -161,8 +159,8 @@ class Optimizer:
 
             # compute average latency
             avg_latencies: dict[str, float] = {}
-            for queue_name, data in data_times.items():
-                avg_latencies[queue_name] = sum(data) / len(data)
+            for queue_name, data_list in data_times.items():
+                avg_latencies[queue_name] = sum(data_list) / len(data_list)
             avg_latency = sum(avg_latencies.values()) / len(avg_latencies)
 
             # compute average cycle time
@@ -175,20 +173,20 @@ class Optimizer:
         print("Computing average stats")
         # compute average fps
         avg_fps = sum(fps) / len(fps)
-        avg_latencies = sum(latencies) / len(latencies)
+        avg_latencies_final = sum(latencies) / len(latencies)
         avg_all_latencies: dict[str, float] = {}
         for key in all_latencies[0]:
             print(f"   {key}")
-            data = [latency[key] for latency in all_latencies]
-            avg_all_latencies[key] = sum(data) / len(data)
+            key_data = [latency[key] for latency in all_latencies]
+            avg_all_latencies[key] = sum(key_data) / len(key_data)
         print("Done")
 
-        return avg_fps, avg_latencies, avg_all_latencies
+        return avg_fps, avg_latencies_final, avg_all_latencies
 
     def optimize(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]
+            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
         ],
         pipeline_args: dict[str, list[Any]],
         objective_func: Callable[
@@ -201,7 +199,7 @@ class Optimizer:
 
         Parameters
         ----------
-        pipeline_func : Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]]
+        pipeline_func : Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]]
             The function to generate a pipeline
         pipeline_args : dict[str, list[Any]]
             The arguments to optimize
@@ -220,7 +218,7 @@ class Optimizer:
         ]
         try:
             # run the selected algorithm for generating measurements
-            results = self._algorithm(
+            results = self._algorithm(  # type: ignore[call-arg]
                 pipeline_func=pipeline_func,
                 possible_args=possible_args,
                 measure_func=self.measure,
@@ -228,7 +226,11 @@ class Optimizer:
             # run the objective function to get the best arguments
             return objective_func(results)
         except TypeError:
-            return self._algorithm(
+            # algorithms which use the objective function internally
+            # unlike grid-search which generates all args and then the objective is run
+            # after the fact
+            # These will use the objective function to inform the measurement process
+            return self._algorithm(  # type: ignore[call-arg, return-value]
                 pipeline_func=pipeline_func,
                 possible_args=possible_args,
                 measure_func=self.measure,

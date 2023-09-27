@@ -9,13 +9,13 @@ if TYPE_CHECKING:
 def grid_search(
     pipeline_func: Callable[
         [dai.Pipeline, dict[str, Any]],
-        list[Callable[[dai.Device], None]],
+        list[Callable[[dai.DeviceBase], None]],
     ],
     possible_args: list[dict[str, Any]],
     measure_func: Callable[
         [
             Callable[
-                [dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]
+                [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
             ],
             dict[str, Any],
         ],
@@ -27,11 +27,11 @@ def grid_search(
 
     Parameters
     ----------
-    pipeline_func : Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]]
+    pipeline_func : Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]]
         The function to generate a pipeline
     possible_args : list[dict[str, Any]]
         The arguments to measure
-    measure_func : Callable[[Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.Device], None]]], dict[str, Any]], tuple[float, float, dict[str, float]]]
+    measure_func : Callable[[Callable[[dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]], dict[str, Any]], tuple[float, float, dict[str, float]]]
         The function to measure the pipeline
 
     Returns
