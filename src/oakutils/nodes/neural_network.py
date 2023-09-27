@@ -32,6 +32,8 @@ def create_neural_network(
     input_link: dai.Node.Output | Iterable[dai.Node.Output],
     blob_path: str,
     input_names: str | Iterable[str] | None = None,
+    input_sizes: int | Iterable[int] | None = None,
+    input_blocking: bool | Iterable[bool] | None = None,
     reuse_messages: bool | Iterable[bool | None] | None = None,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
@@ -54,6 +56,13 @@ def create_neural_network(
     input_names : Optional[Union[str, Iterable[str]]], optional
         The names of the input links, by default None
         Must be the same length as input_link if Iterable
+    input_sizes : Optional[Union[int, Iterable[int]]], optional
+        The size of the queue for the input links, by default will
+        use a queue size of 1.
+        Must be the same length as input_link if Iterable
+    input_blocking : Optional[Union[bool, Iterable[bool]]], optional
+        Whether the input link is blocking, by default will set to False.
+        Must be the same length as input_link if Iterable
     reuse_messages : Optional[Union[bool, Iterable[bool]]], optional
         Whether to reuse messages, by default None
         Must be the same length as input_link if Iterable
@@ -70,6 +79,15 @@ def create_neural_network(
     -------
     dai.node.NeuralNetwork
         The neural network node
+
+    Raises
+    ------
+    ValueError
+        If input_link is an iterable and input_names is None
+        If input_link and input_names are iterables and are not the same length
+        If input_link and reuse_messages are iterables and are not the same length
+        If input_link and input_sizes are iterables and are not the same length
+        If input_link and input_blocking are iterables and are not the same length
     """
     if hasattr(input_link, "__iter__"):
         if input_names is None:
@@ -93,6 +111,37 @@ def create_neural_network(
                 raise ValueError(
                     "input_link and reuse_messages must be the same length if both are iterables"
                 )
+        else:
+            reuse_messages = [None for _ in len(input_link)]
+        if input_sizes is not None:
+            if not hasattr(input_sizes, "__iter__"):
+                raise ValueError(
+                    "input_sizes must be an iterable if input_link is an iterable"
+                )
+            if len(input_link) != len(input_sizes):
+                raise ValueError(
+                    "input_link and input_sizes must be the same length if both are iterables"
+                )
+        else:
+            input_sizes = [1 for _ in len(input_link)]
+        if input_blocking is not None:
+            if not hasattr(input_blocking, "__iter__"):
+                raise ValueError(
+                    "input_blocking must be an iterable if input_link is an iterable"
+                )
+            if len(input_link) != len(input_blocking):
+                raise ValueError(
+                    "input_link and input_blocking must be the same length if both are iterables"
+                )
+        else:
+            input_blocking = [False for _ in len(input_link)]
+    else:
+        if reuse_messages is None:
+            reuse_messages = None
+        if input_sizes is None:
+            input_sizes = 1
+        if input_blocking is None:
+            input_blocking = False
 
     bpath: Path = Path(blob_path)
 
@@ -112,14 +161,31 @@ def create_neural_network(
         # handle a single input to the network
         if input_names is not None:
             input_link.link(nn.inputs[input_names])
+            if reuse_messages is not None:
+                nn.inputs[input_names].setReusePreviousMessage(reuse_messages)
+            if input_sizes is not None:
+                nn.inputs[input_names].setQueueSize(input_sizes)
+            if input_blocking is not None:
+                nn.inputs[input_names].setBlocking(input_blocking)
+        # otherwise use the generic method
         else:
             input_link.link(nn.input)
+            if reuse_messages is not None:
+                nn.input.setReusePreviousMessage(reuse_messages)
+            if input_sizes is not None:
+                nn.input.setQueueSize(input_sizes)
+            if input_blocking is not None:
+                nn.input.setBlocking(input_blocking)
     else:
-        input_data = zip(input_link, input_names, reuse_messages)
-        for link, name, reuse_message in input_data:
+        input_data = zip(input_link, input_names, input_sizes, input_blocking, reuse_messages)
+        for link, name, size, blocking, reuse_message in input_data:
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
+            if size is not None:
+                nn.inputs[name].setQueueSize(size)
+            if blocking is not None:
+                nn.inputs[name].setBlocking(blocking)
 
     return nn
 
