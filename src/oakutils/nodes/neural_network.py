@@ -177,7 +177,9 @@ def create_neural_network(
             if input_blocking is not None:
                 nn.input.setBlocking(input_blocking)
     else:
-        input_data = zip(input_link, input_names, input_sizes, input_blocking, reuse_messages)
+        input_data = zip(
+            input_link, input_names, input_sizes, input_blocking, reuse_messages
+        )
         for link, name, size, blocking, reuse_message in input_data:
             link.link(nn.inputs[name])
             if reuse_message is not None:
@@ -187,9 +189,13 @@ def create_neural_network(
             if blocking is not None:
                 nn.inputs[name].setBlocking(blocking)
 
-    print(f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}")
+    print(
+        f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
+    )
     for name, i in nn.inputs.items():
-        print(f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}")
+        print(
+            f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
+        )
 
     return nn
 

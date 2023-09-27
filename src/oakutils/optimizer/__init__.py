@@ -1,4 +1,5 @@
-"""Module for optimizing pipelines.
+"""
+Module for optimizing pipelines.
 
 Submodules
 ----------
@@ -20,8 +21,8 @@ lowest_latency
     Use to get the set of arguments with the lowest latency for a specific stream
 """
 from . import objective
-from .objective import highest_fps, lowest_avg_latency, lowest_latency
 from ._optimizer import Optimizer
+from .objective import highest_fps, lowest_avg_latency, lowest_latency
 
 __all__ = [
     "objective",

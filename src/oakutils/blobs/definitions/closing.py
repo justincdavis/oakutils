@@ -17,12 +17,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import kornia
+import torch
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -125,9 +125,7 @@ class ClosingGray(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        closing = kornia.morphology.closing(
-            image, self._kernel
-        )
+        closing = kornia.morphology.closing(image, self._kernel)
         return kornia.color.bgr_to_grayscale(closing)
 
 
@@ -190,9 +188,7 @@ class ClosingBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.closing(
-            gaussian, self._kernel
-        )
+        return kornia.morphology.closing(gaussian, self._kernel)
 
 
 class ClosingBlurGray(AbstractModel):
@@ -254,7 +250,5 @@ class ClosingBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        closing = kornia.morphology.closing(
-            gaussian, self._kernel
-        )
+        closing = kornia.morphology.closing(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(closing)

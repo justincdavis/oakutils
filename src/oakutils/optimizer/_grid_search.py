@@ -1,6 +1,9 @@
-from typing import Callable, Any
+from __future__ import annotations
 
-import depthai as dai
+from typing import TYPE_CHECKING, Any, Callable
+
+if TYPE_CHECKING:
+    import depthai as dai
 
 
 def grid_search(
@@ -19,7 +22,8 @@ def grid_search(
         tuple[float, float, dict[str, float]],
     ],
 ) -> list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]:
-    """Use to run a grid search and find all possible measurements.
+    """
+    Use to run a grid search and find all possible measurements.
 
     Parameters
     ----------

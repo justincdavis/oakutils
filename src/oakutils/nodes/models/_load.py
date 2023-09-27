@@ -228,7 +228,8 @@ def create_single_kernel_model(
         Whether or not the input stream will be blocking
     reuse_messages : bool, optional
         Whether or not the data on the stream data will be reused
-        
+
+
     Returns
     -------
     dai.node.NeuralNetwork

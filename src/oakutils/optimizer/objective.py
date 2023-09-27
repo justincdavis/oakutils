@@ -1,4 +1,5 @@
-"""Module containing objective functions for choosing the best set of pipeline arguments.
+"""
+Module containing objective functions for choosing the best set of pipeline arguments.
 
 Functions
 ---------
@@ -9,6 +10,8 @@ lowest_avg_latency
 lowest_latency
     Use to get the set of arguments with the lowest latency for a specific stream
 """
+from __future__ import annotations
+
 from typing import Any
 
 
@@ -16,7 +19,7 @@ def highest_fps(
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
 ) -> dict[str, Any]:
     """
-    Use to get the set of arguments with the highest fps
+    Use to get the set of arguments with the highest fps.
 
     Parameters
     ----------
@@ -40,7 +43,7 @@ def lowest_avg_latency(
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
 ) -> dict[str, Any]:
     """
-    Use to get the set of arguments with the lowest avg latency
+    Use to get the set of arguments with the lowest avg latency.
 
     Parameters
     ----------
@@ -65,7 +68,7 @@ def lowest_latency(
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]],
 ) -> dict[str, Any]:
     """
-    Use to get the set of arguments with the lowest latency for a specific stream
+    Use to get the set of arguments with the lowest latency for a specific stream.
 
     Parameters
     ----------

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-import time
 import itertools
-from typing import Callable, Any
+import time
 from collections import deque
+from typing import TYPE_CHECKING, Any, Callable
 
 import depthai as dai
-from typing_extensions import Self
 
 from ._grid_search import grid_search
-    
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
 
 class Optimizer:
     """Class for optimizing a pipeline onboard an OAK camera."""
@@ -23,7 +25,8 @@ class Optimizer:
         stability_threshold: float = 0.002,
         stability_length: int = 10,
     ) -> None:
-        """Use to create an instance of the class.
+        """
+        Use to create an instance of the class.
 
         Parameters
         ----------
@@ -67,7 +70,8 @@ class Optimizer:
         ],
         pipeline_args: dict[str, Any],
     ) -> tuple[float, float, dict[str, float]]:
-        """Use to measure the FPS of a pipeline.
+        """
+        Use to measure the FPS of a pipeline.
 
         Parameters
         ----------
@@ -117,13 +121,16 @@ class Optimizer:
                 queue_names: list[str] = device.getOutputQueueNames()
                 for queue in queue_names:
                     data_times[queue] = []
-                queues: dict = {q: device.getOutputQueue(name=q, maxSize=3, blocking=False) for q in queue_names}
+                queues: dict = {
+                    q: device.getOutputQueue(name=q, maxSize=3, blocking=False)
+                    for q in queue_names
+                }
 
                 # run pipelines
                 past = deque(maxlen=self._stability_length)
                 counter = 0
                 t0 = time.perf_counter()
-                while not stopped: 
+                while not stopped:
                     counter += 1
                     # get start time
                     t1 = time.perf_counter()
@@ -147,7 +154,9 @@ class Optimizer:
                     elapsed = t2 - t0
                     print(f"   Elapsed: {elapsed:.2f}s")
                     stopped1 = elapsed > self._max_measure_time
-                    stopped2 = (max(past) - min(past) < self._stability_threshold) and len(past) == self._stability_length
+                    stopped2 = (
+                        max(past) - min(past) < self._stability_threshold
+                    ) and len(past) == self._stability_length
                     stopped = stopped1 or stopped2
 
             # compute average latency
@@ -163,12 +172,12 @@ class Optimizer:
             latencies.append(avg_latency)
             all_latencies.append(avg_latencies)
 
-        print(f"Computing average stats")
+        print("Computing average stats")
         # compute average fps
         avg_fps = sum(fps) / len(fps)
         avg_latencies = sum(latencies) / len(latencies)
         avg_all_latencies: dict[str, float] = {}
-        for key in all_latencies[0].keys():
+        for key in all_latencies[0]:
             print(f"   {key}")
             data = [latency[key] for latency in all_latencies]
             avg_all_latencies[key] = sum(data) / len(data)
@@ -187,7 +196,8 @@ class Optimizer:
             dict[str, Any],
         ],
     ) -> dict[str, Any]:
-        """Use to generate optimized arguments for a pipeline.
+        """
+        Use to generate optimized arguments for a pipeline.
 
         Parameters
         ----------
@@ -211,16 +221,16 @@ class Optimizer:
         try:
             # run the selected algorithm for generating measurements
             results = self._algorithm(
-                pipeline_func=pipeline_func, 
-                possible_args=possible_args, 
+                pipeline_func=pipeline_func,
+                possible_args=possible_args,
                 measure_func=self.measure,
             )
             # run the objective function to get the best arguments
             return objective_func(results)
         except TypeError:
             return self._algorithm(
-                pipeline_func=pipeline_func, 
-                possible_args=possible_args, 
+                pipeline_func=pipeline_func,
+                possible_args=possible_args,
                 measure_func=self.measure,
                 objective_func=objective_func,
             )
