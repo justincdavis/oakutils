@@ -216,23 +216,9 @@ class Optimizer:
             dict(zip(pipeline_args.keys(), values))
             for values in itertools.product(*pipeline_args.values())
         ]
-        try:
-            # run the selected algorithm for generating measurements
-            results = self._algorithm(  # type: ignore[call-arg]
-                pipeline_func=pipeline_func,
-                possible_args=possible_args,
-                measure_func=self.measure,
-            )
-            # run the objective function to get the best arguments
-            return objective_func(results)
-        except TypeError:
-            # algorithms which use the objective function internally
-            # unlike grid-search which generates all args and then the objective is run
-            # after the fact
-            # These will use the objective function to inform the measurement process
-            return self._algorithm(  # type: ignore[call-arg, return-value]
-                pipeline_func=pipeline_func,
-                possible_args=possible_args,
-                measure_func=self.measure,
-                objective_func=objective_func,
-            )
+        return self._algorithm(
+            pipeline_func=pipeline_func,
+            possible_args=possible_args,
+            measure_func=self.measure,
+            objective_func=objective_func,
+        )
