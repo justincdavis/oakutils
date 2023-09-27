@@ -23,11 +23,11 @@ def main():
     calibration = get_camera_calibration_basic()
     optim = Optimizer()
     args = {
-        "color_fps": [10, 15, 20, 25, 30],
-        "mono_fps": [30, 40, 50, 60],
+        "color_fps": [10, 30],
+        "mono_fps": [30, 60],
         "pcl_shaves": [1, 2, 3, 4, 5, 6],
         "calibration": [calibration],
-    }
+    }  # should find the highest fps + highest shave for all
     best_args_fps = optim.optimize(
         pipeline_func=pipeline_func, 
         pipeline_args=args,
