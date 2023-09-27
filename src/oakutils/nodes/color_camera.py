@@ -28,6 +28,10 @@ def create_color_camera(
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
     isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.ColorCamera:
     """
     Use to create a pipeline for the color camera.
@@ -79,7 +83,18 @@ def create_color_camera(
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
-
+    input_queue_size: int, optional
+        The size of the input queue, by default 3
+    input_reuse: bool, optional
+        Whether to reuse inputs or not, by default None
+        If none, will be set to False
+    input_blocking: bool, optional
+        Whether to block the input or not, by default None
+        If none, will be set to False
+    input_wait_for_message: bool, optional
+        Whether to wait for a message or not, by default None
+        If none, will be set to False
+        
     Returns
     -------
     dai.node.ColorCamera
@@ -119,6 +134,12 @@ def create_color_camera(
         raise ValueError("luma_denoise must be between 0 and 4")
     if chroma_denoise < 0 or chroma_denoise > 4:
         raise ValueError("chroma_denoise must be between 0 and 4")
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
 
     size_tuple = get_tuple_from_color_sensor_resolution(resolution)
 
@@ -148,5 +169,10 @@ def create_color_camera(
 
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
+
+    cam.inputConfig.setQueueSize(input_queue_size)
+    cam.inputConfig.setReusePreviousMessage(input_reuse)
+    cam.inputConfig.setBlocking(input_blocking)
+    cam.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return cam

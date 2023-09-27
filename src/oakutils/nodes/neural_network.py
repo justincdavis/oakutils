@@ -191,15 +191,15 @@ def create_neural_network(
             if blocking is not None:
                 nn.inputs[name].setBlocking(blocking)
 
-    if hasattr(input_link, "__len__"): 
-        for name, i in nn.inputs.items():
-            print(
-                f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
-            )
-    else:
-        print(
-            f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
-        )
+    # if hasattr(input_link, "__len__"): 
+    #     for name, i in nn.inputs.items():
+    #         print(
+    #             f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
+    #         )
+    # else:
+    #     print(
+    #         f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
+    #     )
 
     return nn
 

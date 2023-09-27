@@ -11,7 +11,6 @@ from oakutils.optimizer import Optimizer, highest_fps, lowest_avg_latency, lowes
 def pipeline_func(pipeline: dai.Pipeline, args: dict[str, Any]) -> list[Callable[[dai.Device], None]]:
     # generate onboard nodes
     color_cam = create_color_camera(pipeline, fps=args["color_fps"])
-    color_cam.inputConfig.setBlocking(False)
     stereo, left, right = create_stereo_depth(pipeline, fps=args["mono_fps"])
     pcl, xin_pcl, start_pcl = create_point_cloud(pipeline, stereo.depth, args["calibration"], shaves=args["pcl_shaves"])
     # # create xout streams
