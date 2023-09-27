@@ -19,6 +19,9 @@ class Optimizer:
         algorithm: str = "grid",
         max_measure_time: float = 10.0,
         measure_trials: int = 1,
+        warmup_cycles: int = 10,
+        stability_threshold: float = 0.005,
+        stability_length: int = 10,
     ) -> None:
         """Use to create an instance of the class.
 
@@ -26,10 +29,21 @@ class Optimizer:
         ----------
         algorithm : str, optional
             The algorithm to use for optimization, by default "grid"
+            Options are "grid"
         max_measure_time : float, optional
             The amount of time to measure the pipeline for, by default 10.0
         measure_trials : int, optional
             The number of times to measure the pipeline, by default 1
+        warmup_cycles : int, optional
+            The number of cycles to run before measuring, by default 10
+        stability_threshold : float, optional
+            The threshold for stability, seconds difference between the max
+            and min cycle time during measurement. If the difference is less than
+            this threshold, the measurement will stop, by default 0.005 (5 millisecond)
+        stability_length : int, optional
+            The number of cycles to check for stability, by default 15
+            A higher number will typically increase the accuracy of the measurement,
+            but will also increase the time it takes to measure.
 
         Raises
         ------
@@ -42,6 +56,9 @@ class Optimizer:
             self._algorithm = grid_search
         self._max_measure_time = max_measure_time
         self._measure_trials = measure_trials
+        self._warmup_cycles = warmup_cycles
+        self._stability_threshold = stability_threshold
+        self._stability_length = stability_length
 
     def measure(
         self: Self,
@@ -79,8 +96,8 @@ class Optimizer:
         all_latencies: list[dict[str, float]] = []
 
         # run each measure trial
-        for trial in range(self._measure_trials):
-            # print(f"Running trial {trial + 1} of {self._measure_trials}")
+        for _ in range(self._measure_trials):
+            print(f"Running trial {_ + 1} of {self._measure_trials}")
             # create the pipeline
             pipeline: dai.Pipeline = dai.Pipeline()
             device_funcs = pipeline_func(pipeline, pipeline_args)
@@ -100,28 +117,37 @@ class Optimizer:
                 queue_names: list[str] = device.getOutputQueueNames()
                 for queue in queue_names:
                     data_times[queue] = []
-                queues: dict = {q: device.getOutputQueue(q) for q in queue_names}
+                queues: dict = {q: device.getOutputQueue(name=q) for q in queue_names}
 
                 # run pipelines
-                past_length = 10
-                past = deque(maxlen=past_length)
+                past = deque(maxlen=self._stability_length)
+                counter = 0
                 t0 = time.perf_counter()
-                while not stopped:
+                while not stopped: 
+                    counter += 1
+                    # get start time
                     t1 = time.perf_counter()
+                    # handle data
                     for queue_name, queue in queues.items():
+                        print(f"      {queue_name}")
                         data = queue.get()
-                        data_times[queue_name].append(
-                            (dai.Clock.now() - data.getTimestamp()).total_seconds()
-                            * 1000
-                        )
+                        if counter >= self._warmup_cycles:
+                            data_times[queue_name].append(
+                                (dai.Clock.now() - data.getTimestamp()).total_seconds()
+                                * 1000
+                            )
+                    # handle cycles
+                    if counter < self._warmup_cycles:
+                        continue
+                    # get end time
                     t2 = time.perf_counter()
                     cycle_time = t2 - t1
                     cycle_times.append(cycle_time)
                     past.append(cycle_time)
                     elapsed = t2 - t0
-                    # print(f"   Elapsed: {elapsed:.2f}s")
+                    print(f"   Elapsed: {elapsed:.2f}s")
                     stopped1 = elapsed > self._max_measure_time
-                    stopped2 = (sum(past) / past_length) == cycle_time
+                    stopped2 = (max(past) - min(past) < self._stability_threshold) and len(past) == self._stability_length
                     stopped = stopped1 or stopped2
 
             # compute average latency
@@ -137,13 +163,16 @@ class Optimizer:
             latencies.append(avg_latency)
             all_latencies.append(avg_latencies)
 
+        print(f"Computing average stats")
         # compute average fps
         avg_fps = sum(fps) / len(fps)
         avg_latencies = sum(latencies) / len(latencies)
         avg_all_latencies: dict[str, float] = {}
         for key in all_latencies[0].keys():
+            print(f"   {key}")
             data = [latency[key] for latency in all_latencies]
             avg_all_latencies[key] = sum(data) / len(data)
+        print("Done")
 
         return avg_fps, avg_latencies, avg_all_latencies
 
@@ -174,10 +203,24 @@ class Optimizer:
         dict[str, Any]
             The optimized arguments
         """
+        # generate all possible assignments
         possible_args: list[dict[str, Any]] = [
             dict(zip(pipeline_args.keys(), values))
             for values in itertools.product(*pipeline_args.values())
         ]
-        results = grid_search(pipeline_func, possible_args, self.measure)
-
-        return objective_func(results)
+        try:
+            # run the selected algorithm for generating measurements
+            results = self._algorithm(
+                pipeline_func=pipeline_func, 
+                possible_args=possible_args, 
+                measure_func=self.measure,
+            )
+            # run the objective function to get the best arguments
+            return objective_func(results)
+        except TypeError:
+            return self._algorithm(
+                pipeline_func=pipeline_func, 
+                possible_args=possible_args, 
+                measure_func=self.measure,
+                objective_func=objective_func,
+            )
