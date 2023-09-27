@@ -94,7 +94,8 @@ def create_color_camera(
     input_wait_for_message: bool, optional
         Whether to wait for a message or not, by default None
         If none, will be set to False
-        
+
+
     Returns
     -------
     dai.node.ColorCamera

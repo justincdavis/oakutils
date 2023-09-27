@@ -170,7 +170,8 @@ def create_stereo_depth(
     stereo_input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
         If None, will be set to False
-        
+
+
     Returns
     -------
     dai.node.StereoDepth
