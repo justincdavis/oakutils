@@ -5,6 +5,7 @@ oakutils
     :maxdepth: 3
 
     source/oakutils
+    source/oakutils.aruco
     source/oakutils.blobs
     source/oakutils.calibration
     source/oakutils.filters
