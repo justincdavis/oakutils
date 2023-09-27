@@ -114,7 +114,7 @@ def create_point_cloud(
         input_links=[xin.out, depth_link],
         model_name=model_type,
         input_names=["xyz", "depth"],
-        input_sizes=[5, 1],
+        input_sizes=[1, 1],
         input_blocking=[True, False],
         reuse_messages=[True, None],
         shaves=shaves,
