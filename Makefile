@@ -30,14 +30,14 @@ docs:
 blobs:
 	python3 scripts/compile_models.py
 
-ci:
-	./scripts/pyupgrade.sh
-	python3 -m ruff ./src//oakutils --fix
+ci:	mypy
+	./scripts/ci/pyupgrade.sh
+	python3 -m ruff ./src/oakutils --fix
 	python3 -m isort src/oakutils
 	python3 -m black src/oakutils --safe
 
 mypy:
-	mypy --config-file pyproject.toml src/oakutils
+	./scripts/ci/mypy.sh
 
 stubs:
 	python3 scripts/make_stubs.py

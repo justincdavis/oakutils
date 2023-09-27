@@ -42,4 +42,3 @@ with dai.Device(pipeline) as device:
             print(f"    Queue: {queue.getName()}")
             data = queue.get()
         iteration += 1
-        
