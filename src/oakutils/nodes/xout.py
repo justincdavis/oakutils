@@ -18,6 +18,10 @@ def create_xout(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     stream_name: str,
+    input_queue_size: int = 3,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.XLinkOut:
     """
     Use to create an XLinkOut node.
@@ -31,6 +35,17 @@ def create_xout(
         Example: cam_rgb.preview
     stream_name : str
         The name of the stream
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
 
     Returns
     -------
@@ -40,5 +55,17 @@ def create_xout(
     xout = pipeline.createXLinkOut()
     xout.setStreamName(stream_name)
     input_link.link(xout.input)
+
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
+
+    xout.input.setQueueSize(input_queue_size)
+    xout.input.setReusePreviousMessage(input_reuse)
+    xout.input.setBlocking(input_blocking)
+    xout.input.setWaitForMessage(input_wait_for_message)
 
     return xout

@@ -114,10 +114,11 @@ def create_point_cloud(
         input_links=[xin.out, depth_link],
         model_name=model_type,
         input_names=["xyz", "depth"],
+        input_sizes=[1, 1],
+        input_blocking=[True, False],
         reuse_messages=[True, None],
         shaves=shaves,
     )
-    point_cloud_node.inputs["xyz"].setReusePreviousMessage(reusePreviousMessage=True)
 
     xyz = create_xyz_matrix(
         calibration.left.size[0], calibration.left.size[1], calibration.left.K

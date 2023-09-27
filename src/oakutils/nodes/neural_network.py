@@ -20,7 +20,7 @@ get_nn_point_cloud
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable, Sized
 
 import cv2
 import depthai as dai
@@ -29,11 +29,13 @@ import numpy as np
 
 def create_neural_network(
     pipeline: dai.Pipeline,
-    input_link: dai.Node.Output | Iterable[dai.Node.Output],
+    input_link: dai.Node.Output | Sized[dai.Node.Output],
     blob_path: str,
-    input_names: str | Iterable[str] | None = None,
-    reuse_messages: bool | Iterable[bool | None] | None = None,
-    num_inference_threads: int = 2,
+    input_names: str | Sized[str] | None = None,
+    input_sizes: int | Sized[int] | None = None,
+    input_blocking: bool | Sized[bool] | None = None,
+    reuse_messages: bool | Sized[bool | None] | None = None,
+    num_inference_threads: int = 0,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -44,19 +46,26 @@ def create_neural_network(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the neural network to
-    input_link : Union[dai.Node.Output, Iterable[dai.Node.Output]]
+    input_link : Union[dai.Node.Output, Sized[dai.Node.Output]]
         The input link to connect to the image manip node or,
         if there are multiple input links, an iterable of input links.
         Example: cam_rgb.preview or (cam_rgb.preview, stereo.depth)
     blob_path : str
         The path to the blob file to use for the neural network.
         Will be converted to a pathlib.Path.
-    input_names : Optional[Union[str, Iterable[str]]], optional
+    input_names : Optional[Union[str, Sized[str]]], optional
         The names of the input links, by default None
-        Must be the same length as input_link if Iterable
-    reuse_messages : Optional[Union[bool, Iterable[bool]]], optional
+        Must be the same length as input_link if Sized
+    input_sizes : Optional[Union[int, Sized[int]]], optional
+        The size of the queue for the input links, by default will
+        use a queue size of 1.
+        Must be the same length as input_link if Sized
+    input_blocking : Optional[Union[bool, Sized[bool]]], optional
+        Whether the input link is blocking, by default will set to False.
+        Must be the same length as input_link if Sized
+    reuse_messages : Optional[Union[bool, Sized[bool]]], optional
         Whether to reuse messages, by default None
-        Must be the same length as input_link if Iterable
+        Must be the same length as input_link if Sized
         Values may be None if the input link does not need a value set
     num_inference_threads : int, optional
         The number of inference threads, by default 2
@@ -70,22 +79,33 @@ def create_neural_network(
     -------
     dai.node.NeuralNetwork
         The neural network node
+
+    Raises
+    ------
+    ValueError
+        If input_link is an iterable and input_names is None
+        If input_link and input_names are iterables and are not the same length
+        If input_link and reuse_messages are iterables and are not the same length
+        If input_link and input_sizes are iterables and are not the same length
+        If input_link and input_blocking are iterables and are not the same length
     """
-    if hasattr(input_link, "__iter__"):
+    if hasattr(input_link, "__len__"):
+        # ensure input_names is present and has the same length as input_link
         if input_names is None:
             raise ValueError(
                 "input_names must be provided if input_link is an iterable"
             )
-        if not hasattr(input_names, "__iter__"):
+        if not hasattr(input_names, "__len__"):
             raise ValueError(
                 "input_names must be an iterable if input_link is an iterable"
             )
+        # ensure input_link and input_names are the same length
         if len(input_link) != len(input_names):
             raise ValueError(
                 "input_link and input_names must be the same length if both are iterables"
             )
         if reuse_messages is not None:
-            if not hasattr(reuse_messages, "__iter__"):
+            if not hasattr(reuse_messages, "__len__"):
                 raise ValueError(
                     "reuse_messages must be an iterable if input_link is an iterable"
                 )
@@ -93,6 +113,37 @@ def create_neural_network(
                 raise ValueError(
                     "input_link and reuse_messages must be the same length if both are iterables"
                 )
+        else:
+            reuse_messages = [None for _ in range(len(input_link))]
+        if input_sizes is not None:
+            if not hasattr(input_sizes, "__len__"):
+                raise ValueError(
+                    "input_sizes must be an iterable if input_link is an iterable"
+                )
+            if len(input_link) != len(input_sizes):
+                raise ValueError(
+                    "input_link and input_sizes must be the same length if both are iterables"
+                )
+        else:
+            input_sizes = [1 for _ in range(len(input_link))]
+        if input_blocking is not None:
+            if not hasattr(input_blocking, "__len__"):
+                raise ValueError(
+                    "input_blocking must be an iterable if input_link is an iterable"
+                )
+            if len(input_link) != len(input_blocking):
+                raise ValueError(
+                    "input_link and input_blocking must be the same length if both are iterables"
+                )
+        else:
+            input_blocking = [False for _ in range(len(input_link))]
+    else:
+        if reuse_messages is None:
+            reuse_messages = False
+        if input_sizes is None:
+            input_sizes = 1
+        if input_blocking is None:
+            input_blocking = False
 
     bpath: Path = Path(blob_path)
 
@@ -108,18 +159,47 @@ def create_neural_network(
         nn.setNumPoolFrames(num_pool_frames)
 
     # connect the input link to the neural network node
-    if not hasattr(input_link, "__iter__"):
+    if not hasattr(input_link, "__len__"):
         # handle a single input to the network
         if input_names is not None:
             input_link.link(nn.inputs[input_names])
+            if reuse_messages is not None:
+                nn.inputs[input_names].setReusePreviousMessage(reuse_messages)
+            if input_sizes is not None:
+                nn.inputs[input_names].setQueueSize(input_sizes)
+            if input_blocking is not None:
+                nn.inputs[input_names].setBlocking(input_blocking)
+        # otherwise use the generic method
         else:
             input_link.link(nn.input)
+            if reuse_messages is not None:
+                nn.input.setReusePreviousMessage(reuse_messages)
+            if input_sizes is not None:
+                nn.input.setQueueSize(input_sizes)
+            if input_blocking is not None:
+                nn.input.setBlocking(input_blocking)
     else:
-        input_data = zip(input_link, input_names, reuse_messages)
-        for link, name, reuse_message in input_data:
+        input_data = zip(
+            input_link, input_names, input_sizes, input_blocking, reuse_messages
+        )
+        for link, name, size, blocking, reuse_message in input_data:
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
+            if size is not None:
+                nn.inputs[name].setQueueSize(size)
+            if blocking is not None:
+                nn.inputs[name].setBlocking(blocking)
+
+    # if hasattr(input_link, "__len__"):
+    #     for name, i in nn.inputs.items():
+    #         print(
+    #             f"Name: {name}, Blocking: {i.getBlocking()}, Reuse: {i.getReusePreviousMessage()}, Queue Size: {i.getQueueSize()}"
+    #         )
+    # else:
+    #     print(
+    #         f"Name: {nn.input.name}, Blocking: {nn.input.getBlocking()}, Reuse: {nn.input.getReusePreviousMessage()}, Queue Size: {nn.input.getQueueSize()}"
+    #     )
 
     return nn
 

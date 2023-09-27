@@ -17,12 +17,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import kornia
+import torch
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -46,7 +46,9 @@ class Dilation(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: Dilation) -> ModelType:
@@ -72,7 +74,7 @@ class Dilation(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        return kornia.morphology.dilation(image, (self._kernel_size, self._kernel_size))
+        return kornia.morphology.dilation(image, self._kernel)
 
 
 class DilationGray(AbstractModel):
@@ -95,7 +97,9 @@ class DilationGray(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: DilationGray) -> ModelType:
@@ -121,9 +125,7 @@ class DilationGray(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        dilation = kornia.morphology.dilation(
-            image, (self._kernel_size, self._kernel_size)
-        )
+        dilation = kornia.morphology.dilation(image, self._kernel)
         return kornia.color.bgr_to_grayscale(dilation)
 
 
@@ -153,8 +155,10 @@ class DilationBlur(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -184,9 +188,7 @@ class DilationBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.dilation(
-            gaussian, (self._kernel_size2, self._kernel_size2)
-        )
+        return kornia.morphology.dilation(gaussian, self._kernel)
 
 
 class DilationBlurGray(AbstractModel):
@@ -215,8 +217,10 @@ class DilationBlurGray(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -246,7 +250,5 @@ class DilationBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        dilation = kornia.morphology.dilation(
-            gaussian, (self._kernel_size2, self._kernel_size2)
-        )
+        dilation = kornia.morphology.dilation(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(dilation)

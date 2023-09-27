@@ -18,6 +18,8 @@ filters
     Contains utilities for working with filters.
 nodes
     Contains utilities for creating nodes.
+optimizer
+    Contains utilities for optimizing pipelines.
 point_clouds
     Contains utilities for working with point clouds.
 tools
@@ -32,7 +34,7 @@ LegacyCamera
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 """
-from . import aruco, blobs, calibration, filters, nodes, point_clouds, tools
+from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
 from .api_camera import Camera as ApiCamera
 from .legacy_camera import Camera as LegacyCamera
 from .webcam import Webcam
@@ -46,6 +48,7 @@ __all__ = [
     "calibration",
     "filters",
     "nodes",
+    "optimizer",
     "point_clouds",
     "tools",
 ]

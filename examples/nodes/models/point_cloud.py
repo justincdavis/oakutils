@@ -10,7 +10,7 @@ from oakutils.point_clouds import (
 )
 
 pipeline = dai.Pipeline()
-pcv = PointCloudVisualizer()
+pcv = PointCloudVisualizer(use_threading=False)
 
 # get the calibration
 calibration = get_camera_calibration(
@@ -38,14 +38,10 @@ with dai.Device(pipeline) as device:
 
     start_pcl(device)
 
-    counter = 0
     while True:
         data = queue.get()
 
-        counter += 1  # visualizer is super slow
-        if counter == 3:
-            np_pcl = get_nn_point_cloud(data)
-            pcl = create_point_cloud_from_np(np_pcl)
-            pcl = filter_point_cloud(pcl)
-            pcv.update(pcl)
-            counter = 0
+        np_pcl = get_nn_point_cloud(data)
+        pcl = create_point_cloud_from_np(np_pcl)
+        pcl = filter_point_cloud(pcl)
+        pcv.update(pcl)
