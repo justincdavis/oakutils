@@ -8,7 +8,9 @@ pipeline = dai.Pipeline()
 
 # create the color camera node
 cam = create_color_camera(
-    pipeline, preview_size=(640, 480)
+    pipeline, 
+    fps=15, # some "advanced" kornia based models require lower fps
+    preview_size=(640, 480),
 )  # set the preview size to the input of the nn
 
 harris = create_harris(
