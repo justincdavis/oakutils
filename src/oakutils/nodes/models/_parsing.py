@@ -66,7 +66,9 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
         "laplacianblur",
         "laplacianblurgray",
         "sobel",
+        "sobelgray",
         "sobelblur",
+        "sobelblurgray",
         "pointcloud",
     ]
     valid_names.extend(
