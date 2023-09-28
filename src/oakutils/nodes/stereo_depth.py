@@ -26,10 +26,10 @@ def create_stereo_depth(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
-    input_reuse: bool | None = None,
-    input_blocking: bool | None = None,
-    input_wait_for_message: bool | None = None,
+    mono_input_queue_size: int = 3,
+    mono_input_reuse: bool | None = None,
+    mono_input_blocking: bool | None = None,
+    mono_input_wait_for_message: bool | None = None,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
@@ -57,10 +57,10 @@ def create_stereo_depth(
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-    stereo_input_queue_size: int = 3,
-    stereo_input_reuse: bool | None = None,
-    stereo_input_blocking: bool | None = None,
-    stereo_input_wait_for_message: bool | None = None,
+    stereo_input_config_queue_size: int = 4,
+    stereo_input_config_reuse: bool | None = None,
+    stereo_input_config_blocking: bool | None = None,
+    stereo_input_config_wait_for_message: bool | None = None,
 ) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
     """
     Use to create a stereo depth given only a pipeline object.
@@ -90,15 +90,15 @@ def create_stereo_depth(
         The chroma denoise of the mono camera, by default 1
     isp_3a_fps: int, optional
         The 3a fps of the mono camera, by default 15
-    input_queue_size : int, optional
+    mono_input_queue_size : int, optional
         The queue size of the input, by default 3
-    input_reuse : Optional[bool], optional
+    mono_input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
         If None, will be set to False
-    input_blocking : Optional[bool], optional
+    mono_input_blocking : Optional[bool], optional
         Whether to block the input, by default None
         If None, will be set to False
-    input_wait_for_message : Optional[bool], optional
+    mono_input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
         If None, will be set to False
     left : dai.node.MonoCamera
@@ -159,18 +159,17 @@ def create_stereo_depth(
         The threshold max range of the stereo depth node, by default 25000
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
-    stereo_input_queue_size : int, optional
-        The queue size of the input, by default 3
-    stereo_input_reuse : Optional[bool], optional
+    stereo_input_config_queue_size : int, optional
+        The queue size of the input, by default 4
+    stereo_input_config_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
-    stereo_input_blocking : Optional[bool], optional
+        If None, will be set to True
+    stereo_input_config_blocking : Optional[bool], optional
         Whether to block the input, by default None
         If None, will be set to False
-    stereo_input_wait_for_message : Optional[bool], optional
+    stereo_input_config_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
         If None, will be set to False
-
 
     Returns
     -------
@@ -205,10 +204,6 @@ def create_stereo_depth(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
-        input_queue_size=input_queue_size,
-        input_reuse=input_reuse,
-        input_blocking=input_blocking,
-        input_wait_for_message=input_wait_for_message,
     )
     stereo = create_stereo_depth_from_mono_cameras(
         pipeline=pipeline,
@@ -241,10 +236,6 @@ def create_stereo_depth(
         threshold_min_range=threshold_min_range,
         threshold_max_range=threshold_max_range,
         bilateral_sigma=bilateral_sigma,
-        input_queue_size=stereo_input_queue_size,
-        input_reuse=stereo_input_reuse,
-        input_blocking=stereo_input_blocking,
-        input_wait_for_message=stereo_input_wait_for_message,
     )
     return (
         stereo,
@@ -284,10 +275,6 @@ def create_stereo_depth_from_mono_cameras(
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-    input_queue_size: int = 3,
-    input_reuse: bool | None = None,
-    input_blocking: bool | None = None,
-    input_wait_for_message: bool | None = None,
 ) -> dai.node.StereoDepth:
     """
     Use to create a stereo depth node from a pipeline and two mono cameras.
@@ -357,17 +344,6 @@ def create_stereo_depth_from_mono_cameras(
         The threshold max range of the stereo depth node, by default 25000
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
-    input_queue_size : int, optional
-        The queue size of the input, by default 3
-    input_reuse : Optional[bool], optional
-        Whether to reuse the previous message, by default None
-        If None, will be set to False
-    input_blocking : Optional[bool], optional
-        Whether to block the input, by default None
-        If None, will be set to False
-    input_wait_for_message : Optional[bool], optional
-        Whether to wait for a message, by default None
-        If None, will be set to False
 
     Returns
     -------
@@ -457,17 +433,22 @@ def create_stereo_depth_from_mono_cameras(
     # write back the config
     stereo.initialConfig.set(config)
 
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
+    # print(f"inputConfig Queue Size: {stereo.inputConfig.getQueueSize()}")
+    # print(f"inputConfig Reuse Previous Message: {stereo.inputConfig.getReusePreviousMessage()}")
+    # print(f"inputConfig Blocking: {stereo.inputConfig.getBlocking()}")
+    # print(f"inputConfig Wait for Message: {stereo.inputConfig.getWaitForMessage()}")
 
-    stereo.inputConfig.setQueueSize(input_queue_size)
-    stereo.inputConfig.setReusePreviousMessage(input_reuse)
-    stereo.inputConfig.setBlocking(input_blocking)
-    stereo.inputConfig.setWaitForMessage(input_wait_for_message)
+    # if input_config_reuse is None:
+    #     input_config_reuse = True
+    # if input_config_blocking is None:
+    #     input_config_blocking = False
+    # if input_config_wait_for_message is None:
+    #     input_config_wait_for_message = False
+
+    # stereo.inputConfig.setQueueSize(input_config_queue_size)
+    # stereo.inputConfig.setReusePreviousMessage(input_config_reuse)
+    # stereo.inputConfig.setBlocking(input_config_blocking)
+    # stereo.inputConfig.setWaitForMessage(input_config_wait_for_message)
 
     # link nodes
     left.out.link(stereo.left)

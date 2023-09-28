@@ -18,7 +18,7 @@ def create_xout(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     stream_name: str,
-    input_queue_size: int = 3,
+    input_queue_size: int = 8,
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
     input_wait_for_message: bool | None = None,
@@ -36,13 +36,13 @@ def create_xout(
     stream_name : str
         The name of the stream
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default 8
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
         If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
+        If None, will be set to True
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
         If None, will be set to False
@@ -59,9 +59,14 @@ def create_xout(
     if input_reuse is None:
         input_reuse = False
     if input_blocking is None:
-        input_blocking = False
+        input_blocking = True
     if input_wait_for_message is None:
-        input_wait_for_message = False
+        input_wait_for_message = True
+
+    # print(f"inputConfig Queue Size: {xout.input.getQueueSize()}")
+    # print(f"inputConfig Reuse Previous Message: {xout.input.getReusePreviousMessage()}")
+    # print(f"inputConfig Blocking: {xout.input.getBlocking()}")
+    # print(f"inputConfig Wait for Message: {xout.input.getWaitForMessage()}")
 
     xout.input.setQueueSize(input_queue_size)
     xout.input.setReusePreviousMessage(input_reuse)

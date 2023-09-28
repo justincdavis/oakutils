@@ -8,9 +8,13 @@ create_color_camera
 """
 from __future__ import annotations
 
+import logging
+
 import depthai as dai
 
 from oakutils.tools import get_tuple_from_color_sensor_resolution
+
+_log = logging.getLogger(__name__)
 
 
 def create_color_camera(
@@ -27,11 +31,15 @@ def create_color_camera(
     chroma_denoise: int = 1,
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
-    isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
-    input_reuse: bool | None = None,
-    input_blocking: bool | None = None,
-    input_wait_for_message: bool | None = None,
+    isp_3a_fps: int | None = 30,
+    input_config_queue_size: int = 8,
+    input_config_reuse: bool | None = None,
+    input_config_blocking: bool | None = None,
+    input_config_wait_for_message: bool | None = None,
+    input_control_queue_size: int = 8,
+    input_control_reuse: bool | None = None,
+    input_control_blocking: bool | None = None,
+    input_control_wait_for_message: bool | None = None,
 ) -> dai.node.ColorCamera:
     """
     Use to create a pipeline for the color camera.
@@ -79,22 +87,32 @@ def create_color_camera(
         not just the natively supported resolutions.
         Works together with the isp_target_size parameter
     isp_3a_fps: Optional[int], optional
-        The fps of how often the 3a algorithms will run, by default 15
+        The fps of how often the 3a algorithms will run, by default 30
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
-    input_queue_size: int, optional
-        The size of the input queue, by default 3
-    input_reuse: bool, optional
+    input_config_queue_size: int, optional
+        The size of the input queue, by default 8
+    input_config_reuse: bool, optional
         Whether to reuse inputs or not, by default None
-        If none, will be set to False
-    input_blocking: bool, optional
+        If none, will be set to True
+    input_config_blocking: bool, optional
         Whether to block the input or not, by default None
         If none, will be set to False
-    input_wait_for_message: bool, optional
+    input_config_wait_for_message: bool, optional
         Whether to wait for a message or not, by default None
         If none, will be set to False
-
+    input_control_queue_size: int, optional
+        The size of the input queue, by default 8
+    input_control_reuse: bool, optional
+        Whether to reuse inputs or not, by default None
+        If none, will be set to True
+    input_control_blocking: bool, optional
+        Whether to block the input or not, by default None
+        If none, will be set to True
+    input_control_wait_for_message: bool, optional
+        Whether to wait for a message or not, by default None
+        If none, will be set to False
 
     Returns
     -------
@@ -135,12 +153,11 @@ def create_color_camera(
         raise ValueError("luma_denoise must be between 0 and 4")
     if chroma_denoise < 0 or chroma_denoise > 4:
         raise ValueError("chroma_denoise must be between 0 and 4")
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
+
+    if fps != isp_3a_fps:
+        _log.warning(
+            f"The fps of the color camera is not the same as the fps of the 3a algorithms. {fps} != {isp_3a_fps}"
+        )
 
     size_tuple = get_tuple_from_color_sensor_resolution(resolution)
 
@@ -153,6 +170,15 @@ def create_color_camera(
     cam.initialControl.setSharpness(sharpness)
     cam.initialControl.setLumaDenoise(luma_denoise)
     cam.initialControl.setChromaDenoise(chroma_denoise)
+
+    # print(f"inputConfig Queue Size: {cam.inputConfig.getQueueSize()}")
+    # print(f"inputConfig Reuse Previous Message: {cam.inputConfig.getReusePreviousMessage()}")
+    # print(f"inputConfig Blocking: {cam.inputConfig.getBlocking()}")
+    # print(f"inputConfig Wait for Message: {cam.inputConfig.getWaitForMessage()}")
+    # print(f"inputControl Queue Size: {cam.inputControl.getQueueSize()}")
+    # print(f"inputControl Reuse Previous Message: {cam.inputControl.getReusePreviousMessage()}")
+    # print(f"inputControl Blocking: {cam.inputControl.getBlocking()}")
+    # print(f"inputControl Wait for Message: {cam.inputControl.getWaitForMessage()}")
 
     # properties that the user can change
     cam.setPreviewSize(preview_size)
@@ -171,9 +197,26 @@ def create_color_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
-    cam.inputConfig.setQueueSize(input_queue_size)
-    cam.inputConfig.setReusePreviousMessage(input_reuse)
-    cam.inputConfig.setBlocking(input_blocking)
-    cam.inputConfig.setWaitForMessage(input_wait_for_message)
+    # if input_config_reuse is None:
+    #     input_config_reuse = True
+    # if input_config_blocking is None:
+    #     input_config_blocking = False
+    # if input_config_wait_for_message is None:
+    #     input_config_wait_for_message = False
+    # cam.inputConfig.setQueueSize(input_config_queue_size)
+    # cam.inputConfig.setReusePreviousMessage(input_config_reuse)
+    # cam.inputConfig.setBlocking(input_config_blocking)
+    # cam.inputConfig.setWaitForMessage(input_config_wait_for_message)
+
+    # if input_control_reuse is None:
+    #     input_control_reuse = True
+    # if input_control_blocking is None:
+    #     input_control_blocking = True
+    # if input_control_wait_for_message is None:
+    #     input_control_wait_for_message = False
+    # cam.inputControl.setQueueSize(input_control_queue_size)
+    # cam.inputControl.setReusePreviousMessage(input_control_reuse)
+    # cam.inputControl.setBlocking(input_control_blocking)
+    # cam.inputControl.setWaitForMessage(input_control_wait_for_message)
 
     return cam

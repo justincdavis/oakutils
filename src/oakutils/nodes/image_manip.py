@@ -29,10 +29,14 @@ def create_image_manip(
     warp_border_fill_color: tuple[int, int, int] | None = None,
     warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
     warp_transform_matrix_3x3: list[float] | None = None,
-    input_queue_size: int = 3,
-    input_reuse: bool | None = None,
-    input_blocking: bool | None = None,
-    input_wait_for_message: bool | None = None,
+    input_config_queue_size: int = 8,
+    input_config_reuse: bool | None = None,
+    input_config_blocking: bool | None = None,
+    input_config_wait_for_message: bool | None = None,
+    input_image_queue_size: int = 8,
+    input_image_reuse: bool | None = None,
+    input_image_blocking: bool | None = None,
+    input_image_wait_for_message: bool | None = None,
 ) -> dai.node.ImageManip:
     """
     Use to create an image manip node.
@@ -75,18 +79,29 @@ def create_image_manip(
         The warp transform four points to apply, by default None
     warp_transform_matrix_3x3 : Optional[List[float]], optional
         The warp transform matrix 3x3 to apply, by default None
-    input_queue_size : int, optional
-        The queue size of the input, by default 3
-    input_reuse : Optional[bool], optional
+    input_config_queue_size : int, optional
+        The queue size of the input, by default 8
+    input_config_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
-    input_blocking : Optional[bool], optional
+        If None, will be set to True
+    input_config_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
-    input_wait_for_message : Optional[bool], optional
+        If None, will be set to True
+    input_config_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
         If None, will be set to False
-
+    input_image_queue_size : int, optional
+        The queue size of the input, by default 8
+    input_image_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_image_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to True
+    input_image_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to True
+        
     Returns
     -------
     dai.node.ImageManip
@@ -94,6 +109,15 @@ def create_image_manip(
     """
     manip = pipeline.create(dai.node.ImageManip)
     manip.initialConfig.setFrameType(frame_type)
+
+    # print(f"inputConfig Queue Size: {manip.inputConfig.getQueueSize()}")
+    # print(f"inputConfig Reuse Previous Message: {manip.inputConfig.getReusePreviousMessage()}")
+    # print(f"inputConfig Blocking: {manip.inputConfig.getBlocking()}")
+    # print(f"inputConfig Wait for Message: {manip.inputConfig.getWaitForMessage()}")
+    # print(f"inputControl Queue Size: {manip.inputImage.getQueueSize()}")
+    # print(f"inputControl Reuse Previous Message: {manip.inputImage.getReusePreviousMessage()}")
+    # print(f"inputControl Blocking: {manip.inputImage.getBlocking()}")
+    # print(f"inputControl Wait for Message: {manip.inputImage.getWaitForMessage()}")
 
     if center_crop is not None:
         manip.initialConfig.setCenterCrop(*center_crop)
@@ -124,18 +148,28 @@ def create_image_manip(
     if warp_transform_matrix_3x3 is not None:
         manip.initialConfig.setWarpTransformMatrix3x3(*warp_transform_matrix_3x3)
 
+    if input_config_reuse is None:
+        input_config_reuse = True
+    if input_config_blocking is None:
+        input_config_blocking = True
+    if input_config_wait_for_message is None:
+        input_config_wait_for_message = False
+    manip.inputConfig.setQueueSize(input_config_queue_size)
+    manip.inputConfig.setReusePreviousMessage(input_config_reuse)
+    manip.inputConfig.setBlocking(input_config_blocking)
+    manip.inputConfig.setWaitForMessage(input_config_wait_for_message)
+
+    if input_image_reuse is None:
+        input_image_reuse = False
+    if input_image_blocking is None:
+        input_image_blocking = True
+    if input_image_wait_for_message is None:
+        input_image_wait_for_message = True
+    manip.inputImage.setQueueSize(input_image_queue_size)
+    manip.inputImage.setReusePreviousMessage(input_image_reuse)
+    manip.inputImage.setBlocking(input_image_blocking)
+    manip.inputImage.setWaitForMessage(input_image_wait_for_message)
+
     input_link.link(manip.inputImage)
-
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
-
-    manip.inputConfig.setQueueSize(input_queue_size)
-    manip.inputConfig.setReusePreviousMessage(input_reuse)
-    manip.inputConfig.setBlocking(input_blocking)
-    manip.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return manip
