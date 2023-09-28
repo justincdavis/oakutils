@@ -226,10 +226,16 @@ def get_nn_frame(
     if swap_rb:
         frame = frame[:, :, ::-1]
 
-    if resize_factor is not None and resize_factor <= 1.0:
-        frame = _normalize(_resize(frame, resize_factor), normalization)
+    if resize_factor is not None and normalization is not None:
+        if resize_factor <= 1.0:
+            frame = _normalize(_resize(frame, resize_factor), normalization)
+        else:
+            frame = _resize(_normalize(frame, normalization), resize_factor)
     else:
-        frame = _resize(_normalize(frame, normalization), resize_factor)
+        if resize_factor is not None:
+            frame = _resize(frame, resize_factor)
+        if normalization is not None:
+            frame = _normalize(frame, normalization)
 
     return np.ascontiguousarray(frame, dtye=np.uint8)
 
