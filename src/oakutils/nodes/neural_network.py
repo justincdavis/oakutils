@@ -231,7 +231,7 @@ def get_nn_frame(
     else:
         frame = _resize(_normalize(frame, normalization), resize_factor)
 
-    return frame.astype(np.uint8)
+    return np.ascontiguousarray(frame, dtye=np.uint8)
 
 
 def get_nn_bgr_frame(
