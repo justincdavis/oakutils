@@ -19,12 +19,15 @@ get_nn_point_cloud
 """
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Callable, Iterable
 
 import cv2
 import depthai as dai
 import numpy as np
+
+_log = logging.getLogger(__name__)
 
 
 def create_neural_network(
@@ -110,13 +113,13 @@ def create_neural_network(
     # connect the input link to the neural network node
     if not hasattr(input_link, "__iter__"):
         # handle a single input to the network
-        if input_names is not None:
-            input_link.link(nn.inputs[input_names])
-        else:
-            input_link.link(nn.input)
+        input_link.link(nn.input)
     else:
         input_data = zip(input_link, input_names, reuse_messages)
         for link, name, reuse_message in input_data:
+            _log.debug(
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+            )
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)

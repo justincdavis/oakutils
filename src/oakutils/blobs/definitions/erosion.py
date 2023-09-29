@@ -17,12 +17,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import kornia
+import torch
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -125,9 +125,7 @@ class ErosionGray(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        erosion = kornia.morphology.erosion(
-            image, self._kernel
-        )
+        erosion = kornia.morphology.erosion(image, self._kernel)
         return kornia.color.bgr_to_grayscale(erosion)
 
 
@@ -190,9 +188,7 @@ class ErosionBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.erosion(
-            gaussian, self._kernel
-        )
+        return kornia.morphology.erosion(gaussian, self._kernel)
 
 
 class ErosionBlurGray(AbstractModel):
@@ -254,7 +250,5 @@ class ErosionBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        erosion = kornia.morphology.erosion(
-            gaussian, self._kernel
-        )
+        erosion = kornia.morphology.erosion(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(erosion)
