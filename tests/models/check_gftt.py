@@ -29,7 +29,7 @@ def check_gftt(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: boo
     """Test the gftt node"""
     pipeline = dai.Pipeline()
 
-    cam = create_color_camera(pipeline, preview_size=(640, 480))
+    cam = create_color_camera(pipeline, fps=15, preview_size=(640, 480))
     lp = create_gftt(
         pipeline, 
         cam.preview,

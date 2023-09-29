@@ -29,7 +29,7 @@ def check_hessian(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: 
     """Test the hessian node"""
     pipeline = dai.Pipeline()
 
-    cam = create_color_camera(pipeline, preview_size=(640, 480))
+    cam = create_color_camera(pipeline, fps=15, preview_size=(640, 480))
     lp = create_hessian(
         pipeline, 
         cam.preview,

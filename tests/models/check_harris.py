@@ -29,7 +29,7 @@ def check_harris(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: b
     """Test the harris node"""
     pipeline = dai.Pipeline()
 
-    cam = create_color_camera(pipeline, preview_size=(640, 480))
+    cam = create_color_camera(pipeline, fps=15, preview_size=(640, 480))
     lp = create_harris(
         pipeline, 
         cam.preview,

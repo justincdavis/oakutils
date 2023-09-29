@@ -29,7 +29,8 @@ def check_sobel(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: bo
     """Test the sobel node"""
     pipeline = dai.Pipeline()
 
-    cam = create_color_camera(pipeline, preview_size=(640, 480))
+    color_fps = 15 if use_blur else 30
+    cam = create_color_camera(pipeline, fps=color_fps, preview_size=(640, 480))
     lp = create_sobel(
         pipeline, 
         cam.preview,
