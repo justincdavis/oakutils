@@ -11,8 +11,6 @@ import depthai as dai
 from ._grid_search import grid_search
 
 if TYPE_CHECKING:
-    import datetime
-
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -135,7 +133,7 @@ class Optimizer:
                 past: deque[float] = deque(maxlen=self._stability_length)
                 counter = 0
                 t0 = time.perf_counter()
-                device_t0 = dai.Clock.now().total_seconds()  # type: ignore[attr-defined]
+                device_t0 = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
                 while not stopped:
                     counter += 1
                     # get start time
@@ -144,10 +142,10 @@ class Optimizer:
                     for queue_name, queue in queues.items():
                         _log.debug(f"      {queue_name}")
                         data = queue.get()
-                        data.getData()
+                        data.getData()  # type: ignore[attr-defined]
                         if counter >= self._warmup_cycles:
-                            current: datetime.timedelta = dai.Clock.now().total_seconds()  # type: ignore[attr-defined]
-                            data_ts = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
+                            current: float = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
+                            data_ts: float = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
                             _log.debug(
                                 f"Base: {device_t0}, Curr: {current}, Data: {data_ts}"
                             )
@@ -206,7 +204,7 @@ class Optimizer:
         pipeline_args: dict[str, list[Any]],
         objective_func: Callable[
             [list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]],
-            dict[str, Any],
+            tuple[dict[str, Any], tuple[float, float, dict[str, float]]],
         ],
     ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
         """

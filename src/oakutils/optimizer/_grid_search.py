@@ -23,7 +23,7 @@ def grid_search(
     ],
     objective_func: Callable[
         [list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]],
-        dict[str, Any],
+        tuple[dict[str, Any], tuple[float, float, dict[str, float]]],
     ],
 ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
@@ -51,4 +51,4 @@ def grid_search(
     for arg in possible_args:
         result = measure_func(pipeline_func, arg)
         results.append((result, arg))
-    return objective_func(options=results)
+    return objective_func(results)

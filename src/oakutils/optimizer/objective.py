@@ -68,20 +68,20 @@ def lowest_avg_latency(
 
 
 def lowest_latency(
-    stream: str,
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]],
+    stream: str,
 ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the lowest latency for a specific stream.
 
     Parameters
     ----------
-    stream : str
-        The name of the stream to get the lowest latency for
     options : list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
         The list of options to choose from. A list of tuples, where the first
         element is the result of `Optimizer.measure` and the second element is the
         arguments used to generate the pipeline.
+    stream : str
+        The name of the stream to get the lowest latency for
 
     Returns
     -------
