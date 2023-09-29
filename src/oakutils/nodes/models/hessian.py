@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 
 _log = logging.getLogger(__name__)
 
+
 def create_hessian(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,

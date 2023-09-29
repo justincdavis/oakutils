@@ -116,7 +116,9 @@ def create_no_args_multi_link_model(
     dai.node.NeuralNetwork
         The model node
     """
-    _log.warning(f"Multi-link models do not have passthrough! Creating model {model_name} with multiple input links...")
+    _log.warning(
+        f"Multi-link models do not have passthrough! Creating model {model_name} with multiple input links..."
+    )
     return create_model(
         pipeline=pipeline,
         input_link=input_links,

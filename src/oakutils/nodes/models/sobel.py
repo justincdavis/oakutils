@@ -68,7 +68,9 @@ def create_sobel(
         grayscale_out = False
 
     if use_blur:
-        _log.warning("Sobel with Blur has trouble running with color camera FPS above 15")
+        _log.warning(
+            "Sobel with Blur has trouble running with color camera FPS above 15"
+        )
 
     model_type = "sobel"
     if use_blur:
