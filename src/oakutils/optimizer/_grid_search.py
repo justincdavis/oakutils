@@ -25,7 +25,7 @@ def grid_search(
         [list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]],
         dict[str, Any],
     ],
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to run a grid search and find all possible measurements.
 
@@ -44,9 +44,11 @@ def grid_search(
     -------
     dict[str, Any]
         The arguments maximizing the objective functions
+    tuple[float, float, dict[str, float]]
+        The best measurement results
     """
     results: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]] = []
     for arg in possible_args:
         result = measure_func(pipeline_func, arg)
         results.append((result, arg))
-    return objective_func(results)
+    return objective_func(options=results)

@@ -17,7 +17,7 @@ from typing import Any
 
 def highest_fps(
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the highest fps.
 
@@ -32,16 +32,18 @@ def highest_fps(
     -------
     dict[str, Any]
         The arguments with the highest fps
+    tuple[float, float, dict[str, float]]
+        The measurement results
     """
     fps_values = [option[0][0] for option in options]
     max_fps = max(fps_values)
     max_fps_index = fps_values.index(max_fps)
-    return options[max_fps_index][1]
+    return options[max_fps_index][1], options[max_fps_index][0]
 
 
 def lowest_avg_latency(
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the lowest avg latency.
 
@@ -56,17 +58,19 @@ def lowest_avg_latency(
     -------
     dict[str, Any]
         The arguments with the lowest avg latency
+    tuple[float, float, dict[str, float]]
+        The measurement results
     """
     avg_latency_values = [option[0][1] for option in options]
     min_avg_latency = min(avg_latency_values)
     min_avg_latency_index = avg_latency_values.index(min_avg_latency)
-    return options[min_avg_latency_index][1]
+    return options[min_avg_latency_index][1], options[min_avg_latency_index][0]
 
 
 def lowest_latency(
     stream: str,
     options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]],
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the lowest latency for a specific stream.
 
@@ -83,8 +87,10 @@ def lowest_latency(
     -------
     dict[str, Any]
         The arguments with the lowest latency for the specified stream
+    tuple[float, float, dict[str, float]]
+        The measurement results for the specified stream
     """
     latency_values = [option[0][2][stream] for option in options]
     min_latency = min(latency_values)
     min_latency_index = latency_values.index(min_latency)
-    return options[min_latency_index][1]
+    return options[min_latency_index][1], options[min_latency_index][0]
