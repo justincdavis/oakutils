@@ -17,12 +17,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import kornia
+import torch
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -49,7 +49,6 @@ class Dilation(AbstractModel):
         self._kernel = torch.zeros((kernel_size, kernel_size))
         self._kernel[kernel_size // 2, :] = 1.0
         self._kernel[:, kernel_size // 2] = 1.0
-
 
     @classmethod
     def model_type(cls: Dilation) -> ModelType:
@@ -102,7 +101,6 @@ class DilationGray(AbstractModel):
         self._kernel[kernel_size // 2, :] = 1.0
         self._kernel[:, kernel_size // 2] = 1.0
 
-
     @classmethod
     def model_type(cls: DilationGray) -> ModelType:
         """Use to get the type of input this model takes."""
@@ -127,9 +125,7 @@ class DilationGray(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        dilation = kornia.morphology.dilation(
-            image, self._kernel
-        )
+        dilation = kornia.morphology.dilation(image, self._kernel)
         return kornia.color.bgr_to_grayscale(dilation)
 
 
@@ -192,9 +188,7 @@ class DilationBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.dilation(
-            gaussian, self._kernel
-        )
+        return kornia.morphology.dilation(gaussian, self._kernel)
 
 
 class DilationBlurGray(AbstractModel):
@@ -256,7 +250,5 @@ class DilationBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        dilation = kornia.morphology.dilation(
-            gaussian, self._kernel
-        )
+        dilation = kornia.morphology.dilation(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(dilation)

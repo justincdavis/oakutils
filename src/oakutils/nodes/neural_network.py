@@ -117,7 +117,9 @@ def create_neural_network(
     else:
         input_data = zip(input_link, input_names, reuse_messages)
         for link, name, reuse_message in input_data:
-            _log.debug(f"Linking {link.name} to {name}, assigning reuse: {reuse_message}")
+            _log.debug(
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+            )
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)

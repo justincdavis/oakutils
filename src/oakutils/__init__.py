@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """
 Package for Python utilities for the OpenCV AI Kit (OAK-D) and related hardware.
 
@@ -35,8 +36,8 @@ Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 """
 # setup the logger before importing anything else
-import sys
 import logging
+import sys
 
 
 # Created from answer by Dennis at:

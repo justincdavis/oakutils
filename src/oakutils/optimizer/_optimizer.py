@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 import itertools
 import logging
 import time
@@ -12,6 +11,8 @@ import depthai as dai
 from ._grid_search import grid_search
 
 if TYPE_CHECKING:
+    import datetime
+
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -143,11 +144,13 @@ class Optimizer:
                     for queue_name, queue in queues.items():
                         _log.debug(f"      {queue_name}")
                         data = queue.get()
-                        raw_data = data.getData()
+                        data.getData()
                         if counter >= self._warmup_cycles:
                             current: datetime.timedelta = dai.Clock.now().total_seconds()  # type: ignore[attr-defined]
                             data_ts = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
-                            _log.debug(f"Base: {device_t0}, Curr: {current}, Data: {data_ts}")
+                            _log.debug(
+                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}"
+                            )
                             ts: float = current - device_t0 - data_ts
                             _log.debug(f"Measured latency: {ts:.2f}ms for {queue_name}")
                             data_times[queue_name].append(ts)
