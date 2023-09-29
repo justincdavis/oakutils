@@ -46,19 +46,19 @@ def _setup_logger() -> None:
     # get logging level environment variable
     import os
 
-    level = os.getenv("OAKUTILS_LOG_LEVEL").upper()
-    if level == "DEBUG":
-        level = logging.DEBUG
-    elif level == "INFO":
-        level = logging.INFO
-    elif level == "WARNING":
-        level = logging.WARNING
-    elif level == "ERROR":
-        level = logging.ERROR
-    elif level == "CRITICAL":
-        level = logging.CRITICAL
-    else:
-        level = logging.WARNING
+    level = os.getenv("OAKUTILS_LOG_LEVEL")
+    if level is not None:
+        level = level.upper()
+    level_map = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "WARN": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL,
+        None: logging.WARNING,
+    }
+    level = level_map[level]
 
     # create logger
     logger = logging.getLogger(__package__)
