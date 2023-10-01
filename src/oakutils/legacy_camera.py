@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING
 
 import cv2
 import depthai as dai
-import depthai_sdk as sdk
 import numpy as np
 
 from .calibration import CalibrationData, get_camera_calibration
@@ -38,7 +37,7 @@ if TYPE_CHECKING:
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera(sdk.OakCamera):
+class Camera:
     """
     Class for interfacing with the OAK-D camera.
 

@@ -19,12 +19,15 @@ get_nn_point_cloud
 """
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Callable, Iterable
 
 import cv2
 import depthai as dai
 import numpy as np
+
+_log = logging.getLogger(__name__)
 
 
 def create_neural_network(
@@ -110,13 +113,13 @@ def create_neural_network(
     # connect the input link to the neural network node
     if not hasattr(input_link, "__iter__"):
         # handle a single input to the network
-        if input_names is not None:
-            input_link.link(nn.inputs[input_names])
-        else:
-            input_link.link(nn.input)
+        input_link.link(nn.input)
     else:
         input_data = zip(input_link, input_names, reuse_messages)
         for link, name, reuse_message in input_data:
+            _log.debug(
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+            )
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
@@ -226,12 +229,18 @@ def get_nn_frame(
     if swap_rb:
         frame = frame[:, :, ::-1]
 
-    if resize_factor is not None and resize_factor <= 1.0:
-        frame = _normalize(_resize(frame, resize_factor), normalization)
+    if resize_factor is not None and normalization is not None:
+        if resize_factor <= 1.0:
+            frame = _normalize(_resize(frame, resize_factor), normalization)
+        else:
+            frame = _resize(_normalize(frame, normalization), resize_factor)
     else:
-        frame = _resize(_normalize(frame, normalization), resize_factor)
+        if resize_factor is not None:
+            frame = _resize(frame, resize_factor)
+        if normalization is not None:
+            frame = _normalize(frame, normalization)
 
-    return frame.astype(np.uint8)
+    return np.ascontiguousarray(frame, dtype=np.uint8)
 
 
 def get_nn_bgr_frame(

@@ -1,4 +1,4 @@
-.PHONY: help install clean docs blobs test ci
+.PHONY: help install clean docs blobs test ci mypy
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -6,6 +6,7 @@ help:
 	@echo "  clean      to clean the directory tree"
 	@echo "  docs       to generate the documentation"
 	@echo "  ci 	    to run the CI workflows"
+	@echo "  mypy       to run the type checker"
 	@echo "  blobs      to compile the models"
 	@echo "  stubs      to generate the stubs"
 	@echo "  test       to run the tests"
@@ -29,14 +30,17 @@ docs:
 blobs:
 	python3 scripts/compile_models.py
 
-ci:
-	./scripts/pyupgrade.sh
+ci: mypy
+	./scripts/ci/pyupgrade.sh
 	python3 -m ruff ./src//oakutils --fix
 	python3 -m isort src/oakutils
 	python3 -m black src/oakutils --safe
+
+mypy:
+	./scripts/ci/mypy.sh
 
 stubs:
 	python3 scripts/make_stubs.py
 
 test:
-	python3 -m pytest -s tests/*
+	./scripts/run_tests.sh

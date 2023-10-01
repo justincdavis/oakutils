@@ -17,12 +17,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import kornia
+import torch
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -46,7 +46,9 @@ class Opening(AbstractModel):
             The size of the kernel to use, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: Opening) -> ModelType:
@@ -72,7 +74,7 @@ class Opening(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        return kornia.morphology.opening(image, (self._kernel_size, self._kernel_size))
+        return kornia.morphology.opening(image, self._kernel)
 
 
 class OpeningGray(AbstractModel):
@@ -95,7 +97,9 @@ class OpeningGray(AbstractModel):
             The size of the kernel to use, by default 3
         """
         super().__init__()
-        self._kernel_size = kernel_size
+        self._kernel = torch.zeros((kernel_size, kernel_size))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
     def model_type(cls: OpeningGray) -> ModelType:
@@ -121,9 +125,7 @@ class OpeningGray(AbstractModel):
         image : torch.Tensor
             The input tensor to run the model on
         """
-        opening = kornia.morphology.opening(
-            image, (self._kernel_size, self._kernel_size)
-        )
+        opening = kornia.morphology.opening(image, self._kernel)
         return kornia.color.bgr_to_grayscale(opening)
 
 
@@ -153,8 +155,10 @@ class OpeningBlur(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -184,9 +188,7 @@ class OpeningBlur(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        return kornia.morphology.opening(
-            gaussian, (self._kernel_size2, self._kernel_size2)
-        )
+        return kornia.morphology.opening(gaussian, self._kernel)
 
 
 class OpeningBlurGray(AbstractModel):
@@ -215,8 +217,10 @@ class OpeningBlurGray(AbstractModel):
             The sigma value for the gaussian blur, by default 1.5
         """
         super().__init__()
+        self._kernel = torch.zeros((kernel_size2, kernel_size2))
+        self._kernel[kernel_size // 2, :] = 1.0
+        self._kernel[:, kernel_size // 2] = 1.0
         self._kernel_size = kernel_size
-        self._kernel_size2 = kernel_size2
         self._sigma = sigma
 
     @classmethod
@@ -246,7 +250,5 @@ class OpeningBlurGray(AbstractModel):
         gaussian = kornia.filters.gaussian_blur2d(
             image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
         )
-        opening = kornia.morphology.opening(
-            gaussian, (self._kernel_size2, self._kernel_size2)
-        )
+        opening = kornia.morphology.opening(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(opening)

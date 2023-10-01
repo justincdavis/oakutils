@@ -1,11 +1,11 @@
-name: Unit Tests - Windows
+name: Unit Tests - MacOS
 
 on: [ push ]
 
 jobs:
   build:
-    runs-on: windows-latest
-
+    runs-on: macos-latest
+    
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
@@ -26,5 +26,5 @@ jobs:
 
       - name: Run unit tests
         run: |
-          ./scripts/run_tests.bat
-  
+          ./scripts/run_tests.sh
+

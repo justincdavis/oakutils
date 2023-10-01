@@ -1,4 +1,4 @@
-name: Black Check
+name: MyPy Check
 on: [ push ]
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install .
-             pip install black
+             pip install mypy
 
       - name: Run black check
-        run: black --check src/oakutils
+        run: ./scripts/ci/mypy.sh
