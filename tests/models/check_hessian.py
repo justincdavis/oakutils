@@ -16,6 +16,7 @@ def check_method_timout(method: callable, name: str, timeout=5) -> Any:
         future = executor.submit(method)
         try:
             result = future.result(timeout=timeout)
+            assert result == 0
         except concurrent.futures.TimeoutError:
             future.cancel()
             raise TimeoutError(f"{name}, timed out after {timeout} seconds")
@@ -40,6 +41,8 @@ def check_hessian(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: 
     )
     _ = create_xout(pipeline, lp.out, "hessian")
 
+    if len(dai.Device.getAllAvailableDevices()) == 0:
+        return 0  # no device found
     with dai.Device(pipeline) as device:
         l_queue: dai.DataOutputQueue = device.getOutputQueue("hessian")
 
@@ -52,6 +55,7 @@ def check_hessian(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: 
                 l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
             if time.perf_counter() - t0 > TIME_TO_RUN:
                 break
+    return 0
 
 def test_hessian_3x3_1_shave():
     check_network(lambda: check_hessian(3, 1, False, False))

@@ -38,14 +38,13 @@ Webcam
 # setup the logger before importing anything else
 import logging
 import sys
+import os
 
 
 # Created from answer by Dennis at:
 # https://stackoverflow.com/questions/7621897/python-logging-module-globally
 def _setup_logger() -> None:
     # get logging level environment variable
-    import os
-
     level = os.getenv("OAKUTILS_LOG_LEVEL")
     if level is not None:
         level = level.upper()
@@ -71,6 +70,7 @@ def _setup_logger() -> None:
 
 
 _setup_logger()
+_log = logging.getLogger(__name__)
 
 
 from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
@@ -101,3 +101,5 @@ related hardware. It is intended to be used with the Luxonis DepthAI API.
 Provides easy-to-use classes for working with the OAK-D and doing
 common tasks. Also provides easy methods for working with OpenCV and Open3D.
 """
+
+_log.info(f"Initialized oakutils with version {__version__}")

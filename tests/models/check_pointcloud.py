@@ -17,6 +17,7 @@ def check_method_timout(method: callable, name: str, timeout=5) -> Any:
         future = executor.submit(method)
         try:
             result = future.result(timeout=timeout)
+            assert result == 0
         except concurrent.futures.TimeoutError:
             future.cancel()
             raise TimeoutError(f"{name}, timed out after {timeout} seconds")
@@ -27,7 +28,10 @@ def check_network(func: callable):
 
 
 def check_pointcloud(shaves: int):
-    """Test the sobel node"""
+    """Test the pointcloud node"""
+    if len(dai.Device.getAllAvailableDevices()) == 0:
+        return 0  # no device found
+    
     pipeline = dai.Pipeline()
 
     calibration = get_camera_calibration(
@@ -54,6 +58,7 @@ def check_pointcloud(shaves: int):
             pcl = get_nn_point_cloud(l_data)
             if time.perf_counter() - t0 > TIME_TO_RUN:
                 break
+    return 0
 
 def test_pointcloud_1_shave():
     check_network(lambda: check_pointcloud(1))
