@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera():
+class Camera:
     """
     Class for interfacing with the OAK-D camera.
 
@@ -347,11 +347,7 @@ class Camera():
                 if self._primary_mono_left
                 else dai.CameraBoardSocket.RIGHT
             )
-            (
-                stereo,
-                left,
-                right,
-            ) = create_stereo_depth(
+            (stereo, left, right,) = create_stereo_depth(
                 pipeline=self._pipeline,
                 resolution=self._mono_size[2],
                 fps=mono_fps,
