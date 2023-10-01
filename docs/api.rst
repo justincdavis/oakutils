@@ -10,6 +10,7 @@ oakutils
     source/oakutils.calibration
     source/oakutils.filters
     source/oakutils.nodes
+    source/oakutils.optimizer
     source/oakutils.point_clouds
     source/oakutils.tools
     source/oakutils.utils
