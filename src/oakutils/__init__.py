@@ -37,8 +37,8 @@ Webcam
 """
 # setup the logger before importing anything else
 import logging
-import sys
 import os
+import sys
 
 
 # Created from answer by Dennis at:
