@@ -28,7 +28,10 @@ def check_network(func: callable):
 
 
 def check_pointcloud(shaves: int):
-    """Test the sobel node"""
+    """Test the pointcloud node"""
+    if len(dai.Device.getAllAvailableDevices()) == 0:
+        return 0  # no device found
+    
     pipeline = dai.Pipeline()
 
     calibration = get_camera_calibration(
@@ -45,8 +48,6 @@ def check_pointcloud(shaves: int):
     )
     _ = create_xout(pipeline, pcl.out, "pcl")
 
-    if len(dai.Device.getAllAvailableDevices()) == 0:
-        return 0  # no device found
     with dai.Device(pipeline) as device:
         start_pcl(device)
         l_queue: dai.DataOutputQueue = device.getOutputQueue("pcl")
