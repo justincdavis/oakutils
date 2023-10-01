@@ -75,7 +75,7 @@ class ArucoLocalizer:
         tag : int
             The id of the marker to use
         transform : np.ndarray
-            The transform from the camera to the marker
+            The transform from the world to the marker
         """
         self._transforms[tag] = transform
 
