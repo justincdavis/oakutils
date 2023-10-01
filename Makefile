@@ -43,4 +43,4 @@ stubs:
 	python3 scripts/make_stubs.py
 
 test:
-	python3 -m pytest -s tests/*
+	./scripts/run_tests.sh

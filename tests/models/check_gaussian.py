@@ -4,7 +4,7 @@ from typing import Any
 
 import depthai as dai
 
-from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame
+from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_gaussian
 
 
@@ -16,6 +16,7 @@ def check_method_timout(method: callable, name: str, timeout=5) -> Any:
         future = executor.submit(method)
         try:
             result = future.result(timeout=timeout)
+            assert result == 0
         except concurrent.futures.TimeoutError:
             future.cancel()
             raise TimeoutError(f"{name}, timed out after 5 seconds")
@@ -39,15 +40,21 @@ def check_gaussian(kernel_size: int, shaves: int, grayscale_out: bool):
     )
     _ = create_xout(pipeline, lp.out, "gaussian")
 
+    if len(dai.Device.getAllAvailableDevices()) == 0:
+        return 0  # no device found
     with dai.Device(pipeline) as device:
         l_queue: dai.DataOutputQueue = device.getOutputQueue("gaussian")
 
         t0 = time.perf_counter()
         while True:
             l_data = l_queue.get()
-            l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
+            if not grayscale_out:
+                l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
+            else:
+                l_frame = get_nn_gray_frame(l_data, frame_size=(640, 480), normalization=255.0)
             if time.perf_counter() - t0 > TIME_TO_RUN:
                 break
+    return 0
 
 def test_gaussian_3x3_1_shave():
     check_network(lambda: check_gaussian(3, 1, False))
