@@ -27,9 +27,9 @@ create_point_cloud
 from . import callbacks
 from ._classes import PointCloudVisualizer
 from ._funcs import (
-    get_point_cloud_from_np_buffer,
     filter_point_cloud,
     get_point_cloud_from_depth_image,
+    get_point_cloud_from_np_buffer,
     get_point_cloud_from_rgb_depth_image,
 )
 from .callbacks import create_point_cloud

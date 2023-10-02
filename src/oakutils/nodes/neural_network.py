@@ -350,5 +350,6 @@ def get_nn_point_cloud_buffer(
         1, 3, frame_size[1], frame_size[0]
     )
     pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
-    pcl_data = pcl_data[pcl_data[:, 0] != 0]  # throwing out 0,0,0 drastically improves future filtering
-    return pcl_data
+    return pcl_data[
+        pcl_data[:, 0] != 0
+    ]  # throwing out 0,0,0 drastically improves future filtering
