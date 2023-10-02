@@ -152,7 +152,7 @@ def filter_point_cloud(
     return pcd
 
 
-def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
+def get_point_cloud_from_np_buffer(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
     """
     Convert a numpy array to an open3d point cloud.
 

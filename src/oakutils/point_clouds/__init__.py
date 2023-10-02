@@ -13,7 +13,7 @@ PointCloudVisualizer
 
 Functions
 ---------
-create_point_cloud_from_np
+get_point_cloud_from_np_buffer
     Use to create a point cloud from a numpy array.
 filter_point_cloud
     Use to filter a point cloud.
@@ -27,7 +27,7 @@ create_point_cloud
 from . import callbacks
 from ._classes import PointCloudVisualizer
 from ._funcs import (
-    create_point_cloud_from_np,
+    get_point_cloud_from_np_buffer,
     filter_point_cloud,
     get_point_cloud_from_depth_image,
     get_point_cloud_from_rgb_depth_image,
@@ -38,7 +38,7 @@ __all__ = [
     "callbacks",
     "get_point_cloud_from_rgb_depth_image",
     "get_point_cloud_from_depth_image",
-    "create_point_cloud_from_np",
+    "get_point_cloud_from_np_buffer",
     "filter_point_cloud",
     "PointCloudVisualizer",
     "create_point_cloud",

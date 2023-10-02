@@ -14,8 +14,8 @@ get_nn_bgr_frame
 get_nn_gray_frame
     Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
-get_nn_point_cloud
-    Takes the raw data output from a neural network execution and converts it to a point cloud.
+get_nn_point_cloud_buffer
+    Takes the raw data output from a neural network execution and converts it to a point cloud buffer.
 """
 from __future__ import annotations
 
@@ -321,7 +321,7 @@ def get_nn_gray_frame(
     )
 
 
-def get_nn_point_cloud(
+def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
@@ -344,9 +344,11 @@ def get_nn_point_cloud(
     Returns
     -------
     np.ndarray
-        Point cloud
+        Point cloud buffer
     """
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
-    return pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+    pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+    pcl_data = pcl_data[pcl_data[:, 0] != 0]  # throwing out 0,0,0 drastically improves future filtering
+    return pcl_data
