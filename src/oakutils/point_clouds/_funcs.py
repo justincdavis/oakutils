@@ -170,4 +170,5 @@ def get_point_cloud_from_np_buffer(pcl_data: np.ndarray) -> o3d.geometry.PointCl
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(pcl_data)
     pcd.remove_non_finite_points()
+    pcd.remove_duplicated_points()
     return pcd

@@ -325,6 +325,7 @@ def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
+    remove_zeros: bool | None = None,
 ) -> np.ndarray:
     """
     Use to convert the raw data output from a neural network execution and converts it to a point cloud.
@@ -340,16 +341,25 @@ def get_nn_point_cloud_buffer(
     scale: float, optional
         The scale to apply to the point cloud, by default 1000.0
         This will convert from mm to m.
+    remove_zeros: bool, optional
+        Whether to remove zero points, by default None
+        If None, then True is used
 
     Returns
     -------
     np.ndarray
         Point cloud buffer
     """
+    if remove_zeros is None:
+        remove_zeros = True
+
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
     pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
-    return pcl_data[
-        pcl_data[:, 0] != 0
-    ]  # throwing out 0,0,0 drastically improves future filtering
+
+    if remove_zeros:
+        pcl_mask = np.all(pcl_data != 0.0, axis=1)
+        pcl_data = pcl_data[pcl_mask]
+        
+    return pcl_data
