@@ -52,10 +52,15 @@ def get_point_cloud_from_rgb_depth_image(
         rgb_o3d, depth_o3d, depth_trunc=depth_trunc, depth_scale=depth_scale
     )
 
-    return o3d.geometry.PointCloud.create_from_rgbd_image(
+    pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
         rgbd_image,
         camera_intrinsics,
     )
+
+    pcd.remove_non_finite_points()
+    pcd.remove_duplicated_points()
+
+    return pcd
 
 
 def get_point_cloud_from_depth_image(
@@ -95,7 +100,7 @@ def get_point_cloud_from_depth_image(
 
     depth_o3d = o3d.geometry.Image(depth_image)
 
-    return o3d.geometry.PointCloud.create_from_depth_image(
+    pcd = o3d.geometry.PointCloud.create_from_depth_image(
         depth_o3d,
         camera_intrinsics,
         depth_scale=depth_scale,
@@ -103,6 +108,11 @@ def get_point_cloud_from_depth_image(
         stride=stride,
         project_valid_depth_only=project_valid_depth_only,
     )
+
+    pcd.remove_non_finite_points()
+    pcd.remove_duplicated_points()
+
+    return pcd
 
 
 def filter_point_cloud(

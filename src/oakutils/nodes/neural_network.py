@@ -361,5 +361,5 @@ def get_nn_point_cloud_buffer(
     if remove_zeros:
         pcl_mask = np.all(pcl_data != 0.0, axis=1)
         pcl_data = pcl_data[pcl_mask]
-        
+
     return pcl_data

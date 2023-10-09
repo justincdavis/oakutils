@@ -5,7 +5,7 @@ from typing import Any
 import depthai as dai
 
 from oakutils.calibration import get_camera_calibration
-from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud
+from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 from oakutils.nodes.models import create_point_cloud
 
 
@@ -55,7 +55,7 @@ def check_pointcloud(shaves: int):
         t0 = time.perf_counter()
         while True:
             l_data = l_queue.get()
-            pcl = get_nn_point_cloud(l_data)
+            pcl = get_nn_point_cloud_buffer(l_data)
             if time.perf_counter() - t0 > TIME_TO_RUN:
                 break
     return 0
