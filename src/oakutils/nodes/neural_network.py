@@ -344,6 +344,9 @@ def get_nn_point_cloud_buffer(
     remove_zeros: bool, optional
         Whether to remove zero points, by default None
         If None, then True is used
+        Recommended to set to True to remove zero points
+        Can speedup reading and filtering of the point cloud
+        by up to 10x
 
     Returns
     -------
@@ -359,7 +362,9 @@ def get_nn_point_cloud_buffer(
     pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
 
     if remove_zeros:
-        pcl_mask = np.all(pcl_data != 0.0, axis=1)
-        pcl_data = pcl_data[pcl_mask]
+        # optimization over an np.all since it performs less checks
+        # and realisticlly it does not matter if there is a few points
+        # difference over hundreds of interations
+        pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
 
     return pcl_data
