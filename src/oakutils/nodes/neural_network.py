@@ -228,7 +228,7 @@ def get_nn_frame(
     )
     frame += 0.5
     frame *= 255.0
-    
+
     if swap_rb:
         frame = frame[:, :, ::-1]
 
