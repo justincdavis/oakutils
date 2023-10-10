@@ -22,7 +22,21 @@ if TYPE_CHECKING:
 
 
 class WLSFilter:
-    """A class for computing the weighted-least-squares filter on disparity images."""
+    """
+    A class for computing the weighted-least-squares filter on disparity images.
+
+    Attributes
+    ----------
+    lamb : int
+        The lambda parameter for the WLS filter.
+    sigma : float
+        The sigma parameter for the WLS filter.
+
+    Methods
+    -------
+    filter_frame
+        Use to filter the disparity image.
+    """
 
     def __init__(
         self: Self,
@@ -55,6 +69,56 @@ class WLSFilter:
             use_confidence=False
         )
         self._filter.setLambda(self._lambda)
+        self._filter.setSigmaColor(self._sigma)
+
+    @property
+    def lamb(self: Self) -> int:
+        """
+        The lambda parameter for the WLS filter.
+
+        Returns
+        -------
+        int
+            The lambda parameter.
+        """
+        return self._lambda
+
+    @lamb.setter
+    def lamb(self: Self, value: int) -> None:
+        """
+        Use to set the lambda parameter for the WLS filter.
+
+        Parameters
+        ----------
+        value : int
+            The new lambda parameter.
+        """
+        self._lambda = value
+        self._filter.setLambda(self._lambda)
+
+    @property
+    def sigma(self: Self) -> float:
+        """
+        The sigma parameter for the WLS filter.
+
+        Returns
+        -------
+        float
+            The sigma parameter.
+        """
+        return self._sigma
+
+    @sigma.setter
+    def sigma(self: Self, value: float) -> None:
+        """
+        Use to set the sigma parameter for the WLS filter.
+
+        Parameters
+        ----------
+        value : float
+            The new sigma parameter.
+        """
+        self._sigma = value
         self._filter.setSigmaColor(self._sigma)
 
     def filter_frame(
