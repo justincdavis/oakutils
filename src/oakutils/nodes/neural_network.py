@@ -182,7 +182,7 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = 255.0,
+    normalization: float | Callable | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -201,7 +201,7 @@ def get_nn_frame(
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
     normalization : Optional[float, Callable], optional
-        The normalization to apply to the frame, by default 255.0
+        The normalization to apply to the frame, by default None
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
         set to the return value.
@@ -209,6 +209,7 @@ def get_nn_frame(
         after resizing.
     swap_rb : Optional[bool], optional
         Whether to swap the red and blue channels, by default None
+        If None, then False is used
 
     Returns
     -------
@@ -225,7 +226,9 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-
+    frame += 0.5
+    frame *= 255.0
+    
     if swap_rb:
         frame = frame[:, :, ::-1]
 
@@ -367,4 +370,4 @@ def get_nn_point_cloud_buffer(
         # difference over hundreds of interations
         pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
 
-    return np.unique(pcl_data)
+    return pcl_data
