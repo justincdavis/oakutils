@@ -367,4 +367,4 @@ def get_nn_point_cloud_buffer(
         # difference over hundreds of interations
         pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
 
-    return pcl_data
+    return np.unique(pcl_data)
