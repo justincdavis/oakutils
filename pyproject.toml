@@ -4,11 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oakutils"
-<<<<<<< HEAD
 version = "1.2.1"
-=======
-version = "1.2.0"
->>>>>>> b2da46c527ff9599309546c36de3eac75d176d4f
 authors = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
