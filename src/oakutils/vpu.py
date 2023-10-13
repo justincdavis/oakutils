@@ -56,7 +56,9 @@ class VPU:
         self._thread.join()
 
     def reconfigure(
-        self: Self, blob_path: str, input_names: list[str] | None = None, input_size: int = 1
+        self: Self,
+        blob_path: str,
+        input_names: list[str] | None = None,
     ) -> None:
         """
         Use to reconfigure the VPU with a new blob file.
