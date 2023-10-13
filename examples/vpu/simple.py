@@ -12,7 +12,7 @@ def main():
 
     fps_buffer = deque(maxlen=30)
     while True:
-        # generate some random data
+        # generate some random data, then send to camera and wait for the result
         data = np.array(np.random.random((640, 480, 3)) * 255.0, dtype=np.uint8)
         t0 = time.perf_counter()
         vpu.run(data)

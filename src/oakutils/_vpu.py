@@ -8,6 +8,7 @@ VPU
 """
 from __future__ import annotations
 
+import atexit
 import logging
 from threading import Condition, Thread
 from typing import TYPE_CHECKING
@@ -24,7 +25,18 @@ _log = logging.getLogger(__name__)
 
 
 class VPU:
-    """Class for using the onboard VPU as a standalone processor."""
+    """
+    Class for using the onboard VPU as a standalone processor.
+
+    Methods
+    -------
+    stop()
+        Use to stop the VPU.
+    reconfigure(blob_path, input_names=None)
+        Use to reconfigure the VPU with a new blob file.
+    run(data)
+        Use to run an inference on the VPU.
+    """
 
     def __init__(self: Self) -> None:
         """
@@ -48,6 +60,34 @@ class VPU:
         self._data: np.ndarray | list[np.ndarray] | None = None
         self._result: np.ndarray | None = None
 
+        atexit.register(self.stop)
+
+    def __del__(self: Self) -> None:
+        """Use to stop the VPU."""
+        self.stop()
+
+    def __call__(self: Self, data: np.ndarray | list[np.ndarray]) -> np.ndarray:
+        """
+        Use to run an inference on the VPU.
+
+        Parameters
+        ----------
+        data : np.ndarray | list[np.ndarray]
+            The data to run an inference on.
+
+
+        Returns
+        -------
+        np.ndarray
+            The result of the inference.
+
+        Raises
+        ------
+        RuntimeError
+            If the blob path is not set.
+        """
+        return self.run(data)
+
     def stop(self: Self) -> None:
         """Use to stop the VPU."""
         self._stopped = True
@@ -70,6 +110,10 @@ class VPU:
         input_names : list[str]
             The names of the input layers. Defaults to None.
         """
+        # stop the VPU if it is running
+        if self._thread is not None:
+            self.stop()
+        self._stopped = False
         self._blob_path = blob_path
         # create pipeline with neural network
         self._pipeline = dai.Pipeline()
@@ -110,6 +154,7 @@ class VPU:
             while not self._stopped:
                 with self._condition:
                     self._condition.wait()
+                _log.debug("VPU thread notified.")
                 if self._stopped:
                     _log.debug("VPU stopped, breaking.")
                     break
@@ -125,6 +170,7 @@ class VPU:
                     buff.setData(self._data)
                     device.getInputQueue("vpu_in").send(buff)
                 self._result = device.getOutputQueue("vpu_out").get()
+                _log.debug("VPU result received, notifying primary thread.")
                 with self._condition:
                     self._condition.notify()
 
