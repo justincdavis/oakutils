@@ -76,6 +76,7 @@ _log = logging.getLogger(__name__)
 from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
 from .api_camera import Camera as ApiCamera
 from .legacy_camera import Camera as LegacyCamera
+from .vpu import VPU
 from .webcam import Webcam
 
 __all__ = [
@@ -90,6 +91,7 @@ __all__ = [
     "optimizer",
     "point_clouds",
     "tools",
+    "VPU",
 ]
 __version__ = "1.2.1"
 
