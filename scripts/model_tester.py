@@ -74,6 +74,7 @@ def main():
         queue: dai.DataOutputQueue = device.getOutputQueue(streamname)
         t0 = time.perf_counter()
         while True:
+            t0 = time.perf_counter()
             data = queue.get()
             frame = get_nn_frame(
                 data,
