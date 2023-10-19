@@ -50,8 +50,8 @@ get_nn_bgr_frame
     Gets the output frame from the neural network node in BGR format.
 get_nn_gray_frame
     Gets the output frame from the neural network node in grayscale format.
-get_nn_point_cloud
-    Gets the output point cloud from the neural network node.
+get_nn_point_cloud_buffer
+    Gets the output point cloud buffer from the neural network node.
 """
 from . import (
     color_camera,
@@ -73,7 +73,7 @@ from .neural_network import (
     get_nn_bgr_frame,
     get_nn_frame,
     get_nn_gray_frame,
-    get_nn_point_cloud,
+    get_nn_point_cloud_buffer,
 )
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
 from .xin import create_xin
@@ -102,5 +102,5 @@ __all__ = [
     "get_nn_frame",
     "get_nn_bgr_frame",
     "get_nn_gray_frame",
-    "get_nn_point_cloud",
+    "get_nn_point_cloud_buffer",
 ]

@@ -12,35 +12,9 @@ Subpackages
    oakutils.calibration
    oakutils.filters
    oakutils.nodes
+   oakutils.optimizer
    oakutils.point_clouds
    oakutils.tools
-
-Submodules
-----------
-
-oakutils.api\_camera module
----------------------------
-
-.. automodule:: oakutils.api_camera
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-oakutils.legacy\_camera module
-------------------------------
-
-.. automodule:: oakutils.legacy_camera
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-oakutils.webcam module
-----------------------
-
-.. automodule:: oakutils.webcam
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module contents
 ---------------

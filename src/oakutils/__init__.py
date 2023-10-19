@@ -74,9 +74,10 @@ _log = logging.getLogger(__name__)
 
 
 from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
-from .api_camera import Camera as ApiCamera
-from .legacy_camera import Camera as LegacyCamera
-from .webcam import Webcam
+from ._api_camera import Camera as ApiCamera
+from ._legacy_camera import Camera as LegacyCamera
+from ._vpu import VPU
+from ._webcam import Webcam
 
 __all__ = [
     "ApiCamera",
@@ -90,8 +91,9 @@ __all__ = [
     "optimizer",
     "point_clouds",
     "tools",
+    "VPU",
 ]
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)

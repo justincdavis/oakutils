@@ -14,8 +14,8 @@ get_nn_bgr_frame
 get_nn_gray_frame
     Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
-get_nn_point_cloud
-    Takes the raw data output from a neural network execution and converts it to a point cloud.
+get_nn_point_cloud_buffer
+    Takes the raw data output from a neural network execution and converts it to a point cloud buffer.
 """
 from __future__ import annotations
 
@@ -182,7 +182,7 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = 255.0,
+    normalization: float | Callable | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -201,7 +201,7 @@ def get_nn_frame(
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
     normalization : Optional[float, Callable], optional
-        The normalization to apply to the frame, by default 255.0
+        The normalization to apply to the frame, by default None
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
         set to the return value.
@@ -209,6 +209,7 @@ def get_nn_frame(
         after resizing.
     swap_rb : Optional[bool], optional
         Whether to swap the red and blue channels, by default None
+        If None, then False is used
 
     Returns
     -------
@@ -225,6 +226,8 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
+    frame += 0.5
+    frame *= 255.0
 
     if swap_rb:
         frame = frame[:, :, ::-1]
@@ -321,10 +324,11 @@ def get_nn_gray_frame(
     )
 
 
-def get_nn_point_cloud(
+def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
+    remove_zeros: bool | None = None,
 ) -> np.ndarray:
     """
     Use to convert the raw data output from a neural network execution and converts it to a point cloud.
@@ -340,13 +344,30 @@ def get_nn_point_cloud(
     scale: float, optional
         The scale to apply to the point cloud, by default 1000.0
         This will convert from mm to m.
+    remove_zeros: bool, optional
+        Whether to remove zero points, by default None
+        If None, then True is used
+        Recommended to set to True to remove zero points
+        Can speedup reading and filtering of the point cloud
+        by up to 10x
 
     Returns
     -------
     np.ndarray
-        Point cloud
+        Point cloud buffer
     """
+    if remove_zeros is None:
+        remove_zeros = True
+
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
-    return pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+    pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+
+    if remove_zeros:
+        # optimization over an np.all since it performs less checks
+        # and realisticlly it does not matter if there is a few points
+        # difference over hundreds of interations
+        pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
+
+    return pcl_data

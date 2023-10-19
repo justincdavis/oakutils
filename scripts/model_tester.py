@@ -5,11 +5,13 @@ Adjust the Custom class to your liking, and then run this script to test it out.
 from __future__ import annotations
 
 import time
+from collections import deque
 
 import torch
 import kornia
 import cv2
 import depthai as dai
+import numpy as np
 from typing_extensions import Self
 from oakutils.blobs import compile_model
 from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
@@ -65,10 +67,12 @@ def main():
     )
     streamname = "network"
     xout_nn = create_xout(pipeline, custom_network.out, streamname)
+    fps_buffer = deque(maxlen=60)
     with dai.Device(pipeline) as device:
         device.setLogLevel(dai.LogLevel.DEBUG)
         device.setLogOutputLevel(dai.LogLevel.DEBUG)
         queue: dai.DataOutputQueue = device.getOutputQueue(streamname)
+        t0 = time.perf_counter()
         while True:
             t0 = time.perf_counter()
             data = queue.get()
@@ -78,7 +82,9 @@ def main():
                 frame_size=IMAGE_SIZE, 
             )
             t1 = time.perf_counter()
-            cv2.putText(frame, f"FPS: {1/(t1-t0):.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            fps_buffer.append(1/(t1-t0))
+            t0 = t1
+            cv2.putText(frame, f"FPS: {np.mean(fps_buffer):.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow(streamname, frame)
             if cv2.waitKey(1) == ord("q"):
                 break
