@@ -93,7 +93,7 @@ __all__ = [
     "tools",
     "VPU",
 ]
-__version__ = "1.2.1"
+__version__ = "1.3.0"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)
