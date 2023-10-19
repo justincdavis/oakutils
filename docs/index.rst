@@ -23,6 +23,7 @@ Contents
    Usage <usage>
    Installation <installation>
    Compiling Custom Models and CV Functions <compiling>
+   Using the OAK-D as a standalone processing unit <vpu>
    API <api>
 
 Indices and Tables

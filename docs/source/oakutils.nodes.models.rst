@@ -12,6 +12,30 @@ oakutils.nodes.models.gaussian module
    :undoc-members:
    :show-inheritance:
 
+oakutils.nodes.models.gftt module
+---------------------------------
+
+.. automodule:: oakutils.nodes.models.gftt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.nodes.models.harris module
+-----------------------------------
+
+.. automodule:: oakutils.nodes.models.harris
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.nodes.models.hessian module
+------------------------------------
+
+.. automodule:: oakutils.nodes.models.hessian
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 oakutils.nodes.models.laplacian module
 --------------------------------------
 
