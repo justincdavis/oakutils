@@ -93,7 +93,11 @@ class VPU:
         self._stopped = True
         with self._condition:
             self._condition.notify()
-        self._thread.join()
+        if self._thread is not None:
+            if self._thread.is_alive():
+                self._thread.join()
+            else:
+                pass
 
     def reconfigure(
         self: Self,
