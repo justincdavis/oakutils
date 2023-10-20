@@ -3,7 +3,7 @@ Module for interacting with the OAK-D enabling easy access to the RGB, depth, an
 
 Classes
 -------
-Camera
+LegacyCamera
     Class for interfacing with the OAK-D camera with fixed pipeline.
 """
 from __future__ import annotations
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera:
+class LegacyCamera:
     """
     Class for interfacing with the OAK-D camera.
 

@@ -9,6 +9,7 @@ to launch and cameras or other sensors onboard the OAK-D.
 An example is as follows:
 
 .. code-block:: python
+    
     import numpy as np
     from oakutils.blobs.models.shave6 import GAUSSIAN_15X15
     from oakutils import VPU
