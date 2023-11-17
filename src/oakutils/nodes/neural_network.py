@@ -20,12 +20,14 @@ get_nn_point_cloud_buffer
 from __future__ import annotations
 
 import logging
-from pathlib import Path
-from typing import Callable, Iterable
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import cv2
 import depthai as dai
 import numpy as np
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 _log = logging.getLogger(__name__)
 
@@ -33,7 +35,7 @@ _log = logging.getLogger(__name__)
 def create_neural_network(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output | Iterable[dai.Node.Output],
-    blob_path: str,
+    blob_path: Path,
     input_names: str | Iterable[str] | None = None,
     reuse_messages: bool | Iterable[bool | None] | None = None,
     num_inference_threads: int = 2,
@@ -97,11 +99,9 @@ def create_neural_network(
                     "input_link and reuse_messages must be the same length if both are iterables"
                 )
 
-    bpath: Path = Path(blob_path)
-
     # create the node and handle the always present parameters
     nn = pipeline.create(dai.node.NeuralNetwork)
-    nn.setBlobPath(bpath)
+    nn.setBlobPath(blob_path)
     nn.setNumInferenceThreads(num_inference_threads)
 
     # handle the optional parameters
