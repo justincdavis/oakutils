@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """
 Package for Python utilities for the OpenCV AI Kit (OAK-D) and related hardware.
 
@@ -34,10 +35,49 @@ LegacyCamera
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 """
+# setup the logger before importing anything else
+import logging
+import os
+import sys
+
+
+# Created from answer by Dennis at:
+# https://stackoverflow.com/questions/7621897/python-logging-module-globally
+def _setup_logger() -> None:
+    # get logging level environment variable
+    level = os.getenv("OAKUTILS_LOG_LEVEL")
+    if level is not None:
+        level = level.upper()
+    level_map = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "WARN": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL,
+        None: logging.WARNING,
+    }
+    level = level_map[level]
+
+    # create logger
+    logger = logging.getLogger(__package__)
+    logger.setLevel(level)
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(level)
+    stdout_handler.setFormatter(formatter)
+    logger.addHandler(stdout_handler)
+
+
+_setup_logger()
+_log = logging.getLogger(__name__)
+
+
 from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
-from .api_camera import Camera as ApiCamera
-from .legacy_camera import Camera as LegacyCamera
-from .webcam import Webcam
+from ._api_camera import ApiCamera
+from ._legacy_camera import LegacyCamera
+from ._vpu import VPU
+from ._webcam import Webcam
 
 __all__ = [
     "ApiCamera",
@@ -51,8 +91,9 @@ __all__ = [
     "optimizer",
     "point_clouds",
     "tools",
+    "VPU",
 ]
-__version__ = "1.1.0"
+__version__ = "1.3.0"
 
 ___doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)
@@ -62,3 +103,5 @@ related hardware. It is intended to be used with the Luxonis DepthAI API.
 Provides easy-to-use classes for working with the OAK-D and doing
 common tasks. Also provides easy methods for working with OpenCV and Open3D.
 """
+
+_log.info(f"Initialized oakutils with version {__version__}")

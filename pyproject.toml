@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oakutils"
-version = "1.1.0"
+version = "1.3.0"
 authors = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
@@ -27,21 +27,29 @@ classifiers = [
     "Natural Language :: English",
     "Topic :: System :: Hardware",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Image Recognition",
     "Topic :: Software Development",
+    "Topic :: Software Development :: Embedded Systems",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Hardware",
     "Intended Audience :: Developers",
+    "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Education",
     "Intended Audience :: Information Technology",
+    "Intended Audience :: End Users/Desktop",
     "Typing :: Typed",
 ]
 requires-python=">=3.8, <3.11"
 dependencies = [
-    "depthai>=2.20",
-    "depthai-sdk>=1.11.0",
+    "depthai>=2.22",
     "numpy>=1.20",
     "open3d>=0.16",
     "opencv-contrib-python>=4.8",
     "typing_extensions>=4.0.0",
+    "setuptools",
 ]
 
 [project.urls]
@@ -57,24 +65,33 @@ compiler = [
     "onnxsim",
     "blobconverter==1.4.2",
 ]
-dev = [
-    "oakutils[compiler]",
+ci = [
     "pyupgrade",
     "black",
     "isort",
     "ruff",
     "mypy",
+]
+test = [
+    "pytest",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+dev = [
+    "oakutils[compiler]",
+    "oakutils[ci]",
+    "oakutils[test]",
+    "oakutils[docs]",
     "twine",
     "wheel",
     "bumpver",
-    "sphinx",
-    "sphinx-rtd-theme",
     "pyclean",
-    "pytest",
 ]
 
 [tool.bumpver]
-current_version = "1.1.0"
+current_version = "1.3.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true

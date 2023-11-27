@@ -3,7 +3,7 @@ Module for creating custom pipelines using a lightweight callback based class.
 
 Classes
 -------
-Camera
+ApiCamera
     A lightweight class for creating custom pipelines using callbacks.
 """
 from __future__ import annotations
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-class Camera:
+class ApiCamera:
     """
     A lightweight class for creating custom pipelines using callbacks.
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+import logging
 import time
 from collections import deque
 from typing import TYPE_CHECKING, Any, Callable
@@ -11,6 +12,8 @@ from ._grid_search import grid_search
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+_log = logging.getLogger(__name__)
 
 
 class Optimizer:
@@ -100,8 +103,8 @@ class Optimizer:
         all_latencies: list[dict[str, float]] = []
 
         # run each measure trial
-        for _ in range(self._measure_trials):
-            print(f"Running trial {_ + 1} of {self._measure_trials}")
+        for trial in range(self._measure_trials):
+            _log.debug(f"Running trial {trial + 1} of {self._measure_trials}")
             # create the pipeline
             pipeline: dai.Pipeline = dai.Pipeline()
             device_funcs = pipeline_func(pipeline, pipeline_args)
@@ -122,7 +125,7 @@ class Optimizer:
                 for q_name in queue_names:
                     data_times[q_name] = []
                 queues: dict[str, dai.DataOutputQueue] = {
-                    q: device.getOutputQueue(name=q, maxSize=1, blocking=False)  # type: ignore[attr-defined]
+                    q: device.getOutputQueue(name=q)  # type: ignore[attr-defined]
                     for q in queue_names
                 }
 
@@ -130,16 +133,24 @@ class Optimizer:
                 past: deque[float] = deque(maxlen=self._stability_length)
                 counter = 0
                 t0 = time.perf_counter()
+                device_t0 = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
                 while not stopped:
                     counter += 1
                     # get start time
                     t1 = time.perf_counter()
                     # handle data
                     for queue_name, queue in queues.items():
-                        print(f"      {queue_name}")
+                        _log.debug(f"      {queue_name}")
                         data = queue.get()
+                        data.getData()  # type: ignore[attr-defined]
                         if counter >= self._warmup_cycles:
-                            ts: float = (dai.Clock.now() - data.getTimestamp()).total_seconds() * 1000  # type: ignore[attr-defined, call-arg]
+                            current: float = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
+                            data_ts: float = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
+                            _log.debug(
+                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}"
+                            )
+                            ts: float = current - device_t0 - data_ts
+                            _log.debug(f"Measured latency: {ts:.2f}ms for {queue_name}")
                             data_times[queue_name].append(ts)
                     # handle cycles
                     if counter < self._warmup_cycles:
@@ -147,10 +158,11 @@ class Optimizer:
                     # get end time
                     t2 = time.perf_counter()
                     cycle_time = t2 - t1
+                    _log.debug(f"Measured cycle time: {cycle_time:.2f}ms")
                     cycle_times.append(cycle_time)
                     past.append(cycle_time)
                     elapsed = t2 - t0
-                    print(f"   Elapsed: {elapsed:.2f}s")
+                    _log.debug(f"Trial: {trial + 1}, Elapsed: {elapsed:.2f}s")
                     stopped1 = elapsed > self._max_measure_time
                     stopped2 = (
                         max(past) - min(past) < self._stability_threshold
@@ -170,16 +182,17 @@ class Optimizer:
             latencies.append(avg_latency)
             all_latencies.append(avg_latencies)
 
-        print("Computing average stats")
+        _log.debug(
+            f"Done measuring, computing results on {self._measure_trials} trials"
+        )
         # compute average fps
         avg_fps = sum(fps) / len(fps)
         avg_latencies_final = sum(latencies) / len(latencies)
         avg_all_latencies: dict[str, float] = {}
         for key in all_latencies[0]:
-            print(f"   {key}")
+            _log.debug(f"   {key}")
             key_data = [latency[key] for latency in all_latencies]
             avg_all_latencies[key] = sum(key_data) / len(key_data)
-        print("Done")
 
         return avg_fps, avg_latencies_final, avg_all_latencies
 
@@ -191,9 +204,9 @@ class Optimizer:
         pipeline_args: dict[str, list[Any]],
         objective_func: Callable[
             [list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]],
-            dict[str, Any],
+            tuple[dict[str, Any], tuple[float, float, dict[str, float]]],
         ],
-    ) -> dict[str, Any]:
+    ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
         """
         Use to generate optimized arguments for a pipeline.
 
@@ -210,29 +223,17 @@ class Optimizer:
         -------
         dict[str, Any]
             The optimized arguments
+        tuple[float, float, dict[str, float]]
+            The best measurement results
         """
         # generate all possible assignments
         possible_args: list[dict[str, Any]] = [
             dict(zip(pipeline_args.keys(), values))
             for values in itertools.product(*pipeline_args.values())
         ]
-        try:
-            # run the selected algorithm for generating measurements
-            results = self._algorithm(  # type: ignore[call-arg]
-                pipeline_func=pipeline_func,
-                possible_args=possible_args,
-                measure_func=self.measure,
-            )
-            # run the objective function to get the best arguments
-            return objective_func(results)
-        except TypeError:
-            # algorithms which use the objective function internally
-            # unlike grid-search which generates all args and then the objective is run
-            # after the fact
-            # These will use the objective function to inform the measurement process
-            return self._algorithm(  # type: ignore[call-arg, return-value]
-                pipeline_func=pipeline_func,
-                possible_args=possible_args,
-                measure_func=self.measure,
-                objective_func=objective_func,
-            )
+        return self._algorithm(
+            pipeline_func=pipeline_func,
+            possible_args=possible_args,
+            measure_func=self.measure,
+            objective_func=objective_func,
+        )

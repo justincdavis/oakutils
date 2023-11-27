@@ -8,6 +8,7 @@ create_gftt
 """
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from ._load import create_no_args_model as _create_no_args_model
@@ -15,6 +16,8 @@ from ._load import create_single_kernel_model as _create_single_kernel_model
 
 if TYPE_CHECKING:
     import depthai as dai
+
+_log = logging.getLogger(__name__)
 
 
 def create_gftt(
@@ -59,6 +62,8 @@ def create_gftt(
     ValueError
         If the kernel_size is invalid
     """
+    _log.warning("GFTT has errors running when color camera FPS is above 15")
+
     if use_blur is None:
         use_blur = False
     if grayscale_out is None:

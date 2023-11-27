@@ -11,7 +11,8 @@ how to :ref:`installation` the project.
 
 .. note::
 
-   This project is under active development.
+   This project is under active development. Major API changes could occur between releases, but stability is expected when
+   using version 1.3.0 or higher.
 
 Contents
 --------
@@ -23,6 +24,8 @@ Contents
    Usage <usage>
    Installation <installation>
    Compiling Custom Models and CV Functions <compiling>
+   Optimzing Custom Pipelines <optimizing>
+   Using the OAK-D as a standalone processing unit <vpu>
    API <api>
 
 Indices and Tables

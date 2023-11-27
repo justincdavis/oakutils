@@ -30,9 +30,9 @@ docs:
 blobs:
 	python3 scripts/compile_models.py
 
-ci:	mypy
+ci: mypy
 	./scripts/ci/pyupgrade.sh
-	python3 -m ruff ./src/oakutils --fix
+	python3 -m ruff ./src//oakutils --fix
 	python3 -m isort src/oakutils
 	python3 -m black src/oakutils --safe
 
@@ -43,4 +43,4 @@ stubs:
 	python3 scripts/make_stubs.py
 
 test:
-	python3 -m pytest -s tests/*
+	./scripts/run_tests.sh

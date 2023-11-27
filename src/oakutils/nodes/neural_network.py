@@ -14,28 +14,31 @@ get_nn_bgr_frame
 get_nn_gray_frame
     Takes the raw data output from a neural network execution and converts it to a grayscale frame
     usable by cv2.
-get_nn_point_cloud
-    Takes the raw data output from a neural network execution and converts it to a point cloud.
+get_nn_point_cloud_buffer
+    Takes the raw data output from a neural network execution and converts it to a point cloud buffer.
 """
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Callable, Sized
+import logging
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import cv2
 import depthai as dai
 import numpy as np
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
+_log = logging.getLogger(__name__)
+
 
 def create_neural_network(
     pipeline: dai.Pipeline,
-    input_link: dai.Node.Output | Sized[dai.Node.Output],
-    blob_path: str,
-    input_names: str | Sized[str] | None = None,
-    input_sizes: int | Sized[int] | None = None,
-    input_blocking: bool | Sized[bool] | None = None,
-    reuse_messages: bool | Sized[bool | None] | None = None,
-    num_inference_threads: int = 0,
+    input_link: dai.Node.Output | Iterable[dai.Node.Output],
+    blob_path: Path,
+    input_names: str | Iterable[str] | None = None,
+    reuse_messages: bool | Iterable[bool | None] | None = None,
+    num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -145,11 +148,9 @@ def create_neural_network(
         if input_blocking is None:
             input_blocking = False
 
-    bpath: Path = Path(blob_path)
-
     # create the node and handle the always present parameters
     nn = pipeline.create(dai.node.NeuralNetwork)
-    nn.setBlobPath(bpath)
+    nn.setBlobPath(blob_path)
     nn.setNumInferenceThreads(num_inference_threads)
 
     # handle the optional parameters
@@ -161,28 +162,13 @@ def create_neural_network(
     # connect the input link to the neural network node
     if not hasattr(input_link, "__len__"):
         # handle a single input to the network
-        if input_names is not None:
-            input_link.link(nn.inputs[input_names])
-            if reuse_messages is not None:
-                nn.inputs[input_names].setReusePreviousMessage(reuse_messages)
-            if input_sizes is not None:
-                nn.inputs[input_names].setQueueSize(input_sizes)
-            if input_blocking is not None:
-                nn.inputs[input_names].setBlocking(input_blocking)
-        # otherwise use the generic method
-        else:
-            input_link.link(nn.input)
-            if reuse_messages is not None:
-                nn.input.setReusePreviousMessage(reuse_messages)
-            if input_sizes is not None:
-                nn.input.setQueueSize(input_sizes)
-            if input_blocking is not None:
-                nn.input.setBlocking(input_blocking)
+        input_link.link(nn.input)
     else:
-        input_data = zip(
-            input_link, input_names, input_sizes, input_blocking, reuse_messages
-        )
-        for link, name, size, blocking, reuse_message in input_data:
+        input_data = zip(input_link, input_names, reuse_messages)
+        for link, name, reuse_message in input_data:
+            _log.debug(
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+            )
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
@@ -259,7 +245,7 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = 255.0,
+    normalization: float | Callable | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -278,7 +264,7 @@ def get_nn_frame(
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
     normalization : Optional[float, Callable], optional
-        The normalization to apply to the frame, by default 255.0
+        The normalization to apply to the frame, by default None
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
         set to the return value.
@@ -286,6 +272,7 @@ def get_nn_frame(
         after resizing.
     swap_rb : Optional[bool], optional
         Whether to swap the red and blue channels, by default None
+        If None, then False is used
 
     Returns
     -------
@@ -302,16 +289,24 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
+    frame += 0.5
+    frame *= 255.0
 
     if swap_rb:
         frame = frame[:, :, ::-1]
 
-    if resize_factor is not None and resize_factor <= 1.0:
-        frame = _normalize(_resize(frame, resize_factor), normalization)
+    if resize_factor is not None and normalization is not None:
+        if resize_factor <= 1.0:
+            frame = _normalize(_resize(frame, resize_factor), normalization)
+        else:
+            frame = _resize(_normalize(frame, normalization), resize_factor)
     else:
-        frame = _resize(_normalize(frame, normalization), resize_factor)
+        if resize_factor is not None:
+            frame = _resize(frame, resize_factor)
+        if normalization is not None:
+            frame = _normalize(frame, normalization)
 
-    return frame.astype(np.uint8)
+    return np.ascontiguousarray(frame, dtype=np.uint8)
 
 
 def get_nn_bgr_frame(
@@ -392,10 +387,11 @@ def get_nn_gray_frame(
     )
 
 
-def get_nn_point_cloud(
+def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
+    remove_zeros: bool | None = None,
 ) -> np.ndarray:
     """
     Use to convert the raw data output from a neural network execution and converts it to a point cloud.
@@ -411,13 +407,30 @@ def get_nn_point_cloud(
     scale: float, optional
         The scale to apply to the point cloud, by default 1000.0
         This will convert from mm to m.
+    remove_zeros: bool, optional
+        Whether to remove zero points, by default None
+        If None, then True is used
+        Recommended to set to True to remove zero points
+        Can speedup reading and filtering of the point cloud
+        by up to 10x
 
     Returns
     -------
     np.ndarray
-        Point cloud
+        Point cloud buffer
     """
+    if remove_zeros is None:
+        remove_zeros = True
+
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
         1, 3, frame_size[1], frame_size[0]
     )
-    return pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+    pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
+
+    if remove_zeros:
+        # optimization over an np.all since it performs less checks
+        # and realisticlly it does not matter if there is a few points
+        # difference over hundreds of interations
+        pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
+
+    return pcl_data

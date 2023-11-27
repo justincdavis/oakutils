@@ -14,7 +14,9 @@ jobs:
           python-version: 3.9
 
       - name: Install dependencies
-        run: pip install .[dev]
+        run: 
+          pip install .
+          pip install mypy
 
       - name: Run black check
         run: ./scripts/ci/mypy.sh

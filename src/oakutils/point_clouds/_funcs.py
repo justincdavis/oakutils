@@ -15,6 +15,9 @@ def get_point_cloud_from_rgb_depth_image(
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
+    image_is_bgr: bool | None = None,
+    remove_non_finite: bool | None = None,
+    remove_duplicates: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """
     Use to create an o3d point cloud from an RGB and a depth image.
@@ -32,18 +35,34 @@ def get_point_cloud_from_rgb_depth_image(
         values to 25 meters.
     depth_scale : float, optional
         Depth scaling factor. Defaults to 1000.0 to convert from millimeters to meters.
+    image_is_bgr: bool, optional
+        If True, converts the RGB image from BGR to RGB. If None will default to True.
+    remove_non_finite : bool, optional
+        If True, removes non-finite points. If None will default to True.
+        Disabling could result in slight speedup.
+    remove_duplicates : bool, optional
+        If True, removes duplicate points. If None will default to True.
+        Disabling could result in slight speedup.
 
     Returns
     -------
     o3d.geometry.PointCloud
         The point cloud created from the RGB and depth images.
     """
+    if image_is_bgr is None:
+        image_is_bgr = True
+    if remove_non_finite is None:
+        remove_non_finite = True
+    if remove_duplicates is None:
+        remove_duplicates = True
+
     if (
         rgb_image.shape[0] != depth_image.shape[0]
         or rgb_image.shape[1] != depth_image.shape[1]
     ):
         rgb_image = cv2.resize(rgb_image, (depth_image.shape[1], depth_image.shape[0]))
-    rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
+    if image_is_bgr:
+        rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
 
     rgb_o3d = o3d.geometry.Image(rgb_image)
     depth_o3d = o3d.geometry.Image(depth_image)
@@ -52,10 +71,17 @@ def get_point_cloud_from_rgb_depth_image(
         rgb_o3d, depth_o3d, depth_trunc=depth_trunc, depth_scale=depth_scale
     )
 
-    return o3d.geometry.PointCloud.create_from_rgbd_image(
+    pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
         rgbd_image,
         camera_intrinsics,
     )
+
+    if remove_duplicates:
+        pcd.remove_duplicated_points()
+    if remove_non_finite:
+        pcd.remove_non_finite_points()
+
+    return pcd
 
 
 def get_point_cloud_from_depth_image(
@@ -65,6 +91,8 @@ def get_point_cloud_from_depth_image(
     depth_trunc: float = 25000.0,
     stride: int = 1,
     project_valid_depth_only: bool | None = None,
+    remove_non_finite: bool | None = None,
+    remove_duplicates: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """
     Use to create an o3d point cloud from a depth image.
@@ -84,6 +112,12 @@ def get_point_cloud_from_depth_image(
         Sampling factor to support coarse point cloud extraction. Defaults to 1.
     project_valid_depth_only : bool, optional
         If True, only projects pixels with valid depth values. Defaults to True.
+    remove_non_finite : bool, optional
+        If True, removes non-finite points. If None will default to True.
+        Disabling could result in slight speedup.
+    remove_duplicates : bool, optional
+        If True, removes duplicate points. If None will default to True.
+        Disabling could result in slight speedup.
 
     Returns
     -------
@@ -92,10 +126,14 @@ def get_point_cloud_from_depth_image(
     """
     if project_valid_depth_only is None:
         project_valid_depth_only = True
+    if remove_non_finite is None:
+        remove_non_finite = True
+    if remove_duplicates is None:
+        remove_duplicates = True
 
     depth_o3d = o3d.geometry.Image(depth_image)
 
-    return o3d.geometry.PointCloud.create_from_depth_image(
+    pcd = o3d.geometry.PointCloud.create_from_depth_image(
         depth_o3d,
         camera_intrinsics,
         depth_scale=depth_scale,
@@ -103,6 +141,13 @@ def get_point_cloud_from_depth_image(
         stride=stride,
         project_valid_depth_only=project_valid_depth_only,
     )
+
+    if remove_duplicates:
+        pcd.remove_duplicated_points()
+    if remove_non_finite:
+        pcd.remove_non_finite_points()
+
+    return pcd
 
 
 def filter_point_cloud(
@@ -152,7 +197,7 @@ def filter_point_cloud(
     return pcd
 
 
-def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
+def get_point_cloud_from_np_buffer(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
     """
     Convert a numpy array to an open3d point cloud.
 
@@ -169,5 +214,4 @@ def create_point_cloud_from_np(pcl_data: np.ndarray) -> o3d.geometry.PointCloud:
     """
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(pcl_data)
-    pcd.remove_non_finite_points()
     return pcd

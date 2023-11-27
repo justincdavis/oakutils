@@ -14,7 +14,8 @@ jobs:
           python-version: 3.9
 
       - name: Install dependencies
-        run: pip install .[dev]
+        run: pip install .
+             pip install black
 
       - name: Run black check
         run: black --check src/oakutils

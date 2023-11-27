@@ -3,7 +3,7 @@ Module for interacting with the OAK-D enabling easy access to the RGB, depth, an
 
 Classes
 -------
-Camera
+LegacyCamera
     Class for interfacing with the OAK-D camera with fixed pipeline.
 """
 from __future__ import annotations
@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING
 
 import cv2
 import depthai as dai
-import depthai_sdk as sdk
 import numpy as np
 
 from .calibration import CalibrationData, get_camera_calibration
@@ -38,7 +37,7 @@ if TYPE_CHECKING:
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera(sdk.OakCamera):
+class LegacyCamera:
     """
     Class for interfacing with the OAK-D camera.
 
@@ -348,11 +347,7 @@ class Camera(sdk.OakCamera):
                 if self._primary_mono_left
                 else dai.CameraBoardSocket.RIGHT
             )
-            (
-                stereo,
-                left,
-                right,
-            ) = create_stereo_depth(
+            (stereo, left, right,) = create_stereo_depth(
                 pipeline=self._pipeline,
                 resolution=self._mono_size[2],
                 fps=mono_fps,

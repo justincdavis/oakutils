@@ -4,6 +4,14 @@ oakutils.filters package
 Submodules
 ----------
 
+oakutils.filters.smoothing module
+---------------------------------
+
+.. automodule:: oakutils.filters.smoothing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 oakutils.filters.wls module
 ---------------------------
 

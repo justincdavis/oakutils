@@ -44,14 +44,18 @@ create_xin
     Creates an xin node.
 create_xout
     Creates an xout node.
+create_yolo_detection_network
+    Creates a yolo detection network node.
 get_nn_frame
     Gets the output frame from the neural network node.
 get_nn_bgr_frame
     Gets the output frame from the neural network node in BGR format.
 get_nn_gray_frame
     Gets the output frame from the neural network node in grayscale format.
-get_nn_point_cloud
-    Gets the output point cloud from the neural network node.
+get_nn_point_cloud_buffer
+    Gets the output point cloud buffer from the neural network node.
+frame_norm
+    Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
 from . import (
     color_camera,
@@ -64,6 +68,7 @@ from . import (
     xin,
     xout,
 )
+from ._misc import frame_norm
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
@@ -73,11 +78,12 @@ from .neural_network import (
     get_nn_bgr_frame,
     get_nn_frame,
     get_nn_gray_frame,
-    get_nn_point_cloud,
+    get_nn_point_cloud_buffer,
 )
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
 from .xin import create_xin
 from .xout import create_xout
+from .yolo_detection_network import create_yolo_detection_network
 
 __all__ = [
     "color_camera",
@@ -99,8 +105,10 @@ __all__ = [
     "create_neural_network",
     "create_xout",
     "create_xin",
+    "create_yolo_detection_network",
     "get_nn_frame",
     "get_nn_bgr_frame",
     "get_nn_gray_frame",
-    "get_nn_point_cloud",
+    "get_nn_point_cloud_buffer",
+    "frame_norm",
 ]
