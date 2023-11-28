@@ -5,7 +5,7 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
 import numpy as np
-import open3d as o3d
+import open3d as o3d  # type: ignore[import]
 
 if TYPE_CHECKING:
     from typing_extensions import Self

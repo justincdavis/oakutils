@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, Callable
+from typing import Callable, Iterable
 
 import torch
 

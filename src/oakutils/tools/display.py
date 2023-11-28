@@ -24,7 +24,7 @@ from collections import defaultdict
 from threading import Thread
 from typing import TYPE_CHECKING, Callable, Iterable
 
-import cv2
+import cv2  # type: ignore[import]
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -50,7 +50,7 @@ class _Display:
     @fps.setter
     def fps(self: Self, fps: int) -> None:
         self._fps = fps
-        self._delay_time: float = 1 / fps
+        self._delay_time = 1 / fps
 
     def __call__(self: Self, frame: np.ndarray) -> None:
         self._frame = frame
@@ -171,7 +171,7 @@ class DisplayManager:
 
     def update(
         self: Self,
-        data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]],
+        data: tuple[str, np.ndarray] | list[tuple[str, np.ndarray]],
         transform: Callable | None = None,
     ) -> None:
         """
@@ -179,14 +179,14 @@ class DisplayManager:
 
         Parameters
         ----------
-        data : Union[Tuple[str, np.ndarray], Iterable[str, np.ndarray]]
+        data : Union[Tuple[str, np.ndarray], list[str, np.ndarray]]
             The data to update the display with. Can be a single tuple or an
-            iterable of tuples.
+            list of tuples.
         transform : Optional[Callable], optional
             A transform to call on each frame, by default None
             The transform should take in an np.ndarray and return an np.ndarray
         """
-        # whether or not we are in Tuple or Iterable case
+        # whether or not we are in Tuple or list case
         if isinstance(data, tuple):
             name, frame = data
             if transform is not None:
@@ -199,7 +199,7 @@ class DisplayManager:
             for name, frame in data:
                 self._update(name, self._transforms[name](frame))
 
-    def callback(self: Self, name: str) -> Callable[[np.ndarray], None]:
+    def callback(self: Self, name: str) -> Callable[[dai.ImgFrame], None]:
         """
         Use to get a callback to be used with ImgFrame outputs.
 
@@ -214,12 +214,13 @@ class DisplayManager:
 
         Returns
         -------
-        Callable[[np.ndarray], None]
+        Callable[[dai.ImgFrame], None]
             The callback to be used with the Camera class.
         """
 
         def callback(frame: dai.ImgFrame) -> None:
-            self._update(name, frame.getCvFrame())
+            cv_frame: np.ndarray = frame.getCvFrame()  # type: ignore[assignment]
+            self._update(name, cv_frame)
 
         return callback
 
@@ -243,7 +244,7 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
 
 def order_resolutions(
     resolutions: Iterable[tuple[int, int]], reverse: bool | None = None
-) -> Iterable[tuple[int, int]]:
+) -> list[tuple[int, int]]:
     """
     Use to order the given resolutions from smallest to largest.
 
@@ -257,7 +258,7 @@ def order_resolutions(
 
     Returns
     -------
-    Iterable[Tuple[int, int]]
+    list[Tuple[int, int]]
         The ordered resolutions
     """
     if reverse is None:

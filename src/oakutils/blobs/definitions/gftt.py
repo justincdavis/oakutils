@@ -15,7 +15,7 @@ GFTTBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 import kornia
 
@@ -42,17 +42,17 @@ class GFTT(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[GFTT]) -> ModelType:
+    def model_type(cls: type[GFTT]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[GFTT]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[GFTT]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[GFTT]) -> list[str]:
+    def output_names(cls: type[GFTT]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -94,17 +94,17 @@ class GFTTBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[GFTTBlur]) -> ModelType:
+    def model_type(cls: type[GFTTBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[GFTTBlur]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[GFTTBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[GFTTBlur]) -> list[str]:
+    def output_names(cls: type[GFTTBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -141,17 +141,17 @@ class GFTTGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[GFTTGray]) -> ModelType:
+    def model_type(cls: type[GFTTGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[GFTTGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[GFTTGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[GFTTGray]) -> list[str]:
+    def output_names(cls: type[GFTTGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -194,17 +194,17 @@ class GFTTBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[GFTTBlurGray]) -> ModelType:
+    def model_type(cls: type[GFTTBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[GFTTBlurGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[GFTTBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[GFTTBlurGray]) -> list[str]:
+    def output_names(cls: type[GFTTBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

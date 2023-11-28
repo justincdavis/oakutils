@@ -30,9 +30,10 @@ docs:
 blobs:
 	python3 scripts/compile_models.py
 
-ci: mypy
-	./scripts/ci/pyupgrade.sh
+ci: 
+	-./scripts/ci/pyupgrade.sh
 	python3 -m ruff ./src//oakutils --fix
+	./scripts/ci/mypy.sh
 	python3 -m isort src/oakutils
 	python3 -m black src/oakutils --safe
 

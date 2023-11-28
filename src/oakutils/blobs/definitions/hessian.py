@@ -14,7 +14,7 @@ HessianBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 import kornia
 
@@ -41,17 +41,17 @@ class Hessian(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[Hessian]) -> ModelType:
+    def model_type(cls: type[Hessian]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[Hessian]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Hessian]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[Hessian]) -> list[str]:
+    def output_names(cls: type[Hessian]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -93,17 +93,17 @@ class HessianBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[HessianBlur]) -> ModelType:
+    def model_type(cls: type[HessianBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[HessianBlur]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[HessianBlur]) -> list[str]:
+    def output_names(cls: type[HessianBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -140,17 +140,17 @@ class HessianGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[HessianGray]) -> ModelType:
+    def model_type(cls: type[HessianGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[HessianGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[HessianGray]) -> list[str]:
+    def output_names(cls: type[HessianGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -193,17 +193,17 @@ class HessianBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[HessianBlurGray]) -> ModelType:
+    def model_type(cls: type[HessianBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[HessianBlurGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[HessianBlurGray]) -> list[str]:
+    def output_names(cls: type[HessianBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

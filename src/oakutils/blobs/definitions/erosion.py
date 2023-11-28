@@ -14,7 +14,7 @@ ErosionBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 import kornia
 import torch
@@ -51,17 +51,17 @@ class Erosion(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Type[Erosion]) -> ModelType:
+    def model_type(cls: type[Erosion]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[Erosion]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Erosion]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[Erosion]) -> list[str]:
+    def output_names(cls: type[Erosion]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +102,17 @@ class ErosionGray(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Type[ErosionGray]) -> ModelType:
+    def model_type(cls: type[ErosionGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[ErosionGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[ErosionGray]) -> list[str]:
+    def output_names(cls: type[ErosionGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -162,17 +162,17 @@ class ErosionBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[ErosionBlur]) -> ModelType:
+    def model_type(cls: type[ErosionBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: Type[ErosionBlur]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[ErosionBlur]) -> list[str]:
+    def output_names(cls: type[ErosionBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -224,17 +224,17 @@ class ErosionBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[ErosionBlurGray]) -> ModelType:
+    def model_type(cls: type[ErosionBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: Type[ErosionBlurGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[ErosionBlurGray]) -> list[str]:
+    def output_names(cls: type[ErosionBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

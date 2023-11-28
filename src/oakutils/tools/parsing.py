@@ -314,7 +314,7 @@ def get_mono_sensor_info_from_str(
 
 def get_median_filter_from_str(
     filter_size: int | None,
-) -> dai.StereoDepthProperties.MedianFilter:
+) -> dai.MedianFilter:
     """
     Use to convert a str to a MedianFilter.
 
@@ -328,17 +328,10 @@ def get_median_filter_from_str(
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
     """
-    minor_version = 21
-    if int(str(dai.Version(dai.__version__)).split(".")[1]) >= minor_version:
-        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
-        median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
-        median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
-        median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
-    else:
-        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
-        median_3 = dai.StereoDepthProperties.MedianFilter.MEDIAN_3x3
-        median_5 = dai.StereoDepthProperties.MedianFilter.MEDIAN_5x5
-        median_7 = dai.StereoDepthProperties.MedianFilter.MEDIAN_7x7
+    median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+    median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
+    median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
+    median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
     if filter_size is None:
         return median_off
     if filter_size == 0:

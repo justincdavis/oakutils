@@ -15,7 +15,7 @@ SobelBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 import kornia
 
@@ -42,17 +42,17 @@ class Sobel(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[Sobel]) -> ModelType:
+    def model_type(cls: type[Sobel]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[Sobel]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Sobel]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[Sobel]) -> list[str]:
+    def output_names(cls: type[Sobel]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -94,17 +94,17 @@ class SobelBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[SobelBlur]) -> ModelType:
+    def model_type(cls: type[SobelBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[SobelBlur]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[SobelBlur]) -> list[str]:
+    def output_names(cls: type[SobelBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -141,17 +141,17 @@ class SobelGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Type[SobelGray]) -> ModelType:
+    def model_type(cls: type[SobelGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Type[SobelGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[SobelGray]) -> list[str]:
+    def output_names(cls: type[SobelGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -194,17 +194,17 @@ class SobelBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Type[SobelBlurGray]) -> ModelType:
+    def model_type(cls: type[SobelBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Type[SobelBlurGray]) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Type[SobelBlurGray]) -> list[str]:
+    def output_names(cls: type[SobelBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
