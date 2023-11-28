@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Define a list of valid strings
-submodules=("aruco" "blobs" "optimizer")
+submodules=("aruco" "blobs" "calibration" "optimizer")
 
 # Iterate over the contents of the directory
 for FILE in src/oakutils/*;

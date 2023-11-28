@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import cv2
+import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
-import open3d as o3d
+import open3d as o3d  # type: ignore[import]
 
 from ._classes import (
     CalibrationData,
