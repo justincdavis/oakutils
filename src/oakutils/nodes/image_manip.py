@@ -122,7 +122,7 @@ def create_image_manip(
     if warp_transform_four_points is not None:
         manip.initialConfig.setWarpTransformFourPoints(*warp_transform_four_points)
     if warp_transform_matrix_3x3 is not None:
-        manip.initialConfig.setWarpTransformMatrix3x3(*warp_transform_matrix_3x3)
+        manip.initialConfig.setWarpTransformMatrix3x3(warp_transform_matrix_3x3)
 
     input_link.link(manip.inputImage)
 

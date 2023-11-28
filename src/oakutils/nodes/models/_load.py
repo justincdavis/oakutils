@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Iterable
+import pathlib
+from typing import TYPE_CHECKING
 
 from oakutils.nodes.neural_network import create_neural_network
 
@@ -15,14 +16,14 @@ _log = logging.getLogger(__name__)
 
 def create_model(
     pipeline: dai.Pipeline,
-    input_link: dai.Node.Output | Iterable[dai.Node.Output],
+    input_link: dai.Node.Output | list[dai.Node.Output],
     model_name: str,
     attributes: list[str],
     shaves: int,
-    input_names: Iterable[str] | None = None,
-    input_sizes: Iterable[int] | None = None,
-    input_blocking: Iterable[bool] | None = None,
-    reuse_messages: Iterable[bool | None] | None = None,
+    input_names: str | list[str] | None = None,
+    input_sizes: int | list[int] | None = None,
+    input_blocking: bool | list[bool] | None = None,
+    reuse_messages: bool | list[bool | None] | None = None,
 ) -> dai.node.NeuralNetwork:
     """
     Use to get the model blob based on the attributes and creates a neural network node.
@@ -31,7 +32,7 @@ def create_model(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the gaussian to
-    input_link : dai.node.XLinkOut
+    input_link : Union[dai.node.XLinkOut, List[dai.node.XLinkOut]]
         The input link to connect to the gaussian node.
         Example: cam_rgb.preview.link
         Explicitly pass in the link as a non-called function.
@@ -41,16 +42,16 @@ def create_model(
         The attributes of the model to use
     shaves : int
         The number of shaves to use
-    input_names : Optional[Iterable[str]], optional
+    input_names : Optional[List[str]], optional
         The names of the input layers, by default None
         If None, will use the default input names for the model
-    input_sizes : Optional[Iterable[int]], optional
+    input_sizes : Optional[List[int]], optional
         The sizes of the queue for each input stream, by default None
         If None, will use the default input sizes for the model
-    input_blocking : Optional[Iterable[bool]], optional
+    input_blocking : Optional[List[bool]], optional
         Whether or not the input stream will be blocking, by default None
         If None, will use the default input blocking for the model
-    reuse_messages : Optional[Iterable[Optional[bool]]], optional
+    reuse_messages : Optional[List[Optional[bool]]], optional
         Whether or not the data on the stream will be reused, by default None
 
     Returns
@@ -83,10 +84,12 @@ def create_model(
         base_str += "`dir(oakutils.blobs.models)`"
         raise ValueError(f"{base_str}\n Possible blobs: {potential_blobs}") from err
 
+    new_path: pathlib.Path = pathlib.Path(path)
+
     return create_neural_network(
         pipeline=pipeline,
         input_link=input_link,
-        blob_path=path,
+        blob_path=new_path,
         input_names=input_names,
         input_sizes=input_sizes,
         input_blocking=input_blocking,

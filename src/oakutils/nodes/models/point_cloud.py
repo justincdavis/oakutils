@@ -11,7 +11,7 @@ create_point_cloud
 from __future__ import annotations
 
 from functools import partial
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 import depthai as dai
 import numpy as np
@@ -78,7 +78,7 @@ def create_point_cloud(
     calibration: CalibrationData,
     input_stream_name: str = "xyz_to_pcl",
     shaves: int = 4,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, Callable[[dai.Device], None]]:
     """
     Use to create a point_cloud model with a specified kernel size.
 
@@ -104,7 +104,7 @@ def create_point_cloud(
         The point_cloud node
     dai.node.XLinkIn
         The input link to connect to the point_cloud node.
-    partial[dai.Device]
+    Callable[[dai.Device], None]
         Function to pass the device, which will start the point cloud generation
     """
     model_type = "pointcloud"

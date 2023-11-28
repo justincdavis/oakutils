@@ -34,7 +34,7 @@ def create_stereo_depth(
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
-    median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
+    median_filter: dai.MedianFilter = dai.MedianFilter.KERNEL_7x7,
     lr_check: bool | None = None,
     extended_disparity: bool | None = None,
     subpixel: bool | None = None,
@@ -261,7 +261,7 @@ def create_stereo_depth_from_mono_cameras(
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
-    median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
+    median_filter: dai.MedianFilter = dai.MedianFilter.KERNEL_7x7,
     lr_check: bool | None = None,
     extended_disparity: bool | None = None,
     subpixel: bool | None = None,
@@ -269,7 +269,7 @@ def create_stereo_depth_from_mono_cameras(
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
-    decimation_mode: dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
+    decimation_mode: dai.RawStereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
     enable_spatial_filter: bool | None = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
@@ -280,7 +280,7 @@ def create_stereo_depth_from_mono_cameras(
     enable_temporal_filter: bool | None = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
-    temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
+    temporal_mode: dai.RawStereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
@@ -418,7 +418,8 @@ def create_stereo_depth_from_mono_cameras(
 
     stereo.setRectifyEdgeFillColor(rectify_edge_color)
     stereo.initialConfig.setConfidenceThreshold(confidence_threshold)
-    stereo.initialConfig.setMedianFilter(median_filter)
+    # The internal DepthAI types are weird here, so we have to do this
+    stereo.initialConfig.setMedianFilter(median_filter)  # type: ignore[arg-type]
 
     config: dai.RawStereoDepthConfig = stereo.initialConfig.get()
 

@@ -17,6 +17,7 @@ jobs:
         run: 
           pip install .
           pip install mypy
+          mypy --install-types --non-interactive
 
-      - name: Run black check
+      - name: Run MyPy check
         run: ./scripts/ci/mypy.sh
