@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import blobconverter
+import blobconverter  # type: ignore[import]
 import onnx
-import onnxsim
+import onnxsim  # type: ignore[import]
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
@@ -72,4 +72,5 @@ def compile_onnx(
         use_cache=False,
         shaves=shaves,
         version=version,
+        simplify=simplify_model,
     )

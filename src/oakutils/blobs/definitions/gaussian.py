@@ -10,7 +10,7 @@ GaussianGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import kornia
 
@@ -48,17 +48,17 @@ class Gaussian(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: Gaussian) -> ModelType:
+    def model_type(cls: Type[Gaussian]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Gaussian) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[Gaussian]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Gaussian) -> list[str]:
+    def output_names(cls: Type[Gaussian]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +102,17 @@ class GaussianGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: GaussianGray) -> ModelType:
+    def model_type(cls: Type[GaussianGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: GaussianGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[GaussianGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: GaussianGray) -> list[str]:
+    def output_names(cls: Type[GaussianGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

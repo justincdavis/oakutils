@@ -14,7 +14,7 @@ LaplacianBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import kornia
 
@@ -49,17 +49,17 @@ class Laplacian(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def model_type(cls: Laplacian) -> ModelType:
+    def model_type(cls: Type[Laplacian]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Laplacian) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[Laplacian]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Laplacian) -> list[str]:
+    def output_names(cls: Type[Laplacian]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -98,17 +98,17 @@ class LaplacianGray(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def model_type(cls: LaplacianGray) -> ModelType:
+    def model_type(cls: Type[LaplacianGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[LaplacianGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianGray) -> list[str]:
+    def output_names(cls: Type[LaplacianGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -156,17 +156,17 @@ class LaplacianBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: LaplacianBlur) -> ModelType:
+    def model_type(cls: Type[LaplacianBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[LaplacianBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianBlur) -> list[str]:
+    def output_names(cls: Type[LaplacianBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -216,17 +216,17 @@ class LaplacianBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: LaplacianBlurGray) -> ModelType:
+    def model_type(cls: Type[LaplacianBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[LaplacianBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianBlurGray) -> list[str]:
+    def output_names(cls: Type[LaplacianBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

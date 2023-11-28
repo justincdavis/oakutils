@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Iterable, Callable
 
 import torch
 
@@ -10,7 +10,7 @@ from oakutils.blobs.definitions.utils import InputType
 def _create_dummy_input(
     input_shape: tuple[int, int, int],
     input_type: InputType,
-    creation_func: callable = torch.rand,
+    creation_func: Callable = torch.rand,
 ) -> torch.Tensor:
     """
     Use to create a dummy input based on the input_shape.
@@ -61,7 +61,7 @@ def _create_dummy_input(
 
 def _create_multiple_dummy_input(
     input_shapes: Iterable[tuple[tuple[int, int, int], InputType]],
-    creation_func: callable = torch.rand,
+    creation_func: Callable = torch.rand,
 ) -> list[torch.Tensor]:
     """
     Use to create a dummy input based on the input_shapes.
@@ -141,7 +141,7 @@ def export(
     onnx_path: str,
     input_names: list[str],
     output_names: list[str],
-    creation_func: callable = torch.rand,
+    creation_func: Callable = torch.rand,
     verbose: bool | None = None,
 ) -> None:
     """
@@ -172,6 +172,7 @@ def export(
         print(dummy_input_shapes)
         print(type(dummy_input_shapes))
 
+    dummy_input: torch.Tensor | list[torch.Tensor] = torch.Tensor()
     if not isinstance(dummy_input_shapes, list):
         input_shape, input_type = dummy_input_shapes
         dummy_input = _create_dummy_input(input_shape, input_type, creation_func)

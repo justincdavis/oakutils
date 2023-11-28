@@ -9,7 +9,7 @@ AbstractModel
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import torch
 
@@ -28,15 +28,15 @@ class AbstractModel(ABC, torch.nn.Module):
 
     @classmethod
     @abstractmethod
-    def model_type(cls: AbstractModel) -> ModelType:
+    def model_type(cls: Type[AbstractModel]) -> ModelType:
         """Use to get the type of input this model takes."""
 
     @classmethod
     @abstractmethod
-    def input_names(cls: AbstractModel) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[AbstractModel]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
 
     @classmethod
     @abstractmethod
-    def output_names(cls: AbstractModel) -> list[str]:
+    def output_names(cls: Type[AbstractModel]) -> list[str]:
         """Use to get the names of the output tensors."""

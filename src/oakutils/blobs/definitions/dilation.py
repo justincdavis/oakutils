@@ -14,7 +14,7 @@ DilationBlurGray
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import kornia
 import torch
@@ -51,17 +51,17 @@ class Dilation(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Dilation) -> ModelType:
+    def model_type(cls: Type[Dilation]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Dilation) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[Dilation]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Dilation) -> list[str]:
+    def output_names(cls: Type[Dilation]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +102,17 @@ class DilationGray(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: DilationGray) -> ModelType:
+    def model_type(cls: Type[DilationGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: DilationGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[DilationGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: DilationGray) -> list[str]:
+    def output_names(cls: Type[DilationGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -162,17 +162,17 @@ class DilationBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: DilationBlur) -> ModelType:
+    def model_type(cls: Type[DilationBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: DilationBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[DilationBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: DilationBlur) -> list[str]:
+    def output_names(cls: Type[DilationBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -224,17 +224,17 @@ class DilationBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: DilationBlurGray) -> ModelType:
+    def model_type(cls: Type[DilationBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: DilationBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[DilationBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: DilationBlurGray) -> list[str]:
+    def output_names(cls: Type[DilationBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

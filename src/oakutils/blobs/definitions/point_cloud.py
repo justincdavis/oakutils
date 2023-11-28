@@ -8,7 +8,7 @@ PointCloud
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType, convert_to_fp16
@@ -40,17 +40,17 @@ class PointCloud(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: PointCloud) -> ModelType:
+    def model_type(cls: Type[PointCloud]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: PointCloud) -> list[tuple[str, InputType]]:
+    def input_names(cls: Type[PointCloud]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
-    def output_names(cls: PointCloud) -> list[str]:
+    def output_names(cls: Type[PointCloud]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
