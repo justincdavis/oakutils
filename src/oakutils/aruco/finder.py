@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 
 if TYPE_CHECKING:
