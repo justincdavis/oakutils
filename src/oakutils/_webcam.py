@@ -72,7 +72,7 @@ class Webcam:
         self._xout_cam = create_xout(self._pipeline, self._cam.video, "cam")
 
         # frame storage
-        self._frame: np.ndarray = None
+        self._frame: np.ndarray = np.zeros((640, 480, 3), dtype=np.uint8)
 
         # thread for reading camera
         self._started = False
@@ -126,7 +126,7 @@ class Webcam:
         """Run the camera."""
         with dai.Device(self._pipeline) as device:
             # get data queues
-            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)
+            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)  # type: ignore[attr-defined]
 
             # loop until stopped
             while not self._stopped:

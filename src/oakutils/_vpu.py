@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import atexit
 import logging
+import pathlib
 from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
@@ -127,7 +128,7 @@ class VPU:
             self._nn = create_neural_network(
                 self._pipeline,
                 self._xin.out,
-                self._blob_path,
+                pathlib.Path(self._blob_path),
             )
             self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
@@ -139,7 +140,7 @@ class VPU:
             self._nn = create_neural_network(
                 self._pipeline,
                 [xin.out for xin in self._xin],
-                self._blob_path,
+                pathlib.Path(self._blob_path),
                 self._input_names,
             )
             self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
@@ -151,6 +152,8 @@ class VPU:
 
     def _run(self: Self) -> None:
         """Use in a thread to process the data on the VPU."""
+        if self._pipeline is None:
+            raise RuntimeError("Pipeline not set.")
         with dai.Device(self._pipeline) as device:
             _log.debug("VPU thread started.")
             with self._start_condition:
@@ -164,16 +167,21 @@ class VPU:
                     break
                 if isinstance(self._xin, list):
                     _log.debug("Sending multi-value data to VPU.")
+                    if self._input_names is None:
+                        raise RuntimeError("Input names not set.")
+                    if self._data is None or not isinstance(self._data, list):
+                        raise RuntimeError("Data not set or data is not a list.")
                     for name, data in zip(self._input_names, self._data):
                         buff = dai.Buffer()
                         buff.setData(data)
-                        device.getInputQueue(name).send(buff)
+                        device.getInputQueue(name).send(buff)  # type: ignore[attr-defined]
                 else:
                     _log.debug("Sending single-value data to VPU.")
                     buff = dai.Buffer()
-                    buff.setData(self._data)
-                    device.getInputQueue("vpu_in").send(buff)
-                self._result = device.getOutputQueue("vpu_out").get()
+                    # setData takes list[int] or ndarray, mypy cannot handle this
+                    buff.setData(self._data)  # type: ignore[arg-type]
+                    device.getInputQueue("vpu_in").send(buff)  # type: ignore[attr-defined]
+                self._result = device.getOutputQueue("vpu_out").get()  # type: ignore[attr-defined]
                 _log.debug("VPU result received, notifying primary thread.")
                 with self._condition:
                     self._condition.notify()
@@ -197,9 +205,13 @@ class VPU:
         ------
         RuntimeError
             If the blob path is not set.
+            If the VPU thread is not set or alive. (Should not happen.)
+            If the VPU result is None.
         """
         if self._blob_path is None:
             raise RuntimeError("Blob path not set.")
+        if self._thread is None:
+            raise RuntimeError("VPU thread not set.")
         if not self._thread.is_alive():
             raise RuntimeError("VPU thread is not alive.")
         _log.debug("VPU run called.")
@@ -209,4 +221,6 @@ class VPU:
         _log.debug("Notified VPU thread, waiting for result.")
         with self._condition:
             self._condition.wait()
+        if self._result is None:
+            raise RuntimeError("VPU result is None.")
         return self._result

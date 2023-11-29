@@ -20,4 +20,5 @@ jobs:
           mypy --install-types --non-interactive
 
       - name: Run MyPy check
-        run: ./scripts/ci/mypy.sh
+        run: 
+          python3 -m mypy src/oakutils --config-file=pyproject.toml

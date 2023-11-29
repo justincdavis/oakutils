@@ -89,7 +89,7 @@ class ApiCamera:
         self._callbacks: dict[str | Iterable[str], Callable] = {}
         self._pipeline: dai.Pipeline = dai.Pipeline()
         self._is_built: bool = False
-        self._custom_device_calls: list[Callable[[dai.Device], None]] = []
+        self._custom_device_calls: list[Callable[[dai.DeviceBase], None]] = []
 
         # handle custom displays directly for API stuff without visualize
         self._display_size: tuple[int, int] = get_smaller_size(
@@ -195,7 +195,7 @@ class ApiCamera:
         """
         self.add_callback(name, self.displays.callback(name))
 
-    def add_device_call(self: Self, call: Callable[[dai.Device], None]) -> None:
+    def add_device_call(self: Self, call: Callable[[dai.DeviceBase], None]) -> None:
         """
         Use to add a device call to be run after the device is created.
 
@@ -225,7 +225,7 @@ class ApiCamera:
 
             # get the output queues ahead of time
             queues = {
-                name: device.getOutputQueue(name) for name, _ in self._callbacks.items()
+                name: device.getOutputQueue(name) for name, _ in self._callbacks.items()  # type: ignore[attr-defined]
             }
 
             # create a cache for queue results to enable multi queue callbacks
