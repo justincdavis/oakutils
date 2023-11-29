@@ -655,9 +655,12 @@ class LegacyCamera:
     def _update_point_cloud(self: Self) -> None:
         if self._rgb_frame is None or self._depth is None:
             raise RuntimeError("RGB frame or depth map is not available.")
-        if self._calibration.primary is None or self._calibration.primary.pinhole is None:
+        if (
+            self._calibration.primary is None
+            or self._calibration.primary.pinhole is None
+        ):
             raise RuntimeError("Primary pinhole calibration is not available.")
-        
+
         pcd = get_point_cloud_from_rgb_depth_image(
             self._rgb_frame, self._depth, self._calibration.primary.pinhole
         )
