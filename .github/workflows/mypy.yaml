@@ -17,7 +17,7 @@ jobs:
         run: |
           pip install .
           pip install mypy
-          python3 -m mypy --install-types --non-interactive
+          pip install types-setuptools
 
       - name: Run MyPy check
         run: 
