@@ -159,21 +159,19 @@ builtins = ["_"]
 
 [tool.mypy]
 python_version = "3.8"
-mypy_path = "$MYPY_CONFIG_FILE_DIR/typings"
-warn_unused_configs = false
-warn_redundant_casts = false
+warn_unused_configs = true
+warn_redundant_casts = true
 warn_unused_ignores = false
-strict_equality = false
-strict_concatenate = false
-check_untyped_defs = false
+strict_equality = true
+check_untyped_defs = true
 disallow_subclassing_any = false
-disallow_untyped_decorators = false
+disallow_untyped_decorators = true
 disallow_any_generics = false
-disallow_untyped_calls = false
-disallow_incomplete_defs = false
-disallow_untyped_defs = false
-no_implicit_reexport = false
-warn_return_any = false
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_reexport = true
+warn_return_any = true
 
 # ignore cv2, open3d, blobconverter
 [[tool.mypy.overrides]]

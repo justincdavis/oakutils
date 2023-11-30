@@ -117,7 +117,7 @@ def quantize_colormap_depth_frame(
     """
     if apply_colormap is None:
         apply_colormap = True
-    quantized_depth = cv2.convertScaleAbs(
+    quantized_depth: np.ndarray = cv2.convertScaleAbs(
         frame.astype(float), alpha=255 / depth_scale_factor
     )
     if apply_colormap:
@@ -149,12 +149,13 @@ def overlay_depth_frame(
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
-    depth_three_channel = np.zeros_like(rgb_frame)
+    depth_three_channel: np.ndarray = np.zeros_like(rgb_frame)
     depth_three_channel[:, :, 2] = depth_frame
     cond = depth_three_channel[:, :, 2] > 0
     depth_three_channel[cond, 2] = 255
     # Blend aligned depth + rgb image
-    blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(
+    blended_image: np.ndarray = (1.0 - rgb_alpha) * depth_three_channel.astype(
         float
     ) + rgb_alpha * rgb_frame.astype(float)
-    return (255 * blended_image.astype(float) / blended_image.max()).astype(np.uint8)
+    blended_max: float = blended_image.max()
+    return (255 * blended_image.astype(float) / blended_max).astype(np.uint8)

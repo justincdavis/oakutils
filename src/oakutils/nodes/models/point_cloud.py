@@ -46,12 +46,12 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
     np.ndarray
         The reprojection matrix
     """
-    xs = np.linspace(0, width - 1, width, dtype=np.float32)
-    ys = np.linspace(0, height - 1, height, dtype=np.float32)
+    xs: np.ndarray = np.linspace(0, width - 1, width, dtype=np.float32)
+    ys: np.ndarray = np.linspace(0, height - 1, height, dtype=np.float32)
 
     # generate grid by stacking coordinates
-    base_grid = np.stack(np.meshgrid(xs, ys))  # WxHx2
-    points_2d = base_grid.transpose(1, 2, 0)  # 1xHxWx2
+    base_grid: np.ndarray = np.stack(np.meshgrid(xs, ys))  # WxHx2
+    points_2d: np.ndarray = base_grid.transpose(1, 2, 0)  # 1xHxWx2
 
     # unpack coordinates
     u_coord: np.ndarray = points_2d[..., 0]
@@ -67,7 +67,7 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
     x_coord: np.ndarray = (u_coord - cx) / fx
     y_coord: np.ndarray = (v_coord - cy) / fy
 
-    xyz = np.stack([x_coord, y_coord], axis=-1)
+    xyz: np.ndarray = np.stack([x_coord, y_coord], axis=-1)
     xyz = np.pad(xyz, ((0, 0), (0, 0), (0, 1)), "constant", constant_values=1.0)
     return np.array([xyz], dtype=np.float16).view(np.int8)
 

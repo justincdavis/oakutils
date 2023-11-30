@@ -178,7 +178,7 @@ class ArucoFinder:
             marker_id, _, rvec, tvec, corner = marker
             cv2.drawFrameAxes(image, self._K, self._D, rvec, tvec, self._marker_size, 3)
             is_connected = True
-            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)
+            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)  # type: ignore[call-overload]
             cx = int((corner[0][0][0] + corner[0][2][0]) / 2)
             cy = int((corner[0][0][1] + corner[0][2][1]) / 2)
             cv2.putText(

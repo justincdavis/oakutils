@@ -133,7 +133,7 @@ def _compile(
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
-    return shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
+    return str(shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path))
 
 
 def compile_model(

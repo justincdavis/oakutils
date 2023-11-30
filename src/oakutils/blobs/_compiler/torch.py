@@ -10,7 +10,7 @@ from oakutils.blobs.definitions.utils import InputType
 def _create_dummy_input(
     input_shape: tuple[int, int, int],
     input_type: InputType,
-    creation_func: Callable = torch.rand,
+    creation_func: Callable[[tuple[int, int, int, int]], torch.Tensor] = torch.rand,
 ) -> torch.Tensor:
     """
     Use to create a dummy input based on the input_shape.
@@ -22,7 +22,7 @@ def _create_dummy_input(
         Should be in form width, height, channels
     input_type : InputType
         The type of the input tensor
-    creation_func : Callable, optional
+    creation_func : Callable[[tuple[int, int, int, int]], torch.Tensor], optional
         The function to use to create the tensor, by default torch.rand
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
 
@@ -46,22 +46,22 @@ def _create_dummy_input(
         # need to double the columns due to the way data
         # is propagated through the pipeline
         return creation_func(
-            (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32
+            (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32  # type: ignore[call-arg]
         )
     if input_type == InputType.FP16:
         return creation_func(
-            (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32
+            (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32  # type: ignore[call-arg]
         )
     if input_type == InputType.XYZ:
         return creation_func(
-            (1, input_shape[1], input_shape[0], input_shape[2]), dtype=torch.float32
+            (1, input_shape[1], input_shape[0], input_shape[2]), dtype=torch.float32  # type: ignore[call-arg]
         )
     raise ValueError(f"Unknown input type: {input_type}")
 
 
 def _create_multiple_dummy_input(
     input_shapes: Iterable[tuple[tuple[int, int, int], InputType]],
-    creation_func: Callable = torch.rand,
+    creation_func: Callable[[tuple[int, int, int, int]], torch.Tensor] = torch.rand,
 ) -> list[torch.Tensor]:
     """
     Use to create a dummy input based on the input_shapes.
@@ -71,7 +71,7 @@ def _create_multiple_dummy_input(
     input_shapes : Iterable[Tuple[int, int, int]]
         The shapes of the input tensors
         Should be in form width, height, channels
-    creation_func : Callable, optional
+    creation_func : Callable[[tuple[int, int, int, int]], torch.Tensor], optional
         The function to use to create the tensor, by default torch.rand
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
 
@@ -141,7 +141,7 @@ def export(
     onnx_path: str,
     input_names: list[str],
     output_names: list[str],
-    creation_func: Callable = torch.rand,
+    creation_func: Callable[[tuple[int, int, int, int]], torch.Tensor] = torch.rand,
     verbose: bool | None = None,
 ) -> None:
     """
@@ -159,7 +159,7 @@ def export(
         The names of the input tensors
     output_names : List[str]
         The names of the output tensors
-    creation_func : Callable, optional
+    creation_func : Callable[[tuple[int, int, int, int]], torch.Tensor], optional
         The function to use to create the tensor, by default torch.rand
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     verbose : bool, optional

@@ -160,7 +160,7 @@ class HostSpatialsCalc:
         RuntimeError
             If the initialization failed. Should never occur.
         """
-        depth_frame = depth_data.getFrame()
+        depth_frame: np.ndarray = depth_data.getFrame()
 
         if self._first_run:
             self._mid_w = int(depth_frame.shape[1] / 2)  # middle of the depth img width
@@ -171,7 +171,7 @@ class HostSpatialsCalc:
             self._f_mid_h = depth_frame.shape[0] / 2.0  # middle of the depth img height
 
             # Required information for calculating spatial coordinates on the host
-            cam_num = depth_data.getInstanceNum()
+            cam_num: int = depth_data.getInstanceNum()
             if cam_num == 0:
                 self._HFOV = self._data.rgb.fov_rad
             elif cam_num == 1:

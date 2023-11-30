@@ -155,7 +155,9 @@ def create_neural_network(
     return nn
 
 
-def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.ndarray:
+def _normalize(
+    frame: np.ndarray, factor: float | Callable[[np.ndarray], np.ndarray] | None = None
+) -> np.ndarray:
     """
     Use to normalize a frame.
 
@@ -163,7 +165,7 @@ def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.
     ----------
     frame : np.ndarray
         The frame to normalize.
-    factor : Optional[float, Callable], optional
+    factor : Optional[float, Callable[[np.ndarray], np.ndarray]], optional
         The normalization factor.
 
     Returns
@@ -196,13 +198,14 @@ def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
     """
     if factor is None:
         return frame
-    return cv2.resize(
+    resized_frame: np.ndarray = cv2.resize(
         frame,
         (0, 0),
         fx=factor,
         fy=factor,
         interpolation=cv2.INTER_LINEAR,
     )
+    return resized_frame
 
 
 def get_nn_frame(
@@ -210,7 +213,7 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = None,
+    normalization: float | Callable[[np.ndarray], np.ndarray] | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -228,7 +231,7 @@ def get_nn_frame(
         If frame_size is incorrect, an error will occur.
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
-    normalization : Optional[float, Callable], optional
+    normalization : Optional[float, Callable[[np.ndarray], np.ndarray]], optional
         The normalization to apply to the frame, by default None
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
@@ -249,7 +252,7 @@ def get_nn_frame(
 
     if isinstance(data, dai.NNData):
         data = data.getData()
-    frame = (
+    frame: np.ndarray = (
         data.view(np.float16)
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)

@@ -471,7 +471,7 @@ def get_camera_calibration(
         None,
         p_rgb,
         rgb_size,
-        cv2.CV_16SC2,
+        cv2.CV_16SC2,  # type: ignore[attr-defined]
     )
     pinhole_rgb = o3d.camera.PinholeCameraIntrinsic(
         width=rgb_size[0],
@@ -524,7 +524,7 @@ def get_camera_calibration(
         cv2_r1,
         p1,
         mono_size,
-        cv2.CV_16SC2,
+        cv2.CV_16SC2,  # type: ignore[attr-defined]
     )
     map_right_1, map_right_2 = cv2.initUndistortRectifyMap(
         data.right.K,
@@ -532,7 +532,7 @@ def get_camera_calibration(
         cv2_r2,
         p2,
         mono_size,
-        cv2.CV_16SC2,
+        cv2.CV_16SC2,  # type: ignore[attr-defined]
     )
     valid_region_primary = (
         valid_region_left if is_primary_mono_left else valid_region_right
