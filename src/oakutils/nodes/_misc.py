@@ -29,4 +29,7 @@ def frame_norm(
     """
     norm_vals: np.ndarray = np.full(len(bbox), frame.shape[0])
     norm_vals[::2] = frame.shape[1]
-    return tuple((np.clip(np.array(bbox), 0, 1) * norm_vals).astype(int))
+    int_bbox: tuple[int, ...] = tuple(
+        (np.clip(np.array(bbox), 0, 1) * norm_vals).astype(int)
+    )
+    return int_bbox  # type: ignore[return-value]

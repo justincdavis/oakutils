@@ -181,7 +181,7 @@ class HostSpatialsCalc:
 
             # angle calc stuff
             self._i_HFOV = math.tan(self._HFOV / 2.0)
-            self._i_angle = self._i_HFOV / self._f_mid_w
+            self._i_angle = self._i_HFOV / self._f_mid_w  # type: ignore[operator]
 
             # reset flag
             self._first_run = False

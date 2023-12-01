@@ -614,7 +614,7 @@ class LegacyCamera:
             if self._rgb_frame is not None and self._display_rgb:
                 cv2.imshow("rgb", cv2.resize(self._rgb_frame, self._display_size))
             if self._disparity is not None and self._display_disparity:
-                frame = (
+                frame: np.ndarray = (
                     self._disparity * (255 / self._stereo_confidence_threshold)
                 ).astype(np.uint8)
                 frame = cv2.resize(frame, self._display_size)

@@ -59,10 +59,9 @@ class ArucoFinder:
         self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
         self._calibration = calibration
-        if self._calibration is None:
-            self._K = np.zeros((3, 3), dtype=np.float32)
-            self._D = np.zeros((5, 1), dtype=np.float32)
-        else:
+        self._K: np.ndarray = np.zeros((3, 3), dtype=np.float32)
+        self._D: np.ndarray = np.zeros((5, 1), dtype=np.float32)
+        if self._calibration is not None:
             self._K = self._calibration.K
             self._D = self._calibration.D
 
@@ -131,7 +130,7 @@ class ArucoFinder:
                 self._K,
             )
         corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)
-        ret_val = []
+        ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
             rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
                 [corner], self._marker_size, self._K, self._D
