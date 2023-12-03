@@ -22,7 +22,8 @@ def _depth_to_3d(depth: torch.Tensor, xyz: torch.Tensor) -> torch.Tensor:
     # depth should come in Bx1xHxW
     points_depth: torch.Tensor = depth.permute(0, 2, 3, 1)  # 1xHxWx1
     points_3d: torch.Tensor = xyz * points_depth
-    return points_3d.permute(0, 3, 1, 2)  # Bx3xHxW
+    new_tensor: torch.Tensor = points_3d.permute(0, 3, 1, 2)  # Bx3xHxW
+    return new_tensor
 
 
 class PointCloud(AbstractModel):
@@ -40,17 +41,17 @@ class PointCloud(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: PointCloud) -> ModelType:
+    def model_type(cls: type[PointCloud]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: PointCloud) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[PointCloud]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
-    def output_names(cls: PointCloud) -> list[str]:
+    def output_names(cls: type[PointCloud]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -65,5 +66,5 @@ class PointCloud(AbstractModel):
         depth : torch.Tensor
             The input tensor to run the model on
         """
-        depth_fp16 = convert_to_fp16(depth)
+        depth_fp16: torch.Tensor = convert_to_fp16(depth)
         return _depth_to_3d(depth_fp16, xyz)

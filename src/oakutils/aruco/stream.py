@@ -11,7 +11,7 @@ from __future__ import annotations
 from collections import defaultdict, deque
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 
 from .finder import ArucoFinder
 
@@ -80,9 +80,11 @@ class ArucoStream:
         ValueError
             If alpha is not in range [0, 1]
         """
-        self._finder = ArucoFinder(aruco_dict, marker_size, calibration)
-        self._buffers = defaultdict(lambda: deque(maxlen=buffersize))
-        self._id_age = defaultdict(int)
+        self._finder: ArucoFinder = ArucoFinder(aruco_dict, marker_size, calibration)
+        self._buffers: dict[
+            int, deque[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+        ] = defaultdict(lambda: deque(maxlen=buffersize))
+        self._id_age: dict[int, int] = defaultdict(int)
         self._max_age = max_age
         self._age = 0
         if alpha < 0 or alpha > 1:

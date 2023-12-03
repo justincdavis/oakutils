@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import cv2
-import open3d as o3d
+import cv2  # type: ignore[import]
+import open3d as o3d  # type: ignore[import]
 
 if TYPE_CHECKING:
     import numpy as np

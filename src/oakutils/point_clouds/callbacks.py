@@ -14,12 +14,13 @@ from ._funcs import filter_point_cloud, get_point_cloud_from_rgb_depth_image
 
 if TYPE_CHECKING:
     import numpy as np
-    import open3d as o3d
+    import open3d as o3d  # type: ignore[import]
 
 
 def create_point_cloud(
     rgb: np.ndarray,
     depth: np.ndarray,
+    camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
     filter_pc: bool | None = None,
@@ -37,6 +38,8 @@ def create_point_cloud(
         The RGB image to use.
     depth : np.ndarray
         The depth image to use.
+    camera_intrinsics : o3d.camera.PinholeCameraIntrinsic
+        The camera intrinsics to use.
     depth_trunc : float, optional
         Truncated depth values to this value. Defaults to 25000.0 to truncate depth
           values to 25 meters.
@@ -62,6 +65,7 @@ def create_point_cloud(
     pcd = get_point_cloud_from_rgb_depth_image(
         rgb,
         depth,
+        camera_intrinsics,
         depth_trunc=depth_trunc,
         depth_scale=depth_scale,
     )

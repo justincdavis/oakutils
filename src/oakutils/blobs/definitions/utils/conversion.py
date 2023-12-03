@@ -28,4 +28,5 @@ def convert_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
     torch.Tensor
         The converted tensor
     """
-    return 256.0 * tensor[:, :, :, 1::2] + tensor[:, :, :, ::2]
+    fp16: torch.Tensor = 256.0 * tensor[:, :, :, 1::2] + tensor[:, :, :, ::2]
+    return fp16

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import blobconverter
+import blobconverter  # type: ignore[import]
 
 from oakutils.blobs.definitions.utils.types import input_type_to_str
 

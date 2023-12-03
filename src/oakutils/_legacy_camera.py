@@ -13,7 +13,7 @@ import contextlib
 from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
 
@@ -31,7 +31,7 @@ from .tools.parsing import (
 )
 
 if TYPE_CHECKING:
-    import open3d as o3d
+    import open3d as o3d  # type: ignore[import]
     from typing_extensions import Self
 
 
@@ -347,7 +347,11 @@ class LegacyCamera:
                 if self._primary_mono_left
                 else dai.CameraBoardSocket.RIGHT
             )
-            (stereo, left, right,) = create_stereo_depth(
+            (
+                stereo,
+                left,
+                right,
+            ) = create_stereo_depth(
                 pipeline=self._pipeline,
                 resolution=self._mono_size[2],
                 fps=mono_fps,
@@ -387,7 +391,7 @@ class LegacyCamera:
         if enable_imu:
             imu = create_imu(
                 pipeline=self._pipeline,
-                accel_range=self._imu_accelerometer_refresh_rate,
+                accelerometer_rate=self._imu_accelerometer_refresh_rate,
                 gyroscope_rate=self._imu_gyroscope_refresh_rate,
                 batch_report_threshold=self._imu_batch_report_threshold,
                 max_batch_reports=self._imu_max_batch_reports,
@@ -610,7 +614,7 @@ class LegacyCamera:
             if self._rgb_frame is not None and self._display_rgb:
                 cv2.imshow("rgb", cv2.resize(self._rgb_frame, self._display_size))
             if self._disparity is not None and self._display_disparity:
-                frame = (
+                frame: np.ndarray = (
                     self._disparity * (255 / self._stereo_confidence_threshold)
                 ).astype(np.uint8)
                 frame = cv2.resize(frame, self._display_size)
@@ -649,6 +653,14 @@ class LegacyCamera:
         self._display_thread.join()
 
     def _update_point_cloud(self: Self) -> None:
+        if self._rgb_frame is None or self._depth is None:
+            raise RuntimeError("RGB frame or depth map is not available.")
+        if (
+            self._calibration.primary is None
+            or self._calibration.primary.pinhole is None
+        ):
+            raise RuntimeError("Primary pinhole calibration is not available.")
+
         pcd = get_point_cloud_from_rgb_depth_image(
             self._rgb_frame, self._depth, self._calibration.primary.pinhole
         )
@@ -670,7 +682,7 @@ class LegacyCamera:
         with dai.Device(self._pipeline) as device:
             queues = {}
             for stream in self._streams:
-                queues[stream] = device.getOutputQueue(
+                queues[stream] = device.getOutputQueue(  # type: ignore[attr-defined]
                     name=stream, maxSize=1, blocking=False
                 )
 
@@ -763,6 +775,10 @@ class LegacyCamera:
                     self._data_condition.notify_all()
 
     def _crop_to_valid_primary_region(self: Self, img: np.ndarray) -> np.ndarray:
+        if self._calibration.primary is None:
+            raise RuntimeError("Primary calibration is not available.")
+        if self._calibration.primary.valid_region is None:
+            raise RuntimeError("Primary valid region is not available.")
         return img[
             self._calibration.primary.valid_region[
                 1
@@ -827,6 +843,8 @@ class LegacyCamera:
         if self._compute_im3d_on_demand:
             self._update_im3d()
             im3d = self._im3d
+        if im3d is None or disparity is None or rect is None:
+            return None, None, None
         return (
             self._crop_to_valid_primary_region(im3d),
             self._crop_to_valid_primary_region(disparity),

@@ -3,6 +3,8 @@ import os
 import shutil
 
 import open3d
+import onnxsim
+import blobconverter
 
 
 def get_name(module):
@@ -11,6 +13,13 @@ def get_name(module):
     except AttributeError:
         return module
 
+def move_stubs(name: str):
+    # moves stubs from out to typings
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", name))
+    shutil.move(
+        os.path.join(os.path.dirname(__file__), "..", "out", name),
+        os.path.join(os.path.dirname(__file__), "..", "typings", name),
+    )
 
 def move_open3d_stubs():
     # moves stubs from out to typings
@@ -76,6 +85,8 @@ def make_stubs(module):
 def main():
     for module in [
         open3d,
+        open3d.cpu,
+        open3d.cpu.pybind,
         open3d.camera,
         open3d.core,
         open3d.data,
@@ -86,15 +97,21 @@ def main():
         open3d.t,
         open3d.utility,
         open3d.visualization,
+        onnxsim,
+        onnxsim.onnx_simplifier,
+        blobconverter,
     ]:
         print(f"Making stubs for {get_name(module)}")
         make_stubs(module)
 
     fix_open3d_stubs()
-
     move_open3d_stubs()
-
     fix_open3d_stub_syntax()
+
+    # move all other stubs
+    for file in os.listdir(os.path.join(os.path.dirname(__file__), "..", "out")):
+        if file != "open3d":
+            move_stubs(file)
 
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
 

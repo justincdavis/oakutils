@@ -35,6 +35,8 @@ LegacyCamera
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 """
+from __future__ import annotations
+
 # setup the logger before importing anything else
 import logging
 import os
@@ -48,7 +50,7 @@ def _setup_logger() -> None:
     level = os.getenv("OAKUTILS_LOG_LEVEL")
     if level is not None:
         level = level.upper()
-    level_map = {
+    level_map: dict[str | None, int] = {
         "DEBUG": logging.DEBUG,
         "INFO": logging.INFO,
         "WARNING": logging.WARNING,
@@ -57,14 +59,14 @@ def _setup_logger() -> None:
         "CRITICAL": logging.CRITICAL,
         None: logging.WARNING,
     }
-    level = level_map[level]
+    log_level = level_map[level]
 
     # create logger
     logger = logging.getLogger(__package__)
-    logger.setLevel(level)
+    logger.setLevel(log_level)
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setLevel(level)
+    stdout_handler.setLevel(log_level)
     stdout_handler.setFormatter(formatter)
     logger.addHandler(stdout_handler)
 

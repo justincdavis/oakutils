@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 
 if TYPE_CHECKING:
@@ -59,10 +59,9 @@ class ArucoFinder:
         self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
         self._calibration = calibration
-        if self._calibration is None:
-            self._K = np.zeros((3, 3), dtype=np.float32)
-            self._D = np.zeros((5, 1), dtype=np.float32)
-        else:
+        self._K: np.ndarray = np.zeros((3, 3), dtype=np.float32)
+        self._D: np.ndarray = np.zeros((5, 1), dtype=np.float32)
+        if self._calibration is not None:
             self._K = self._calibration.K
             self._D = self._calibration.D
 
@@ -131,7 +130,7 @@ class ArucoFinder:
                 self._K,
             )
         corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)
-        ret_val = []
+        ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
             rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
                 [corner], self._marker_size, self._K, self._D
@@ -178,7 +177,7 @@ class ArucoFinder:
             marker_id, _, rvec, tvec, corner = marker
             cv2.drawFrameAxes(image, self._K, self._D, rvec, tvec, self._marker_size, 3)
             is_connected = True
-            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)
+            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)  # type: ignore[call-overload]
             cx = int((corner[0][0][0] + corner[0][2][0]) / 2)
             cy = int((corner[0][0][1] + corner[0][2][1]) / 2)
             cv2.putText(

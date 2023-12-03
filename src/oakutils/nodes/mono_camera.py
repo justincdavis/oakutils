@@ -25,6 +25,10 @@ def create_mono_camera(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.MonoCamera:
     """
     Use to create a pipeline for the mono camera.
@@ -62,6 +66,17 @@ def create_mono_camera(
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
 
     Returns
     -------
@@ -122,6 +137,18 @@ def create_mono_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
+
+    cam.inputControl.setQueueSize(input_queue_size)
+    cam.inputControl.setReusePreviousMessage(input_reuse)
+    cam.inputControl.setBlocking(input_blocking)
+    cam.inputControl.setWaitForMessage(input_wait_for_message)
+
     return cam
 
 
@@ -135,7 +162,11 @@ def create_left_right_cameras(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: int | None = None,
+    isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
     """
     Use to create the left and right mono cameras.
@@ -170,6 +201,19 @@ def create_left_right_cameras(
         The fps of how often the 3a algorithms will run, by default None
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
+        Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
+
 
     Returns
     -------
@@ -194,6 +238,10 @@ def create_left_right_cameras(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
+        input_queue_size=input_queue_size,
+        input_reuse=input_reuse,
+        input_blocking=input_blocking,
+        input_wait_for_message=input_wait_for_message,
     )
     right_cam = create_mono_camera(
         pipeline=pipeline,
@@ -207,6 +255,10 @@ def create_left_right_cameras(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
+        input_queue_size=input_queue_size,
+        input_reuse=input_reuse,
+        input_blocking=input_blocking,
+        input_wait_for_message=input_wait_for_message,
     )
 
     return left_cam, right_cam

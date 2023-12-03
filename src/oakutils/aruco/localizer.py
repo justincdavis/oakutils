@@ -61,7 +61,7 @@ class ArucoLocalizer:
         self._alpha1, self._alpha2 = alpha, (1.0 - alpha)
         self._max_age = max_age
         self._age = 0
-        self._buffer = deque(maxlen=buffersize)
+        self._buffer: deque[np.ndarray] = deque(maxlen=buffersize)
         for tag, transform in transforms.items():
             self.add_transform(tag, transform)
         self._last_transform = create_transform(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

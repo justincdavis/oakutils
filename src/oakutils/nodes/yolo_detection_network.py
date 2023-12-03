@@ -8,16 +8,15 @@ create_yolo_detection_network
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     import depthai as dai
+    from typing_extensions import TypeAlias
 
-YoloDectionNetwork: TypeAlias = (
-    "dai.Node.YoloDetectionNetwork | dai.Node.YoloSpatialDetectionNetwork"
-)
+YoloDectionNetwork: TypeAlias = "dai.Node.YoloDetectionNetwork | dai.Node.YoloSpatialDetectionNetwork"  # type: ignore[name-defined]
 
 
 def create_yolo_detection_network(

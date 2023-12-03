@@ -51,17 +51,17 @@ class Closing(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Closing) -> ModelType:
+    def model_type(cls: type[Closing]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Closing) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Closing]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Closing) -> list[str]:
+    def output_names(cls: type[Closing]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +102,17 @@ class ClosingGray(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: ClosingGray) -> ModelType:
+    def model_type(cls: type[ClosingGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: ClosingGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingGray) -> list[str]:
+    def output_names(cls: type[ClosingGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -162,17 +162,17 @@ class ClosingBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ClosingBlur) -> ModelType:
+    def model_type(cls: type[ClosingBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ClosingBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingBlur) -> list[str]:
+    def output_names(cls: type[ClosingBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -224,17 +224,17 @@ class ClosingBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ClosingBlurGray) -> ModelType:
+    def model_type(cls: type[ClosingBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ClosingBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingBlurGray) -> list[str]:
+    def output_names(cls: type[ClosingBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

@@ -41,17 +41,17 @@ class Harris(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Harris) -> ModelType:
+    def model_type(cls: type[Harris]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Harris) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Harris]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Harris) -> list[str]:
+    def output_names(cls: type[Harris]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -93,17 +93,17 @@ class HarrisBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: HarrisBlur) -> ModelType:
+    def model_type(cls: type[HarrisBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: HarrisBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HarrisBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HarrisBlur) -> list[str]:
+    def output_names(cls: type[HarrisBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -140,17 +140,17 @@ class HarrisGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: HarrisGray) -> ModelType:
+    def model_type(cls: type[HarrisGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: HarrisGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HarrisGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HarrisGray) -> list[str]:
+    def output_names(cls: type[HarrisGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -193,17 +193,17 @@ class HarrisBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: HarrisBlurGray) -> ModelType:
+    def model_type(cls: type[HarrisBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: HarrisBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HarrisBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HarrisBlurGray) -> list[str]:
+    def output_names(cls: type[HarrisBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 

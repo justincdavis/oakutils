@@ -59,7 +59,7 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
         ]
     )
 
-    return rotation_z @ rotation_y @ rotation_x
+    return rotation_z @ rotation_y @ rotation_x  # type: ignore[no-any-return]
 
 
 def create_translation(delta_x: float, delta_y: float, delta_z: float) -> np.ndarray:

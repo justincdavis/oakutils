@@ -5,7 +5,7 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
 import numpy as np
-import open3d as o3d
+import open3d as o3d  # type: ignore[import]
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -52,9 +52,9 @@ class PointCloudVisualizer:
 
         self._pcd: o3d.geometry.PointCloud | None = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
-        self._R_camera_to_world = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]]).astype(
-            np.float64
-        )
+        self._R_camera_to_world: np.ndarray = np.array(
+            [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
+        ).astype(np.float64)
         self._window_name: str = window_name
         self._window_size: tuple[int, int] = window_size
         self._started: bool = False

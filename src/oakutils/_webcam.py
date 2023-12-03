@@ -14,13 +14,13 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
 import depthai as dai
+import numpy as np
 
 from .calibration import ColorCalibrationData, get_camera_calibration_basic
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
 if TYPE_CHECKING:
-    import numpy as np
     from typing_extensions import Self
 
 
@@ -72,7 +72,7 @@ class Webcam:
         self._xout_cam = create_xout(self._pipeline, self._cam.video, "cam")
 
         # frame storage
-        self._frame: np.ndarray = None
+        self._frame: np.ndarray = np.zeros((640, 480, 3), dtype=np.uint8)
 
         # thread for reading camera
         self._started = False
@@ -126,7 +126,7 @@ class Webcam:
         """Run the camera."""
         with dai.Device(self._pipeline) as device:
             # get data queues
-            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)
+            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)  # type: ignore[attr-defined]
 
             # loop until stopped
             while not self._stopped:

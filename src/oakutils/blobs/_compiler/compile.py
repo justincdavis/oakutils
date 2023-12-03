@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+from typing import Callable
 
 import torch
 
@@ -22,7 +23,7 @@ def _compile(
     | tuple[tuple[int, int, int], InputType],
     cache: bool | None = None,
     shaves: int = 6,
-    creation_func: callable = torch.rand,
+    creation_func: Callable = torch.rand,
 ) -> str:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.
@@ -132,7 +133,7 @@ def _compile(
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
-    return shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path)
+    return str(shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path))
 
 
 def compile_model(
@@ -141,7 +142,7 @@ def compile_model(
     cache: bool | None = None,
     shaves: int = 6,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
-    creation_func: callable = torch.rand,
+    creation_func: Callable = torch.rand,
 ) -> str:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.
