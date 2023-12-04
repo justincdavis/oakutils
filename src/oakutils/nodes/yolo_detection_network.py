@@ -30,13 +30,14 @@ def create_yolo_detection_network(
     anchors: list[float],
     anchor_masks: dict[str, list[int]],
     spatial: bool | None = None,
+    depth_input_link: dai.Node.Output | None = None,
     lower_depth_threshold: int = 100,
     upper_depth_threshold: int = 20000,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
     input_blocking: bool | None = None,
-) -> dai.node.YoloDetectionNetwork:
+) -> YoloDectionNetwork:
     """
     Use to create a Yolo Detection Network node.
 
@@ -68,6 +69,10 @@ def create_yolo_detection_network(
     spatial : bool, optional
         Whether or not to use spatial coordinates, by default None
         If None, then False is used
+    depth_input_link : dai.Node.Output, optional
+        The depth input link to connect to the Yolo Spatial Detection Network node
+        Example: stereo.depth
+        Must be set if spatial is True
     lower_depth_threshold : float, optional
         The lower depth threshold for detections. By default 100 mm
         Only used if spatial is True.
@@ -83,6 +88,16 @@ def create_yolo_detection_network(
     input_blocking : bool, optional
         Whether or not to use input blocking, by default None
         If None, then False is used
+
+    Returns
+    -------
+    dai.Node.YoloDetectionNetwork | dai.Node.YoloSpatialDetectionNetwork
+        The Yolo Detection Network node
+
+    Raises
+    ------
+    ValueError
+        If spatial is True and depth_input_link is None
     """
     if spatial is None:
         spatial = False
@@ -92,6 +107,9 @@ def create_yolo_detection_network(
         yolo_detection_network = pipeline.createYoloSpatialDetectionNetwork()
         yolo_detection_network.setDepthLowerThreshold(lower_depth_threshold)
         yolo_detection_network.setDepthUpperThreshold(upper_depth_threshold)
+        if depth_input_link is None:
+            raise ValueError("You must set depth_input_link if spatial is True!")
+        depth_input_link.link(yolo_detection_network.inputDepth)
 
     yolo_detection_network.setBlobPath(blob_path)
     yolo_detection_network.setConfidenceThreshold(confidence_threshold)
