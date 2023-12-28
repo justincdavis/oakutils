@@ -18,7 +18,7 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Home <self>
    Usage <usage>
@@ -26,6 +26,7 @@ Contents
    Compiling Custom Models and CV Functions <compiling>
    Optimzing Custom Pipelines <optimizing>
    Using the OAK-D as a standalone processing unit <vpu>
+   Examples <examples>
    API <api>
 
 Indices and Tables
