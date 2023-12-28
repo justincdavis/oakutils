@@ -25,6 +25,8 @@ point_clouds
     Contains utilities for working with point clouds.
 tools
     Contains general tools and utilities.
+vpu
+    Contains utilities for using the onboard VPU as a standalone processor.
 
 Classes
 -------
@@ -34,6 +36,8 @@ LegacyCamera
     A class for using the color, mono, and imu sensors on the OAK-D.
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
+VPU
+    A class for using the onboard VPU as a standalone processor.
 """
 from __future__ import annotations
 

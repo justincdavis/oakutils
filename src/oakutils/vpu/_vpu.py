@@ -16,7 +16,8 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
-from .nodes import create_neural_network, create_xin, create_xout
+from ..nodes import create_neural_network, create_xin, create_xout, create_yolo_detection_network, create_mobilenet_detection_network
+from ._model_data import YolomodelData, MobilenetData
 
 if TYPE_CHECKING:
     import numpy as np
@@ -104,6 +105,10 @@ class VPU:
         self: Self,
         blob_path: str,
         input_names: list[str] | None = None,
+        is_yolo_model: bool | None = None,
+        yolo_data: YolomodelData | None = None,
+        is_mobilenet_model: bool | None = None,
+        mobilenet_data: MobilenetData | None = None,
     ) -> None:
         """
         Use to reconfigure the VPU with a new blob file.
@@ -114,7 +119,30 @@ class VPU:
             The path to the blob file.
         input_names : list[str]
             The names of the input layers. Defaults to None.
+        is_yolo_model : bool
+            Whether or not the blob file is a YOLO model. Defaults to None.
+        yolo_data : YolomodelData
+            The YOLO model data. Defaults to None. 
+            If is_yolo_model is True, must not be None
+        is_mobilenet_model : bool
+            Whether or not the blob file is a Mobilenet model. Defaults to None.
+        mobilenet_data : MobilenetData
+            The Mobilenet model data. Defaults to None.
+            If is_mobilenet_model is True, must not be None
+
+        Raises
+        ------
+        ValueError
+            If is_yolo_model is True and yolo_data is None
+            If is_mobilenet_model is True and mobilenet_data is None
+            If is_yolo_model is True and is_mobilenet_model is True
         """
+        if is_yolo_model is None:
+            is_yolo_model = False
+        if is_mobilenet_model is None:
+            is_mobilenet_model = False
+        if is_yolo_model and is_mobilenet_model:
+            raise ValueError("Cannot be both YOLO model and Mobilenet model.")
         # stop the VPU if it is running
         if self._thread is not None:
             self.stop()
@@ -123,13 +151,52 @@ class VPU:
         # create pipeline with neural network
         self._pipeline = dai.Pipeline()
         if input_names is None:
-            _log.debug("Reconfiguring VPU with single input.")
             self._xin = create_xin(self._pipeline, "vpu_in")
-            self._nn = create_neural_network(
-                self._pipeline,
-                self._xin.out,
-                pathlib.Path(self._blob_path),
-            )
+            if not is_yolo_model and not is_mobilenet_model:
+                _log.debug("Reconfiguring VPU with single input.")
+                self._nn = create_neural_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                )
+            if is_yolo_model:
+                _log.debug("Reconfiguring VPU with YOLO model.")
+                self._nn = create_yolo_detection_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                    yolo_data.confidence_threshold,
+                    yolo_data.iou_threshold,
+                    yolo_data.num_classes,
+                    yolo_data.coordinate_size,
+                    yolo_data.anchors,
+                    yolo_data.anchor_masks,
+                    yolo_data.spatial,
+                    yolo_data.depth_input_link,
+                    yolo_data.lower_depth_threshold,
+                    yolo_data.upper_depth_threshold,
+                    yolo_data.num_inference_threads,
+                    yolo_data.num_nce_per_inference_thread,
+                    yolo_data.num_pool_frames,
+                    yolo_data.input_blocking,
+                )
+            if is_mobilenet_model:
+                _log.debug("Reconfiguring VPU with Mobilenet model.")
+                self._nn = create_mobilenet_detection_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                    mobilenet_data.confidence_threshold,
+                    mobilenet_data.bounding_box_scale_factor,
+                    mobilenet_data.spatial,
+                    mobilenet_data.depth_input_link,
+                    mobilenet_data.lower_depth_threshold,
+                    mobilenet_data.upper_depth_threshold,
+                    mobilenet_data.num_inference_threads,
+                    mobilenet_data.num_nce_per_inference_thread,
+                    mobilenet_data.num_pool_frames,
+                    mobilenet_data.input_blocking,
+                )
             self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
             _log.debug("Reconfiguring VPU with multiple inputs.")

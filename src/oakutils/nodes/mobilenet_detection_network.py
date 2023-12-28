@@ -24,9 +24,9 @@ def create_mobilenet_detection_network(
     input_link: dai.Node.Output,
     blob_path: Path,
     confidence_threshold: float,
+    bounding_box_scale_factor: float = 0.5,
     spatial: bool | None = None,
     depth_input_link: dai.Node.Output | None = None,
-    bounding_box_scale_factor: float = 0.5,
     lower_depth_threshold: int = 100,
     upper_depth_threshold: int = 20000,
     num_inference_threads: int = 2,
@@ -52,6 +52,8 @@ def create_mobilenet_detection_network(
         The path to the blob file
     confidence_threshold : float
         The confidence threshold
+    bounding_box_scale_factor : float, optional
+        The bounding box scale factor, by default 0.5
     spatial : bool, optional
         Whether or not to use spatial coordinates, by default None
         If None, then False is used
@@ -59,8 +61,6 @@ def create_mobilenet_detection_network(
         The depth input link to connect to the Mobilenet Spatial Detection Network node
         Example: stereo.depth
         Must be set if spatial is True
-    bounding_box_scale_factor : float, optional
-        The bounding box scale factor, by default 0.5
     lower_depth_threshold : float, optional
         The lower depth threshold for detections. By default 100 mm
         Only used if spatial is True.
