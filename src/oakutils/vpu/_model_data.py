@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import depthai as dai
+
 
 @dataclass
 class YolomodelData:

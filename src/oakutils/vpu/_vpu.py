@@ -16,8 +16,14 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
-from ..nodes import create_neural_network, create_xin, create_xout, create_yolo_detection_network, create_mobilenet_detection_network
-from ._model_data import YolomodelData, MobilenetData
+from ..nodes import (
+    create_mobilenet_detection_network,
+    create_neural_network,
+    create_xin,
+    create_xout,
+    create_yolo_detection_network,
+)
+from ._model_data import MobilenetData, YolomodelData
 
 if TYPE_CHECKING:
     import numpy as np
@@ -122,7 +128,7 @@ class VPU:
         is_yolo_model : bool
             Whether or not the blob file is a YOLO model. Defaults to None.
         yolo_data : YolomodelData
-            The YOLO model data. Defaults to None. 
+            The YOLO model data. Defaults to None.
             If is_yolo_model is True, must not be None
         is_mobilenet_model : bool
             Whether or not the blob file is a Mobilenet model. Defaults to None.

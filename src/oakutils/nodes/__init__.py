@@ -74,6 +74,7 @@ from ._misc import frame_norm
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
+from .mobilenet_detection_network import create_mobilenet_detection_network
 from .mono_camera import create_left_right_cameras, create_mono_camera
 from .neural_network import (
     create_neural_network,
@@ -86,7 +87,6 @@ from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cam
 from .xin import create_xin
 from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
-from .mobilenet_detection_network import create_mobilenet_detection_network
 
 __all__ = [
     "color_camera",
