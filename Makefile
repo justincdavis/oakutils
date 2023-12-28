@@ -23,6 +23,7 @@ clean:
 	pyclean .
 
 docs:
+	python3 scripts/build_example_docs.py
 	rm -rf docs/source/*
 	sphinx-apidoc -o docs/source/ src/oakutils/
 	cd docs && make html
