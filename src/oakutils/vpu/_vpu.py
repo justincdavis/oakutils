@@ -16,18 +16,19 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
-from ..nodes import (
+from oakutils.nodes import (
     create_mobilenet_detection_network,
     create_neural_network,
     create_xin,
     create_xout,
     create_yolo_detection_network,
 )
-from ._model_data import MobilenetData, YolomodelData
 
 if TYPE_CHECKING:
     import numpy as np
     from typing_extensions import Self
+
+    from ._model_data import MobilenetData, YolomodelData
 
 _log = logging.getLogger(__name__)
 
@@ -166,6 +167,8 @@ class VPU:
                     pathlib.Path(self._blob_path),
                 )
             if is_yolo_model:
+                if yolo_data is None:
+                    raise ValueError("YOLO data must not be None.")
                 _log.debug("Reconfiguring VPU with YOLO model.")
                 self._nn = create_yolo_detection_network(
                     self._pipeline,
@@ -186,7 +189,10 @@ class VPU:
                     yolo_data.num_pool_frames,
                     yolo_data.input_blocking,
                 )
+                self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_mobilenet_model:
+                if mobilenet_data is None:
+                    raise ValueError("Mobilenet data must not be None.")
                 _log.debug("Reconfiguring VPU with Mobilenet model.")
                 self._nn = create_mobilenet_detection_network(
                     self._pipeline,
@@ -203,7 +209,7 @@ class VPU:
                     mobilenet_data.num_pool_frames,
                     mobilenet_data.input_blocking,
                 )
-            self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
+                self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
             _log.debug("Reconfiguring VPU with multiple inputs.")
             self._input_names = input_names
