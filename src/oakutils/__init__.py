@@ -79,11 +79,21 @@ _setup_logger()
 _log = logging.getLogger(__name__)
 
 
-from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
+from . import (
+    aruco,
+    blobs,
+    calibration,
+    filters,
+    nodes,
+    optimizer,
+    point_clouds,
+    tools,
+    vpu,
+)
 from ._api_camera import ApiCamera
 from ._legacy_camera import LegacyCamera
-from ._vpu import VPU
 from ._webcam import Webcam
+from .vpu import VPU
 
 __all__ = [
     "ApiCamera",
@@ -97,6 +107,7 @@ __all__ = [
     "optimizer",
     "point_clouds",
     "tools",
+    "vpu",
     "VPU",
 ]
 __version__ = "1.3.1"
