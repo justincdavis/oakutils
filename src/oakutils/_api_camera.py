@@ -56,9 +56,10 @@ class ApiCamera:
     def __init__(
         self: Self,
         # custom args, only related to configuration
-        primary_mono_left: bool | None = None,
         color_size: tuple[int, int] = (1920, 1080),
         mono_size: tuple[int, int] = (640, 400),
+        *,
+        primary_mono_left: bool | None = None,
     ) -> None:
         """
         Use to create an instance of the camera.
@@ -147,7 +148,7 @@ class ApiCamera:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
-    def start(self: Self, blocking: bool | None = None) -> None:
+    def start(self: Self, *, blocking: bool | None = None) -> None:
         """Use to start the camera. To be done after all api calls are made."""
         if blocking is None:
             blocking = False

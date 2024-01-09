@@ -189,6 +189,10 @@ class VPU:
                     yolo_data.num_pool_frames,
                     yolo_data.input_blocking,
                 )
+                if self._nn is None:
+                    raise RuntimeError(
+                        "Neural network is None, major internal error occured."
+                    )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_mobilenet_model:
                 if mobilenet_data is None:
@@ -209,6 +213,10 @@ class VPU:
                     mobilenet_data.num_pool_frames,
                     mobilenet_data.input_blocking,
                 )
+                if self._nn is None:
+                    raise RuntimeError(
+                        "Neural network is None, major internal error occured."
+                    )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
             _log.debug("Reconfiguring VPU with multiple inputs.")
