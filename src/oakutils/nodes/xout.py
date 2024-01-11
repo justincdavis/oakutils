@@ -19,6 +19,7 @@ def create_xout(
     input_link: dai.Node.Output,
     stream_name: str,
     input_queue_size: int = 3,
+    *,
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
     input_wait_for_message: bool | None = None,

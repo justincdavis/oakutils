@@ -92,6 +92,7 @@ def align_depth_to_rgb(
 def quantize_colormap_depth_frame(
     frame: np.ndarray,
     depth_scale_factor: float = 2.0,
+    *,
     apply_colormap: bool | None = None,
 ) -> np.ndarray:
     """

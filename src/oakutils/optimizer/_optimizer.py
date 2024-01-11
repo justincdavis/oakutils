@@ -56,7 +56,7 @@ class Optimizer:
         ValueError
             If the algorithm is invalid
         """
-        if algorithm not in ["grid"]:
+        if algorithm != "grid":
             raise ValueError(f"Invalid algorithm {algorithm}")
         if algorithm == "grid":
             self._algorithm = grid_search

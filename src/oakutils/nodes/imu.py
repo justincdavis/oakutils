@@ -17,6 +17,7 @@ def create_imu(
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
     max_batch_reports: int = 10,
+    *,
     enable_accelerometer_raw: bool | None = None,
     enable_accelerometer: bool | None = None,
     enable_linear_acceleration: bool | None = None,

@@ -25,13 +25,14 @@ def create_mobilenet_detection_network(
     blob_path: Path,
     confidence_threshold: float,
     bounding_box_scale_factor: float = 0.5,
-    spatial: bool | None = None,
     depth_input_link: dai.Node.Output | None = None,
     lower_depth_threshold: int = 100,
     upper_depth_threshold: int = 20000,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
+    *,
+    spatial: bool | None = None,
     input_blocking: bool | None = None,
 ) -> MobileNetDectionNetwork:
     """

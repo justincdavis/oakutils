@@ -112,10 +112,11 @@ class VPU:
         self: Self,
         blob_path: str,
         input_names: list[str] | None = None,
-        is_yolo_model: bool | None = None,
         yolo_data: YolomodelData | None = None,
-        is_mobilenet_model: bool | None = None,
         mobilenet_data: MobilenetData | None = None,
+        *,
+        is_yolo_model: bool | None = None,
+        is_mobilenet_model: bool | None = None,
     ) -> None:
         """
         Use to reconfigure the VPU with a new blob file.

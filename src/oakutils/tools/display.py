@@ -243,7 +243,7 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
 
 
 def order_resolutions(
-    resolutions: Iterable[tuple[int, int]], reverse: bool | None = None
+    resolutions: Iterable[tuple[int, int]], *, reverse: bool | None = None
 ) -> list[tuple[int, int]]:
     """
     Use to order the given resolutions from smallest to largest.
