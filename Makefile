@@ -61,4 +61,4 @@ stubs:
 test:
 	./scripts/run_tests.sh
 
-release: docs
+release: clean ci docs

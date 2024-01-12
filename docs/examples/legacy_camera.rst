@@ -1,3 +1,26 @@
-.. include:: legacy_camera.py
-    :literal:
-    :language: python
+.. _examples_legacy_camera:
+
+Example: legacy_camera.py
+=========================
+
+.. code-block:: python
+
+	import time
+	
+	from oakutils import LegacyCamera
+	
+	
+	def main():
+	    cam = LegacyCamera(
+	        display_depth=True,
+	    )
+	    cam.start(block=True)
+	
+	    time.sleep(10)
+	
+	    cam.stop()
+	
+	
+	if __name__ == "__main__":
+	    main()
+

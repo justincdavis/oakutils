@@ -32,9 +32,17 @@ def main():
 
         # create the rst file
         with open(rst_file, "w") as f:
-            f.write(f".. include:: {relative_path}\n")
-            f.write(f"    :literal:\n")
-            f.write(f"    :language: python\n")
+            # f.write(f".. include:: {relative_path}\n")
+            # f.write(f"    :literal:\n")
+            # f.write(f"    :language: python\n")
+            f.write(f".. _examples_{relative_path.replace('.py', '')}:\n\n")
+            f.write(f"Example: {relative_path}\n")
+            f.write(f"{'=' * (len(relative_path) + 9)}\n\n")
+            f.write(f".. code-block:: python\n\n")
+            with open(os.path.join("examples", relative_path), "r") as example_f:
+                for line in example_f.readlines():
+                    f.write(f"\t{line}")
+            f.write("\n")
 
     # create the examples.rst file
     with open(os.path.join("docs", "examples.rst"), "w") as f:
