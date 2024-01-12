@@ -25,6 +25,8 @@ point_clouds
     Contains utilities for working with point clouds.
 tools
     Contains general tools and utilities.
+vpu
+    Contains utilities for using the onboard VPU as a standalone processor.
 
 Classes
 -------
@@ -34,6 +36,8 @@ LegacyCamera
     A class for using the color, mono, and imu sensors on the OAK-D.
 Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
+VPU
+    A class for using the onboard VPU as a standalone processor.
 """
 from __future__ import annotations
 
@@ -75,11 +79,21 @@ _setup_logger()
 _log = logging.getLogger(__name__)
 
 
-from . import aruco, blobs, calibration, filters, nodes, optimizer, point_clouds, tools
+from . import (
+    aruco,
+    blobs,
+    calibration,
+    filters,
+    nodes,
+    optimizer,
+    point_clouds,
+    tools,
+    vpu,
+)
 from ._api_camera import ApiCamera
 from ._legacy_camera import LegacyCamera
-from ._vpu import VPU
 from ._webcam import Webcam
+from .vpu import VPU
 
 __all__ = [
     "ApiCamera",
@@ -93,6 +107,7 @@ __all__ = [
     "optimizer",
     "point_clouds",
     "tools",
+    "vpu",
     "VPU",
 ]
 __version__ = "1.3.1"

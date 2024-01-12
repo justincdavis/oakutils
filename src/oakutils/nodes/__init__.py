@@ -46,6 +46,8 @@ create_xout
     Creates an xout node.
 create_yolo_detection_network
     Creates a yolo detection network node.
+create_mobilenet_detection_network
+    Creates a mobilenet detection network node.
 get_nn_frame
     Gets the output frame from the neural network node.
 get_nn_bgr_frame
@@ -72,6 +74,7 @@ from ._misc import frame_norm
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
+from .mobilenet_detection_network import create_mobilenet_detection_network
 from .mono_camera import create_left_right_cameras, create_mono_camera
 from .neural_network import (
     create_neural_network,
@@ -106,6 +109,7 @@ __all__ = [
     "create_xout",
     "create_xin",
     "create_yolo_detection_network",
+    "create_mobilenet_detection_network",
     "get_nn_frame",
     "get_nn_bgr_frame",
     "get_nn_gray_frame",

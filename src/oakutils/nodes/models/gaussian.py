@@ -21,6 +21,7 @@ def create_gaussian(
     input_link: dai.Node.Output,
     kernel_size: int = 3,
     shaves: int = 1,
+    *,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:
     """

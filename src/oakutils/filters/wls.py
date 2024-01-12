@@ -125,6 +125,7 @@ class WLSFilter:
         self: Self,
         disparity: np.ndarray,
         mono_frame: np.ndarray,
+        *,
         use_mono_left: bool | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """

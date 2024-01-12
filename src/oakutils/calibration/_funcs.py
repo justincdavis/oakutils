@@ -265,6 +265,7 @@ def get_camera_calibration_primary_mono(
     device: dai.Device | None = None,
     rgb_size: tuple[int, int] = (1920, 1080),
     mono_size: tuple[int, int] = (640, 400),
+    *,
     is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:
     """
@@ -410,8 +411,9 @@ def create_q_matrix(
 def get_camera_calibration(
     rgb_size: tuple[int, int],
     mono_size: tuple[int, int],
-    is_primary_mono_left: bool | None = None,
     device: dai.Device | None = None,
+    *,
+    is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:
     """
     Use to create the full CalibrationData object.

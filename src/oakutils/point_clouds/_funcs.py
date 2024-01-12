@@ -15,6 +15,7 @@ def get_point_cloud_from_rgb_depth_image(
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
+    *,
     image_is_bgr: bool | None = None,
     remove_non_finite: bool | None = None,
     remove_duplicates: bool | None = None,
@@ -90,6 +91,7 @@ def get_point_cloud_from_depth_image(
     depth_scale: float = 1000.0,
     depth_trunc: float = 25000.0,
     stride: int = 1,
+    *,
     project_valid_depth_only: bool | None = None,
     remove_non_finite: bool | None = None,
     remove_duplicates: bool | None = None,
@@ -155,6 +157,7 @@ def filter_point_cloud(
     voxel_size: float | None = 0.01,
     nb_neighbors: int | None = 50,
     std_ratio: float | None = 0.1,
+    *,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """

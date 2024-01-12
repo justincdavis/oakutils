@@ -16,11 +16,19 @@ from typing import TYPE_CHECKING
 
 import depthai as dai
 
-from .nodes import create_neural_network, create_xin, create_xout
+from oakutils.nodes import (
+    create_mobilenet_detection_network,
+    create_neural_network,
+    create_xin,
+    create_xout,
+    create_yolo_detection_network,
+)
 
 if TYPE_CHECKING:
     import numpy as np
     from typing_extensions import Self
+
+    from ._model_data import MobilenetData, YolomodelData
 
 _log = logging.getLogger(__name__)
 
@@ -104,6 +112,11 @@ class VPU:
         self: Self,
         blob_path: str,
         input_names: list[str] | None = None,
+        yolo_data: YolomodelData | None = None,
+        mobilenet_data: MobilenetData | None = None,
+        *,
+        is_yolo_model: bool | None = None,
+        is_mobilenet_model: bool | None = None,
     ) -> None:
         """
         Use to reconfigure the VPU with a new blob file.
@@ -114,7 +127,30 @@ class VPU:
             The path to the blob file.
         input_names : list[str]
             The names of the input layers. Defaults to None.
+        is_yolo_model : bool
+            Whether or not the blob file is a YOLO model. Defaults to None.
+        yolo_data : YolomodelData
+            The YOLO model data. Defaults to None.
+            If is_yolo_model is True, must not be None
+        is_mobilenet_model : bool
+            Whether or not the blob file is a Mobilenet model. Defaults to None.
+        mobilenet_data : MobilenetData
+            The Mobilenet model data. Defaults to None.
+            If is_mobilenet_model is True, must not be None
+
+        Raises
+        ------
+        ValueError
+            If is_yolo_model is True and yolo_data is None
+            If is_mobilenet_model is True and mobilenet_data is None
+            If is_yolo_model is True and is_mobilenet_model is True
         """
+        if is_yolo_model is None:
+            is_yolo_model = False
+        if is_mobilenet_model is None:
+            is_mobilenet_model = False
+        if is_yolo_model and is_mobilenet_model:
+            raise ValueError("Cannot be both YOLO model and Mobilenet model.")
         # stop the VPU if it is running
         if self._thread is not None:
             self.stop()
@@ -123,14 +159,66 @@ class VPU:
         # create pipeline with neural network
         self._pipeline = dai.Pipeline()
         if input_names is None:
-            _log.debug("Reconfiguring VPU with single input.")
             self._xin = create_xin(self._pipeline, "vpu_in")
-            self._nn = create_neural_network(
-                self._pipeline,
-                self._xin.out,
-                pathlib.Path(self._blob_path),
-            )
-            self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
+            if not is_yolo_model and not is_mobilenet_model:
+                _log.debug("Reconfiguring VPU with single input.")
+                self._nn = create_neural_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                )
+            if is_yolo_model:
+                if yolo_data is None:
+                    raise ValueError("YOLO data must not be None.")
+                _log.debug("Reconfiguring VPU with YOLO model.")
+                self._nn = create_yolo_detection_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                    confidence_threshold=yolo_data.confidence_threshold,
+                    iou_threshold=yolo_data.iou_threshold,
+                    num_classes=yolo_data.num_classes,
+                    coordinate_size=yolo_data.coordinate_size,
+                    anchors=yolo_data.anchors,
+                    anchor_masks=yolo_data.anchor_masks,
+                    depth_input_link=yolo_data.depth_input_link,
+                    lower_depth_threshold=yolo_data.lower_depth_threshold,
+                    upper_depth_threshold=yolo_data.upper_depth_threshold,
+                    num_inference_threads=yolo_data.num_inference_threads,
+                    num_nce_per_inference_thread=yolo_data.num_nce_per_inference_thread,
+                    num_pool_frames=yolo_data.num_pool_frames,
+                    spatial=yolo_data.spatial,
+                    input_blocking=yolo_data.input_blocking,
+                )
+                if self._nn is None:
+                    raise RuntimeError(
+                        "Neural network is None, major internal error occured."
+                    )
+                self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
+            if is_mobilenet_model:
+                if mobilenet_data is None:
+                    raise ValueError("Mobilenet data must not be None.")
+                _log.debug("Reconfiguring VPU with Mobilenet model.")
+                self._nn = create_mobilenet_detection_network(
+                    self._pipeline,
+                    self._xin.out,
+                    pathlib.Path(self._blob_path),
+                    confidence_threshold=mobilenet_data.confidence_threshold,
+                    bounding_box_scale_factor=mobilenet_data.bounding_box_scale_factor,
+                    depth_input_link=mobilenet_data.depth_input_link,
+                    lower_depth_threshold=mobilenet_data.lower_depth_threshold,
+                    upper_depth_threshold=mobilenet_data.upper_depth_threshold,
+                    num_inference_threads=mobilenet_data.num_inference_threads,
+                    num_nce_per_inference_thread=mobilenet_data.num_nce_per_inference_thread,
+                    num_pool_frames=mobilenet_data.num_pool_frames,
+                    spatial=mobilenet_data.spatial,
+                    input_blocking=mobilenet_data.input_blocking,
+                )
+                if self._nn is None:
+                    raise RuntimeError(
+                        "Neural network is None, major internal error occured."
+                    )
+                self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
             _log.debug("Reconfiguring VPU with multiple inputs.")
             self._input_names = input_names

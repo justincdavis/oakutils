@@ -33,7 +33,7 @@ blobs:
 
 ci: 
 	-./scripts/ci/pyupgrade.sh
-	python3 -m ruff ./src/oakutils --fix
+	python3 -m ruff ./src/oakutils --fix --preview
 	python3 -m mypy src/oakutils --config-file pyproject.toml
 	python3 -m isort src/oakutils
 	python3 -m black src/oakutils --safe

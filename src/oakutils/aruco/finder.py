@@ -96,6 +96,7 @@ class ArucoFinder:
     def find(
         self: Self,
         image: np.ndarray,
+        *,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
         """

@@ -21,9 +21,10 @@ def _compile(
     model_args: dict,
     dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]]
     | tuple[tuple[int, int, int], InputType],
-    cache: bool | None = None,
     shaves: int = 6,
     creation_func: Callable = torch.rand,
+    *,
+    cache: bool | None = None,
 ) -> str:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.
@@ -139,10 +140,11 @@ def _compile(
 def compile_model(
     model_type: AbstractModel,
     model_args: dict,
-    cache: bool | None = None,
     shaves: int = 6,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
     creation_func: Callable = torch.rand,
+    *,
+    cache: bool | None = None,
 ) -> str:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.

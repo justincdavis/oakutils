@@ -36,6 +36,7 @@ def compile_onnx(
     output_path: str,
     shaves: int = 6,
     version: str = "2022.1",
+    *,
     simplify_model: bool | None = None,
 ) -> None:
     """

@@ -38,12 +38,13 @@ def create_neural_network(
     input_link: dai.Node.Output | list[dai.Node.Output],
     blob_path: Path,
     input_names: str | list[str] | None = None,
-    reuse_messages: bool | list[bool | None] | None = None,
     input_sizes: int | list[int] | None = None,
-    input_blocking: bool | list[bool] | None = None,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
+    *,
+    reuse_messages: bool | list[bool | None] | None = None,
+    input_blocking: bool | list[bool] | None = None,
 ) -> dai.node.NeuralNetwork:
     """
     Use to create a neural network node.
@@ -214,6 +215,7 @@ def get_nn_frame(
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
     normalization: float | Callable[[np.ndarray], np.ndarray] | None = None,
+    *,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -359,6 +361,7 @@ def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
+    *,
     remove_zeros: bool | None = None,
 ) -> np.ndarray:
     """

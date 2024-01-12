@@ -45,7 +45,7 @@ classifiers = [
 requires-python=">=3.8, <3.11"
 dependencies = [
     "depthai>=2.22",
-    "numpy>=1.20",
+    "numpy>=1.20,<2.0",
     "open3d>=0.16",
     "opencv-contrib-python>=4.8",
     "typing_extensions>=4.0.0",
@@ -66,11 +66,12 @@ compiler = [
     "blobconverter==1.4.2",
 ]
 ci = [
-    "pyupgrade",
-    "black",
-    "isort",
-    "ruff",
-    "mypy",
+    "pyupgrade>=3.10",
+    "black>=23.0",
+    "isort>=5.10",
+    "ruff>=0.1",
+    "mypy>=1.8.0",
+    "types-setuptools",
 ]
 test = [
     "pytest",

@@ -25,6 +25,7 @@ def create_sobel(
     input_link: dai.Node.Output,
     blur_kernel_size: int = 3,
     shaves: int = 1,
+    *,
     use_blur: bool | None = None,
     grayscale_out: bool | None = None,
 ) -> dai.node.NeuralNetwork:

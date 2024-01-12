@@ -22,6 +22,7 @@ def create_model(
     shaves: int,
     input_names: str | list[str] | None = None,
     input_sizes: int | list[int] | None = None,
+    *,
     input_blocking: bool | list[bool] | None = None,
     reuse_messages: bool | list[bool | None] | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -104,6 +105,7 @@ def create_no_args_multi_link_model(
     shaves: int,
     input_names: list[str] | None = None,
     input_sizes: list[int] | None = None,
+    *,
     input_blocking: list[bool] | None = None,
     reuse_messages: list[bool | None] | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -158,6 +160,7 @@ def create_no_args_model(
     shaves: int,
     input_names: str | None = None,
     input_sizes: int | None = None,
+    *,
     input_blocking: bool | None = None,
     reuse_messages: bool | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -210,6 +213,7 @@ def create_single_kernel_model(
     shaves: int,
     input_names: str | None = None,
     input_sizes: int | None = None,
+    *,
     input_blocking: bool | None = None,
     reuse_messages: bool | None = None,
 ) -> dai.node.NeuralNetwork:
@@ -270,6 +274,7 @@ def create_double_kernel_model(
     shaves: int,
     input_names: str | None = None,
     input_sizes: int | None = None,
+    *,
     input_blocking: bool | None = None,
     reuse_messages: bool | None = None,
 ) -> dai.node.NeuralNetwork:

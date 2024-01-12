@@ -23,10 +23,11 @@ def create_point_cloud(
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
-    filter_pc: bool | None = None,
     voxel_size: float = 0.1,
     nb_neighbors: int = 30,
     std_ratio: float = 0.1,
+    *,
+    filter_pc: bool | None = None,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """

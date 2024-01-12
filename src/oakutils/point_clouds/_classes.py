@@ -33,6 +33,7 @@ class PointCloudVisualizer:
         self: Self,
         window_name: str = "PointCloud",
         window_size: tuple[int, int] = (1920, 1080),
+        *,
         use_threading: bool | None = None,
     ) -> None:
         """
