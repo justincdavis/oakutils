@@ -36,6 +36,14 @@ oakutils.nodes.imu module
    :undoc-members:
    :show-inheritance:
 
+oakutils.nodes.mobilenet\_detection\_network module
+---------------------------------------------------
+
+.. automodule:: oakutils.nodes.mobilenet_detection_network
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 oakutils.nodes.mono\_camera module
 ----------------------------------
 
@@ -72,6 +80,14 @@ oakutils.nodes.xout module
 --------------------------
 
 .. automodule:: oakutils.nodes.xout
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakutils.nodes.yolo\_detection\_network module
+----------------------------------------------
+
+.. automodule:: oakutils.nodes.yolo_detection_network
    :members:
    :undoc-members:
    :show-inheritance:

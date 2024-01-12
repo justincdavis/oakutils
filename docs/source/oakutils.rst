@@ -15,6 +15,7 @@ Subpackages
    oakutils.optimizer
    oakutils.point_clouds
    oakutils.tools
+   oakutils.vpu
 
 Module contents
 ---------------

@@ -10,6 +10,7 @@ help:
 	@echo "  blobs      to compile the models"
 	@echo "  stubs      to generate the stubs"
 	@echo "  test       to run the tests"
+	@echo "  release    to perform all actions required for a release"
 
 install:
 	pip3 install .
@@ -46,3 +47,5 @@ stubs:
 
 test:
 	./scripts/run_tests.sh
+
+release: docs

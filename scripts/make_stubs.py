@@ -47,6 +47,8 @@ def delete_folder(folder_path: str):
 def fix_open3d_stubs():
     folder = os.path.join(os.path.dirname(__file__), "..", "out", "open3d")
     pybind_folder = os.path.join(folder, "cpu", "pybind")
+    if not os.path.exists(pybind_folder):
+        pybind_folder = os.path.join(folder, "cuda", "pybind")
     for file in os.listdir(pybind_folder):
         folder_name = file.split(".")[0]
         delete_folder(os.path.join(folder, folder_name))
@@ -85,8 +87,6 @@ def make_stubs(module):
 def main():
     for module in [
         open3d,
-        open3d.cpu,
-        open3d.cpu.pybind,
         open3d.camera,
         open3d.core,
         open3d.data,
