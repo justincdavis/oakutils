@@ -92,6 +92,7 @@ def _export_module_to_onnx(
     onnx_path: str,
     input_names: list[str],
     output_names: list[str],
+    *,
     verbose: bool | None = None,
 ) -> None:
     """
@@ -142,6 +143,7 @@ def export(
     input_names: list[str],
     output_names: list[str],
     creation_func: Callable[[tuple[int, int, int, int]], torch.Tensor] = torch.rand,
+    *,
     verbose: bool | None = None,
 ) -> None:
     """

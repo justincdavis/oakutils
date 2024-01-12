@@ -94,6 +94,7 @@ class ArucoStream:
     def find(
         self: Self,
         image: np.ndarray,
+        *,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
         """
@@ -117,7 +118,7 @@ class ArucoStream:
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
         """
-        detections = self._finder.find(image, rectified)
+        detections = self._finder.find(image, rectified=rectified)
 
         # need to clear old detections, if an id hasnt been seen in awhile
         # need to empty its buffer

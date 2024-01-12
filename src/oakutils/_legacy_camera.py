@@ -93,16 +93,29 @@ class LegacyCamera:
     def __init__(
         self: Self,
         rgb_size: str = "1080p",
-        enable_rgb: bool | None = None,
         mono_size: str = "400p",
-        enable_mono: bool | None = None,
         rgb_fps: int = 30,
         mono_fps: int = 60,
+        display_size: tuple[int, int] = (640, 400),
+        median_filter: int | None = 7,
+        stereo_confidence_threshold: int = 200,
+        stereo_speckle_filter_range: int = 60,
+        stereo_spatial_filter_radius: int = 2,
+        stereo_spatial_filter_num_iterations: int = 1,
+        stereo_threshold_filter_min_range: int = 200,
+        stereo_threshold_filter_max_range: int = 20000,
+        stereo_decimation_filter_factor: int = 1,
+        imu_batch_report_threshold: int = 20,
+        imu_max_batch_reports: int = 20,
+        imu_accelerometer_refresh_rate: int = 400,
+        imu_gyroscope_refresh_rate: int = 400,
+        *,
+        enable_rgb: bool | None = None,
+        enable_mono: bool | None = None,
         primary_mono_left: bool | None = None,
         use_cv2_q_matrix: bool | None = None,
         compute_im3d_on_demand: bool | None = None,
         compute_point_cloud_on_demand: bool | None = None,
-        display_size: tuple[int, int] = (640, 400),
         display_rgb: bool | None = None,
         display_mono: bool | None = None,
         display_depth: bool | None = None,
@@ -112,22 +125,10 @@ class LegacyCamera:
         extended_disparity: bool | None = None,
         subpixel: bool | None = None,
         lr_check: bool | None = None,
-        median_filter: int | None = 7,
-        stereo_confidence_threshold: int = 200,
         stereo_speckle_filter_enable: bool | None = None,
-        stereo_speckle_filter_range: int = 60,
         stereo_temporal_filter_enable: bool | None = None,
         stereo_spatial_filter_enable: bool | None = None,
-        stereo_spatial_filter_radius: int = 2,
-        stereo_spatial_filter_num_iterations: int = 1,
-        stereo_threshold_filter_min_range: int = 200,
-        stereo_threshold_filter_max_range: int = 20000,
-        stereo_decimation_filter_factor: int = 1,
         enable_imu: bool | None = None,
-        imu_batch_report_threshold: int = 20,
-        imu_max_batch_reports: int = 20,
-        imu_accelerometer_refresh_rate: int = 400,
-        imu_gyroscope_refresh_rate: int = 400,
     ) -> None:
         """
         Use to create the camera object.
@@ -246,6 +247,8 @@ class LegacyCamera:
         if enable_imu is None:
             enable_imu = False
 
+        self._nodes: list[dai.Node] = []
+
         self._primary_mono_left = primary_mono_left
         self._use_cv2_q_matrix = use_cv2_q_matrix
 
@@ -275,7 +278,7 @@ class LegacyCamera:
         self._calibration: CalibrationData = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),
             (self._mono_size[0], self._mono_size[1]),
-            self._primary_mono_left,
+            is_primary_mono_left=self._primary_mono_left,
         )
         self._Q = (
             self._calibration.stereo.Q_cv2
@@ -341,6 +344,7 @@ class LegacyCamera:
             )
             create_xout(self._pipeline, cam.video, "rgb")
             self._streams.extend(["rgb"])
+            self._nodes.extend([cam])
         if enable_mono:
             align_socket = (
                 dai.CameraBoardSocket.LEFT
@@ -388,6 +392,7 @@ class LegacyCamera:
                     "rectified_right",
                 ]
             )
+            self._nodes.extend([stereo, left, right])
         if enable_imu:
             imu = create_imu(
                 pipeline=self._pipeline,
@@ -401,6 +406,7 @@ class LegacyCamera:
             create_xout(self._pipeline, imu.out, "imu")
 
             self._streams.extend(["imu"])
+            self._nodes.extend([imu])
 
         # set atexit methods
         atexit.register(self.stop)
@@ -573,7 +579,7 @@ class LegacyCamera:
         """
         return self._cam_thread.is_alive()
 
-    def start(self: Self, block: bool | None = None) -> None:
+    def start(self: Self, *, block: bool | None = None) -> None:
         """
         Use to start the camera.
 
@@ -789,7 +795,7 @@ class LegacyCamera:
         ]
 
     def compute_point_cloud(
-        self: Self, block: bool | None = None
+        self: Self, *, block: bool | None = None
     ) -> o3d.geometry.PointCloud | None:
         """
         Compute a point cloud from the depth map.
@@ -816,7 +822,7 @@ class LegacyCamera:
         return self._point_cloud
 
     def compute_im3d(
-        self: Self, block: bool | None = None
+        self: Self, *, block: bool | None = None
     ) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None]:
         """
         Compute 3D points from the disparity map.
