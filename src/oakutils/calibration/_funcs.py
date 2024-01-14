@@ -474,7 +474,7 @@ def get_camera_calibration(
         p_rgb,
         rgb_size,
         cv2.CV_16SC2,  # type: ignore[attr-defined]
-    )
+    )  # type: ignore[call-overload]
     pinhole_rgb = o3d.camera.PinholeCameraIntrinsic(
         width=rgb_size[0],
         height=rgb_size[1],
@@ -496,7 +496,7 @@ def get_camera_calibration(
         fov=data.rgb.fov,
         fov_rad=data.rgb.fov_rad,
         P=p_rgb,
-        valid_region=valid_region_rgb,
+        valid_region=valid_region_rgb,  # type: ignore[arg-type]
         map_1=map_rgb_1,
         map_2=map_rgb_2,
         pinhole=pinhole_rgb,
@@ -575,7 +575,7 @@ def get_camera_calibration(
         R=data.left.R,
         T=data.left.T,
         H=data.left.H,
-        valid_region=valid_region_left,
+        valid_region=valid_region_left,  # type: ignore[arg-type]
         map_1=map_left_1,
         map_2=map_left_2,
         pinhole=pinhole_left,
@@ -593,7 +593,7 @@ def get_camera_calibration(
         R=data.right.R,
         T=data.right.T,
         H=data.right.H,
-        valid_region=valid_region_right,
+        valid_region=valid_region_right,  # type: ignore[arg-type]
         map_1=map_right_1,
         map_2=map_right_2,
         pinhole=pinhole_right,
@@ -611,7 +611,7 @@ def get_camera_calibration(
         R=data.primary.R,
         T=data.primary.T,
         H=data.primary.H,
-        valid_region=valid_region_primary,
+        valid_region=valid_region_primary,  # type: ignore[arg-type]
         map_1=map_1_primary,
         map_2=map_2_primary,
         pinhole=pinhole_primary,
@@ -639,7 +639,7 @@ def get_camera_calibration(
         R2_cv2=cv2_r2,
         P1=p1,
         P2=p2,
-        valid_region_primary=valid_region_primary,
+        valid_region_primary=valid_region_primary,  # type: ignore[arg-type]
         pinhole_primary=pinhole_primary,
     )
 

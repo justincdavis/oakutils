@@ -160,12 +160,12 @@ class WLSFilter:
                 / (2.0 * math.tan(math.radians(self._data.right.fov / 2)))
             )
 
-        depth_scale = (
+        depth_scale: float = (
             self._depth_scale_left if use_mono_left else self._depth_scale_right
         )
 
-        filtered_disp = self._filter.filter(disparity, mono_frame)
+        filtered_disp: float = self._filter.filter(disparity, mono_frame)
         with np.errstate(divide="ignore"):
-            depth = (depth_scale / filtered_disp).astype(np.uint16)
+            depth = (depth_scale / filtered_disp).astype(np.uint16)  # type: ignore[operator]
 
         return filtered_disp, depth

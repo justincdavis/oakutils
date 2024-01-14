@@ -682,7 +682,7 @@ class LegacyCamera:
             self._point_cloud.colors = pcd.colors
 
     def _update_im3d(self: Self) -> None:
-        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)
+        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)  # type: ignore[arg-type]
 
     def _target(self: Self) -> None:
         with dai.Device(self._pipeline) as device:
@@ -705,7 +705,7 @@ class LegacyCamera:
                                 self._calibration.rgb.map_1,
                                 self._calibration.rgb.map_2,
                                 cv2.INTER_LINEAR,
-                            )
+                            )  # type: ignore[arg-type]
                         elif name == "left":
                             self._left_frame = data.getCvFrame()
                         elif name == "right":
