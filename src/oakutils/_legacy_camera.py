@@ -701,9 +701,9 @@ class LegacyCamera:
                         if name == "rgb":
                             self._rgb_frame = data.getCvFrame()
                             self._rectified_rgb_frame = cv2.remap(
-                                self._rgb_frame, # type: ignore[arg-type]
-                                self._calibration.rgb.map_1, # type: ignore[arg-type]
-                                self._calibration.rgb.map_2, # type: ignore[arg-type]
+                                self._rgb_frame,  # type: ignore[arg-type]
+                                self._calibration.rgb.map_1,  # type: ignore[arg-type]
+                                self._calibration.rgb.map_2,  # type: ignore[arg-type]
                                 cv2.INTER_LINEAR,
                             )
                         elif name == "left":
