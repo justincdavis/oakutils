@@ -325,7 +325,9 @@ class LegacyCamera:
 
         # packet for compute_3d
         self._3d_packet: tuple[
-            np.ndarray | None, np.ndarray | None, np.ndarray | None
+            np.ndarray | None,
+            np.ndarray | None,
+            np.ndarray | None,
         ] = (None, None, None)
 
         # display information
@@ -390,7 +392,7 @@ class LegacyCamera:
                     "disparity",
                     "rectified_left",
                     "rectified_right",
-                ]
+                ],
             )
             self._nodes.extend([stereo, left, right])
         if enable_imu:
@@ -668,11 +670,17 @@ class LegacyCamera:
             raise RuntimeError("Primary pinhole calibration is not available.")
 
         pcd = get_point_cloud_from_rgb_depth_image(
-            self._rgb_frame, self._depth, self._calibration.primary.pinhole
+            self._rgb_frame,
+            self._depth,
+            self._calibration.primary.pinhole,
         )
 
         pcd = filter_point_cloud(
-            pcd, voxel_size=None, nb_neighbors=30, std_ratio=0.1, downsample_first=True
+            pcd,
+            voxel_size=None,
+            nb_neighbors=30,
+            std_ratio=0.1,
+            downsample_first=True,
         )
 
         if self._point_cloud is None:
@@ -689,7 +697,9 @@ class LegacyCamera:
             queues = {}
             for stream in self._streams:
                 queues[stream] = device.getOutputQueue(  # type: ignore[attr-defined]
-                    name=stream, maxSize=1, blocking=False
+                    name=stream,
+                    maxSize=1,
+                    blocking=False,
                 )
 
             base_accel_timestamp = None
@@ -795,7 +805,9 @@ class LegacyCamera:
         ]
 
     def compute_point_cloud(
-        self: Self, *, block: bool | None = None
+        self: Self,
+        *,
+        block: bool | None = None,
     ) -> o3d.geometry.PointCloud | None:
         """
         Compute a point cloud from the depth map.
@@ -822,7 +834,9 @@ class LegacyCamera:
         return self._point_cloud
 
     def compute_im3d(
-        self: Self, *, block: bool | None = None
+        self: Self,
+        *,
+        block: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None]:
         """
         Compute 3D points from the disparity map.

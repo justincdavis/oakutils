@@ -79,7 +79,8 @@ class ArucoFinder:
 
     @calibration.setter
     def calibration(
-        self: Self, calibration: ColorCalibrationData | MonoCalibrationData
+        self: Self,
+        calibration: ColorCalibrationData | MonoCalibrationData,
     ) -> None:
         """
         Use to set the calibration data used by the ArucoFinder.
@@ -134,7 +135,10 @@ class ArucoFinder:
         ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
             rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                [corner], self._marker_size, self._K, self._D
+                [corner],
+                self._marker_size,
+                self._K,
+                self._D,
             )
             try:
                 rvec = rvecs[0]
@@ -146,7 +150,7 @@ class ArucoFinder:
             t_matrix = np.block([[r_matrix, t_vector], [np.zeros((1, 3)), 1]])
 
             ret_val.append(
-                (ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32))
+                (ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32)),
             )
 
         return ret_val

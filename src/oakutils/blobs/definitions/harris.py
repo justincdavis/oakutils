@@ -121,7 +121,7 @@ class HarrisBlur(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
 
 
@@ -221,6 +221,6 @@ class HarrisBlurGray(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
         return kornia.color.bgr_to_grayscale(harris)

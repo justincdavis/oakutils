@@ -112,14 +112,16 @@ class HostSpatialsCalc:
         self._thresh_high = value
 
     def _check_input(
-        self: Self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
+        self: Self,
+        roi: tuple[int, int] | tuple[int, int, int, int],
+        frame: np.ndarray,
     ) -> tuple[int, int, int, int]:
         """Use to check if the input is valid, and constrains to the frame size."""
         if len(roi) == 4:  # xywh
             return roi  # type: ignore[return-value]
         if len(roi) != 2:  # not xy or xywh
             raise ValueError(
-                "You have to pass either ROI (4 values) or point (2 values)!"
+                "You have to pass either ROI (4 values) or point (2 values)!",
             )
         x = min(max(roi[0], self._delta), frame.shape[1] - self._delta)
         y = min(max(roi[1], self._delta), frame.shape[0] - self._delta)
@@ -165,7 +167,7 @@ class HostSpatialsCalc:
         if self._first_run:
             self._mid_w = int(depth_frame.shape[1] / 2)  # middle of the depth img width
             self._mid_h = int(
-                depth_frame.shape[0] / 2
+                depth_frame.shape[0] / 2,
             )  # middle of the depth img height
             self._f_mid_w = depth_frame.shape[1] / 2.0  # middle of the depth img width
             self._f_mid_h = depth_frame.shape[0] / 2.0  # middle of the depth img height
@@ -187,7 +189,8 @@ class HostSpatialsCalc:
             self._first_run = False
 
         roi = self._check_input(
-            roi, depth_frame
+            roi,
+            depth_frame,
         )  # If point was passed, convert it to ROI
         xmin, ymin, xmax, ymax = roi
 
@@ -205,7 +208,7 @@ class HostSpatialsCalc:
         # assert self._mid_w, self._mid_h are not None
         if self._mid_w is None or self._mid_h is None:
             raise RuntimeError(
-                "self._mid_w or self._mid_h is None, initialization error"
+                "self._mid_w or self._mid_h is None, initialization error",
             )
 
         bb_x_pos = centroid[0] - self._mid_w

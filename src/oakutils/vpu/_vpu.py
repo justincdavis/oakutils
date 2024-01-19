@@ -192,7 +192,7 @@ class VPU:
                 )
                 if self._nn is None:
                     raise RuntimeError(
-                        "Neural network is None, major internal error occured."
+                        "Neural network is None, major internal error occured.",
                     )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_mobilenet_model:
@@ -216,7 +216,7 @@ class VPU:
                 )
                 if self._nn is None:
                     raise RuntimeError(
-                        "Neural network is None, major internal error occured."
+                        "Neural network is None, major internal error occured.",
                     )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:

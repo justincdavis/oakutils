@@ -69,7 +69,8 @@ class Optimizer:
     def measure(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
+            [dai.Pipeline, dict[str, Any]],
+            list[Callable[[dai.DeviceBase], None]],
         ],
         pipeline_args: dict[str, Any],
     ) -> tuple[float, float, dict[str, float]]:
@@ -147,7 +148,7 @@ class Optimizer:
                             current: float = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
                             data_ts: float = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
                             _log.debug(
-                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}"
+                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}",
                             )
                             ts: float = current - device_t0 - data_ts
                             _log.debug(f"Measured latency: {ts:.2f}ms for {queue_name}")
@@ -183,7 +184,7 @@ class Optimizer:
             all_latencies.append(avg_latencies)
 
         _log.debug(
-            f"Done measuring, computing results on {self._measure_trials} trials"
+            f"Done measuring, computing results on {self._measure_trials} trials",
         )
         # compute average fps
         avg_fps = sum(fps) / len(fps)
@@ -199,7 +200,8 @@ class Optimizer:
     def optimize(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
+            [dai.Pipeline, dict[str, Any]],
+            list[Callable[[dai.DeviceBase], None]],
         ],
         pipeline_args: dict[str, list[Any]],
         objective_func: Callable[

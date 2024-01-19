@@ -121,7 +121,9 @@ def create_point_cloud(
     )
 
     xyz = create_xyz_matrix(
-        calibration.left.size[0], calibration.left.size[1], calibration.left.K
+        calibration.left.size[0],
+        calibration.left.size[1],
+        calibration.left.K,
     )
 
     def _start_point_cloud(device: dai.Device, xyz: np.ndarray) -> None:

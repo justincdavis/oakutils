@@ -54,7 +54,7 @@ class PointCloudVisualizer:
         self._pcd: o3d.geometry.PointCloud | None = None
         self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
         self._R_camera_to_world: np.ndarray = np.array(
-            [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
+            [[1, 0, 0], [0, -1, 0], [0, 0, -1]],
         ).astype(np.float64)
         self._window_name: str = window_name
         self._window_size: tuple[int, int] = window_size
@@ -103,7 +103,8 @@ class PointCloudVisualizer:
         )
         self._vis.add_geometry(self._pcd)
         origin = o3d.geometry.TriangleMesh.create_coordinate_frame(
-            size=0.3, origin=[0, 0, 0]
+            size=0.3,
+            origin=[0, 0, 0],
         )
         self._vis.add_geometry(origin)
         self._started = True
@@ -113,7 +114,8 @@ class PointCloudVisualizer:
         if self._pcd is None:
             return
         self._pcd.rotate(
-            self._R_camera_to_world, center=np.array([0, 0, 0], dtype=np.float64)
+            self._R_camera_to_world,
+            center=np.array([0, 0, 0], dtype=np.float64),
         )
         self._vis.update_geometry(self._pcd)
         self._vis.poll_events()

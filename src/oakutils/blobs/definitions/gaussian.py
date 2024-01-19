@@ -72,7 +72,9 @@ class Gaussian(AbstractModel):
             The input tensor to run the model on
         """
         return kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
 
 
@@ -126,6 +128,8 @@ class GaussianGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.color.bgr_to_grayscale(gaussian)

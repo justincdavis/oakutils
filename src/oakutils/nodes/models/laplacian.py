@@ -75,7 +75,7 @@ def create_laplacian(
 
     if use_blur:
         _log.warning(
-            "Laplacian with Blur has trouble running with color camera FPS above 15"
+            "Laplacian with Blur has trouble running with color camera FPS above 15",
         )
 
     model_type = "laplacian"

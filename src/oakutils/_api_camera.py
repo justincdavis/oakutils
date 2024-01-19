@@ -94,7 +94,8 @@ class ApiCamera:
 
         # handle custom displays directly for API stuff without visualize
         self._display_size: tuple[int, int] = get_smaller_size(
-            self._color_size, self._mono_size
+            self._color_size,
+            self._mono_size,
         )
         self._displays: DisplayManager | None = None
         self._pcv: PointCloudVisualizer | None = None

@@ -72,7 +72,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
         "pointcloud",
     ]
     valid_names.extend(
-        [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names]
+        [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names],
     )
     for name in valid_names:
         if model_type in name:
@@ -81,7 +81,9 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
 
 
 def get_candidates(
-    model_type: str, attributes: list[str], shaves: int
+    model_type: str,
+    attributes: list[str],
+    shaves: int,
 ) -> list[tuple[str, list[str], str]]:
     """
     Use to get the list of candidate models for a given model type and attribute.

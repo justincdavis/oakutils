@@ -169,7 +169,7 @@ def create_left_right_cameras(
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
     input_wait_for_message: bool | None = None,
-) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
+) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Use to create the left and right mono cameras.
 

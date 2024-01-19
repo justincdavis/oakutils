@@ -89,24 +89,24 @@ def create_neural_network(
     if isinstance(input_link, list):
         if input_names is None:
             raise ValueError(
-                "input_names must be provided if input_link is an iterable"
+                "input_names must be provided if input_link is an iterable",
             )
         if not isinstance(input_names, list):
             raise ValueError(
-                "input_names must be an iterable if input_link is an iterable"
+                "input_names must be an iterable if input_link is an iterable",
             )
         if len(input_link) != len(input_names):
             raise ValueError(
-                "input_link and input_names must be the same length if both are iterables"
+                "input_link and input_names must be the same length if both are iterables",
             )
         if reuse_messages is not None:
             if not isinstance(reuse_messages, list):
                 raise ValueError(
-                    "reuse_messages must be an iterable if input_link is an iterable"
+                    "reuse_messages must be an iterable if input_link is an iterable",
                 )
             if len(input_link) != len(reuse_messages):
                 raise ValueError(
-                    "input_link and reuse_messages must be the same length if both are iterables"
+                    "input_link and reuse_messages must be the same length if both are iterables",
                 )
 
     # create the node and handle the always present parameters
@@ -127,11 +127,11 @@ def create_neural_network(
     else:
         if input_names is None or reuse_messages is None:
             raise ValueError(
-                "input_names and reuse_messages must be provided if input_link is an iterable"
+                "input_names and reuse_messages must be provided if input_link is an iterable",
             )
         if isinstance(input_names, str) or isinstance(reuse_messages, bool):
             raise RuntimeError(
-                "input_names and reuse_messages must be iterables if input_link is an iterable"
+                "input_names and reuse_messages must be iterables if input_link is an iterable",
             )
         if input_blocking is not None and isinstance(input_blocking, bool):
             input_blocking = [input_blocking] * len(input_link)
@@ -141,7 +141,7 @@ def create_neural_network(
         input_data = zip(input_link, input_names, reuse_messages)
         for idx, (link, name, reuse_message) in enumerate(input_data):
             _log.debug(
-                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}",
             )
             link.link(nn.inputs[name])
             if reuse_message is not None:
@@ -157,7 +157,8 @@ def create_neural_network(
 
 
 def _normalize(
-    frame: np.ndarray, factor: float | Callable[[np.ndarray], np.ndarray] | None = None
+    frame: np.ndarray,
+    factor: float | Callable[[np.ndarray], np.ndarray] | None = None,
 ) -> np.ndarray:
     """
     Use to normalize a frame.
@@ -394,7 +395,10 @@ def get_nn_point_cloud_buffer(
         remove_zeros = True
 
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
-        1, 3, frame_size[1], frame_size[0]
+        1,
+        3,
+        frame_size[1],
+        frame_size[0],
     )
     pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
 

@@ -343,5 +343,5 @@ def get_median_filter_from_str(
     if filter_size == 7:
         return median_7
     raise ValueError(
-        "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
+        "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None",
     )

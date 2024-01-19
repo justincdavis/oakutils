@@ -108,7 +108,7 @@ def create_mobilenet_detection_network(
     mobilenet_detection_network.setNumInferenceThreads(num_inference_threads)
     if num_nce_per_inference_thread is not None:
         mobilenet_detection_network.setNumNCEPerInferenceThread(
-            num_nce_per_inference_thread
+            num_nce_per_inference_thread,
         )
     if num_pool_frames is not None:
         mobilenet_detection_network.setNumPoolFrames(num_pool_frames)

@@ -138,7 +138,7 @@ def create_no_args_multi_link_model(
         The model node
     """
     _log.warning(
-        f"Multi-link models do not have passthrough! Creating model {model_name} with multiple input links..."
+        f"Multi-link models do not have passthrough! Creating model {model_name} with multiple input links...",
     )
     return create_model(
         pipeline=pipeline,
@@ -249,7 +249,7 @@ def create_single_kernel_model(
         The model node
     """
     _ = parse_kernel_size(
-        kernel_size
+        kernel_size,
     )  # raises ValueError if invalid, so no need to check
     attributes = [str(kernel_size)]
     return create_model(
@@ -311,10 +311,10 @@ def create_double_kernel_model(
         The model node
     """
     _ = parse_kernel_size(
-        kernel_size1
+        kernel_size1,
     )  # raises ValueError if invalid, so no need to check
     _ = parse_kernel_size(
-        kernel_size2
+        kernel_size2,
     )  # raises ValueError if invalid, so no need to check
     attributes = [str(kernel_size1), str(kernel_size2)]
     return create_model(

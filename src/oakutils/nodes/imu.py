@@ -134,7 +134,7 @@ def create_imu(
 
     if accelerometer_rate not in [100, 200, 400]:
         raise ValueError(
-            "accelerometer_rate must be one of the following: 100, 200, 400"
+            "accelerometer_rate must be one of the following: 100, 200, 400",
         )
     if gyroscope_rate not in [125, 250, 400]:
         raise ValueError("gyroscope_rate must be one of the following: 125, 250, 400")

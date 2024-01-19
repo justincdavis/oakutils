@@ -47,11 +47,13 @@ def get_camera_calibration_basic(
 
         k_rgb = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.RGB, rgb_size[0], rgb_size[1]
-            )
+                dai.CameraBoardSocket.RGB,
+                rgb_size[0],
+                rgb_size[1],
+            ),
         )
         d_rgb = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB)
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB),
         )
         fx_rgb = k_rgb[0][0]
         fy_rgb = k_rgb[1][1]
@@ -60,8 +62,10 @@ def get_camera_calibration_basic(
 
         k_left = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.LEFT, mono_size[0], mono_size[1]
-            )
+                dai.CameraBoardSocket.LEFT,
+                mono_size[0],
+                mono_size[1],
+            ),
         )
         fx_left = k_left[0][0]
         fy_left = k_left[1][1]
@@ -69,8 +73,10 @@ def get_camera_calibration_basic(
         cy_left = k_left[1][2]
         k_right = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.RIGHT, mono_size[0], mono_size[1]
-            )
+                dai.CameraBoardSocket.RIGHT,
+                mono_size[0],
+                mono_size[1],
+            ),
         )
 
         fx_right = k_right[0][0]
@@ -78,10 +84,10 @@ def get_camera_calibration_basic(
         cx_right = k_right[0][2]
         cy_right = k_right[1][2]
         d_left = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.LEFT)
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.LEFT),
         )
         d_right = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT)
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT),
         )
 
         rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
@@ -99,7 +105,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.LEFT,
                     dstCamera=dai.CameraBoardSocket.RIGHT,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -108,7 +114,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RIGHT,
                     dstCamera=dai.CameraBoardSocket.LEFT,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -117,7 +123,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.LEFT,
                     dstCamera=dai.CameraBoardSocket.RGB,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -126,7 +132,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RIGHT,
                     dstCamera=dai.CameraBoardSocket.RGB,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -135,7 +141,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RGB,
                     dstCamera=dai.CameraBoardSocket.LEFT,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -144,7 +150,7 @@ def get_camera_calibration_basic(
                 calib_data.getCameraTranslationVector(
                     srcCamera=dai.CameraBoardSocket.RGB,
                     dstCamera=dai.CameraBoardSocket.RIGHT,
-                )
+                ),
             )
             / 100
         )  # convert to meters
@@ -156,37 +162,37 @@ def get_camera_calibration_basic(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.LEFT,
                 dstCamera=dai.CameraBoardSocket.RIGHT,
-            )
+            ),
         )
         r2l_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RIGHT,
                 dstCamera=dai.CameraBoardSocket.LEFT,
-            )
+            ),
         )
         l2rgb_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.LEFT,
                 dstCamera=dai.CameraBoardSocket.RGB,
-            )
+            ),
         )
         r2rgb_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RIGHT,
                 dstCamera=dai.CameraBoardSocket.RGB,
-            )
+            ),
         )
         rgb2l_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RGB,
                 dstCamera=dai.CameraBoardSocket.LEFT,
-            )
+            ),
         )
         rgb2r_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
                 srcCamera=dai.CameraBoardSocket.RGB,
                 dstCamera=dai.CameraBoardSocket.RIGHT,
-            )
+            ),
         )
 
         baseline = calib_data.getBaselineDistance() / 100  # in meters
@@ -295,7 +301,9 @@ def get_camera_calibration_primary_mono(
         is_primary_mono_left = True
     # load the data from get_camera_calibration
     data: CalibrationData = get_camera_calibration_basic(
-        device=device, rgb_size=rgb_size, mono_size=mono_size
+        device=device,
+        rgb_size=rgb_size,
+        mono_size=mono_size,
     )
 
     k_primary = data.left.K if is_primary_mono_left else data.right.K
@@ -345,7 +353,11 @@ def get_camera_calibration_primary_mono(
         baseline=data.stereo.baseline,
         primary=primary_mono_data,
         Q_primary=create_q_matrix(
-            fx_primary, fy_primary, cx_primary, cy_primary, data.stereo.baseline
+            fx_primary,
+            fy_primary,
+            cx_primary,
+            cy_primary,
+            data.stereo.baseline,
         ),
     )
     return CalibrationData(
@@ -366,7 +378,11 @@ def get_camera_calibration_primary_mono(
 
 
 def create_q_matrix(
-    fx: float, fy: float, cx: float, cy: float, baseline: float
+    fx: float,
+    fy: float,
+    cx: float,
+    cy: float,
+    baseline: float,
 ) -> np.ndarray:
     """
     Use to create Q matrix for stereo depth map.
@@ -404,7 +420,7 @@ def create_q_matrix(
             [0, 1, 0, -cy],
             [0, 0, 0, (fx + fy) / 2],
             [0, 0, -1.0 / baseline, 0],
-        ]
+        ],
     )
 
 
@@ -449,7 +465,9 @@ def get_camera_calibration(
         mono_size=mono_size,
         is_primary_mono_left=is_primary_mono_left,
     )
-    assert data.primary is not None  # help mypy
+    # assert data.primary is not None  # help mypy
+    if data.primary is None:
+        raise RuntimeError("data.primary is None")
 
     q_primary = create_q_matrix(
         data.primary.fx,

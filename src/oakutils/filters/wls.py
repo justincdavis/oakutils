@@ -66,7 +66,7 @@ class WLSFilter:
         self._depth_scale_left: float | None = None
         self._depth_scale_right: float | None = None
         self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(
-            use_confidence=False
+            use_confidence=False,
         )
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)

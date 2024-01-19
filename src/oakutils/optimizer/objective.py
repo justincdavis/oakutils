@@ -16,7 +16,7 @@ from typing import Any
 
 
 def highest_fps(
-    options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
+    options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]],
 ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the highest fps.
@@ -42,7 +42,7 @@ def highest_fps(
 
 
 def lowest_avg_latency(
-    options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]]
+    options: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]],
 ) -> tuple[dict[str, Any], tuple[float, float, dict[str, float]]]:
     """
     Use to get the set of arguments with the lowest avg latency.

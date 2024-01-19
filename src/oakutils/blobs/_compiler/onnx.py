@@ -25,9 +25,12 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
     """
     model = onnx.load(model_path)
     model_simp, check = onnxsim.simplify(
-        model, check_n=check_num, perform_optimization=True
+        model,
+        check_n=check_num,
+        perform_optimization=True,
     )
-    assert check, "Simplified ONNX model could not be validated"
+    if not check:
+        raise AssertionError("Simplified model could not be validated")
     onnx.save(model_simp, output_path)
 
 

@@ -43,7 +43,9 @@ class Webcam:
     """
 
     def __init__(
-        self: Self, resolution: tuple[int, int] = (1920, 1080), fps: int = 30
+        self: Self,
+        resolution: tuple[int, int] = (1920, 1080),
+        fps: int = 30,
     ) -> None:
         """
         Create a new Webcam object.
@@ -67,7 +69,9 @@ class Webcam:
         self._pipeline = dai.Pipeline()
         dai_resolution = get_color_sensor_resolution_from_tuple(self._resolution)
         self._cam = create_color_camera(
-            self._pipeline, resolution=dai_resolution, fps=self._fps
+            self._pipeline,
+            resolution=dai_resolution,
+            fps=self._fps,
         )
         self._xout_cam = create_xout(self._pipeline, self._cam.video, "cam")
 

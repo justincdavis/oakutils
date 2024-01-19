@@ -46,15 +46,18 @@ def _create_dummy_input(
         # need to double the columns due to the way data
         # is propagated through the pipeline
         return creation_func(
-            (1, input_shape[2], input_shape[1], input_shape[0] * 2), dtype=torch.float32  # type: ignore[call-arg]
+            (1, input_shape[2], input_shape[1], input_shape[0] * 2),
+            dtype=torch.float32,  # type: ignore[call-arg]
         )
     if input_type == InputType.FP16:
         return creation_func(
-            (1, input_shape[2], input_shape[1], input_shape[0]), dtype=torch.float32  # type: ignore[call-arg]
+            (1, input_shape[2], input_shape[1], input_shape[0]),
+            dtype=torch.float32,  # type: ignore[call-arg]
         )
     if input_type == InputType.XYZ:
         return creation_func(
-            (1, input_shape[1], input_shape[0], input_shape[2]), dtype=torch.float32  # type: ignore[call-arg]
+            (1, input_shape[1], input_shape[0], input_shape[2]),
+            dtype=torch.float32,  # type: ignore[call-arg]
         )
     raise ValueError(f"Unknown input type: {input_type}")
 
@@ -182,5 +185,9 @@ def export(
         dummy_input = _create_multiple_dummy_input(dummy_input_shapes, creation_func)
 
     _export_module_to_onnx(
-        model_instance, dummy_input, onnx_path, input_names, output_names
+        model_instance,
+        dummy_input,
+        onnx_path,
+        input_names,
+        output_names,
     )

@@ -90,7 +90,9 @@ class DisplayManager:
     """
 
     def __init__(
-        self: Self, fps: int = 30, display_size: tuple[int, int] = (640, 480)
+        self: Self,
+        fps: int = 30,
+        display_size: tuple[int, int] = (640, 480),
     ) -> None:
         """
         Use to initialize a display manager.
@@ -243,7 +245,9 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
 
 
 def order_resolutions(
-    resolutions: Iterable[tuple[int, int]], *, reverse: bool | None = None
+    resolutions: Iterable[tuple[int, int]],
+    *,
+    reverse: bool | None = None,
 ) -> list[tuple[int, int]]:
     """
     Use to order the given resolutions from smallest to largest.

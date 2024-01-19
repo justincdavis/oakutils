@@ -15,7 +15,8 @@ def grid_search(
     measure_func: Callable[
         [
             Callable[
-                [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
+                [dai.Pipeline, dict[str, Any]],
+                list[Callable[[dai.DeviceBase], None]],
             ],
             dict[str, Any],
         ],

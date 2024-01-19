@@ -408,13 +408,13 @@ _BLOB_FOLDER = os.path.join(_PACKAGE_LOCATION, _RELATIVE_BLOB_FOLDER)
 
 GFTT = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTT.blob"))
 GFTTBLURGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_11x11.blob"),
 )
 GFTTBLURGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_13x13.blob"),
 )
 GFTTBLURGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "GFTTBlurGray_15x15.blob"),
 )
 GFTTBLURGRAY_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTTBlurGray_3x3.blob"))
 GFTTBLURGRAY_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTTBlurGray_5x5.blob"))
@@ -429,13 +429,13 @@ GFTTBLUR_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTTBlur_7x7.blob"))
 GFTTBLUR_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTTBlur_9x9.blob"))
 GFTTGRAY = os.path.abspath(os.path.join(_BLOB_FOLDER, "GFTTGray.blob"))
 GAUSSIANGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GaussianGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "GaussianGray_11x11.blob"),
 )
 GAUSSIANGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GaussianGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "GaussianGray_13x13.blob"),
 )
 GAUSSIANGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "GaussianGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "GaussianGray_15x15.blob"),
 )
 GAUSSIANGRAY_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GaussianGray_3x3.blob"))
 GAUSSIANGRAY_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, "GaussianGray_5x5.blob"))
@@ -450,25 +450,25 @@ GAUSSIAN_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, "Gaussian_7x7.blob"))
 GAUSSIAN_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, "Gaussian_9x9.blob"))
 HARRIS = os.path.abspath(os.path.join(_BLOB_FOLDER, "Harris.blob"))
 HARRISBLURGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_11x11.blob"),
 )
 HARRISBLURGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_13x13.blob"),
 )
 HARRISBLURGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_15x15.blob"),
 )
 HARRISBLURGRAY_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_3x3.blob"),
 )
 HARRISBLURGRAY_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_5x5.blob"),
 )
 HARRISBLURGRAY_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_7x7.blob"),
 )
 HARRISBLURGRAY_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "HarrisBlurGray_9x9.blob"),
 )
 HARRISBLUR_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HarrisBlur_11x11.blob"))
 HARRISBLUR_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HarrisBlur_13x13.blob"))
@@ -480,34 +480,34 @@ HARRISBLUR_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HarrisBlur_9x9.blob
 HARRISGRAY = os.path.abspath(os.path.join(_BLOB_FOLDER, "HarrisGray.blob"))
 HESSIAN = os.path.abspath(os.path.join(_BLOB_FOLDER, "Hessian.blob"))
 HESSIANBLURGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_11x11.blob"),
 )
 HESSIANBLURGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_13x13.blob"),
 )
 HESSIANBLURGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_15x15.blob"),
 )
 HESSIANBLURGRAY_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_3x3.blob"),
 )
 HESSIANBLURGRAY_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_5x5.blob"),
 )
 HESSIANBLURGRAY_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_7x7.blob"),
 )
 HESSIANBLURGRAY_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlurGray_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlurGray_9x9.blob"),
 )
 HESSIANBLUR_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlur_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlur_11x11.blob"),
 )
 HESSIANBLUR_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlur_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlur_13x13.blob"),
 )
 HESSIANBLUR_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "HessianBlur_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "HessianBlur_15x15.blob"),
 )
 HESSIANBLUR_3X3 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HessianBlur_3x3.blob"))
 HESSIANBLUR_5X5 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HessianBlur_5x5.blob"))
@@ -515,319 +515,319 @@ HESSIANBLUR_7X7 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HessianBlur_7x7.bl
 HESSIANBLUR_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, "HessianBlur_9x9.blob"))
 HESSIANGRAY = os.path.abspath(os.path.join(_BLOB_FOLDER, "HessianGray.blob"))
 LAPLACIANBLURGRAY_11X11_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_11x11.blob"),
 )
 LAPLACIANBLURGRAY_11X11_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_13x13.blob"),
 )
 LAPLACIANBLURGRAY_11X11_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_15x15.blob"),
 )
 LAPLACIANBLURGRAY_11X11_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_3x3.blob"),
 )
 LAPLACIANBLURGRAY_11X11_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_5x5.blob"),
 )
 LAPLACIANBLURGRAY_11X11_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_7x7.blob"),
 )
 LAPLACIANBLURGRAY_11X11_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_11x11_9x9.blob"),
 )
 LAPLACIANBLURGRAY_13X13_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_11x11.blob"),
 )
 LAPLACIANBLURGRAY_13X13_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_13x13.blob"),
 )
 LAPLACIANBLURGRAY_13X13_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_15x15.blob"),
 )
 LAPLACIANBLURGRAY_13X13_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_3x3.blob"),
 )
 LAPLACIANBLURGRAY_13X13_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_5x5.blob"),
 )
 LAPLACIANBLURGRAY_13X13_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_7x7.blob"),
 )
 LAPLACIANBLURGRAY_13X13_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_13x13_9x9.blob"),
 )
 LAPLACIANBLURGRAY_15X15_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_11x11.blob"),
 )
 LAPLACIANBLURGRAY_15X15_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_13x13.blob"),
 )
 LAPLACIANBLURGRAY_15X15_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_15x15.blob"),
 )
 LAPLACIANBLURGRAY_15X15_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_3x3.blob"),
 )
 LAPLACIANBLURGRAY_15X15_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_5x5.blob"),
 )
 LAPLACIANBLURGRAY_15X15_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_7x7.blob"),
 )
 LAPLACIANBLURGRAY_15X15_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_15x15_9x9.blob"),
 )
 LAPLACIANBLURGRAY_3X3_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_11x11.blob"),
 )
 LAPLACIANBLURGRAY_3X3_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_13x13.blob"),
 )
 LAPLACIANBLURGRAY_3X3_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_15x15.blob"),
 )
 LAPLACIANBLURGRAY_3X3_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_3x3.blob"),
 )
 LAPLACIANBLURGRAY_3X3_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_5x5.blob"),
 )
 LAPLACIANBLURGRAY_3X3_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_7x7.blob"),
 )
 LAPLACIANBLURGRAY_3X3_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_3x3_9x9.blob"),
 )
 LAPLACIANBLURGRAY_5X5_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_11x11.blob"),
 )
 LAPLACIANBLURGRAY_5X5_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_13x13.blob"),
 )
 LAPLACIANBLURGRAY_5X5_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_15x15.blob"),
 )
 LAPLACIANBLURGRAY_5X5_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_3x3.blob"),
 )
 LAPLACIANBLURGRAY_5X5_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_5x5.blob"),
 )
 LAPLACIANBLURGRAY_5X5_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_7x7.blob"),
 )
 LAPLACIANBLURGRAY_5X5_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_5x5_9x9.blob"),
 )
 LAPLACIANBLURGRAY_7X7_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_11x11.blob"),
 )
 LAPLACIANBLURGRAY_7X7_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_13x13.blob"),
 )
 LAPLACIANBLURGRAY_7X7_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_15x15.blob"),
 )
 LAPLACIANBLURGRAY_7X7_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_3x3.blob"),
 )
 LAPLACIANBLURGRAY_7X7_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_5x5.blob"),
 )
 LAPLACIANBLURGRAY_7X7_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_7x7.blob"),
 )
 LAPLACIANBLURGRAY_7X7_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_7x7_9x9.blob"),
 )
 LAPLACIANBLURGRAY_9X9_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_11x11.blob"),
 )
 LAPLACIANBLURGRAY_9X9_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_13x13.blob"),
 )
 LAPLACIANBLURGRAY_9X9_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_15x15.blob"),
 )
 LAPLACIANBLURGRAY_9X9_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_3x3.blob"),
 )
 LAPLACIANBLURGRAY_9X9_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_5x5.blob"),
 )
 LAPLACIANBLURGRAY_9X9_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_7x7.blob"),
 )
 LAPLACIANBLURGRAY_9X9_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlurGray_9x9_9x9.blob"),
 )
 LAPLACIANBLUR_11X11_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_11x11.blob"),
 )
 LAPLACIANBLUR_11X11_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_13x13.blob"),
 )
 LAPLACIANBLUR_11X11_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_15x15.blob"),
 )
 LAPLACIANBLUR_11X11_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_3x3.blob"),
 )
 LAPLACIANBLUR_11X11_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_5x5.blob"),
 )
 LAPLACIANBLUR_11X11_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_7x7.blob"),
 )
 LAPLACIANBLUR_11X11_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_11x11_9x9.blob"),
 )
 LAPLACIANBLUR_13X13_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_11x11.blob"),
 )
 LAPLACIANBLUR_13X13_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_13x13.blob"),
 )
 LAPLACIANBLUR_13X13_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_15x15.blob"),
 )
 LAPLACIANBLUR_13X13_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_3x3.blob"),
 )
 LAPLACIANBLUR_13X13_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_5x5.blob"),
 )
 LAPLACIANBLUR_13X13_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_7x7.blob"),
 )
 LAPLACIANBLUR_13X13_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_13x13_9x9.blob"),
 )
 LAPLACIANBLUR_15X15_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_11x11.blob"),
 )
 LAPLACIANBLUR_15X15_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_13x13.blob"),
 )
 LAPLACIANBLUR_15X15_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_15x15.blob"),
 )
 LAPLACIANBLUR_15X15_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_3x3.blob"),
 )
 LAPLACIANBLUR_15X15_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_5x5.blob"),
 )
 LAPLACIANBLUR_15X15_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_7x7.blob"),
 )
 LAPLACIANBLUR_15X15_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_15x15_9x9.blob"),
 )
 LAPLACIANBLUR_3X3_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_11x11.blob"),
 )
 LAPLACIANBLUR_3X3_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_13x13.blob"),
 )
 LAPLACIANBLUR_3X3_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_15x15.blob"),
 )
 LAPLACIANBLUR_3X3_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_3x3.blob"),
 )
 LAPLACIANBLUR_3X3_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_5x5.blob"),
 )
 LAPLACIANBLUR_3X3_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_7x7.blob"),
 )
 LAPLACIANBLUR_3X3_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_3x3_9x9.blob"),
 )
 LAPLACIANBLUR_5X5_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_11x11.blob"),
 )
 LAPLACIANBLUR_5X5_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_13x13.blob"),
 )
 LAPLACIANBLUR_5X5_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_15x15.blob"),
 )
 LAPLACIANBLUR_5X5_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_3x3.blob"),
 )
 LAPLACIANBLUR_5X5_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_5x5.blob"),
 )
 LAPLACIANBLUR_5X5_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_7x7.blob"),
 )
 LAPLACIANBLUR_5X5_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_5x5_9x9.blob"),
 )
 LAPLACIANBLUR_7X7_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_11x11.blob"),
 )
 LAPLACIANBLUR_7X7_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_13x13.blob"),
 )
 LAPLACIANBLUR_7X7_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_15x15.blob"),
 )
 LAPLACIANBLUR_7X7_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_3x3.blob"),
 )
 LAPLACIANBLUR_7X7_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_5x5.blob"),
 )
 LAPLACIANBLUR_7X7_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_7x7.blob"),
 )
 LAPLACIANBLUR_7X7_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_7x7_9x9.blob"),
 )
 LAPLACIANBLUR_9X9_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_11x11.blob"),
 )
 LAPLACIANBLUR_9X9_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_13x13.blob"),
 )
 LAPLACIANBLUR_9X9_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_15x15.blob"),
 )
 LAPLACIANBLUR_9X9_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_3x3.blob"),
 )
 LAPLACIANBLUR_9X9_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_5x5.blob"),
 )
 LAPLACIANBLUR_9X9_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_7x7.blob"),
 )
 LAPLACIANBLUR_9X9_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianBlur_9x9_9x9.blob"),
 )
 LAPLACIANGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_11x11.blob"),
 )
 LAPLACIANGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_13x13.blob"),
 )
 LAPLACIANGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_15x15.blob"),
 )
 LAPLACIANGRAY_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_3x3.blob"),
 )
 LAPLACIANGRAY_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_5x5.blob"),
 )
 LAPLACIANGRAY_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_7x7.blob"),
 )
 LAPLACIANGRAY_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "LaplacianGray_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "LaplacianGray_9x9.blob"),
 )
 LAPLACIAN_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, "Laplacian_11x11.blob"))
 LAPLACIAN_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, "Laplacian_13x13.blob"))
@@ -839,25 +839,25 @@ LAPLACIAN_9X9 = os.path.abspath(os.path.join(_BLOB_FOLDER, "Laplacian_9x9.blob")
 POINTCLOUD = os.path.abspath(os.path.join(_BLOB_FOLDER, "PointCloud.blob"))
 SOBEL = os.path.abspath(os.path.join(_BLOB_FOLDER, "Sobel.blob"))
 SOBELBLURGRAY_11X11 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_11x11.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_11x11.blob"),
 )
 SOBELBLURGRAY_13X13 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_13x13.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_13x13.blob"),
 )
 SOBELBLURGRAY_15X15 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_15x15.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_15x15.blob"),
 )
 SOBELBLURGRAY_3X3 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_3x3.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_3x3.blob"),
 )
 SOBELBLURGRAY_5X5 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_5x5.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_5x5.blob"),
 )
 SOBELBLURGRAY_7X7 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_7x7.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_7x7.blob"),
 )
 SOBELBLURGRAY_9X9 = os.path.abspath(
-    os.path.join(_BLOB_FOLDER, "SobelBlurGray_9x9.blob")
+    os.path.join(_BLOB_FOLDER, "SobelBlurGray_9x9.blob"),
 )
 SOBELBLUR_11X11 = os.path.abspath(os.path.join(_BLOB_FOLDER, "SobelBlur_11x11.blob"))
 SOBELBLUR_13X13 = os.path.abspath(os.path.join(_BLOB_FOLDER, "SobelBlur_13x13.blob"))

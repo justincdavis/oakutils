@@ -136,7 +136,10 @@ class LaplacianBlur(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -180,7 +183,9 @@ class LaplacianBlur(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.filters.laplacian(gaussian, self._kernel_size2)
 
@@ -196,7 +201,10 @@ class LaplacianBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -240,7 +248,9 @@ class LaplacianBlurGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         laplacian = kornia.filters.laplacian(gaussian, self._kernel_size2)
         return kornia.color.bgr_to_grayscale(laplacian)

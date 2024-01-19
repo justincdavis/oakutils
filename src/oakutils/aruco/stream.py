@@ -82,7 +82,8 @@ class ArucoStream:
         """
         self._finder: ArucoFinder = ArucoFinder(aruco_dict, marker_size, calibration)
         self._buffers: dict[
-            int, deque[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            int,
+            deque[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
         ] = defaultdict(lambda: deque(maxlen=buffersize))
         self._id_age: dict[int, int] = defaultdict(int)
         self._max_age = max_age

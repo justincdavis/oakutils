@@ -94,7 +94,8 @@ def _compile(
     # resolve the paths
     onnx_path = os.path.join(onnx_cache_dir, f"{model_name}.onnx")
     simplfiy_onnx_path = os.path.join(
-        simp_onnx_cache_dir, f"{model_name}_simplified.onnx"
+        simp_onnx_cache_dir,
+        f"{model_name}_simplified.onnx",
     )
     blob_dir = os.path.join(blob_cache_dir, model_name)
     final_blob_path = os.path.join(cache_dir, f"{model_name}.blob")

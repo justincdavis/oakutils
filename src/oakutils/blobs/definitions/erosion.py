@@ -140,7 +140,10 @@ class ErosionBlur(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -186,7 +189,9 @@ class ErosionBlur(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.morphology.erosion(gaussian, self._kernel)
 
@@ -202,7 +207,10 @@ class ErosionBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -248,7 +256,9 @@ class ErosionBlurGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         erosion = kornia.morphology.erosion(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(erosion)

@@ -83,7 +83,9 @@ def align_depth_to_rgb(
 
     # place the valid aligned points into a new depth image
     aligned_depth_image: np.ndarray = np.full(
-        (rgb_height, rgb_width), 0, dtype=np.uint16
+        (rgb_height, rgb_width),
+        0,
+        dtype=np.uint16,
     )
     aligned_depth_image[y_idx, x_idx] = u_v_z_sampled[3] * depth_scale
     return aligned_depth_image
@@ -119,7 +121,8 @@ def quantize_colormap_depth_frame(
     if apply_colormap is None:
         apply_colormap = True
     quantized_depth: np.ndarray = cv2.convertScaleAbs(
-        frame.astype(float), alpha=255 / depth_scale_factor
+        frame.astype(float),
+        alpha=255 / depth_scale_factor,
     )
     if apply_colormap:
         quantized_depth = cv2.applyColorMap(quantized_depth, cv2.COLORMAP_JET)
@@ -127,7 +130,9 @@ def quantize_colormap_depth_frame(
 
 
 def overlay_depth_frame(
-    rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5
+    rgb_frame: np.ndarray,
+    depth_frame: np.ndarray,
+    rgb_alpha: float = 0.5,
 ) -> np.ndarray:
     """
     Overlay the depth map on top of the RGB image.
@@ -156,7 +161,7 @@ def overlay_depth_frame(
     depth_three_channel[cond, 2] = 255
     # Blend aligned depth + rgb image
     blended_image: np.ndarray = (1.0 - rgb_alpha) * depth_three_channel.astype(
-        float
+        float,
     ) + rgb_alpha * rgb_frame.astype(float)
     blended_max: float = blended_image.max()
     return (255 * blended_image.astype(float) / blended_max).astype(np.uint8)

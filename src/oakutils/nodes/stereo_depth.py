@@ -62,7 +62,7 @@ def create_stereo_depth(
     stereo_input_reuse: bool | None = None,
     stereo_input_blocking: bool | None = None,
     stereo_input_wait_for_message: bool | None = None,
-) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
+) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Use to create a stereo depth given only a pipeline object.
 
