@@ -310,5 +310,6 @@ class VPU:
         with self._condition:
             self._condition.wait()
         if self._result is None:
-            raise RuntimeError("VPU result is None.")
+            err_msg = "VPU result is None."
+            raise RuntimeError(err_msg)
         return self._result
