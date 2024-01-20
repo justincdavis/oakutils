@@ -113,7 +113,8 @@ def create_mobilenet_detection_network(
         mobilenet_detection_network.setDepthUpperThreshold(upper_depth_threshold)
         mobilenet_detection_network.setBoundingBoxScaleFactor(bounding_box_scale_factor)
         if depth_input_link is None:
-            raise ValueError("You must set depth_input_link if spatial is True!")
+            err_msg = "You must set depth_input_link if spatial is True!"
+            raise ValueError(err_msg)
         depth_input_link.link(mobilenet_detection_network.inputDepth)
 
     mobilenet_detection_network.setBlobPath(blob_path)

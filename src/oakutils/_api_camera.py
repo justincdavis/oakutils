@@ -140,7 +140,8 @@ class ApiCamera:
             If the pipeline is accessed once the camera has been started.
         """
         if self._started:
-            raise RuntimeError("Cannot access pipeline once camera has been started.")
+            err_msg = "Cannot access pipeline once camera has been started."
+            raise RuntimeError(err_msg)
         return self._pipeline
 
     @property
@@ -225,7 +226,8 @@ class ApiCamera:
             If the camera has already been started.
         """
         if self._started:
-            raise RuntimeError("Cannot add device call after camera has been started.")
+            err_msg = "Cannot add device call after camera has been started."
+            raise RuntimeError(err_msg)
         self._custom_device_calls.append(call)
 
     def _run(self: Self) -> None:

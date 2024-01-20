@@ -144,7 +144,8 @@ def _compile(
         base_str += "Usually this is caused by a corrupted json file. "
         base_str += "Try deleting the blobconverter cache directory and json file. "
         base_str += "Then recompile the blob."
-        raise RuntimeError(base_str) from er
+        err_msg = base_str
+        raise RuntimeError(err_msg) from er
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
@@ -208,7 +209,8 @@ def compile_model(
             elif input_type == InputType.XYZ:
                 dummy_input_shapes.append(((640, 400, 3), InputType.XYZ))
             else:
-                raise ValueError(f"Unknown input type: {input_type}")
+                err_msg = f"Unknown input type: {input_type}"
+                raise ValueError(err_msg)
         else:
             dummy_input_shapes.append((shape_mapping[input_type], input_type))
 

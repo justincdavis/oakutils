@@ -73,4 +73,5 @@ def input_type_to_str(inputtype: InputType) -> str:
         return "U8"
     if inputtype == InputType.XYZ:
         return "FP16"
-    raise ValueError(f"Unknown input type: {inputtype}")
+    err_msg = f"Unknown input type: {inputtype}"
+    raise ValueError(err_msg)

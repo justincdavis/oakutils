@@ -80,7 +80,8 @@ def get_color_sensor_resolution_from_str(
         return dai.ColorCameraProperties.SensorResolution.THE_1440X1080
     if resolution == "4000x3000":
         return dai.ColorCameraProperties.SensorResolution.THE_4000X3000
-    raise ValueError("Invalid resolution in get_color_sensor_resolution_from_str")
+    err_msg = "Invalid resolution in get_color_sensor_resolution_from_str"
+    raise ValueError(err_msg)
 
 
 def get_tuple_from_color_sensor_resolution(
@@ -133,7 +134,8 @@ def get_tuple_from_color_sensor_resolution(
     if resolution == dai.ColorCameraProperties.SensorResolution.THE_4000X3000:
         return (4000, 3000)
     # Anything else is not valid
-    raise ValueError("Invalid resolution in get_tuple_from_color_sensor_resolution")
+    err_msg = "Invalid resolution in get_tuple_from_color_sensor_resolution"
+    raise ValueError(err_msg)
 
 
 def get_color_sensor_resolution_from_tuple(
@@ -181,7 +183,8 @@ def get_color_sensor_resolution_from_tuple(
         return dai.ColorCameraProperties.SensorResolution.THE_1440X1080
     if resolution == (4000, 3000):
         return dai.ColorCameraProperties.SensorResolution.THE_4000X3000
-    raise ValueError("Invalid resolution in get_color_resolution_from_tuple")
+    err_msg = "Invalid resolution in get_color_resolution_from_tuple"
+    raise ValueError(err_msg)
 
 
 def get_color_sensor_info_from_str(
@@ -231,7 +234,8 @@ def get_mono_sensor_resolution_from_str(
         return dai.MonoCameraProperties.SensorResolution.THE_800_P
     if resolution == "1200p":
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
-    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_str")
+    err_msg = "Invalid resolution in get_mono_sensor_resolution_from_str"
+    raise ValueError(err_msg)
 
 
 def get_mono_sensor_resolution_from_tuple(
@@ -265,7 +269,8 @@ def get_mono_sensor_resolution_from_tuple(
         return dai.MonoCameraProperties.SensorResolution.THE_800_P
     if resolution == (1920, 1200):
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
-    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_tuple")
+    err_msg = "Invalid resolution in get_mono_sensor_resolution_from_tuple"
+    raise ValueError(err_msg)
 
 
 def get_tuple_from_mono_sensor_resolution(
@@ -301,7 +306,8 @@ def get_tuple_from_mono_sensor_resolution(
     if resolution == dai.MonoCameraProperties.SensorResolution.THE_1200_P:
         return (1920, 1200)
     # Anything else is not valid
-    raise ValueError("Invalid resolution in get_tuple_from_mono_sensor_resolution")
+    err_msg = "Invalid resolution in get_tuple_from_mono_sensor_resolution"
+    raise ValueError(err_msg)
 
 
 def get_mono_sensor_info_from_str(
@@ -355,6 +361,7 @@ def get_median_filter_from_str(
         return median_5
     if filter_size == 7:
         return median_7
+    err_msg = "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
     raise ValueError(
-        "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None",
+        err_msg,
     )

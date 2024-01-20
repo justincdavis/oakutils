@@ -153,7 +153,8 @@ class PointCloudVisualizer:
             If pcd is not an open3d.geometry.PointCloud object.
         """
         if not isinstance(pcd, o3d.geometry.PointCloud):
-            raise TypeError("pcd must be an open3d.geometry.PointCloud object.")
+            err_msg = "pcd must be an open3d.geometry.PointCloud object."
+            raise TypeError(err_msg)
 
         if self._pcd is None:
             self._pcd = pcd

@@ -70,7 +70,8 @@ class ArucoLocalizer:
         """
         self._transforms: dict[int, np.ndarray] = {}
         if alpha < 0.0 or alpha > 1.0:
-            raise ValueError("alpha must be in range [0, 1]")
+            err_msg = "alpha must be in range [0, 1]"
+            raise ValueError(err_msg)
         self._alpha1, self._alpha2 = alpha, (1.0 - alpha)
         self._max_age = max_age
         self._age = 0

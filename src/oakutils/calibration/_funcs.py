@@ -480,7 +480,8 @@ def get_camera_calibration(
     )
     # assert data.primary is not None  # help mypy
     if data.primary is None:
-        raise RuntimeError("data.primary is None")
+        err_msg = "data.primary is None"
+        raise RuntimeError(err_msg)
 
     q_primary = create_q_matrix(
         data.primary.fx,

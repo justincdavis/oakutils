@@ -43,7 +43,8 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
         perform_optimization=True,
     )
     if not check:
-        raise AssertionError("Simplified model could not be validated")
+        err_msg = "Simplified model could not be validated"
+        raise AssertionError(err_msg)
     onnx.save(model_simp, output_path)
 
 

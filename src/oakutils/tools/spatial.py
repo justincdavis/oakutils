@@ -133,8 +133,9 @@ class HostSpatialsCalc:
         if len(roi) == 4:  # xywh
             return roi  # type: ignore[return-value]
         if len(roi) != 2:  # not xy or xywh
+            err_msg = "You have to pass either ROI (4 values) or point (2 values)!"
             raise ValueError(
-                "You have to pass either ROI (4 values) or point (2 values)!",
+                err_msg,
             )
         x = min(max(roi[0], self._delta), frame.shape[1] - self._delta)
         y = min(max(roi[1], self._delta), frame.shape[0] - self._delta)
@@ -220,8 +221,9 @@ class HostSpatialsCalc:
 
         # assert self._mid_w, self._mid_h are not None
         if self._mid_w is None or self._mid_h is None:
+            err_msg = "self._mid_w or self._mid_h is None, initialization error"
             raise RuntimeError(
-                "self._mid_w or self._mid_h is None, initialization error",
+                err_msg,
             )
 
         bb_x_pos = centroid[0] - self._mid_w
@@ -229,7 +231,8 @@ class HostSpatialsCalc:
 
         # asssert self._i_angle is not None
         if self._i_angle is None:
-            raise RuntimeError("self._i_angle is None, initialization error")
+            err_msg = "self._i_angle is None, initialization error"
+            raise RuntimeError(err_msg)
 
         angle_x = math.atan(self._i_angle * bb_x_pos)
         angle_y = math.atan(self._i_angle * bb_y_pos)

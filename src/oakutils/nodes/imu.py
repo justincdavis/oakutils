@@ -146,11 +146,13 @@ def create_imu(
         enable_arvr_stabilized_game_rotation_vector = False
 
     if accelerometer_rate not in [100, 200, 400]:
+        err_msg = "accelerometer_rate must be one of the following: 100, 200, 400"
         raise ValueError(
-            "accelerometer_rate must be one of the following: 100, 200, 400",
+            err_msg,
         )
     if gyroscope_rate not in [125, 250, 400]:
-        raise ValueError("gyroscope_rate must be one of the following: 125, 250, 400")
+        err_msg = "gyroscope_rate must be one of the following: 125, 250, 400"
+        raise ValueError(err_msg)
     slower_rate = min(accelerometer_rate, gyroscope_rate)
 
     sensors = []

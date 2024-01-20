@@ -136,19 +136,26 @@ def create_color_camera(
         set_interleaved = False
 
     if fps < 0 or fps > 60:
-        raise ValueError("fps must be between 0 and 60")
+        err_msg = "fps must be between 0 and 60"
+        raise ValueError(err_msg)
     if brightness < -10 or brightness > 10:
-        raise ValueError("brightness must be between -10 and 10")
+        err_msg = "brightness must be between -10 and 10"
+        raise ValueError(err_msg)
     if saturation < -10 or saturation > 10:
-        raise ValueError("saturation must be between -10 and 10")
+        err_msg = "saturation must be between -10 and 10"
+        raise ValueError(err_msg)
     if contrast < -10 or contrast > 10:
-        raise ValueError("contrast must be between -10 and 10")
+        err_msg = "contrast must be between -10 and 10"
+        raise ValueError(err_msg)
     if sharpness < 0 or sharpness > 4:
-        raise ValueError("sharpness must be between 0 and 4")
+        err_msg = "sharpness must be between 0 and 4"
+        raise ValueError(err_msg)
     if luma_denoise < 0 or luma_denoise > 4:
-        raise ValueError("luma_denoise must be between 0 and 4")
+        err_msg = "luma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
     if chroma_denoise < 0 or chroma_denoise > 4:
-        raise ValueError("chroma_denoise must be between 0 and 4")
+        err_msg = "chroma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
     if input_reuse is None:
         input_reuse = False
     if input_blocking is None:

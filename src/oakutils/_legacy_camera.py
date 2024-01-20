@@ -675,12 +675,14 @@ class LegacyCamera:
 
     def _update_point_cloud(self: Self) -> None:
         if self._rgb_frame is None or self._depth is None:
-            raise RuntimeError("RGB frame or depth map is not available.")
+            err_msg = "RGB frame or depth map is not available."
+            raise RuntimeError(err_msg)
         if (
             self._calibration.primary is None
             or self._calibration.primary.pinhole is None
         ):
-            raise RuntimeError("Primary pinhole calibration is not available.")
+            err_msg = "Primary pinhole calibration is not available."
+            raise RuntimeError(err_msg)
 
         pcd = get_point_cloud_from_rgb_depth_image(
             self._rgb_frame,
@@ -805,9 +807,11 @@ class LegacyCamera:
 
     def _crop_to_valid_primary_region(self: Self, img: np.ndarray) -> np.ndarray:
         if self._calibration.primary is None:
-            raise RuntimeError("Primary calibration is not available.")
+            err_msg = "Primary calibration is not available."
+            raise RuntimeError(err_msg)
         if self._calibration.primary.valid_region is None:
-            raise RuntimeError("Primary valid region is not available.")
+            err_msg = "Primary valid region is not available."
+            raise RuntimeError(err_msg)
         return img[
             self._calibration.primary.valid_region[
                 1

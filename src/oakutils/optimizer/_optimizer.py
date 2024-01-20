@@ -70,7 +70,8 @@ class Optimizer:
             If the algorithm is invalid
         """
         if algorithm != "grid":
-            raise ValueError(f"Invalid algorithm {algorithm}")
+            err_msg = f"Invalid algorithm {algorithm}"
+            raise ValueError(err_msg)
         if algorithm == "grid":
             self._algorithm = grid_search
         self._max_measure_time = max_measure_time

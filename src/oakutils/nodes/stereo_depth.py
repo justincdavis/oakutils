@@ -413,12 +413,15 @@ def create_stereo_depth_from_mono_cameras(
         enable_temporal_filter = False
     # all alpha parameters should be between 0.0 and 1.0
     if not 0.0 <= spatial_alpha <= 1.0:
-        raise ValueError("spatial_alpha should be between 0.0 and 1.0")
+        err_msg = "spatial_alpha should be between 0.0 and 1.0"
+        raise ValueError(err_msg)
     if not 0.0 <= temporal_alpha <= 1.0:
-        raise ValueError("temporal_alpha should be between 0.0 and 1.0")
+        err_msg = "temporal_alpha should be between 0.0 and 1.0"
+        raise ValueError(err_msg)
     # decimation should be 1,2,3,4
     if decimation_factor not in [1, 2, 3, 4]:
-        raise ValueError("decimation_factor should be 1,2,3,4")
+        err_msg = "decimation_factor should be 1,2,3,4"
+        raise ValueError(err_msg)
 
     stereo: dai.node.StereoDepth = pipeline.create(dai.node.StereoDepth)
     stereo.setDefaultProfilePreset(preset)

@@ -13,11 +13,14 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import logging
 from typing import Callable, Iterable
 
 import torch
 
 from oakutils.blobs.definitions.utils import InputType
+
+_log = logging.getLogger(__name__)
 
 
 def _create_dummy_input(
@@ -50,9 +53,11 @@ def _create_dummy_input(
         If the input_shape is not in the correct form
     """
     if len(input_shape) != 3:
-        raise ValueError("input_shape must be in form width, height, channels")
+        err_msg = "input_shape must be in form width, height, channels"
+        raise ValueError(err_msg)
     if input_shape[2] not in [1, 3]:
-        raise ValueError("input_shape must have 1 or 3 channels")
+        err_msg = "input_shape must have 1 or 3 channels"
+        raise ValueError(err_msg)
 
     if input_type == InputType.U8:
         # if we are using a single channel, should assume that it will be grayscale
@@ -72,7 +77,9 @@ def _create_dummy_input(
             (1, input_shape[1], input_shape[0], input_shape[2]),
             dtype=torch.float32,  # type: ignore[call-arg]
         )
-    raise ValueError(f"Unknown input type: {input_type}")
+
+    err_msg = f"Unknown input type: {input_type}"
+    raise ValueError(err_msg)
 
 
 def _create_multiple_dummy_input(
@@ -133,11 +140,11 @@ def _export_module_to_onnx(
         verbose = False
 
     if verbose:
-        print(f"Exporting model to {onnx_path}")
-        print(f"Input names: {input_names}")
-        print(f"Output names: {output_names}")
+        _log.info(f"Exporting model to {onnx_path}")
+        _log.info(f"Input names: {input_names}")
+        _log.info(f"Output names: {output_names}")
         for dummy_input_tensor in dummy_input:
-            print(f"Dummy input shape: {dummy_input_tensor.shape}")
+            _log.info(f"Dummy input shape: {dummy_input_tensor.shape}")
 
     torch.onnx.export(
         model_instance,
@@ -187,8 +194,8 @@ def export(
         verbose = False
 
     if verbose:
-        print(dummy_input_shapes)
-        print(type(dummy_input_shapes))
+        _log.info(dummy_input_shapes)
+        _log.info(type(dummy_input_shapes))
 
     dummy_input: torch.Tensor | list[torch.Tensor] = torch.Tensor()
     if not isinstance(dummy_input_shapes, list):

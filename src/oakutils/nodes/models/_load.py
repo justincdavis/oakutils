@@ -96,7 +96,8 @@ def create_model(
             "Please check that all models are present in your installation through: "
         )
         base_str += "`dir(oakutils.blobs.models)`"
-        raise ValueError(f"{base_str}\n Possible blobs: {potential_blobs}") from err
+        err_msg = f"{base_str}\n Possible blobs: {potential_blobs}"
+        raise ValueError(err_msg) from err
 
     new_path: pathlib.Path = pathlib.Path(path)
 

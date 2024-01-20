@@ -41,7 +41,8 @@ def parse_kernel_size(kernel_size: int) -> bool:
         valid = True
 
     if not valid:
-        raise ValueError("Invalid kernel size, must be an odd integer between 3 and 15")
+        err_msg = "Invalid kernel size, must be an odd integer between 3 and 15"
+        raise ValueError(err_msg)
     return valid
 
 
@@ -124,7 +125,8 @@ def get_candidates(
     """
     valid, valid_names = _valid_model_names(model_type)
     if not valid:
-        raise ValueError(f"Invalid model type, valid names are: {valid_names}")
+        err_msg = f"Invalid model type, valid names are: {valid_names}"
+        raise ValueError(err_msg)
     model_type = model_type.upper()
 
     potential_blobs = []

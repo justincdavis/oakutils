@@ -122,7 +122,8 @@ def create_yolo_detection_network(
         yolo_detection_network.setDepthLowerThreshold(lower_depth_threshold)
         yolo_detection_network.setDepthUpperThreshold(upper_depth_threshold)
         if depth_input_link is None:
-            raise ValueError("You must set depth_input_link if spatial is True!")
+            err_msg = "You must set depth_input_link if spatial is True!"
+            raise ValueError(err_msg)
         depth_input_link.link(yolo_detection_network.inputDepth)
 
     yolo_detection_network.setBlobPath(blob_path)

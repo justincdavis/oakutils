@@ -98,28 +98,43 @@ def create_neural_network(
     -------
     dai.node.NeuralNetwork
         The neural network node
+
+    Raises
+    ------
+    ValueError
+        If input_link is an iterable and input_names is None
+        If input_link and input_names are iterables and are not the same length
+        If input_link and reuse_messages are iterables and are not the same length
+    TypeError
+        If input_link is an iterable and input_names is not an iterable
+        If input_link is an iterable and reuse_messages is not an iterable
     """
     if isinstance(input_link, list):
         if input_names is None:
+            err_msg = "input_names must be provided if input_link is an iterable"
             raise ValueError(
-                "input_names must be provided if input_link is an iterable",
+                err_msg,
             )
         if not isinstance(input_names, list):
-            raise ValueError(
-                "input_names must be an iterable if input_link is an iterable",
+            err_msg = "input_names must be an iterable if input_link is an iterable"
+            raise TypeError(
+                err_msg,
             )
         if len(input_link) != len(input_names):
+            err_msg = "input_link and input_names must be the same length if both are iterables"
             raise ValueError(
-                "input_link and input_names must be the same length if both are iterables",
+                err_msg,
             )
         if reuse_messages is not None:
             if not isinstance(reuse_messages, list):
-                raise ValueError(
-                    "reuse_messages must be an iterable if input_link is an iterable",
+                err_msg = "reuse_messages must be an iterable if input_link is an iterable"
+                raise TypeError(
+                    err_msg,
                 )
             if len(input_link) != len(reuse_messages):
+                err_msg = "input_link and reuse_messages must be the same length if both are iterables"
                 raise ValueError(
-                    "input_link and reuse_messages must be the same length if both are iterables",
+                    err_msg,
                 )
 
     # create the node and handle the always present parameters
@@ -139,12 +154,14 @@ def create_neural_network(
         input_link.link(nn.input)
     else:
         if input_names is None or reuse_messages is None:
+            err_msg = "input_names and reuse_messages must be provided if input_link is an iterable"
             raise ValueError(
-                "input_names and reuse_messages must be provided if input_link is an iterable",
+                err_msg,
             )
         if isinstance(input_names, str) or isinstance(reuse_messages, bool):
-            raise RuntimeError(
-                "input_names and reuse_messages must be iterables if input_link is an iterable",
+            err_msg = "input_names and reuse_messages must be iterables if input_link is an iterable"
+            raise TypeError(
+                err_msg,
             )
         if input_blocking is not None and isinstance(input_blocking, bool):
             input_blocking = [input_blocking] * len(input_link)

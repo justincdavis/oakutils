@@ -117,22 +117,30 @@ def create_mono_camera(
         If the chroma_denoise is not between 0 and 4
     """
     if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
-        raise ValueError("socket must be LEFT or RIGHT")
+        err_msg = "socket must be LEFT or RIGHT"
+        raise ValueError(err_msg)
 
     if fps < 0 or fps > 120:
-        raise ValueError("fps must be between 0 and 120")
+        err_msg = "fps must be between 0 and 120"
+        raise ValueError(err_msg)
     if brightness < -10 or brightness > 10:
-        raise ValueError("brightness must be between -10 and 10")
+        err_msg = "brightness must be between -10 and 10"
+        raise ValueError(err_msg)
     if saturation < -10 or saturation > 10:
-        raise ValueError("saturation must be between -10 and 10")
+        err_msg = "saturation must be between -10 and 10"
+        raise ValueError(err_msg)
     if contrast < -10 or contrast > 10:
-        raise ValueError("contrast must be between -10 and 10")
+        err_msg = "contrast must be between -10 and 10"
+        raise ValueError(err_msg)
     if sharpness < 0 or sharpness > 4:
-        raise ValueError("sharpness must be between 0 and 4")
+        err_msg = "sharpness must be between 0 and 4"
+        raise ValueError(err_msg)
     if luma_denoise < 0 or luma_denoise > 4:
-        raise ValueError("luma_denoise must be between 0 and 4")
+        err_msg = "luma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
     if chroma_denoise < 0 or chroma_denoise > 4:
-        raise ValueError("chroma_denoise must be between 0 and 4")
+        err_msg = "chroma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
 
     # static properties
     cam: dai.node.MonoCamera = pipeline.create(dai.node.MonoCamera)

@@ -163,7 +163,8 @@ class VPU:
         if is_mobilenet_model is None:
             is_mobilenet_model = False
         if is_yolo_model and is_mobilenet_model:
-            raise ValueError("Cannot be both YOLO model and Mobilenet model.")
+            err_msg = "Cannot be both YOLO model and Mobilenet model."
+            raise ValueError(err_msg)
         # stop the VPU if it is running
         if self._thread is not None:
             self.stop()
@@ -182,7 +183,8 @@ class VPU:
                 )
             if is_yolo_model:
                 if yolo_data is None:
-                    raise ValueError("YOLO data must not be None.")
+                    err_msg = "YOLO data must not be None."
+                    raise ValueError(err_msg)
                 _log.debug("Reconfiguring VPU with YOLO model.")
                 self._nn = create_yolo_detection_network(
                     self._pipeline,
@@ -204,13 +206,15 @@ class VPU:
                     input_blocking=yolo_data.input_blocking,
                 )
                 if self._nn is None:
+                    err_msg = "Neural network is None, major internal error occured."
                     raise RuntimeError(
-                        "Neural network is None, major internal error occured.",
+                        err_msg,
                     )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_mobilenet_model:
                 if mobilenet_data is None:
-                    raise ValueError("Mobilenet data must not be None.")
+                    err_msg = "Mobilenet data must not be None."
+                    raise ValueError(err_msg)
                 _log.debug("Reconfiguring VPU with Mobilenet model.")
                 self._nn = create_mobilenet_detection_network(
                     self._pipeline,
@@ -228,8 +232,9 @@ class VPU:
                     input_blocking=mobilenet_data.input_blocking,
                 )
                 if self._nn is None:
+                    err_msg = "Neural network is None, major internal error occured."
                     raise RuntimeError(
-                        "Neural network is None, major internal error occured.",
+                        err_msg,
                     )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
         else:
@@ -254,7 +259,8 @@ class VPU:
     def _run(self: Self) -> None:
         """Use in a thread to process the data on the VPU."""
         if self._pipeline is None:
-            raise RuntimeError("Pipeline not set.")
+            err_msg = "Pipeline not set."
+            raise RuntimeError(err_msg)
         with dai.Device(self._pipeline) as device:
             _log.debug("VPU thread started.")
             with self._start_condition:
@@ -269,9 +275,11 @@ class VPU:
                 if isinstance(self._xin, list):
                     _log.debug("Sending multi-value data to VPU.")
                     if self._input_names is None:
-                        raise RuntimeError("Input names not set.")
+                        err_msg = "Input names not set."
+                        raise RuntimeError(err_msg)
                     if self._data is None or not isinstance(self._data, list):
-                        raise RuntimeError("Data not set or data is not a list.")
+                        err_msg = "Data not set or data is not a list."
+                        raise RuntimeError(err_msg)
                     for name, data in zip(self._input_names, self._data):
                         buff = dai.Buffer()
                         buff.setData(data)
@@ -310,11 +318,14 @@ class VPU:
             If the VPU result is None.
         """
         if self._blob_path is None:
-            raise RuntimeError("Blob path not set.")
+            err_msg = "Blob path not set."
+            raise RuntimeError(err_msg)
         if self._thread is None:
-            raise RuntimeError("VPU thread not set.")
+            err_msg = "VPU thread not set."
+            raise RuntimeError(err_msg)
         if not self._thread.is_alive():
-            raise RuntimeError("VPU thread is not alive.")
+            err_msg = "VPU thread is not alive."
+            raise RuntimeError(err_msg)
         _log.debug("VPU run called.")
         self._data = data
         with self._condition:
