@@ -261,7 +261,6 @@ class ApiCamera:
                         data = [data_cache[n] for n in name]
                     partials.append(partial(callback, data))
                 # run/dispatch the callback partials
-                # TODO: run in async loop or another thread or process?
                 for callback in partials:
                     callback()
 
