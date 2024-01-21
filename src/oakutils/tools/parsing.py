@@ -351,17 +351,15 @@ def get_median_filter_from_str(
     median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
     median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
     median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
-    if filter_size is None:
-        return median_off
-    if filter_size == 0:
-        return median_off
-    if filter_size == 3:
-        return median_3
-    if filter_size == 5:
-        return median_5
-    if filter_size == 7:
-        return median_7
-    err_msg = "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
-    raise ValueError(
-        err_msg,
-    )
+    median_filter_map = {
+        None: median_off,
+        0: median_off,
+        3: median_3,
+        5: median_5,
+        7: median_7,
+    }
+    try:
+        return median_filter_map[filter_size]
+    except KeyError as err:
+        err_msg = "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
+        raise ValueError(err_msg) from err

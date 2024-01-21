@@ -297,7 +297,8 @@ def get_nn_frame(
         frame = frame[:, :, ::-1]
 
     if resize_factor is not None and normalization is not None:
-        if resize_factor <= 1.0:
+        resize_to_be_smaller = 1.0
+        if resize_factor <= resize_to_be_smaller:
             frame = _normalize(_resize(frame, resize_factor), normalization)
         else:
             frame = _resize(_normalize(frame, normalization), resize_factor)
@@ -436,6 +437,7 @@ def get_nn_point_cloud_buffer(
         # optimization over an np.all since it performs less checks
         # and realisticlly it does not matter if there is a few points
         # difference over hundreds of interations
-        pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
+        zero_val = 0.0
+        pcl_data = pcl_data[pcl_data[:, 2] != zero_val]
 
     return pcl_data

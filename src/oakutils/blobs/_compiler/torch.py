@@ -52,7 +52,8 @@ def _create_dummy_input(
     ValueError
         If the input_shape is not in the correct form
     """
-    if len(input_shape) != 3:
+    whc = 3
+    if len(input_shape) != whc:
         err_msg = "input_shape must be in form width, height, channels"
         raise ValueError(err_msg)
     if input_shape[2] not in [1, 3]:

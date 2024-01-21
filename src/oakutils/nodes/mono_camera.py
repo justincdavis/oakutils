@@ -120,25 +120,32 @@ def create_mono_camera(
         err_msg = "socket must be LEFT or RIGHT"
         raise ValueError(err_msg)
 
-    if fps < 0 or fps > 120:
+    min_fps, max_fps = 0, 120
+    if fps < min_fps or fps > max_fps:
         err_msg = "fps must be between 0 and 120"
         raise ValueError(err_msg)
-    if brightness < -10 or brightness > 10:
+    min_brightness, max_brightness = -10, 10
+    if brightness < min_brightness or brightness > max_brightness:
         err_msg = "brightness must be between -10 and 10"
         raise ValueError(err_msg)
-    if saturation < -10 or saturation > 10:
+    min_saturation, max_saturation = -10, 10
+    if saturation < min_saturation or saturation > max_saturation:
         err_msg = "saturation must be between -10 and 10"
         raise ValueError(err_msg)
-    if contrast < -10 or contrast > 10:
+    min_contrast, max_contrast = -10, 10
+    if contrast < min_contrast or contrast > max_contrast:
         err_msg = "contrast must be between -10 and 10"
         raise ValueError(err_msg)
-    if sharpness < 0 or sharpness > 4:
+    min_sharpness, max_sharpness = 0, 4
+    if sharpness < min_sharpness or sharpness > max_sharpness:
         err_msg = "sharpness must be between 0 and 4"
         raise ValueError(err_msg)
-    if luma_denoise < 0 or luma_denoise > 4:
+    min_luma_denoise, max_luma_denoise = 0, 4
+    if luma_denoise < min_luma_denoise or luma_denoise > max_luma_denoise:
         err_msg = "luma_denoise must be between 0 and 4"
         raise ValueError(err_msg)
-    if chroma_denoise < 0 or chroma_denoise > 4:
+    min_chroma_denoise, max_chroma_denoise = 0, 4
+    if chroma_denoise < min_chroma_denoise or chroma_denoise > max_chroma_denoise:
         err_msg = "chroma_denoise must be between 0 and 4"
         raise ValueError(err_msg)
 

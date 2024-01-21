@@ -412,10 +412,12 @@ def create_stereo_depth_from_mono_cameras(
     if enable_temporal_filter is None:
         enable_temporal_filter = False
     # all alpha parameters should be between 0.0 and 1.0
-    if not 0.0 <= spatial_alpha <= 1.0:
+    min_spatial_alpha, max_spacial_alpha = 0.0, 1.0
+    if not min_spatial_alpha <= spatial_alpha <= max_spacial_alpha:
         err_msg = "spatial_alpha should be between 0.0 and 1.0"
         raise ValueError(err_msg)
-    if not 0.0 <= temporal_alpha <= 1.0:
+    min_temporal_alpha, max_temporal_alpha = 0.0, 1.0
+    if not min_temporal_alpha <= temporal_alpha <= max_temporal_alpha:
         err_msg = "temporal_alpha should be between 0.0 and 1.0"
         raise ValueError(err_msg)
     # decimation should be 1,2,3,4

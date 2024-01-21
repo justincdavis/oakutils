@@ -278,11 +278,12 @@ class LegacyCamera:
         self._rgb_size = get_color_sensor_info_from_str(rgb_size)
         self._mono_size = get_mono_sensor_info_from_str(mono_size)
 
-        if stereo_decimation_filter_factor == 2:
+        dec_filter_divisor = 2
+        if stereo_decimation_filter_factor == dec_filter_divisor:
             # need to divide the mono height by 2
             self._mono_size = (
                 self._mono_size[0],
-                self._mono_size[1] // 2,
+                self._mono_size[1] // dec_filter_divisor,
                 self._mono_size[2],
             )
 

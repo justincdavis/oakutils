@@ -130,9 +130,11 @@ class HostSpatialsCalc:
         frame: np.ndarray,
     ) -> tuple[int, int, int, int]:
         """Use to check if the input is valid, and constrains to the frame size."""
-        if len(roi) == 4:  # xywh
+        xywh_size = 4
+        if len(roi) == xywh_size:  # xywh
             return roi  # type: ignore[return-value]
-        if len(roi) != 2:  # not xy or xywh
+        xy_size = 2
+        if len(roi) != xy_size:  # not xy or xywh
             err_msg = "You have to pass either ROI (4 values) or point (2 values)!"
             raise ValueError(
                 err_msg,
