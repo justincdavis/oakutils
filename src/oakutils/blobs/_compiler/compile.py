@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+from pathlib import Path
 from typing import Callable
 
 import torch
@@ -38,7 +39,7 @@ def _compile(
     creation_func: Callable = torch.rand,
     *,
     cache: bool | None = None,
-) -> str:
+) -> Path:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.
 
@@ -65,7 +66,7 @@ def _compile(
 
     Returns
     -------
-    str
+    Path
         The path to the compiled blob
 
     Raises
@@ -92,53 +93,55 @@ def _compile(
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
-    onnx_cache_dir = os.path.join(cache_dir, "onnx")
-    if not os.path.exists(onnx_cache_dir):
-        os.makedirs(onnx_cache_dir)
-    simp_onnx_cache_dir = os.path.join(cache_dir, "simplified_onnx")
-    if not os.path.exists(simp_onnx_cache_dir):
-        os.makedirs(simp_onnx_cache_dir)
-    blob_cache_dir = os.path.join(cache_dir, "blobs")
-    if not os.path.exists(blob_cache_dir):
-        os.makedirs(blob_cache_dir)
+    if not Path.exists(cache_dir):
+        Path.mkdir(cache_dir, parents=True)
+    onnx_cache_dir = Path(cache_dir) / "onnx"
+    if not Path.exists(onnx_cache_dir):
+        Path.mkdir(onnx_cache_dir, parents=True)
+    simp_onnx_cache_dir = Path(cache_dir) / "simplified_onnx"
+    if not Path.exists(simp_onnx_cache_dir):
+        Path.mkdir(simp_onnx_cache_dir, parents=True)
+    blob_cache_dir = Path(cache_dir) / "blobs"
+    if not Path.exists(blob_cache_dir):
+        Path.mkdir(blob_cache_dir, parents=True)
 
     # resolve the paths
-    onnx_path = os.path.join(onnx_cache_dir, f"{model_name}.onnx")
-    simplfiy_onnx_path = os.path.join(
-        simp_onnx_cache_dir,
-        f"{model_name}_simplified.onnx",
-    )
-    blob_dir = os.path.join(blob_cache_dir, model_name)
-    final_blob_path = os.path.join(cache_dir, f"{model_name}.blob")
+    onnx_path = Path(onnx_cache_dir) / f"{model_name}.onnx"
+    simplfiy_onnx_path = Path(simp_onnx_cache_dir) / f"{model_name}_simplified.onnx"
+    blob_dir = Path(blob_cache_dir) / model_name
+    final_blob_path = Path(cache_dir) / f"{model_name}.blob"
 
     # check if the model has been made before
-    if cache and os.path.exists(final_blob_path):
+    if cache and Path.exists(final_blob_path):
         return final_blob_path
 
     # if we are not caching, then remove the old blob
     if not cache:
         for p in [onnx_path, simplfiy_onnx_path, final_blob_path]:
-            if os.path.exists(p):
-                os.remove(p)
+            if Path.exists(p):
+                Path.unlink(p)
 
     # first step, export the torch model
     export(
         model_instance=model,
         dummy_input_shapes=dummy_input_shapes,
-        onnx_path=onnx_path,
+        onnx_path=str(onnx_path.resolve()),
         input_names=input_names,
         output_names=output_names,
         creation_func=creation_func,
     )
 
     # second step, simplify the onnx model
-    simplify(onnx_path, simplfiy_onnx_path)
+    simplify(str(onnx_path.resolve()), str(simplfiy_onnx_path.resolve()))
 
     # third step, compile the onnx model
     try:
-        compile_blob(model_type, simplfiy_onnx_path, blob_dir, shaves=shaves)
+        compile_blob(
+            model_type,
+            str(simplfiy_onnx_path.resolve()),
+            str(blob_dir.resolve()),
+            shaves=shaves,
+        )
     except json.JSONDecodeError as er:
         base_str = "Error compiling blob. "
         base_str += "Usually this is caused by a corrupted json file. "
@@ -149,7 +152,7 @@ def _compile(
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]
-    return str(shutil.copy(os.path.join(blob_dir, blob_file), final_blob_path))
+    return Path(str(shutil.copy(Path(blob_dir) / blob_file, final_blob_path)))
 
 
 def compile_model(
@@ -214,11 +217,13 @@ def compile_model(
         else:
             dummy_input_shapes.append((shape_mapping[input_type], input_type))
 
-    return _compile(
-        model_type=model_type,
-        model_args=model_args,
-        dummy_input_shapes=dummy_input_shapes,
-        cache=cache,
-        shaves=shaves,
-        creation_func=creation_func,
+    return str(
+        _compile(
+            model_type=model_type,
+            model_args=model_args,
+            dummy_input_shapes=dummy_input_shapes,
+            cache=cache,
+            shaves=shaves,
+            creation_func=creation_func,
+        ).resolve(),
     )

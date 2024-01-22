@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from oakutils.blobs import models
 
@@ -148,7 +149,7 @@ def get_candidates(
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
     for blob in potential_blobs:
-        path: str = os.path.basename(blob)  # drop the extension
+        path: str = Path(blob).name  # drop the extension
         path = os.path.split(path)[-1]  # just the file name
         data = path.split("_")  # split into name and attributes
         if len(data) == 1:  # if there are no extra attributes

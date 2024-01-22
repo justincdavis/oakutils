@@ -16,9 +16,10 @@ from __future__ import annotations
 import os
 import site
 import sysconfig
+from pathlib import Path
 
 
-def get_site_packages_path() -> str:
+def get_site_packages_path() -> Path:
     """
     Use to get the path to the site-packages folder.
 
@@ -32,10 +33,10 @@ def get_site_packages_path() -> str:
     site_packages = (
         site_site_packages if os.name == "posix" else sysconfig_site_packages
     )
-    return os.path.abspath(site_packages)
+    return Path(site_packages).resolve()
 
 
-def get_oakutils_path() -> str:
+def get_oakutils_path() -> Path:
     """
     Use to get the path to the oakutils folder.
 
@@ -44,10 +45,10 @@ def get_oakutils_path() -> str:
     str
         The path to the oakutils folder.
     """
-    return os.path.join(get_site_packages_path(), "oakutils")
+    return Path(get_site_packages_path()) / "oakutils"
 
 
-def get_blobs_path() -> str:
+def get_blobs_path() -> Path:
     """
     Use to get the path to the oakutils blobs folder.
 
@@ -56,10 +57,10 @@ def get_blobs_path() -> str:
     str
         The path to the oakutils blobs folder.
     """
-    return os.path.join(get_oakutils_path(), "blobs")
+    return Path(get_oakutils_path()) / "blobs"
 
 
-def get_cache_dir_path() -> str:
+def get_cache_dir_path() -> Path:
     """
     Use to get the path to the oakutils blobs cache folder.
 
@@ -68,10 +69,10 @@ def get_cache_dir_path() -> str:
     str
         The path to the oakutils blobs cache folder.
     """
-    return os.path.join(get_blobs_path(), "_cache")
+    return Path(get_blobs_path()) / "_cache"
 
 
-def get_models_dir_path() -> str:
+def get_models_dir_path() -> Path:
     """
     Use to get the path to the oakutils blobs models folder.
 
@@ -80,4 +81,4 @@ def get_models_dir_path() -> str:
     str
         The path to the oakutils blobs models folder.
     """
-    return os.path.join(get_blobs_path(), "models")
+    return Path(get_blobs_path()) / "models"
