@@ -71,7 +71,6 @@ ci = [
     "isort>=5.10",
     "ruff>=0.1.14",
     "mypy>=1.8.0",
-    "pyright>=1.1.50",
     "types-setuptools",
 ]
 test = [
@@ -90,6 +89,7 @@ dev = [
     "wheel",
     "bumpver",
     "pyclean",
+    "pyright>=1.1.50",
 ]
 
 [tool.bumpver]
