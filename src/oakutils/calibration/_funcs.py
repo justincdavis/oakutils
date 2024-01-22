@@ -502,7 +502,7 @@ def get_camera_calibration(
     map_rgb_1, map_rgb_2 = cv2.initUndistortRectifyMap(
         data.rgb.K,
         data.rgb.D,
-        None,
+        None,  # pyright: ignore[reportArgumentType]
         p_rgb,
         rgb_size,
         cv2.CV_16SC2,  # type: ignore[attr-defined]

@@ -1,4 +1,4 @@
-.PHONY: help install clean docs blobs test ci mypy pyupgrade isort black ruff release
+.PHONY: help install clean docs blobs test ci mypy pyright pyupgrade isort black ruff release
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -6,7 +6,8 @@ help:
 	@echo "  clean      to clean the directory tree"
 	@echo "  docs       to generate the documentation"
 	@echo "  ci 	    to run the CI workflows"
-	@echo "  mypy       to run the type checker"
+	@echo "  mypy       to run the mypy static type checker"
+	@echo "  pyright    to run the pyright static type checker"
 	@echo "  pyupgrade  to run pyupgrade"
 	@echo "  isort      to run isort"
 	@echo "  black      to run black"
@@ -42,6 +43,9 @@ ci: pyupgrade ruff mypy isort black
 
 mypy:
 	python3 -m mypy src/oakutils --config-file=pyproject.toml
+
+pyright:
+	python3 -m pyright --project=pyproject.toml
 
 pyupgrade:
 	-./scripts/ci/pyupgrade.sh

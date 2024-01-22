@@ -211,7 +211,7 @@ def _normalize(
         return frame
     if isinstance(factor, float):
         return frame * factor
-    return factor(frame)
+    return factor(frame)  # pyright: ignore [reportCallIssue]
 
 
 def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
