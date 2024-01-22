@@ -7,6 +7,7 @@
     - Increase amount of rules Ruff checks for
     - Changed boolean parameters to be keyword only (Ruff FTB)
 - MyPy Static Type checking
+- Stub generation with Pyright, static type checking with Pyright (non-CI)
 
 ### Changed
 
