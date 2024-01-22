@@ -1,8 +1,12 @@
 name: Pyright
 on: [ push ]
 jobs:
-  run:
-    - uses: jakebailey/pyright-action@v2
-      with:
-        version: 1.1.311
-        project: pyproject.toml
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pyright
+        uses: jakebailey/pyright-action@v2
+        with:
+          version: latest
+          project: pyproject.toml
