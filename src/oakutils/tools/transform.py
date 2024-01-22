@@ -129,5 +129,10 @@ def create_transform(
     """
     rotation_matrix = create_rotation(theta_x, theta_y, theta_z)
     translation_vector = create_translation(delta_x, delta_y, delta_z)
-    transform = np.block([[rotation_matrix, translation_vector], [0, 0, 0, 1]])
+    transform: np.ndarray = np.block(
+        [
+            [rotation_matrix, translation_vector],
+            [0, 0, 0, 1],
+        ],  # pyright: ignore[reportArgumentType, reportCallIssue]
+    )
     return transform.astype(np.float32)
