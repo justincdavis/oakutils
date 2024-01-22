@@ -45,10 +45,10 @@ try:
     from ._compiler import compile_model, compile_onnx
 
     __all__ = [
-        "models",
-        "definitions",
         "compile_model",
         "compile_onnx",
+        "definitions",
+        "models",
     ]
 except ImportError:
     pass

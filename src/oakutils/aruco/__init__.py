@@ -29,6 +29,6 @@ from .stream import ArucoStream
 
 __all__ = [
     "ArucoFinder",
-    "ArucoStream",
     "ArucoLocalizer",
+    "ArucoStream",
 ]

@@ -58,16 +58,16 @@ from .parsing import (
 from .spatial import HostSpatialsCalc
 
 __all__ = [
+    "HostSpatialsCalc",
+    "align_depth_to_rgb",
     "depth",
     "display",
+    "get_color_sensor_resolution_from_tuple",
+    "get_mono_sensor_resolution_from_tuple",
+    "get_tuple_from_color_sensor_resolution",
+    "get_tuple_from_mono_sensor_resolution",
     "parsing",
     "pixel",
     "spatial",
     "transform",
-    "align_depth_to_rgb",
-    "get_tuple_from_color_sensor_resolution",
-    "get_tuple_from_mono_sensor_resolution",
-    "get_color_sensor_resolution_from_tuple",
-    "get_mono_sensor_resolution_from_tuple",
-    "HostSpatialsCalc",
 ]

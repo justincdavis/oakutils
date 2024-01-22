@@ -60,6 +60,14 @@ from .point_cloud import create_point_cloud, create_xyz_matrix
 from .sobel import create_sobel
 
 __all__ = [
+    "create_gaussian",
+    "create_gftt",
+    "create_harris",
+    "create_hessian",
+    "create_laplacian",
+    "create_point_cloud",
+    "create_sobel",
+    "create_xyz_matrix",
     "gaussian",
     "gftt",
     "harris",
@@ -67,12 +75,4 @@ __all__ = [
     "laplacian",
     "point_cloud",
     "sobel",
-    "create_gaussian",
-    "create_gftt",
-    "create_harris",
-    "create_hessian",
-    "create_laplacian",
-    "create_point_cloud",
-    "create_xyz_matrix",
-    "create_sobel",
 ]

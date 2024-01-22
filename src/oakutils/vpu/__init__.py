@@ -29,6 +29,6 @@ from ._vpu import VPU
 
 __all__ = [
     "VPU",
-    "YolomodelData",
     "MobilenetData",
+    "YolomodelData",
 ]

@@ -109,6 +109,7 @@ from ._webcam import Webcam
 from .vpu import VPU
 
 __all__ = [
+    "VPU",
     "ApiCamera",
     "LegacyCamera",
     "Webcam",
@@ -121,7 +122,6 @@ __all__ = [
     "point_clouds",
     "tools",
     "vpu",
-    "VPU",
 ]
 __version__ = "1.3.1"
 

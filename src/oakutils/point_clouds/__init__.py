@@ -48,11 +48,11 @@ from ._funcs import (
 from .callbacks import create_point_cloud
 
 __all__ = [
+    "PointCloudVisualizer",
     "callbacks",
-    "get_point_cloud_from_rgb_depth_image",
+    "create_point_cloud",
+    "filter_point_cloud",
     "get_point_cloud_from_depth_image",
     "get_point_cloud_from_np_buffer",
-    "filter_point_cloud",
-    "PointCloudVisualizer",
-    "create_point_cloud",
+    "get_point_cloud_from_rgb_depth_image",
 ]
