@@ -254,6 +254,8 @@ def compiles_models():
             for model_name in model_names:
                 if model_name == "__init__.py":
                     continue
+                if model_name == "__pycache__":
+                    continue
                 model_name = model_name.split(".")[0]
                 f.write(f"{model_name.capitalize()} : str\n")
                 f.write(f"    nn.Module wrapper for {model_name.lower()} operation.\n")
@@ -262,11 +264,12 @@ def compiles_models():
             # handle imports first
             # f.write("import abc\n")
             f.write("import os\n")
+            f.write("from pathlib import Path\n")
             f.write("import pkg_resources\n\n")
 
             # get the path to the blob folder
             f.write(
-                f"_RELATIVE_BLOB_FOLDER = os.path.join('oakutils', 'blobs', 'models', 'shave{shave}')\n"
+                f"_RELATIVE_BLOB_FOLDER = Path('oakutils') / 'blobs' / 'models' / 'shave{shave}'\n"
             )
 
             # get the site packages path
@@ -276,7 +279,7 @@ def compiles_models():
 
             # get the path to the blob folder
             f.write(
-                f"_BLOB_FOLDER = os.path.join(_PACKAGE_LOCATION, _RELATIVE_BLOB_FOLDER)\n"
+                f"_BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
             )
 
             # add a space
@@ -297,7 +300,7 @@ def compiles_models():
                 # var_name = var_name[1:]
                 var_names.append(var_name)
                 f.write(
-                    f"{var_name} = os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}'))\n"
+                    f"{var_name} = Path(Path(_BLOB_FOLDER) / '{model_name}').resolve()\n"
                 )
                 # f.write(f"{var_name} = _Blob(os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}')))\n")
                 # f.write(f"{var_name}.__doc__ = 'Absolute file path for {model_name} file'\n")

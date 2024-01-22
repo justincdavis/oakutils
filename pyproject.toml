@@ -112,7 +112,7 @@ oakutils = ["src/*.blob"]
 
 [tool.ruff]
 select = ["ALL", "PLR2004"]
-ignore = ["PLR", "PTH", "C901", "E501", "D203", "D212", "ERA"]
+ignore = ["PLR", "C901", "E501", "D203", "D212", "ERA"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
