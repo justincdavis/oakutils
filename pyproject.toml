@@ -71,7 +71,7 @@ ci = [
     "isort>=5.10",
     "ruff>=0.1.14",
     "mypy>=1.8.0",
-    "pyright>=1.1.0",
+    "pyright>=1.1.50",
     "types-setuptools",
 ]
 test = [
@@ -184,3 +184,23 @@ module = [
     'blobconverter',
 ]
 ignore_errors = true
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/node_modules",
+    "**/__pycache__",
+]
+
+ignore = ["scripts/*"]
+
+defineConstant = {DEBUG = true}
+stubPath = "typings"
+reportMissingImports = true
+reportMissingTypeStubs = false
+  
+pythonVersion = "3.8"
+pythonPlatform = "Linux"
+
+executionEnvironments = [
+    { root = "src", pythonVersion = "3.8", stubPath = "typings" },
+]
