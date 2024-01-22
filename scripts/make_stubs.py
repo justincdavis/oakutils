@@ -84,7 +84,7 @@ def make_stubs(module):
     subprocess.run(["stubgen", "-m", name])
 
 
-def main():
+def mypy_stubs():
     for module in [
         open3d,
         open3d.camera,
@@ -115,6 +115,14 @@ def main():
 
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
 
+
+def pyright_stubs():
+    for module in ["open3d", "onnxsim", "blobconverter"]:
+        print(f"Making stubs for {module}")
+        subprocess.run(["pyright", "--createstub", module])
+
+def main():
+    pyright_stubs()
 
 if __name__ == "__main__":
     main()
