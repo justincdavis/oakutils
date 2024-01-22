@@ -127,7 +127,9 @@ def create_neural_network(
             )
         if reuse_messages is not None:
             if not isinstance(reuse_messages, list):
-                err_msg = "reuse_messages must be an iterable if input_link is an iterable"
+                err_msg = (
+                    "reuse_messages must be an iterable if input_link is an iterable"
+                )
                 raise TypeError(
                     err_msg,
                 )

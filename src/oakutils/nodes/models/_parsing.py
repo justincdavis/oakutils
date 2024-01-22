@@ -36,7 +36,11 @@ def parse_kernel_size(kernel_size: int) -> bool:
     """
     valid = False
     min_kernel_size, max_kernel_size = 3, 15
-    if kernel_size % 2 == 0 or kernel_size < min_kernel_size or kernel_size > max_kernel_size:
+    if (
+        kernel_size % 2 == 0
+        or kernel_size < min_kernel_size
+        or kernel_size > max_kernel_size
+    ):
         valid = False
     else:
         valid = True
