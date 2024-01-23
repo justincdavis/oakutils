@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for tools related to calculating spatials locations.
 
@@ -11,10 +24,10 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, Callable
 
-import depthai as dai
 import numpy as np
 
 if TYPE_CHECKING:
+    import depthai as dai
     from typing_extensions import Self
 
     from oakutils.calibration import CalibrationData
@@ -112,16 +125,19 @@ class HostSpatialsCalc:
         self._thresh_high = value
 
     def _check_input(
-        self: Self, roi: tuple[int, int] | tuple[int, int, int, int], frame: np.ndarray
+        self: Self,
+        roi: tuple[int, int] | tuple[int, int, int, int],
+        frame: np.ndarray,
     ) -> tuple[int, int, int, int]:
         """Use to check if the input is valid, and constrains to the frame size."""
-        xywh = 4
-        xy = 2
-        if len(roi) == xywh:
-            return roi
-        if len(roi) != xy:
+        xywh_size = 4
+        if len(roi) == xywh_size:  # xywh
+            return roi  # type: ignore[return-value]
+        xy_size = 2
+        if len(roi) != xy_size:  # not xy or xywh
+            err_msg = "You have to pass either ROI (4 values) or point (2 values)!"
             raise ValueError(
-                "You have to pass either ROI (4 values) or point (2 values)!"
+                err_msg,
             )
         x = min(max(roi[0], self._delta), frame.shape[1] - self._delta)
         y = min(max(roi[1], self._delta), frame.shape[0] - self._delta)
@@ -129,7 +145,7 @@ class HostSpatialsCalc:
 
     def calc_spatials(
         self: Self,
-        depth_data: dai.ImgFrame | np.ndarray,
+        depth_data: dai.ImgFrame,
         roi: tuple[int, int] | tuple[int, int, int, int],
         averaging_method: Callable = np.mean,
     ) -> tuple[float, float, float, tuple[int, int]]:
@@ -156,22 +172,24 @@ class HostSpatialsCalc:
             The z coordinate of the ROI centroid.
         Tuple[int, int]
             The centroid of the ROI.
+
+        Raises
+        ------
+        RuntimeError
+            If the initialization failed. Should never occur.
         """
-        if isinstance(depth_data, dai.ImgFrame):
-            depth_frame = depth_data.getFrame()
-        else:
-            depth_frame = depth_data
+        depth_frame: np.ndarray = depth_data.getFrame()
 
         if self._first_run:
             self._mid_w = int(depth_frame.shape[1] / 2)  # middle of the depth img width
             self._mid_h = int(
-                depth_frame.shape[0] / 2
+                depth_frame.shape[0] / 2,
             )  # middle of the depth img height
             self._f_mid_w = depth_frame.shape[1] / 2.0  # middle of the depth img width
             self._f_mid_h = depth_frame.shape[0] / 2.0  # middle of the depth img height
 
             # Required information for calculating spatial coordinates on the host
-            cam_num = depth_data.getInstanceNum()
+            cam_num: int = depth_data.getInstanceNum()
             if cam_num == 0:
                 self._HFOV = self._data.rgb.fov_rad
             elif cam_num == 1:
@@ -180,14 +198,15 @@ class HostSpatialsCalc:
                 self._HFOV = self._data.right.fov_rad
 
             # angle calc stuff
-            self._i_HFOV: float = math.tan(self._HFOV / 2.0)
-            self._i_angle: float = self._i_HFOV / self._f_mid_w
+            self._i_HFOV = math.tan(self._HFOV / 2.0)
+            self._i_angle = self._i_HFOV / self._f_mid_w  # type: ignore[operator]
 
             # reset flag
             self._first_run = False
 
         roi = self._check_input(
-            roi, depth_frame
+            roi,
+            depth_frame,
         )  # If point was passed, convert it to ROI
         xmin, ymin, xmax, ymax = roi
 
@@ -202,11 +221,23 @@ class HostSpatialsCalc:
             int((ymax + ymin) / 2),
         )
 
+        # assert self._mid_w, self._mid_h are not None
+        if self._mid_w is None or self._mid_h is None:
+            err_msg = "self._mid_w or self._mid_h is None, initialization error"
+            raise RuntimeError(
+                err_msg,
+            )
+
         bb_x_pos = centroid[0] - self._mid_w
         bb_y_pos = centroid[1] - self._mid_h
 
-        angle_x = math.atan2(self._i_angle * bb_x_pos)
-        angle_y = math.atan2(self._i_angle * bb_y_pos)
+        # asssert self._i_angle is not None
+        if self._i_angle is None:
+            err_msg = "self._i_angle is None, initialization error"
+            raise RuntimeError(err_msg)
+
+        angle_x = math.atan(self._i_angle * bb_x_pos)
+        angle_y = math.atan(self._i_angle * bb_y_pos)
 
         spatials = (
             avg_depth,

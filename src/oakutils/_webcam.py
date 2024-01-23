@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module defining a webcam class for reading frames from an OAK.
 
@@ -14,13 +27,13 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
 import depthai as dai
+import numpy as np
 
 from .calibration import ColorCalibrationData, get_camera_calibration_basic
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
 if TYPE_CHECKING:
-    import numpy as np
     from typing_extensions import Self
 
 
@@ -43,7 +56,9 @@ class Webcam:
     """
 
     def __init__(
-        self: Self, resolution: tuple[int, int] = (1920, 1080), fps: int = 30
+        self: Self,
+        resolution: tuple[int, int] = (1920, 1080),
+        fps: int = 30,
     ) -> None:
         """
         Create a new Webcam object.
@@ -67,12 +82,14 @@ class Webcam:
         self._pipeline = dai.Pipeline()
         dai_resolution = get_color_sensor_resolution_from_tuple(self._resolution)
         self._cam = create_color_camera(
-            self._pipeline, resolution=dai_resolution, fps=self._fps
+            self._pipeline,
+            resolution=dai_resolution,
+            fps=self._fps,
         )
         self._xout_cam = create_xout(self._pipeline, self._cam.video, "cam")
 
         # frame storage
-        self._frame: np.ndarray = None
+        self._frame: np.ndarray = np.zeros((640, 480, 3), dtype=np.uint8)
 
         # thread for reading camera
         self._started = False
@@ -126,7 +143,7 @@ class Webcam:
         """Run the camera."""
         with dai.Device(self._pipeline) as device:
             # get data queues
-            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)
+            q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)  # type: ignore[attr-defined]
 
             # loop until stopped
             while not self._stopped:

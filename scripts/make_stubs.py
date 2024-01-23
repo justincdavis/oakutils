@@ -1,8 +1,23 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 import subprocess
 import os
 import shutil
 
 import open3d
+import onnxsim
+import blobconverter
 
 
 def get_name(module):
@@ -11,6 +26,13 @@ def get_name(module):
     except AttributeError:
         return module
 
+def move_stubs(name: str):
+    # moves stubs from out to typings
+    delete_folder(os.path.join(os.path.dirname(__file__), "..", "typings", name))
+    shutil.move(
+        os.path.join(os.path.dirname(__file__), "..", "out", name),
+        os.path.join(os.path.dirname(__file__), "..", "typings", name),
+    )
 
 def move_open3d_stubs():
     # moves stubs from out to typings
@@ -38,6 +60,8 @@ def delete_folder(folder_path: str):
 def fix_open3d_stubs():
     folder = os.path.join(os.path.dirname(__file__), "..", "out", "open3d")
     pybind_folder = os.path.join(folder, "cpu", "pybind")
+    if not os.path.exists(pybind_folder):
+        pybind_folder = os.path.join(folder, "cuda", "pybind")
     for file in os.listdir(pybind_folder):
         folder_name = file.split(".")[0]
         delete_folder(os.path.join(folder, folder_name))
@@ -73,7 +97,7 @@ def make_stubs(module):
     subprocess.run(["stubgen", "-m", name])
 
 
-def main():
+def mypy_stubs():
     for module in [
         open3d,
         open3d.camera,
@@ -86,18 +110,32 @@ def main():
         open3d.t,
         open3d.utility,
         open3d.visualization,
+        onnxsim,
+        onnxsim.onnx_simplifier,
+        blobconverter,
     ]:
         print(f"Making stubs for {get_name(module)}")
         make_stubs(module)
 
     fix_open3d_stubs()
-
     move_open3d_stubs()
-
     fix_open3d_stub_syntax()
+
+    # move all other stubs
+    for file in os.listdir(os.path.join(os.path.dirname(__file__), "..", "out")):
+        if file != "open3d":
+            move_stubs(file)
 
     delete_folder(os.path.join(os.path.dirname(__file__), "..", "out"))
 
+
+def pyright_stubs():
+    for module in ["open3d", "onnxsim", "blobconverter"]:
+        print(f"Making stubs for {module}")
+        subprocess.run(["pyright", "--createstub", module])
+
+def main():
+    pyright_stubs()
 
 if __name__ == "__main__":
     main()

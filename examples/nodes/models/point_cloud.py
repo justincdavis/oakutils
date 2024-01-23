@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 import depthai as dai
 
 from oakutils.calibration import get_camera_calibration
@@ -10,7 +23,7 @@ from oakutils.point_clouds import (
 )
 
 pipeline = dai.Pipeline()
-pcv = PointCloudVisualizer()
+pcv = PointCloudVisualizer(use_threading=False)
 
 # get the calibration
 calibration = get_camera_calibration(
@@ -38,7 +51,6 @@ with dai.Device(pipeline) as device:
 
     start_pcl(device)
 
-    counter = 0
     while True:
         data = queue.get()
 

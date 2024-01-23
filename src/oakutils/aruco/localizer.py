@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for localizing the camera in the world using ArUco markers.
 
@@ -56,12 +69,14 @@ class ArucoLocalizer:
         by default 0.95, must be in range [0, 1]
         """
         self._transforms: dict[int, np.ndarray] = {}
-        if alpha < 0.0 or alpha > 1.0:
-            raise ValueError("alpha must be in range [0, 1]")
+        min_alpha, max_alpha = 0.0, 1.0
+        if alpha < min_alpha or alpha > max_alpha:
+            err_msg = "alpha must be in range [0, 1]"
+            raise ValueError(err_msg)
         self._alpha1, self._alpha2 = alpha, (1.0 - alpha)
         self._max_age = max_age
         self._age = 0
-        self._buffer = deque(maxlen=buffersize)
+        self._buffer: deque[np.ndarray] = deque(maxlen=buffersize)
         for tag, transform in transforms.items():
             self.add_transform(tag, transform)
         self._last_transform = create_transform(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import atexit
@@ -5,7 +18,7 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
 import numpy as np
-import open3d as o3d
+import open3d as o3d  # type: ignore[import]
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -33,6 +46,7 @@ class PointCloudVisualizer:
         self: Self,
         window_name: str = "PointCloud",
         window_size: tuple[int, int] = (1920, 1080),
+        *,
         use_threading: bool | None = None,
     ) -> None:
         """
@@ -51,10 +65,12 @@ class PointCloudVisualizer:
             use_threading = True
 
         self._pcd: o3d.geometry.PointCloud | None = None
-        self._vis: o3d.visualization.Visualizer = o3d.visualization.Visualizer()
-        self._R_camera_to_world = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]]).astype(
-            np.float64
+        self._vis: o3d.visualization.Visualizer = (  # pyright: ignore[reportAttributeAccessIssue]
+            o3d.visualization.Visualizer()  # pyright: ignore[reportAttributeAccessIssue]
         )
+        self._R_camera_to_world: np.ndarray = np.array(
+            [[1, 0, 0], [0, -1, 0], [0, 0, -1]],
+        ).astype(np.float64)
         self._window_name: str = window_name
         self._window_size: tuple[int, int] = window_size
         self._started: bool = False
@@ -102,7 +118,8 @@ class PointCloudVisualizer:
         )
         self._vis.add_geometry(self._pcd)
         origin = o3d.geometry.TriangleMesh.create_coordinate_frame(
-            size=0.3, origin=[0, 0, 0]
+            size=0.3,
+            origin=[0, 0, 0],
         )
         self._vis.add_geometry(origin)
         self._started = True
@@ -112,7 +129,8 @@ class PointCloudVisualizer:
         if self._pcd is None:
             return
         self._pcd.rotate(
-            self._R_camera_to_world, center=np.array([0, 0, 0], dtype=np.float64)
+            self._R_camera_to_world,
+            center=np.array([0, 0, 0], dtype=np.float64),
         )
         self._vis.update_geometry(self._pcd)
         self._vis.poll_events()
@@ -137,7 +155,8 @@ class PointCloudVisualizer:
             If pcd is not an open3d.geometry.PointCloud object.
         """
         if not isinstance(pcd, o3d.geometry.PointCloud):
-            raise TypeError("pcd must be an open3d.geometry.PointCloud object.")
+            err_msg = "pcd must be an open3d.geometry.PointCloud object."
+            raise TypeError(err_msg)
 
         if self._pcd is None:
             self._pcd = pcd

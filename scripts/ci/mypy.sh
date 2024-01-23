@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Define a list of valid strings
-submodules=("optimizer")
+submodules=("aruco" "blobs" "calibration" "filters" "nodes" "optimizer" "point_clouds" "tools")
 
 # Iterate over the contents of the directory
 for FILE in src/oakutils/*;
@@ -12,7 +12,7 @@ do
     # Check if the filename is in the list of valid strings
     if [[ " ${submodules[*]} " =~ " $filename " ]]; then
         echo "Running $filename..."
-        python3 -m mypy --follow-imports=silent $FILE
+        python3 -m mypy --follow-imports=silent $FILE --config-file pyproject.toml
     else
         echo "Skipping $filename..."
     fi

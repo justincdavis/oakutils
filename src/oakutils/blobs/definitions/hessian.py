@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for Hessian blobs models.
 
@@ -41,17 +54,17 @@ class Hessian(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Hessian) -> ModelType:
+    def model_type(cls: type[Hessian]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Hessian) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Hessian]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Hessian) -> list[str]:
+    def output_names(cls: type[Hessian]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -93,17 +106,17 @@ class HessianBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: HessianBlur) -> ModelType:
+    def model_type(cls: type[HessianBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: HessianBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HessianBlur) -> list[str]:
+    def output_names(cls: type[HessianBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -121,7 +134,7 @@ class HessianBlur(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
 
 
@@ -140,17 +153,17 @@ class HessianGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: HessianGray) -> ModelType:
+    def model_type(cls: type[HessianGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: HessianGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HessianGray) -> list[str]:
+    def output_names(cls: type[HessianGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -193,17 +206,17 @@ class HessianBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: HessianBlurGray) -> ModelType:
+    def model_type(cls: type[HessianBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: HessianBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[HessianBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: HessianBlurGray) -> list[str]:
+    def output_names(cls: type[HessianBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -221,6 +234,6 @@ class HessianBlurGray(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
         return kornia.color.bgr_to_grayscale(hessian)

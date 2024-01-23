@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating mono camera nodes.
 
@@ -25,6 +38,11 @@ def create_mono_camera(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    *,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.MonoCamera:
     """
     Use to create a pipeline for the mono camera.
@@ -62,6 +80,17 @@ def create_mono_camera(
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
 
     Returns
     -------
@@ -88,22 +117,37 @@ def create_mono_camera(
         If the chroma_denoise is not between 0 and 4
     """
     if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
-        raise ValueError("socket must be LEFT or RIGHT")
+        err_msg = "socket must be LEFT or RIGHT"
+        raise ValueError(err_msg)
 
-    if fps < 0 or fps > 120:
-        raise ValueError("fps must be between 0 and 120")
-    if brightness < -10 or brightness > 10:
-        raise ValueError("brightness must be between -10 and 10")
-    if saturation < -10 or saturation > 10:
-        raise ValueError("saturation must be between -10 and 10")
-    if contrast < -10 or contrast > 10:
-        raise ValueError("contrast must be between -10 and 10")
-    if sharpness < 0 or sharpness > 4:
-        raise ValueError("sharpness must be between 0 and 4")
-    if luma_denoise < 0 or luma_denoise > 4:
-        raise ValueError("luma_denoise must be between 0 and 4")
-    if chroma_denoise < 0 or chroma_denoise > 4:
-        raise ValueError("chroma_denoise must be between 0 and 4")
+    min_fps, max_fps = 0, 120
+    if fps < min_fps or fps > max_fps:
+        err_msg = "fps must be between 0 and 120"
+        raise ValueError(err_msg)
+    min_brightness, max_brightness = -10, 10
+    if brightness < min_brightness or brightness > max_brightness:
+        err_msg = "brightness must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_saturation, max_saturation = -10, 10
+    if saturation < min_saturation or saturation > max_saturation:
+        err_msg = "saturation must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_contrast, max_contrast = -10, 10
+    if contrast < min_contrast or contrast > max_contrast:
+        err_msg = "contrast must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_sharpness, max_sharpness = 0, 4
+    if sharpness < min_sharpness or sharpness > max_sharpness:
+        err_msg = "sharpness must be between 0 and 4"
+        raise ValueError(err_msg)
+    min_luma_denoise, max_luma_denoise = 0, 4
+    if luma_denoise < min_luma_denoise or luma_denoise > max_luma_denoise:
+        err_msg = "luma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
+    min_chroma_denoise, max_chroma_denoise = 0, 4
+    if chroma_denoise < min_chroma_denoise or chroma_denoise > max_chroma_denoise:
+        err_msg = "chroma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
 
     # static properties
     cam: dai.node.MonoCamera = pipeline.create(dai.node.MonoCamera)
@@ -122,6 +166,18 @@ def create_mono_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
+
+    cam.inputControl.setQueueSize(input_queue_size)
+    cam.inputControl.setReusePreviousMessage(input_reuse)
+    cam.inputControl.setBlocking(input_blocking)
+    cam.inputControl.setWaitForMessage(input_wait_for_message)
+
     return cam
 
 
@@ -135,8 +191,13 @@ def create_left_right_cameras(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: int | None = None,
-) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera,]:
+    isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    *,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
+) -> tuple[dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Use to create the left and right mono cameras.
 
@@ -170,6 +231,19 @@ def create_left_right_cameras(
         The fps of how often the 3a algorithms will run, by default None
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
+        Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
+
 
     Returns
     -------
@@ -194,6 +268,10 @@ def create_left_right_cameras(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
+        input_queue_size=input_queue_size,
+        input_reuse=input_reuse,
+        input_blocking=input_blocking,
+        input_wait_for_message=input_wait_for_message,
     )
     right_cam = create_mono_camera(
         pipeline=pipeline,
@@ -207,6 +285,10 @@ def create_left_right_cameras(
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
         isp_3a_fps=isp_3a_fps,
+        input_queue_size=input_queue_size,
+        input_reuse=input_reuse,
+        input_blocking=input_blocking,
+        input_wait_for_message=input_wait_for_message,
     )
 
     return left_cam, right_cam

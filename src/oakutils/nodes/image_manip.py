@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating image manip nodes.
 
@@ -19,16 +32,21 @@ def create_image_manip(
     color_map: dai.Colormap | None = None,
     crop_rect: tuple[float, float, float, float] | None = None,
     crop_rotated_rect: tuple[dai.RotatedRect, bool] | None = None,
-    horizontal_flip: bool | None = None,
-    keep_aspect_ratio: bool | None = None,
     resize: tuple[int, int] | None = None,
     resize_thumbnail: tuple[int, int, int, int, int] | None = None,
     rotation_degrees: float | None = None,
     rotation_radians: float | None = None,
-    vertical_flip: bool | None = None,
     warp_border_fill_color: tuple[int, int, int] | None = None,
     warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
     warp_transform_matrix_3x3: list[float] | None = None,
+    input_queue_size: int = 3,
+    *,
+    horizontal_flip: bool | None = None,
+    keep_aspect_ratio: bool | None = None,
+    vertical_flip: bool | None = None,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.ImageManip:
     """
     Use to create an image manip node.
@@ -71,6 +89,17 @@ def create_image_manip(
         The warp transform four points to apply, by default None
     warp_transform_matrix_3x3 : Optional[List[float]], optional
         The warp transform matrix 3x3 to apply, by default None
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
 
     Returns
     -------
@@ -107,8 +136,20 @@ def create_image_manip(
     if warp_transform_four_points is not None:
         manip.initialConfig.setWarpTransformFourPoints(*warp_transform_four_points)
     if warp_transform_matrix_3x3 is not None:
-        manip.initialConfig.setWarpTransformMatrix3x3(*warp_transform_matrix_3x3)
+        manip.initialConfig.setWarpTransformMatrix3x3(warp_transform_matrix_3x3)
 
     input_link.link(manip.inputImage)
+
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
+
+    manip.inputConfig.setQueueSize(input_queue_size)
+    manip.inputConfig.setReusePreviousMessage(input_reuse)
+    manip.inputConfig.setBlocking(input_blocking)
+    manip.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return manip

@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for Laplacian models.
 
@@ -49,17 +62,17 @@ class Laplacian(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def model_type(cls: Laplacian) -> ModelType:
+    def model_type(cls: type[Laplacian]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Laplacian) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Laplacian]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Laplacian) -> list[str]:
+    def output_names(cls: type[Laplacian]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -98,17 +111,17 @@ class LaplacianGray(AbstractModel):
         self._kernel_size = kernel_size
 
     @classmethod
-    def model_type(cls: LaplacianGray) -> ModelType:
+    def model_type(cls: type[LaplacianGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[LaplacianGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianGray) -> list[str]:
+    def output_names(cls: type[LaplacianGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -136,7 +149,10 @@ class LaplacianBlur(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -156,17 +172,17 @@ class LaplacianBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: LaplacianBlur) -> ModelType:
+    def model_type(cls: type[LaplacianBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[LaplacianBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianBlur) -> list[str]:
+    def output_names(cls: type[LaplacianBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -180,7 +196,9 @@ class LaplacianBlur(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.filters.laplacian(gaussian, self._kernel_size2)
 
@@ -196,7 +214,10 @@ class LaplacianBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -216,17 +237,17 @@ class LaplacianBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: LaplacianBlurGray) -> ModelType:
+    def model_type(cls: type[LaplacianBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: LaplacianBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[LaplacianBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: LaplacianBlurGray) -> list[str]:
+    def output_names(cls: type[LaplacianBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -240,7 +261,9 @@ class LaplacianBlurGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         laplacian = kornia.filters.laplacian(gaussian, self._kernel_size2)
         return kornia.color.bgr_to_grayscale(laplacian)

@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Helper functions for creating transformation matrices.
 
@@ -40,7 +53,7 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
             [1, 0, 0],
             [0, np.cos(theta_x), -np.sin(theta_x)],
             [0, np.sin(theta_x), np.cos(theta_x)],
-        ]
+        ],
     )
 
     rotation_y = np.array(
@@ -48,7 +61,7 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
             [np.cos(theta_y), 0, np.sin(theta_y)],
             [0, 1, 0],
             [-np.sin(theta_y), 0, np.cos(theta_y)],
-        ]
+        ],
     )
 
     rotation_z = np.array(
@@ -56,10 +69,10 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
             [np.cos(theta_z), -np.sin(theta_z), 0],
             [np.sin(theta_z), np.cos(theta_z), 0],
             [0, 0, 1],
-        ]
+        ],
     )
 
-    return rotation_z @ rotation_y @ rotation_x
+    return rotation_z @ rotation_y @ rotation_x  # type: ignore[no-any-return]
 
 
 def create_translation(delta_x: float, delta_y: float, delta_z: float) -> np.ndarray:
@@ -116,5 +129,10 @@ def create_transform(
     """
     rotation_matrix = create_rotation(theta_x, theta_y, theta_z)
     translation_vector = create_translation(delta_x, delta_y, delta_z)
-    transform = np.block([[rotation_matrix, translation_vector], [0, 0, 0, 1]])
+    transform: np.ndarray = np.block(
+        [
+            [rotation_matrix, translation_vector],
+            [0, 0, 0, 1],
+        ],  # pyright: ignore[reportArgumentType, reportCallIssue]
+    )
     return transform.astype(np.float32)

@@ -2,7 +2,7 @@ oakutils
 ========
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
     source/oakutils
     source/oakutils.aruco
@@ -14,4 +14,5 @@ oakutils
     source/oakutils.point_clouds
     source/oakutils.tools
     source/oakutils.utils
+    source/modules.rst
     

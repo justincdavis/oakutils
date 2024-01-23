@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for finding aruco markers in images and acquiring transformation matrices to them.
 
@@ -10,7 +23,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 
 if TYPE_CHECKING:
@@ -59,10 +72,9 @@ class ArucoFinder:
         self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
         self._calibration = calibration
-        if self._calibration is None:
-            self._K = np.zeros((3, 3), dtype=np.float32)
-            self._D = np.zeros((5, 1), dtype=np.float32)
-        else:
+        self._K: np.ndarray = np.zeros((3, 3), dtype=np.float32)
+        self._D: np.ndarray = np.zeros((5, 1), dtype=np.float32)
+        if self._calibration is not None:
             self._K = self._calibration.K
             self._D = self._calibration.D
 
@@ -80,7 +92,8 @@ class ArucoFinder:
 
     @calibration.setter
     def calibration(
-        self: Self, calibration: ColorCalibrationData | MonoCalibrationData
+        self: Self,
+        calibration: ColorCalibrationData | MonoCalibrationData,
     ) -> None:
         """
         Use to set the calibration data used by the ArucoFinder.
@@ -97,6 +110,7 @@ class ArucoFinder:
     def find(
         self: Self,
         image: np.ndarray,
+        *,
         rectified: bool | None = None,
     ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
         """
@@ -131,10 +145,13 @@ class ArucoFinder:
                 self._K,
             )
         corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)
-        ret_val = []
+        ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
             rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                [corner], self._marker_size, self._K, self._D
+                [corner],
+                self._marker_size,
+                self._K,
+                self._D,
             )
             try:
                 rvec = rvecs[0]
@@ -146,7 +163,7 @@ class ArucoFinder:
             t_matrix = np.block([[r_matrix, t_vector], [np.zeros((1, 3)), 1]])
 
             ret_val.append(
-                (ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32))
+                (ids[idx][0], t_matrix, rvec, tvec, np.array(corner, dtype=np.int32)),
             )
 
         return ret_val
@@ -178,7 +195,7 @@ class ArucoFinder:
             marker_id, _, rvec, tvec, corner = marker
             cv2.drawFrameAxes(image, self._K, self._D, rvec, tvec, self._marker_size, 3)
             is_connected = True
-            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)
+            cv2.polylines(image, corner, is_connected, (0, 255, 0), 3)  # type: ignore[call-overload]
             cx = int((corner[0][0][0] + corner[0][2][0]) / 2)
             cy = int((corner[0][0][1] + corner[0][2][1]) / 2)
             cv2.putText(

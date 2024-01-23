@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating a point cloud model onboard.
 
@@ -11,7 +24,7 @@ create_point_cloud
 from __future__ import annotations
 
 from functools import partial
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 import depthai as dai
 import numpy as np
@@ -46,12 +59,12 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
     np.ndarray
         The reprojection matrix
     """
-    xs = np.linspace(0, width - 1, width, dtype=np.float32)
-    ys = np.linspace(0, height - 1, height, dtype=np.float32)
+    xs: np.ndarray = np.linspace(0, width - 1, width, dtype=np.float32)
+    ys: np.ndarray = np.linspace(0, height - 1, height, dtype=np.float32)
 
     # generate grid by stacking coordinates
-    base_grid = np.stack(np.meshgrid(xs, ys))  # WxHx2
-    points_2d = base_grid.transpose(1, 2, 0)  # 1xHxWx2
+    base_grid: np.ndarray = np.stack(np.meshgrid(xs, ys))  # WxHx2
+    points_2d: np.ndarray = base_grid.transpose(1, 2, 0)  # 1xHxWx2
 
     # unpack coordinates
     u_coord: np.ndarray = points_2d[..., 0]
@@ -67,7 +80,7 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
     x_coord: np.ndarray = (u_coord - cx) / fx
     y_coord: np.ndarray = (v_coord - cy) / fy
 
-    xyz = np.stack([x_coord, y_coord], axis=-1)
+    xyz: np.ndarray = np.stack([x_coord, y_coord], axis=-1)
     xyz = np.pad(xyz, ((0, 0), (0, 0), (0, 1)), "constant", constant_values=1.0)
     return np.array([xyz], dtype=np.float16).view(np.int8)
 
@@ -78,7 +91,7 @@ def create_point_cloud(
     calibration: CalibrationData,
     input_stream_name: str = "xyz_to_pcl",
     shaves: int = 4,
-) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, partial[dai.Device, np.ndarray]]:
+) -> tuple[dai.node.NeuralNetwork, dai.node.XLinkIn, Callable[[dai.Device], None]]:
     """
     Use to create a point_cloud model with a specified kernel size.
 
@@ -104,7 +117,7 @@ def create_point_cloud(
         The point_cloud node
     dai.node.XLinkIn
         The input link to connect to the point_cloud node.
-    partial[dai.Device]
+    Callable[[dai.Device], None]
         Function to pass the device, which will start the point cloud generation
     """
     model_type = "pointcloud"
@@ -114,13 +127,16 @@ def create_point_cloud(
         input_links=[xin.out, depth_link],
         model_name=model_type,
         input_names=["xyz", "depth"],
+        input_sizes=[1, 1],
+        input_blocking=[True, False],
         reuse_messages=[True, None],
         shaves=shaves,
     )
-    point_cloud_node.inputs["xyz"].setReusePreviousMessage(reusePreviousMessage=True)
 
     xyz = create_xyz_matrix(
-        calibration.left.size[0], calibration.left.size[1], calibration.left.K
+        calibration.left.size[0],
+        calibration.left.size[1],
+        calibration.left.K,
     )
 
     def _start_point_cloud(device: dai.Device, xyz: np.ndarray) -> None:

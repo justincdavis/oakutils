@@ -1,9 +1,22 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating custom pipelines using a lightweight callback based class.
 
 Classes
 -------
-Camera
+ApiCamera
     A lightweight class for creating custom pipelines using callbacks.
 """
 from __future__ import annotations
@@ -24,7 +37,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-class Camera:
+class ApiCamera:
     """
     A lightweight class for creating custom pipelines using callbacks.
 
@@ -56,9 +69,10 @@ class Camera:
     def __init__(
         self: Self,
         # custom args, only related to configuration
-        primary_mono_left: bool | None = None,
         color_size: tuple[int, int] = (1920, 1080),
         mono_size: tuple[int, int] = (640, 400),
+        *,
+        primary_mono_left: bool | None = None,
     ) -> None:
         """
         Use to create an instance of the camera.
@@ -89,11 +103,12 @@ class Camera:
         self._callbacks: dict[str | Iterable[str], Callable] = {}
         self._pipeline: dai.Pipeline = dai.Pipeline()
         self._is_built: bool = False
-        self._custom_device_calls: list[Callable[[dai.Device], None]] = []
+        self._custom_device_calls: list[Callable[[dai.DeviceBase], None]] = []
 
         # handle custom displays directly for API stuff without visualize
         self._display_size: tuple[int, int] = get_smaller_size(
-            self._color_size, self._mono_size
+            self._color_size,
+            self._mono_size,
         )
         self._displays: DisplayManager | None = None
         self._pcv: PointCloudVisualizer | None = None
@@ -125,7 +140,8 @@ class Camera:
             If the pipeline is accessed once the camera has been started.
         """
         if self._started:
-            raise RuntimeError("Cannot access pipeline once camera has been started.")
+            err_msg = "Cannot access pipeline once camera has been started."
+            raise RuntimeError(err_msg)
         return self._pipeline
 
     @property
@@ -147,7 +163,7 @@ class Camera:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
-    def start(self: Self, blocking: bool | None = None) -> None:
+    def start(self: Self, *, blocking: bool | None = None) -> None:
         """Use to start the camera. To be done after all api calls are made."""
         if blocking is None:
             blocking = False
@@ -195,7 +211,7 @@ class Camera:
         """
         self.add_callback(name, self.displays.callback(name))
 
-    def add_device_call(self: Self, call: Callable[[dai.Device], None]) -> None:
+    def add_device_call(self: Self, call: Callable[[dai.DeviceBase], None]) -> None:
         """
         Use to add a device call to be run after the device is created.
 
@@ -210,7 +226,8 @@ class Camera:
             If the camera has already been started.
         """
         if self._started:
-            raise RuntimeError("Cannot add device call after camera has been started.")
+            err_msg = "Cannot add device call after camera has been started."
+            raise RuntimeError(err_msg)
         self._custom_device_calls.append(call)
 
     def _run(self: Self) -> None:
@@ -225,7 +242,7 @@ class Camera:
 
             # get the output queues ahead of time
             queues = {
-                name: device.getOutputQueue(name) for name, _ in self._callbacks.items()
+                name: device.getOutputQueue(name) for name, _ in self._callbacks.items()  # type: ignore[attr-defined]
             }
 
             # create a cache for queue results to enable multi queue callbacks
@@ -244,7 +261,6 @@ class Camera:
                         data = [data_cache[n] for n in name]
                     partials.append(partial(callback, data))
                 # run/dispatch the callback partials
-                # TODO: run in async loop or another thread or process?
                 for callback in partials:
                     callback()
 

@@ -1,8 +1,21 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import blobconverter
+import blobconverter  # type: ignore[import]
 import onnx
-import onnxsim
+import onnxsim  # type: ignore[import]
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
@@ -25,9 +38,13 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
     """
     model = onnx.load(model_path)
     model_simp, check = onnxsim.simplify(
-        model, check_n=check_num, perform_optimization=True
+        model,
+        check_n=check_num,
+        perform_optimization=True,
     )
-    assert check, "Simplified ONNX model could not be validated"
+    if not check:
+        err_msg = "Simplified model could not be validated"
+        raise AssertionError(err_msg)
     onnx.save(model_simp, output_path)
 
 
@@ -36,6 +53,7 @@ def compile_onnx(
     output_path: str,
     shaves: int = 6,
     version: str = "2022.1",
+    *,
     simplify_model: bool | None = None,
 ) -> None:
     """
@@ -72,4 +90,5 @@ def compile_onnx(
         use_cache=False,
         shaves=shaves,
         version=version,
+        simplify=simplify_model,
     )

@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating neural network nodes.
 
@@ -19,26 +32,32 @@ get_nn_point_cloud_buffer
 """
 from __future__ import annotations
 
+import contextlib
 import logging
-from pathlib import Path
-from typing import Callable, Iterable
+from typing import TYPE_CHECKING, Callable
 
-import cv2
+import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 _log = logging.getLogger(__name__)
 
 
 def create_neural_network(
     pipeline: dai.Pipeline,
-    input_link: dai.Node.Output | Iterable[dai.Node.Output],
-    blob_path: str,
-    input_names: str | Iterable[str] | None = None,
-    reuse_messages: bool | Iterable[bool | None] | None = None,
+    input_link: dai.Node.Output | list[dai.Node.Output],
+    blob_path: Path,
+    input_names: str | list[str] | None = None,
+    input_sizes: int | list[int] | None = None,
     num_inference_threads: int = 2,
     num_nce_per_inference_thread: int | None = None,
     num_pool_frames: int | None = None,
+    *,
+    reuse_messages: bool | list[bool | None] | None = None,
+    input_blocking: bool | list[bool] | None = None,
 ) -> dai.node.NeuralNetwork:
     """
     Use to create a neural network node.
@@ -47,20 +66,26 @@ def create_neural_network(
     ----------
     pipeline : dai.Pipeline
         The pipeline to add the neural network to
-    input_link : Union[dai.Node.Output, Iterable[dai.Node.Output]]
+    input_link : Union[dai.Node.Output, list[dai.Node.Output]]
         The input link to connect to the image manip node or,
         if there are multiple input links, an iterable of input links.
         Example: cam_rgb.preview or (cam_rgb.preview, stereo.depth)
     blob_path : str
         The path to the blob file to use for the neural network.
         Will be converted to a pathlib.Path.
-    input_names : Optional[Union[str, Iterable[str]]], optional
+    input_names : Optional[Union[str, list[str]]], optional
         The names of the input links, by default None
-        Must be the same length as input_link if Iterable
-    reuse_messages : Optional[Union[bool, Iterable[bool]]], optional
+        Must be the same length as input_link if a list
+    reuse_messages : Optional[Union[bool, list[bool]]], optional
         Whether to reuse messages, by default None
-        Must be the same length as input_link if Iterable
+        Must be the same length as input_link if a list
         Values may be None if the input link does not need a value set
+    input_sizes : Optional[Union[int, list[int]]], optional
+        The size of the input queue, by default None
+        Must be the same length as input_link if a list
+    input_blocking : Optional[Union[bool, list[bool]]], optional
+        Whether the input queue is blocking, by default None
+        Must be the same length as input_link if a list
     num_inference_threads : int, optional
         The number of inference threads, by default 2
     num_nce_per_inference_thread : Optional[int], optional
@@ -73,35 +98,50 @@ def create_neural_network(
     -------
     dai.node.NeuralNetwork
         The neural network node
+
+    Raises
+    ------
+    ValueError
+        If input_link is an iterable and input_names is None
+        If input_link and input_names are iterables and are not the same length
+        If input_link and reuse_messages are iterables and are not the same length
+    TypeError
+        If input_link is an iterable and input_names is not an iterable
+        If input_link is an iterable and reuse_messages is not an iterable
     """
-    if hasattr(input_link, "__iter__"):
+    if isinstance(input_link, list):
         if input_names is None:
+            err_msg = "input_names must be provided if input_link is an iterable"
             raise ValueError(
-                "input_names must be provided if input_link is an iterable"
+                err_msg,
             )
-        if not hasattr(input_names, "__iter__"):
-            raise ValueError(
-                "input_names must be an iterable if input_link is an iterable"
+        if not isinstance(input_names, list):
+            err_msg = "input_names must be an iterable if input_link is an iterable"
+            raise TypeError(
+                err_msg,
             )
         if len(input_link) != len(input_names):
+            err_msg = "input_link and input_names must be the same length if both are iterables"
             raise ValueError(
-                "input_link and input_names must be the same length if both are iterables"
+                err_msg,
             )
         if reuse_messages is not None:
-            if not hasattr(reuse_messages, "__iter__"):
-                raise ValueError(
+            if not isinstance(reuse_messages, list):
+                err_msg = (
                     "reuse_messages must be an iterable if input_link is an iterable"
                 )
-            if len(input_link) != len(reuse_messages):
-                raise ValueError(
-                    "input_link and reuse_messages must be the same length if both are iterables"
+                raise TypeError(
+                    err_msg,
                 )
-
-    bpath: Path = Path(blob_path)
+            if len(input_link) != len(reuse_messages):
+                err_msg = "input_link and reuse_messages must be the same length if both are iterables"
+                raise ValueError(
+                    err_msg,
+                )
 
     # create the node and handle the always present parameters
     nn = pipeline.create(dai.node.NeuralNetwork)
-    nn.setBlobPath(bpath)
+    nn.setBlobPath(blob_path)
     nn.setNumInferenceThreads(num_inference_threads)
 
     # handle the optional parameters
@@ -111,23 +151,47 @@ def create_neural_network(
         nn.setNumPoolFrames(num_pool_frames)
 
     # connect the input link to the neural network node
-    if not hasattr(input_link, "__iter__"):
+    if not isinstance(input_link, list):
         # handle a single input to the network
         input_link.link(nn.input)
     else:
+        if input_names is None or reuse_messages is None:
+            err_msg = "input_names and reuse_messages must be provided if input_link is an iterable"
+            raise ValueError(
+                err_msg,
+            )
+        if isinstance(input_names, str) or isinstance(reuse_messages, bool):
+            err_msg = "input_names and reuse_messages must be iterables if input_link is an iterable"
+            raise TypeError(
+                err_msg,
+            )
+        if input_blocking is not None and isinstance(input_blocking, bool):
+            input_blocking = [input_blocking] * len(input_link)
+        if input_sizes is not None and isinstance(input_sizes, int):
+            input_sizes = [input_sizes] * len(input_link)
+
         input_data = zip(input_link, input_names, reuse_messages)
-        for link, name, reuse_message in input_data:
+        for idx, (link, name, reuse_message) in enumerate(input_data):
             _log.debug(
-                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}"
+                f"Linking {link.name} to {name}, assigning reuse: {reuse_message}",
             )
             link.link(nn.inputs[name])
             if reuse_message is not None:
                 nn.inputs[name].setReusePreviousMessage(reuse_message)
+            if input_blocking is not None:
+                with contextlib.suppress(IndexError):
+                    nn.inputs[name].setBlocking(input_blocking[idx])
+            if input_sizes is not None:
+                with contextlib.suppress(IndexError):
+                    nn.inputs[name].setQueueSize(input_sizes[idx])
 
     return nn
 
 
-def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.ndarray:
+def _normalize(
+    frame: np.ndarray,
+    factor: float | Callable[[np.ndarray], np.ndarray] | None = None,
+) -> np.ndarray:
     """
     Use to normalize a frame.
 
@@ -135,7 +199,7 @@ def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.
     ----------
     frame : np.ndarray
         The frame to normalize.
-    factor : Optional[float, Callable], optional
+    factor : Optional[float, Callable[[np.ndarray], np.ndarray]], optional
         The normalization factor.
 
     Returns
@@ -147,7 +211,7 @@ def _normalize(frame: np.ndarray, factor: float | Callable | None = None) -> np.
         return frame
     if isinstance(factor, float):
         return frame * factor
-    return factor(frame)
+    return factor(frame)  # pyright: ignore [reportCallIssue]
 
 
 def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
@@ -168,13 +232,14 @@ def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
     """
     if factor is None:
         return frame
-    return cv2.resize(
+    resized_frame: np.ndarray = cv2.resize(
         frame,
         (0, 0),
         fx=factor,
         fy=factor,
         interpolation=cv2.INTER_LINEAR,
     )
+    return resized_frame
 
 
 def get_nn_frame(
@@ -182,7 +247,8 @@ def get_nn_frame(
     channels: int,
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
-    normalization: float | Callable | None = None,
+    normalization: float | Callable[[np.ndarray], np.ndarray] | None = None,
+    *,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -200,7 +266,7 @@ def get_nn_frame(
         If frame_size is incorrect, an error will occur.
     resize_factor : Optional[float], optional
         The resize factor to apply to the frame, by default None
-    normalization : Optional[float, Callable], optional
+    normalization : Optional[float, Callable[[np.ndarray], np.ndarray]], optional
         The normalization to apply to the frame, by default None
         If a float then the frame is multiplied by the float.
         If a callable then the frame is passed to the callable and
@@ -221,7 +287,7 @@ def get_nn_frame(
 
     if isinstance(data, dai.NNData):
         data = data.getData()
-    frame = (
+    frame: np.ndarray = (
         data.view(np.float16)
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
@@ -233,7 +299,8 @@ def get_nn_frame(
         frame = frame[:, :, ::-1]
 
     if resize_factor is not None and normalization is not None:
-        if resize_factor <= 1.0:
+        resize_to_be_smaller = 1.0
+        if resize_factor <= resize_to_be_smaller:
             frame = _normalize(_resize(frame, resize_factor), normalization)
         else:
             frame = _resize(_normalize(frame, normalization), resize_factor)
@@ -328,6 +395,7 @@ def get_nn_point_cloud_buffer(
     data: dai.NNData,
     frame_size: tuple[int, int] = (640, 400),
     scale: float = 1000.0,
+    *,
     remove_zeros: bool | None = None,
 ) -> np.ndarray:
     """
@@ -360,7 +428,10 @@ def get_nn_point_cloud_buffer(
         remove_zeros = True
 
     pcl_data = np.array(data.getFirstLayerFp16()).reshape(
-        1, 3, frame_size[1], frame_size[0]
+        1,
+        3,
+        frame_size[1],
+        frame_size[0],
     )
     pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
 
@@ -368,6 +439,7 @@ def get_nn_point_cloud_buffer(
         # optimization over an np.all since it performs less checks
         # and realisticlly it does not matter if there is a few points
         # difference over hundreds of interations
-        pcl_data = pcl_data[pcl_data[:, 2] != 0.0]
+        zero_val = 0.0
+        pcl_data = pcl_data[pcl_data[:, 2] != zero_val]
 
     return pcl_data

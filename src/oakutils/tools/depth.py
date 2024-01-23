@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Tools for working with depth images.
 
@@ -12,7 +25,7 @@ overlay_depth_frame
 """
 from __future__ import annotations
 
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 
 
@@ -82,7 +95,11 @@ def align_depth_to_rgb(
     x_idx = u_v_z_sampled[0].astype(int)
 
     # place the valid aligned points into a new depth image
-    aligned_depth_image = np.full((rgb_height, rgb_width), 0, dtype=np.uint16)
+    aligned_depth_image: np.ndarray = np.full(
+        (rgb_height, rgb_width),
+        0,
+        dtype=np.uint16,
+    )
     aligned_depth_image[y_idx, x_idx] = u_v_z_sampled[3] * depth_scale
     return aligned_depth_image
 
@@ -90,6 +107,7 @@ def align_depth_to_rgb(
 def quantize_colormap_depth_frame(
     frame: np.ndarray,
     depth_scale_factor: float = 2.0,
+    *,
     apply_colormap: bool | None = None,
 ) -> np.ndarray:
     """
@@ -115,8 +133,9 @@ def quantize_colormap_depth_frame(
     """
     if apply_colormap is None:
         apply_colormap = True
-    quantized_depth = cv2.convertScaleAbs(
-        frame.astype(float), alpha=255 / depth_scale_factor
+    quantized_depth: np.ndarray = cv2.convertScaleAbs(
+        frame.astype(float),
+        alpha=255 / depth_scale_factor,
     )
     if apply_colormap:
         quantized_depth = cv2.applyColorMap(quantized_depth, cv2.COLORMAP_JET)
@@ -124,7 +143,9 @@ def quantize_colormap_depth_frame(
 
 
 def overlay_depth_frame(
-    rgb_frame: np.ndarray, depth_frame: np.ndarray, rgb_alpha: float = 0.5
+    rgb_frame: np.ndarray,
+    depth_frame: np.ndarray,
+    rgb_alpha: float = 0.5,
 ) -> np.ndarray:
     """
     Overlay the depth map on top of the RGB image.
@@ -147,12 +168,13 @@ def overlay_depth_frame(
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
     """
-    depth_three_channel = np.zeros_like(rgb_frame)
+    depth_three_channel: np.ndarray = np.zeros_like(rgb_frame)
     depth_three_channel[:, :, 2] = depth_frame
     cond = depth_three_channel[:, :, 2] > 0
     depth_three_channel[cond, 2] = 255
     # Blend aligned depth + rgb image
-    blended_image = (1.0 - rgb_alpha) * depth_three_channel.astype(
-        float
+    blended_image: np.ndarray = (1.0 - rgb_alpha) * depth_three_channel.astype(
+        float,
     ) + rgb_alpha * rgb_frame.astype(float)
-    return (255 * blended_image.astype(float) / blended_image.max()).astype(np.uint8)
+    blended_max: float = blended_image.max()
+    return (255 * blended_image.astype(float) / blended_max).astype(np.uint8)

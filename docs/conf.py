@@ -25,7 +25,7 @@ import oakutils
 project = "oakutils"
 copyright = "2023, Justin Davis"
 author = "Justin Davis"
-version = "1.3.1"
+version = "1.4.0"
 
 assert version == oakutils.__version__  # Make sure version is consistent
 
@@ -41,6 +41,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     'sphinx.ext.mathjax',
+    "myst_parser",
 ]
 
 intersphinx_mapping = {
@@ -54,6 +55,12 @@ intersphinx_mapping = {
 intersphinx_disabled_domains = ["std"]
 
 templates_path = ["_templates"]
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Model definitions for erosion models.
 
@@ -51,17 +64,17 @@ class Erosion(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Erosion) -> ModelType:
+    def model_type(cls: type[Erosion]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Erosion) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Erosion]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Erosion) -> list[str]:
+    def output_names(cls: type[Erosion]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +115,17 @@ class ErosionGray(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: ErosionGray) -> ModelType:
+    def model_type(cls: type[ErosionGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: ErosionGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ErosionGray) -> list[str]:
+    def output_names(cls: type[ErosionGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -140,7 +153,10 @@ class ErosionBlur(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -162,17 +178,17 @@ class ErosionBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ErosionBlur) -> ModelType:
+    def model_type(cls: type[ErosionBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ErosionBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ErosionBlur) -> list[str]:
+    def output_names(cls: type[ErosionBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -186,7 +202,9 @@ class ErosionBlur(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.morphology.erosion(gaussian, self._kernel)
 
@@ -202,7 +220,10 @@ class ErosionBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -224,17 +245,17 @@ class ErosionBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ErosionBlurGray) -> ModelType:
+    def model_type(cls: type[ErosionBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ErosionBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ErosionBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ErosionBlurGray) -> list[str]:
+    def output_names(cls: type[ErosionBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -248,7 +269,9 @@ class ErosionBlurGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         erosion = kornia.morphology.erosion(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(erosion)

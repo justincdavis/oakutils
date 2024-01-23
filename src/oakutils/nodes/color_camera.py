@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating a color camera node in the pipeline.
 
@@ -17,7 +30,6 @@ def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
     preview_size: tuple[int, int] = (640, 480),
-    set_interleaved: bool | None = None,
     fps: int = 30,
     brightness: int = 0,
     saturation: int = 0,
@@ -28,6 +40,12 @@ def create_color_camera(
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
     isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
+    *,
+    set_interleaved: bool | None = None,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.ColorCamera:
     """
     Use to create a pipeline for the color camera.
@@ -79,6 +97,18 @@ def create_color_camera(
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
+    input_queue_size: int, optional
+        The size of the input queue, by default 3
+    input_reuse: bool, optional
+        Whether to reuse inputs or not, by default None
+        If none, will be set to False
+    input_blocking: bool, optional
+        Whether to block the input or not, by default None
+        If none, will be set to False
+    input_wait_for_message: bool, optional
+        Whether to wait for a message or not, by default None
+        If none, will be set to False
+
 
     Returns
     -------
@@ -105,20 +135,40 @@ def create_color_camera(
     if set_interleaved is None:
         set_interleaved = False
 
-    if fps < 0 or fps > 60:
-        raise ValueError("fps must be between 0 and 60")
-    if brightness < -10 or brightness > 10:
-        raise ValueError("brightness must be between -10 and 10")
-    if saturation < -10 or saturation > 10:
-        raise ValueError("saturation must be between -10 and 10")
-    if contrast < -10 or contrast > 10:
-        raise ValueError("contrast must be between -10 and 10")
-    if sharpness < 0 or sharpness > 4:
-        raise ValueError("sharpness must be between 0 and 4")
-    if luma_denoise < 0 or luma_denoise > 4:
-        raise ValueError("luma_denoise must be between 0 and 4")
-    if chroma_denoise < 0 or chroma_denoise > 4:
-        raise ValueError("chroma_denoise must be between 0 and 4")
+    min_fps, max_fps = 0, 60
+    if fps < min_fps or fps > max_fps:
+        err_msg = "fps must be between 0 and 60"
+        raise ValueError(err_msg)
+    min_brightness, max_brightness = -10, 10
+    if brightness < min_brightness or brightness > max_brightness:
+        err_msg = "brightness must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_saturation, max_saturation = -10, 10
+    if saturation < min_saturation or saturation > max_saturation:
+        err_msg = "saturation must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_contrast, max_contrast = -10, 10
+    if contrast < min_contrast or contrast > max_contrast:
+        err_msg = "contrast must be between -10 and 10"
+        raise ValueError(err_msg)
+    min_sharpness, max_sharpness = 0, 4
+    if sharpness < min_sharpness or sharpness > max_sharpness:
+        err_msg = "sharpness must be between 0 and 4"
+        raise ValueError(err_msg)
+    min_luma_denoise, max_luma_denoise = 0, 4
+    if luma_denoise < min_luma_denoise or luma_denoise > max_luma_denoise:
+        err_msg = "luma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
+    min_chroma_denoise, max_chroma_denoise = 0, 4
+    if chroma_denoise < min_chroma_denoise or chroma_denoise > max_chroma_denoise:
+        err_msg = "chroma_denoise must be between 0 and 4"
+        raise ValueError(err_msg)
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
 
     size_tuple = get_tuple_from_color_sensor_resolution(resolution)
 
@@ -148,5 +198,10 @@ def create_color_camera(
 
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
+
+    cam.inputConfig.setQueueSize(input_queue_size)
+    cam.inputConfig.setReusePreviousMessage(input_reuse)
+    cam.inputConfig.setBlocking(input_blocking)
+    cam.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return cam

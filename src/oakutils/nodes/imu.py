@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating IMU nodes.
 
@@ -17,6 +30,7 @@ def create_imu(
     gyroscope_rate: int = 400,
     batch_report_threshold: int = 1,
     max_batch_reports: int = 10,
+    *,
     enable_accelerometer_raw: bool | None = None,
     enable_accelerometer: bool | None = None,
     enable_linear_acceleration: bool | None = None,
@@ -132,11 +146,13 @@ def create_imu(
         enable_arvr_stabilized_game_rotation_vector = False
 
     if accelerometer_rate not in [100, 200, 400]:
+        err_msg = "accelerometer_rate must be one of the following: 100, 200, 400"
         raise ValueError(
-            "accelerometer_rate must be one of the following: 100, 200, 400"
+            err_msg,
         )
     if gyroscope_rate not in [125, 250, 400]:
-        raise ValueError("gyroscope_rate must be one of the following: 125, 250, 400")
+        err_msg = "gyroscope_rate must be one of the following: 125, 250, 400"
+        raise ValueError(err_msg)
     slower_rate = min(accelerometer_rate, gyroscope_rate)
 
     sensors = []

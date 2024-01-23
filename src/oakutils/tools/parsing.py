@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for converting between depthai types, tuples, and strings.
 
@@ -67,7 +80,8 @@ def get_color_sensor_resolution_from_str(
         return dai.ColorCameraProperties.SensorResolution.THE_1440X1080
     if resolution == "4000x3000":
         return dai.ColorCameraProperties.SensorResolution.THE_4000X3000
-    raise ValueError("Invalid resolution in get_color_sensor_resolution_from_str")
+    err_msg = "Invalid resolution in get_color_sensor_resolution_from_str"
+    raise ValueError(err_msg)
 
 
 def get_tuple_from_color_sensor_resolution(
@@ -120,7 +134,8 @@ def get_tuple_from_color_sensor_resolution(
     if resolution == dai.ColorCameraProperties.SensorResolution.THE_4000X3000:
         return (4000, 3000)
     # Anything else is not valid
-    raise ValueError("Invalid resolution in get_tuple_from_color_sensor_resolution")
+    err_msg = "Invalid resolution in get_tuple_from_color_sensor_resolution"
+    raise ValueError(err_msg)
 
 
 def get_color_sensor_resolution_from_tuple(
@@ -168,7 +183,8 @@ def get_color_sensor_resolution_from_tuple(
         return dai.ColorCameraProperties.SensorResolution.THE_1440X1080
     if resolution == (4000, 3000):
         return dai.ColorCameraProperties.SensorResolution.THE_4000X3000
-    raise ValueError("Invalid resolution in get_color_resolution_from_tuple")
+    err_msg = "Invalid resolution in get_color_resolution_from_tuple"
+    raise ValueError(err_msg)
 
 
 def get_color_sensor_info_from_str(
@@ -218,7 +234,8 @@ def get_mono_sensor_resolution_from_str(
         return dai.MonoCameraProperties.SensorResolution.THE_800_P
     if resolution == "1200p":
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
-    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_str")
+    err_msg = "Invalid resolution in get_mono_sensor_resolution_from_str"
+    raise ValueError(err_msg)
 
 
 def get_mono_sensor_resolution_from_tuple(
@@ -252,7 +269,8 @@ def get_mono_sensor_resolution_from_tuple(
         return dai.MonoCameraProperties.SensorResolution.THE_800_P
     if resolution == (1920, 1200):
         return dai.MonoCameraProperties.SensorResolution.THE_1200_P
-    raise ValueError("Invalid resolution in get_mono_sensor_resolution_from_tuple")
+    err_msg = "Invalid resolution in get_mono_sensor_resolution_from_tuple"
+    raise ValueError(err_msg)
 
 
 def get_tuple_from_mono_sensor_resolution(
@@ -288,7 +306,8 @@ def get_tuple_from_mono_sensor_resolution(
     if resolution == dai.MonoCameraProperties.SensorResolution.THE_1200_P:
         return (1920, 1200)
     # Anything else is not valid
-    raise ValueError("Invalid resolution in get_tuple_from_mono_sensor_resolution")
+    err_msg = "Invalid resolution in get_tuple_from_mono_sensor_resolution"
+    raise ValueError(err_msg)
 
 
 def get_mono_sensor_info_from_str(
@@ -314,7 +333,7 @@ def get_mono_sensor_info_from_str(
 
 def get_median_filter_from_str(
     filter_size: int | None,
-) -> dai.StereoDepthProperties.MedianFilter:
+) -> dai.MedianFilter:
     """
     Use to convert a str to a MedianFilter.
 
@@ -328,27 +347,19 @@ def get_median_filter_from_str(
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
     """
-    minor_version = 21
-    if int(str(dai.Version(dai.__version__)).split(".")[1]) >= minor_version:
-        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
-        median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
-        median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
-        median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
-    else:
-        median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
-        median_3 = dai.StereoDepthProperties.MedianFilter.MEDIAN_3x3
-        median_5 = dai.StereoDepthProperties.MedianFilter.MEDIAN_5x5
-        median_7 = dai.StereoDepthProperties.MedianFilter.MEDIAN_7x7
-    if filter_size is None:
-        return median_off
-    if filter_size == 0:
-        return median_off
-    if filter_size == 3:
-        return median_3
-    if filter_size == 5:
-        return median_5
-    if filter_size == 7:
-        return median_7
-    raise ValueError(
-        "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
-    )
+    median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
+    median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
+    median_5 = dai.StereoDepthProperties.MedianFilter.KERNEL_5x5
+    median_7 = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7
+    median_filter_map = {
+        None: median_off,
+        0: median_off,
+        3: median_3,
+        5: median_5,
+        7: median_7,
+    }
+    try:
+        return median_filter_map[filter_size]
+    except KeyError as err:
+        err_msg = "Invalid filter size in get_median_filter_from_str, must be 0, 3, 5, 7 or None"
+        raise ValueError(err_msg) from err

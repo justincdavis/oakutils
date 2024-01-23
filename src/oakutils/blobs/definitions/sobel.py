@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Model definitions for Sobel edge detection.
 
@@ -42,17 +55,17 @@ class Sobel(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: Sobel) -> ModelType:
+    def model_type(cls: type[Sobel]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: Sobel) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Sobel]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Sobel) -> list[str]:
+    def output_names(cls: type[Sobel]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -94,17 +107,17 @@ class SobelBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: SobelBlur) -> ModelType:
+    def model_type(cls: type[SobelBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: SobelBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: SobelBlur) -> list[str]:
+    def output_names(cls: type[SobelBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -122,7 +135,7 @@ class SobelBlur(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
 
 
@@ -141,17 +154,17 @@ class SobelGray(AbstractModel):
         super().__init__()
 
     @classmethod
-    def model_type(cls: SobelGray) -> ModelType:
+    def model_type(cls: type[SobelGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.NONE
 
     @classmethod
-    def input_names(cls: SobelGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: SobelGray) -> list[str]:
+    def output_names(cls: type[SobelGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -194,17 +207,17 @@ class SobelBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: SobelBlurGray) -> ModelType:
+    def model_type(cls: type[SobelBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: SobelBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[SobelBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: SobelBlurGray) -> list[str]:
+    def output_names(cls: type[SobelBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -222,6 +235,6 @@ class SobelBlurGray(AbstractModel):
                 image,
                 (self._kernel_size, self._kernel_size),
                 (self._sigma, self._sigma),
-            )
+            ),
         )
         return kornia.color.bgr_to_grayscale(sobel)

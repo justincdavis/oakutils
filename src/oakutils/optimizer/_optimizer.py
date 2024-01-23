@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import itertools
@@ -56,8 +69,9 @@ class Optimizer:
         ValueError
             If the algorithm is invalid
         """
-        if algorithm not in ["grid"]:
-            raise ValueError(f"Invalid algorithm {algorithm}")
+        if algorithm != "grid":
+            err_msg = f"Invalid algorithm {algorithm}"
+            raise ValueError(err_msg)
         if algorithm == "grid":
             self._algorithm = grid_search
         self._max_measure_time = max_measure_time
@@ -69,7 +83,8 @@ class Optimizer:
     def measure(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
+            [dai.Pipeline, dict[str, Any]],
+            list[Callable[[dai.DeviceBase], None]],
         ],
         pipeline_args: dict[str, Any],
     ) -> tuple[float, float, dict[str, float]]:
@@ -147,7 +162,7 @@ class Optimizer:
                             current: float = dai.Clock.now().total_seconds()  # type: ignore[call-arg]
                             data_ts: float = data.getTimestampDevice().total_seconds()  # type: ignore[attr-defined]
                             _log.debug(
-                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}"
+                                f"Base: {device_t0}, Curr: {current}, Data: {data_ts}",
                             )
                             ts: float = current - device_t0 - data_ts
                             _log.debug(f"Measured latency: {ts:.2f}ms for {queue_name}")
@@ -183,7 +198,7 @@ class Optimizer:
             all_latencies.append(avg_latencies)
 
         _log.debug(
-            f"Done measuring, computing results on {self._measure_trials} trials"
+            f"Done measuring, computing results on {self._measure_trials} trials",
         )
         # compute average fps
         avg_fps = sum(fps) / len(fps)
@@ -199,7 +214,8 @@ class Optimizer:
     def optimize(
         self: Self,
         pipeline_func: Callable[
-            [dai.Pipeline, dict[str, Any]], list[Callable[[dai.DeviceBase], None]]
+            [dai.Pipeline, dict[str, Any]],
+            list[Callable[[dai.DeviceBase], None]],
         ],
         pipeline_args: dict[str, list[Any]],
         objective_func: Callable[

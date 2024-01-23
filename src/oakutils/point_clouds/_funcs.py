@@ -1,9 +1,22 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import cv2
-import open3d as o3d
+import cv2  # type: ignore[import]
+import open3d as o3d  # type: ignore[import]
 
 if TYPE_CHECKING:
     import numpy as np
@@ -15,6 +28,7 @@ def get_point_cloud_from_rgb_depth_image(
     camera_intrinsics: o3d.camera.PinholeCameraIntrinsic,
     depth_trunc: float = 25000.0,
     depth_scale: float = 1000.0,
+    *,
     image_is_bgr: bool | None = None,
     remove_non_finite: bool | None = None,
     remove_duplicates: bool | None = None,
@@ -68,7 +82,10 @@ def get_point_cloud_from_rgb_depth_image(
     depth_o3d = o3d.geometry.Image(depth_image)
 
     rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(
-        rgb_o3d, depth_o3d, depth_trunc=depth_trunc, depth_scale=depth_scale
+        rgb_o3d,
+        depth_o3d,
+        depth_trunc=depth_trunc,
+        depth_scale=depth_scale,
     )
 
     pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
@@ -90,6 +107,7 @@ def get_point_cloud_from_depth_image(
     depth_scale: float = 1000.0,
     depth_trunc: float = 25000.0,
     stride: int = 1,
+    *,
     project_valid_depth_only: bool | None = None,
     remove_non_finite: bool | None = None,
     remove_duplicates: bool | None = None,
@@ -155,6 +173,7 @@ def filter_point_cloud(
     voxel_size: float | None = 0.01,
     nb_neighbors: int | None = 50,
     std_ratio: float | None = 0.1,
+    *,
     downsample_first: bool | None = None,
 ) -> o3d.geometry.PointCloud:
     """

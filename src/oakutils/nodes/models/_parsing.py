@@ -1,6 +1,20 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from oakutils.blobs import models
 
@@ -22,13 +36,19 @@ def parse_kernel_size(kernel_size: int) -> bool:
         True if the kernel size is valid, False otherwise
     """
     valid = False
-    if kernel_size % 2 == 0 or kernel_size < 3 or kernel_size > 15:
+    min_kernel_size, max_kernel_size = 3, 15
+    if (
+        kernel_size % 2 == 0
+        or kernel_size < min_kernel_size
+        or kernel_size > max_kernel_size
+    ):
         valid = False
     else:
         valid = True
 
     if not valid:
-        raise ValueError("Invalid kernel size, must be an odd integer between 3 and 15")
+        err_msg = "Invalid kernel size, must be an odd integer between 3 and 15"
+        raise ValueError(err_msg)
     return valid
 
 
@@ -72,7 +92,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
         "pointcloud",
     ]
     valid_names.extend(
-        [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names]
+        [n.upper() for n in valid_names] + [n.capitalize() for n in valid_names],
     )
     for name in valid_names:
         if model_type in name:
@@ -81,7 +101,9 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
 
 
 def get_candidates(
-    model_type: str, attributes: list[str], shaves: int
+    model_type: str,
+    attributes: list[str],
+    shaves: int,
 ) -> list[tuple[str, list[str], str]]:
     """
     Use to get the list of candidate models for a given model type and attribute.
@@ -109,7 +131,8 @@ def get_candidates(
     """
     valid, valid_names = _valid_model_names(model_type)
     if not valid:
-        raise ValueError(f"Invalid model type, valid names are: {valid_names}")
+        err_msg = f"Invalid model type, valid names are: {valid_names}"
+        raise ValueError(err_msg)
     model_type = model_type.upper()
 
     potential_blobs = []
@@ -126,7 +149,7 @@ def get_candidates(
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
     for blob in potential_blobs:
-        path: str = os.path.basename(blob)  # drop the extension
+        path: str = Path(blob).name  # drop the extension
         path = os.path.split(path)[-1]  # just the file name
         data = path.split("_")  # split into name and attributes
         if len(data) == 1:  # if there are no extra attributes

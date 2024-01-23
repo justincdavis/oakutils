@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Models for closing blobs.
 
@@ -51,17 +64,17 @@ class Closing(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: Closing) -> ModelType:
+    def model_type(cls: type[Closing]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: Closing) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[Closing]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: Closing) -> list[str]:
+    def output_names(cls: type[Closing]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -102,17 +115,17 @@ class ClosingGray(AbstractModel):
         self._kernel[:, kernel_size // 2] = 1.0
 
     @classmethod
-    def model_type(cls: ClosingGray) -> ModelType:
+    def model_type(cls: type[ClosingGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.KERNEL
 
     @classmethod
-    def input_names(cls: ClosingGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingGray) -> list[str]:
+    def output_names(cls: type[ClosingGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -140,7 +153,10 @@ class ClosingBlur(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -162,17 +178,17 @@ class ClosingBlur(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ClosingBlur) -> ModelType:
+    def model_type(cls: type[ClosingBlur]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ClosingBlur) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingBlur]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingBlur) -> list[str]:
+    def output_names(cls: type[ClosingBlur]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -186,7 +202,9 @@ class ClosingBlur(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         return kornia.morphology.closing(gaussian, self._kernel)
 
@@ -202,7 +220,10 @@ class ClosingBlurGray(AbstractModel):
     """
 
     def __init__(
-        self: Self, kernel_size: int = 3, kernel_size2: int = 3, sigma: float = 1.5
+        self: Self,
+        kernel_size: int = 3,
+        kernel_size2: int = 3,
+        sigma: float = 1.5,
     ) -> None:
         """
         Use to create an instance of the model.
@@ -224,17 +245,17 @@ class ClosingBlurGray(AbstractModel):
         self._sigma = sigma
 
     @classmethod
-    def model_type(cls: ClosingBlurGray) -> ModelType:
+    def model_type(cls: type[ClosingBlurGray]) -> ModelType:
         """Use to get the type of input this model takes."""
         return ModelType.DUAL_KERNEL
 
     @classmethod
-    def input_names(cls: ClosingBlurGray) -> list[tuple[str, InputType]]:
+    def input_names(cls: type[ClosingBlurGray]) -> list[tuple[str, InputType]]:
         """Use to get the names of the input tensors."""
         return [("input", InputType.FP16)]
 
     @classmethod
-    def output_names(cls: ClosingBlurGray) -> list[str]:
+    def output_names(cls: type[ClosingBlurGray]) -> list[str]:
         """Use to get the names of the output tensors."""
         return ["output"]
 
@@ -248,7 +269,9 @@ class ClosingBlurGray(AbstractModel):
             The input tensor to run the model on
         """
         gaussian = kornia.filters.gaussian_blur2d(
-            image, (self._kernel_size, self._kernel_size), (self._sigma, self._sigma)
+            image,
+            (self._kernel_size, self._kernel_size),
+            (self._sigma, self._sigma),
         )
         closing = kornia.morphology.closing(gaussian, self._kernel)
         return kornia.color.bgr_to_grayscale(closing)

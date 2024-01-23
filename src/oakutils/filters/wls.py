@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for using the WLS filter on disparity images.
 
@@ -12,7 +25,7 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 
 if TYPE_CHECKING:
@@ -66,7 +79,7 @@ class WLSFilter:
         self._depth_scale_left: float | None = None
         self._depth_scale_right: float | None = None
         self._filter = cv2.ximgproc.createDisparityWLSFilterGeneric(
-            use_confidence=False
+            use_confidence=False,
         )
         self._filter.setLambda(self._lambda)
         self._filter.setSigmaColor(self._sigma)
@@ -125,6 +138,7 @@ class WLSFilter:
         self: Self,
         disparity: np.ndarray,
         mono_frame: np.ndarray,
+        *,
         use_mono_left: bool | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """
@@ -165,6 +179,6 @@ class WLSFilter:
 
         filtered_disp = self._filter.filter(disparity, mono_frame)
         with np.errstate(divide="ignore"):
-            depth = (depth_scale / filtered_disp).astype(np.uint16)
+            depth = (depth_scale / filtered_disp).astype(np.uint16)  # type: ignore[operator]
 
         return filtered_disp, depth

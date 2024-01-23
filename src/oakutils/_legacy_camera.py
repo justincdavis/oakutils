@@ -1,9 +1,22 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for interacting with the OAK-D enabling easy access to the RGB, depth, and IMU sensors.
 
 Classes
 -------
-Camera
+LegacyCamera
     Class for interfacing with the OAK-D camera with fixed pipeline.
 """
 from __future__ import annotations
@@ -13,7 +26,7 @@ import contextlib
 from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
-import cv2
+import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
 
@@ -31,13 +44,13 @@ from .tools.parsing import (
 )
 
 if TYPE_CHECKING:
-    import open3d as o3d
+    import open3d as o3d  # type: ignore[import]
     from typing_extensions import Self
 
 
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
-class Camera:
+class LegacyCamera:
     """
     Class for interfacing with the OAK-D camera.
 
@@ -93,16 +106,29 @@ class Camera:
     def __init__(
         self: Self,
         rgb_size: str = "1080p",
-        enable_rgb: bool | None = None,
         mono_size: str = "400p",
-        enable_mono: bool | None = None,
         rgb_fps: int = 30,
         mono_fps: int = 60,
+        display_size: tuple[int, int] = (640, 400),
+        median_filter: int | None = 7,
+        stereo_confidence_threshold: int = 200,
+        stereo_speckle_filter_range: int = 60,
+        stereo_spatial_filter_radius: int = 2,
+        stereo_spatial_filter_num_iterations: int = 1,
+        stereo_threshold_filter_min_range: int = 200,
+        stereo_threshold_filter_max_range: int = 20000,
+        stereo_decimation_filter_factor: int = 1,
+        imu_batch_report_threshold: int = 20,
+        imu_max_batch_reports: int = 20,
+        imu_accelerometer_refresh_rate: int = 400,
+        imu_gyroscope_refresh_rate: int = 400,
+        *,
+        enable_rgb: bool | None = None,
+        enable_mono: bool | None = None,
         primary_mono_left: bool | None = None,
         use_cv2_q_matrix: bool | None = None,
         compute_im3d_on_demand: bool | None = None,
         compute_point_cloud_on_demand: bool | None = None,
-        display_size: tuple[int, int] = (640, 400),
         display_rgb: bool | None = None,
         display_mono: bool | None = None,
         display_depth: bool | None = None,
@@ -112,22 +138,10 @@ class Camera:
         extended_disparity: bool | None = None,
         subpixel: bool | None = None,
         lr_check: bool | None = None,
-        median_filter: int | None = 7,
-        stereo_confidence_threshold: int = 200,
         stereo_speckle_filter_enable: bool | None = None,
-        stereo_speckle_filter_range: int = 60,
         stereo_temporal_filter_enable: bool | None = None,
         stereo_spatial_filter_enable: bool | None = None,
-        stereo_spatial_filter_radius: int = 2,
-        stereo_spatial_filter_num_iterations: int = 1,
-        stereo_threshold_filter_min_range: int = 200,
-        stereo_threshold_filter_max_range: int = 20000,
-        stereo_decimation_filter_factor: int = 1,
         enable_imu: bool | None = None,
-        imu_batch_report_threshold: int = 20,
-        imu_max_batch_reports: int = 20,
-        imu_accelerometer_refresh_rate: int = 400,
-        imu_gyroscope_refresh_rate: int = 400,
     ) -> None:
         """
         Use to create the camera object.
@@ -246,6 +260,8 @@ class Camera:
         if enable_imu is None:
             enable_imu = False
 
+        self._nodes: list[dai.Node] = []
+
         self._primary_mono_left = primary_mono_left
         self._use_cv2_q_matrix = use_cv2_q_matrix
 
@@ -262,11 +278,12 @@ class Camera:
         self._rgb_size = get_color_sensor_info_from_str(rgb_size)
         self._mono_size = get_mono_sensor_info_from_str(mono_size)
 
-        if stereo_decimation_filter_factor == 2:
+        dec_filter_divisor = 2
+        if stereo_decimation_filter_factor == dec_filter_divisor:
             # need to divide the mono height by 2
             self._mono_size = (
                 self._mono_size[0],
-                self._mono_size[1] // 2,
+                self._mono_size[1] // dec_filter_divisor,
                 self._mono_size[2],
             )
 
@@ -275,7 +292,7 @@ class Camera:
         self._calibration: CalibrationData = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),
             (self._mono_size[0], self._mono_size[1]),
-            self._primary_mono_left,
+            is_primary_mono_left=self._primary_mono_left,
         )
         self._Q = (
             self._calibration.stereo.Q_cv2
@@ -322,7 +339,9 @@ class Camera:
 
         # packet for compute_3d
         self._3d_packet: tuple[
-            np.ndarray | None, np.ndarray | None, np.ndarray | None
+            np.ndarray | None,
+            np.ndarray | None,
+            np.ndarray | None,
         ] = (None, None, None)
 
         # display information
@@ -341,6 +360,7 @@ class Camera:
             )
             create_xout(self._pipeline, cam.video, "rgb")
             self._streams.extend(["rgb"])
+            self._nodes.extend([cam])
         if enable_mono:
             align_socket = (
                 dai.CameraBoardSocket.LEFT
@@ -386,12 +406,13 @@ class Camera:
                     "disparity",
                     "rectified_left",
                     "rectified_right",
-                ]
+                ],
             )
+            self._nodes.extend([stereo, left, right])
         if enable_imu:
             imu = create_imu(
                 pipeline=self._pipeline,
-                accel_range=self._imu_accelerometer_refresh_rate,
+                accelerometer_rate=self._imu_accelerometer_refresh_rate,
                 gyroscope_rate=self._imu_gyroscope_refresh_rate,
                 batch_report_threshold=self._imu_batch_report_threshold,
                 max_batch_reports=self._imu_max_batch_reports,
@@ -401,6 +422,7 @@ class Camera:
             create_xout(self._pipeline, imu.out, "imu")
 
             self._streams.extend(["imu"])
+            self._nodes.extend([imu])
 
         # set atexit methods
         atexit.register(self.stop)
@@ -573,7 +595,7 @@ class Camera:
         """
         return self._cam_thread.is_alive()
 
-    def start(self: Self, block: bool | None = None) -> None:
+    def start(self: Self, *, block: bool | None = None) -> None:
         """
         Use to start the camera.
 
@@ -614,7 +636,7 @@ class Camera:
             if self._rgb_frame is not None and self._display_rgb:
                 cv2.imshow("rgb", cv2.resize(self._rgb_frame, self._display_size))
             if self._disparity is not None and self._display_disparity:
-                frame = (
+                frame: np.ndarray = (
                     self._disparity * (255 / self._stereo_confidence_threshold)
                 ).astype(np.uint8)
                 frame = cv2.resize(frame, self._display_size)
@@ -653,12 +675,28 @@ class Camera:
         self._display_thread.join()
 
     def _update_point_cloud(self: Self) -> None:
+        if self._rgb_frame is None or self._depth is None:
+            err_msg = "RGB frame or depth map is not available."
+            raise RuntimeError(err_msg)
+        if (
+            self._calibration.primary is None
+            or self._calibration.primary.pinhole is None
+        ):
+            err_msg = "Primary pinhole calibration is not available."
+            raise RuntimeError(err_msg)
+
         pcd = get_point_cloud_from_rgb_depth_image(
-            self._rgb_frame, self._depth, self._calibration.primary.pinhole
+            self._rgb_frame,
+            self._depth,
+            self._calibration.primary.pinhole,
         )
 
         pcd = filter_point_cloud(
-            pcd, voxel_size=None, nb_neighbors=30, std_ratio=0.1, downsample_first=True
+            pcd,
+            voxel_size=None,
+            nb_neighbors=30,
+            std_ratio=0.1,
+            downsample_first=True,
         )
 
         if self._point_cloud is None:
@@ -668,14 +706,16 @@ class Camera:
             self._point_cloud.colors = pcd.colors
 
     def _update_im3d(self: Self) -> None:
-        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)
+        self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)  # type: ignore[arg-type]
 
     def _target(self: Self) -> None:
         with dai.Device(self._pipeline) as device:
             queues = {}
             for stream in self._streams:
-                queues[stream] = device.getOutputQueue(
-                    name=stream, maxSize=1, blocking=False
+                queues[stream] = device.getOutputQueue(  # type: ignore[attr-defined]
+                    name=stream,
+                    maxSize=1,
+                    blocking=False,
                 )
 
             base_accel_timestamp = None
@@ -687,9 +727,9 @@ class Camera:
                         if name == "rgb":
                             self._rgb_frame = data.getCvFrame()
                             self._rectified_rgb_frame = cv2.remap(
-                                self._rgb_frame,
-                                self._calibration.rgb.map_1,
-                                self._calibration.rgb.map_2,
+                                self._rgb_frame,  # type: ignore[arg-type]
+                                self._calibration.rgb.map_1,  # type: ignore[arg-type]
+                                self._calibration.rgb.map_2,  # type: ignore[arg-type]
                                 cv2.INTER_LINEAR,
                             )
                         elif name == "left":
@@ -767,6 +807,12 @@ class Camera:
                     self._data_condition.notify_all()
 
     def _crop_to_valid_primary_region(self: Self, img: np.ndarray) -> np.ndarray:
+        if self._calibration.primary is None:
+            err_msg = "Primary calibration is not available."
+            raise RuntimeError(err_msg)
+        if self._calibration.primary.valid_region is None:
+            err_msg = "Primary valid region is not available."
+            raise RuntimeError(err_msg)
         return img[
             self._calibration.primary.valid_region[
                 1
@@ -777,7 +823,9 @@ class Camera:
         ]
 
     def compute_point_cloud(
-        self: Self, block: bool | None = None
+        self: Self,
+        *,
+        block: bool | None = None,
     ) -> o3d.geometry.PointCloud | None:
         """
         Compute a point cloud from the depth map.
@@ -804,7 +852,9 @@ class Camera:
         return self._point_cloud
 
     def compute_im3d(
-        self: Self, block: bool | None = None
+        self: Self,
+        *,
+        block: bool | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None]:
         """
         Compute 3D points from the disparity map.
@@ -831,6 +881,8 @@ class Camera:
         if self._compute_im3d_on_demand:
             self._update_im3d()
             im3d = self._im3d
+        if im3d is None or disparity is None or rect is None:
+            return None, None, None
         return (
             self._crop_to_valid_primary_region(im3d),
             self._crop_to_valid_primary_region(disparity),

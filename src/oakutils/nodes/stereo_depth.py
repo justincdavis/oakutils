@@ -1,3 +1,16 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 Module for creating stereo depth nodes.
 
@@ -25,34 +38,44 @@ def create_stereo_depth(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
+    isp_3a_fps: int | None = 15,
+    input_queue_size: int = 3,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
-    median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool | None = None,
-    extended_disparity: bool | None = None,
-    subpixel: bool | None = None,
+    median_filter: dai.MedianFilter = dai.MedianFilter.KERNEL_7x7,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
     decimation_mode: dai.RawStereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool | None = None,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool | None = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool | None = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
     temporal_mode: dai.RawStereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera,]:
+    stereo_input_queue_size: int = 3,
+    *,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
+    lr_check: bool | None = None,
+    extended_disparity: bool | None = None,
+    subpixel: bool | None = None,
+    enable_spatial_filter: bool | None = None,
+    enable_speckle_filter: bool | None = None,
+    enable_temporal_filter: bool | None = None,
+    stereo_input_reuse: bool | None = None,
+    stereo_input_blocking: bool | None = None,
+    stereo_input_wait_for_message: bool | None = None,
+) -> tuple[dai.node.StereoDepth, dai.node.MonoCamera, dai.node.MonoCamera]:
     """
     Use to create a stereo depth given only a pipeline object.
 
@@ -79,6 +102,19 @@ def create_stereo_depth(
         The luma denoise of the mono camera, by default 1
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
+    isp_3a_fps: int, optional
+        The 3a fps of the mono camera, by default 15
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
     left : dai.node.MonoCamera
         The left mono camera node
     right : dai.node.MonoCamera
@@ -137,6 +173,18 @@ def create_stereo_depth(
         The threshold max range of the stereo depth node, by default 25000
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
+    stereo_input_queue_size : int, optional
+        The queue size of the input, by default 3
+    stereo_input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    stereo_input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    stereo_input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
+
 
     Returns
     -------
@@ -170,6 +218,11 @@ def create_stereo_depth(
         sharpness=sharpness,
         luma_denoise=luma_denoise,
         chroma_denoise=chroma_denoise,
+        isp_3a_fps=isp_3a_fps,
+        input_queue_size=input_queue_size,
+        input_reuse=input_reuse,
+        input_blocking=input_blocking,
+        input_wait_for_message=input_wait_for_message,
     )
     stereo = create_stereo_depth_from_mono_cameras(
         pipeline=pipeline,
@@ -202,6 +255,10 @@ def create_stereo_depth(
         threshold_min_range=threshold_min_range,
         threshold_max_range=threshold_max_range,
         bilateral_sigma=bilateral_sigma,
+        input_queue_size=stereo_input_queue_size,
+        input_reuse=stereo_input_reuse,
+        input_blocking=stereo_input_blocking,
+        input_wait_for_message=stereo_input_wait_for_message,
     )
     return (
         stereo,
@@ -218,29 +275,34 @@ def create_stereo_depth_from_mono_cameras(
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
     rectify_edge_color: int = 0,
-    median_filter: dai.StereoDepthProperties.MedianFilter = dai.StereoDepthProperties.MedianFilter.KERNEL_7x7,
-    lr_check: bool | None = None,
-    extended_disparity: bool | None = None,
-    subpixel: bool | None = None,
+    median_filter: dai.MedianFilter = dai.MedianFilter.KERNEL_7x7,
     subpixel_fractional_bits: int = 3,
     min_brightness: int = 0,
     max_brightness: int = 255,
     decimation_factor: int = 1,
-    decimation_mode: dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
-    enable_spatial_filter: bool | None = None,
+    decimation_mode: dai.RawStereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode = dai.StereoDepthConfig.PostProcessing.DecimationFilter.DecimationMode.NON_ZERO_MEAN,
     spatial_alpha: float = 0.5,
     spatial_delta: int = 0,
     spatial_radius: int = 2,
     spatial_iterations: int = 1,
-    enable_speckle_filter: bool | None = None,
     speckle_range: int = 20,
-    enable_temporal_filter: bool | None = None,
     temporal_alpha: float = 0.5,
     temporal_delta: int = 0,
-    temporal_mode: dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
+    temporal_mode: dai.RawStereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode = dai.StereoDepthConfig.PostProcessing.TemporalFilter.PersistencyMode.VALID_2_IN_LAST_3,
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
+    input_queue_size: int = 3,
+    *,
+    lr_check: bool | None = None,
+    extended_disparity: bool | None = None,
+    subpixel: bool | None = None,
+    enable_spatial_filter: bool | None = None,
+    enable_speckle_filter: bool | None = None,
+    enable_temporal_filter: bool | None = None,
+    input_reuse: bool | None = None,
+    input_blocking: bool | None = None,
+    input_wait_for_message: bool | None = None,
 ) -> dai.node.StereoDepth:
     """
     Use to create a stereo depth node from a pipeline and two mono cameras.
@@ -310,6 +372,17 @@ def create_stereo_depth_from_mono_cameras(
         The threshold max range of the stereo depth node, by default 25000
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
+    input_queue_size : int, optional
+        The queue size of the input, by default 3
+    input_reuse : Optional[bool], optional
+        Whether to reuse the previous message, by default None
+        If None, will be set to False
+    input_blocking : Optional[bool], optional
+        Whether to block the input, by default None
+        If None, will be set to False
+    input_wait_for_message : Optional[bool], optional
+        Whether to wait for a message, by default None
+        If None, will be set to False
 
     Returns
     -------
@@ -339,13 +412,18 @@ def create_stereo_depth_from_mono_cameras(
     if enable_temporal_filter is None:
         enable_temporal_filter = False
     # all alpha parameters should be between 0.0 and 1.0
-    if not 0.0 <= spatial_alpha <= 1.0:
-        raise ValueError("spatial_alpha should be between 0.0 and 1.0")
-    if not 0.0 <= temporal_alpha <= 1.0:
-        raise ValueError("temporal_alpha should be between 0.0 and 1.0")
+    min_spatial_alpha, max_spacial_alpha = 0.0, 1.0
+    if not min_spatial_alpha <= spatial_alpha <= max_spacial_alpha:
+        err_msg = "spatial_alpha should be between 0.0 and 1.0"
+        raise ValueError(err_msg)
+    min_temporal_alpha, max_temporal_alpha = 0.0, 1.0
+    if not min_temporal_alpha <= temporal_alpha <= max_temporal_alpha:
+        err_msg = "temporal_alpha should be between 0.0 and 1.0"
+        raise ValueError(err_msg)
     # decimation should be 1,2,3,4
     if decimation_factor not in [1, 2, 3, 4]:
-        raise ValueError("decimation_factor should be 1,2,3,4")
+        err_msg = "decimation_factor should be 1,2,3,4"
+        raise ValueError(err_msg)
 
     stereo: dai.node.StereoDepth = pipeline.create(dai.node.StereoDepth)
     stereo.setDefaultProfilePreset(preset)
@@ -360,7 +438,8 @@ def create_stereo_depth_from_mono_cameras(
 
     stereo.setRectifyEdgeFillColor(rectify_edge_color)
     stereo.initialConfig.setConfidenceThreshold(confidence_threshold)
-    stereo.initialConfig.setMedianFilter(median_filter)
+    # The internal DepthAI types are weird here, so we have to do this
+    stereo.initialConfig.setMedianFilter(median_filter)  # type: ignore[arg-type]
 
     config: dai.RawStereoDepthConfig = stereo.initialConfig.get()
 
@@ -398,6 +477,18 @@ def create_stereo_depth_from_mono_cameras(
 
     # write back the config
     stereo.initialConfig.set(config)
+
+    if input_reuse is None:
+        input_reuse = False
+    if input_blocking is None:
+        input_blocking = False
+    if input_wait_for_message is None:
+        input_wait_for_message = False
+
+    stereo.inputConfig.setQueueSize(input_queue_size)
+    stereo.inputConfig.setReusePreviousMessage(input_reuse)
+    stereo.inputConfig.setBlocking(input_blocking)
+    stereo.inputConfig.setWaitForMessage(input_wait_for_message)
 
     # link nodes
     left.out.link(stereo.left)
