@@ -15,7 +15,7 @@ how to :ref:`installation` the project.
    using version 1.4.0 or higher.
 
 Contents
---------
+========
 
 .. toctree::
    :maxdepth: 1
@@ -28,6 +28,12 @@ Contents
    Using the OAK-D as a standalone processing unit <vpu>
    Examples <examples>
    API <api>
+   Changelog <changelog>
+
+README
+======
+
+.. include:: ../README.md
 
 Indices and Tables
 ==================

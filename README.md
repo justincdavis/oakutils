@@ -32,11 +32,11 @@ The library can also be installed from source by first cloning and then building
 OakUtils requires a small subset of libraries in order to function: 
 
 * depthai
-* depthai-sdk
 * numpy
 * opencv-contrib-python
 * open3d
 * typing-extensions
+* setuptools
 
 ## Motivation
 

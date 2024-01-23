@@ -79,6 +79,7 @@ test = [
 docs = [
     "sphinx",
     "sphinx-rtd-theme",
+    "myst_parser",
 ]
 dev = [
     "oakutils[compiler]",
