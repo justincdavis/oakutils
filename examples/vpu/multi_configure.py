@@ -11,44 +11,46 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example showcasing how to reconfigure the VPU on the fly."""
+from __future__ import annotations
+
 import time
 from collections import deque
 
 import numpy as np
-from oakutils.blobs.models.shave6 import GAUSSIAN_15X15, LAPLACIAN_15X15
-from oakutils import VPU
 
+from oakutils import VPU
+from oakutils.blobs.models.shave6 import GAUSSIAN_15X15, LAPLACIAN_15X15
 
 SWAP_TIME = 10
-CURRENT_MODEL = GAUSSIAN_15X15
 
-def get_model():
-    global CURRENT_MODEL
-    if CURRENT_MODEL == GAUSSIAN_15X15:
-        CURRENT_MODEL = LAPLACIAN_15X15
+
+def get_model(current_model: str) -> str:
+    """Get the next model to use."""
+    if current_model == GAUSSIAN_15X15:
+        current_model = LAPLACIAN_15X15
     else:
-        CURRENT_MODEL = GAUSSIAN_15X15
-    return CURRENT_MODEL
+        current_model = GAUSSIAN_15X15
+    return current_model
 
-def main():
-    vpu = VPU()
-    vpu.reconfigure(CURRENT_MODEL)
-    fps_buffer = deque(maxlen=SWAP_TIME)
-    counter = 0
-    while True:
-        # reconfigure every 10 frames
-        if counter == SWAP_TIME - 1:
-            vpu.reconfigure(get_model())
-            counter = 0
-            fps_buffer.clear()
-        # generate some random data, then send to camera and wait for the result
-        data = np.array(np.random.random((640, 480, 3)) * 255.0, dtype=np.uint8)
-        t0 = time.perf_counter()
-        vpu.run(data)
-        t1 = time.perf_counter()
-        fps_buffer.append(1.0 / (t1 - t0))
-        print(f"FPS: {np.mean(fps_buffer):.2f}")
-        counter += 1
 
-if __name__ == "__main__":
-    main()
+vpu = VPU()
+current_model = GAUSSIAN_15X15
+vpu.reconfigure(current_model)
+fps_buffer = deque(maxlen=SWAP_TIME)
+counter = 0
+while True:
+    # reconfigure every 10 frames
+    if counter == SWAP_TIME - 1:
+        current_model = get_model(current_model)
+        vpu.reconfigure(current_model)
+        counter = 0
+        fps_buffer.clear()
+    # generate some random data, then send to camera and wait for the result
+    data = np.array(np.random.random((640, 480, 3)) * 255.0, dtype=np.uint8)
+    t0 = time.perf_counter()
+    vpu.run(data)
+    t1 = time.perf_counter()
+    fps_buffer.append(1.0 / (t1 - t0))
+    print(f"FPS: {np.mean(fps_buffer):.2f}")
+    counter += 1

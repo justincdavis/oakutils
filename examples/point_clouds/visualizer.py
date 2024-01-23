@@ -11,6 +11,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example showcasing how to use the PointCloudVisualizer abstraction."""
+from __future__ import annotations
+
 import cv2
 import depthai as dai
 
@@ -18,8 +21,8 @@ from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 from oakutils.point_clouds import (
     PointCloudVisualizer,
-    get_point_cloud_from_rgb_depth_image,
     filter_point_cloud,
+    get_point_cloud_from_rgb_depth_image,
 )
 
 pipeline = dai.Pipeline()
@@ -42,6 +45,7 @@ with dai.Device(pipeline) as device:
     depth_q: dai.DataOutputQueue = device.getOutputQueue("depth")
 
     counter = 0  # maintain a counter since always updating the visual is expensive
+    update_rate = 3
     while True:
         in_rgb = rgb_q.get()
         in_depth = depth_q.get()
@@ -49,9 +53,11 @@ with dai.Device(pipeline) as device:
         depth_frame = in_depth.getFrame()
 
         counter += 1
-        if counter == 3:
+        if counter == update_rate:
             point_cloud = get_point_cloud_from_rgb_depth_image(
-                rgb_frame, depth_frame, calibration.primary.pinhole
+                rgb_frame,
+                depth_frame,
+                calibration.primary.pinhole,
             )
             point_cloud = filter_point_cloud(
                 point_cloud,

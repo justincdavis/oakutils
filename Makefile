@@ -1,4 +1,4 @@
-.PHONY: help install clean docs blobs test ci mypy pyright pyupgrade isort black ruff release
+.PHONY: help install clean docs blobs test ci mypy pyright pyupgrade isort black ruff release example-ci
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -16,6 +16,7 @@ help:
 	@echo "  stubs      to generate the stubs"
 	@echo "  test       to run the tests"
 	@echo "  release    to perform all actions required for a release"
+	@echo "  example-ci to run the CI workflows for the example scripts"
 
 install:
 	pip3 install .
@@ -37,7 +38,7 @@ docs:
 	cd docs && make html
 
 blobs:
-	python3 scripts/compile_models.py
+	python3 scripts/compile_models.py --definitions
 
 ci: pyupgrade ruff mypy isort black
 
@@ -65,4 +66,9 @@ stubs:
 test:
 	./scripts/run_tests.sh
 
-release: clean ci docs
+example-ci: pyupgrade
+	python3 -m ruff ./examples --fix --preview --ignore=T201,INP001,F841
+	python3 -m isort examples
+	python3 -m black examples --safe
+
+release: clean blobs ci test docs example-ci

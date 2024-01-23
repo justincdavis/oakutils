@@ -11,6 +11,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example showcasing how to use the Laplacian model."""
+from __future__ import annotations
+
 import cv2
 import depthai as dai
 
@@ -21,7 +24,8 @@ pipeline = dai.Pipeline()
 
 # create the color camera node
 cam = create_color_camera(
-    pipeline, preview_size=(640, 480)
+    pipeline,
+    preview_size=(640, 480),
 )  # set the preview size to the input of the nn
 
 lap = create_laplacian(

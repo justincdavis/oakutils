@@ -11,6 +11,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example showcasing how to make a neural_network node."""
+from __future__ import annotations
+
 import cv2
 import depthai as dai
 

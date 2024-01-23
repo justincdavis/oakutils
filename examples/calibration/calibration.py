@@ -11,12 +11,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example on getting calibration data from the OAK-D."""
 import depthai_sdk as sdk
 
-from oakutils.calibration import get_camera_calibration
+from oakutils.calibration import CalibrationData, get_camera_calibration
 
 
-def print_calibration(calibration):
+def print_calibration(calibration: CalibrationData) -> None:
+    """Print out basic calibration information about the camera."""
     # print out the K matrices
     print(f"K matrix for rgb: {calibration.rgb.K}")
     print(f"K matrix for left: {calibration.left.K}")
@@ -43,8 +45,7 @@ with sdk.OakCamera() as oak:
         mono_size=(640, 400),
         is_primary_mono_left=True,
     )
-
-print_calibration(calibration)
+    print_calibration(calibration)
 
 # Create a CalibrationData object for the camera
 # create_camera_calibration requires an open device through depthai
@@ -54,5 +55,4 @@ calibration = get_camera_calibration(
     mono_size=(640, 400),
     is_primary_mono_left=True,
 )
-
 print_calibration(calibration)

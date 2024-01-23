@@ -11,20 +11,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Example showcasing how to use the Webcam abstraction."""
+from __future__ import annotations
+
 import cv2
+
 from oakutils import Webcam
 
-
-def main():
-    cam = Webcam()
-    while True:
-        ret, frame = cam.read()
-        if not ret:
-            continue
-        cv2.imshow("frame", frame)
-        if cv2.waitKey(1) == ord("q"):
-            break
-
-
-if __name__ == "__main__":
-    main()
+cam = Webcam()
+while True:
+    ret, frame = cam.read()
+    if not ret:
+        continue
+    cv2.imshow("frame", frame)
+    if cv2.waitKey(1) == ord("q"):
+        break
