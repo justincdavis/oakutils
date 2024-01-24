@@ -32,7 +32,7 @@ def print_calibration(calibration: CalibrationData) -> None:
     print(f"Distortion coefficients for primary: {calibration.primary.D}")
 
     # print out the stereo information
-    print(f"Q matrix: {calibration.stereo.cv2_Q}")
+    print(f"Q matrix: {calibration.stereo.Q_cv2}")
     print(f"Manual Left Q matrix: {calibration.stereo.Q_left}")
     print(f"Manual Right Q matrix: {calibration.stereo.Q_right}")
 
