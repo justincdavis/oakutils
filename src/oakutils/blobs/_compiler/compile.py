@@ -13,6 +13,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import os
 import shutil
@@ -20,6 +22,7 @@ from pathlib import Path
 from typing import Callable
 
 import torch
+from requests.exceptions import HTTPError
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 
@@ -136,19 +139,32 @@ def _compile(
 
     # third step, compile the onnx model
     try:
-        compile_blob(
-            model_type,
-            str(simplfiy_onnx_path.resolve()),
-            str(blob_dir.resolve()),
-            shaves=shaves,
-        )
-    except json.JSONDecodeError as er:
+        with contextlib.redirect_stdout(io.StringIO()) as f:
+            compile_blob(
+                model_type,
+                str(simplfiy_onnx_path.resolve()),
+                str(blob_dir.resolve()),
+                shaves=shaves,
+            )
+    except json.JSONDecodeError as err:
         base_str = "Error compiling blob. "
         base_str += "Usually this is caused by a corrupted json file. "
         base_str += "Try deleting the blobconverter cache directory and json file. "
         base_str += "Then recompile the blob."
         err_msg = base_str
-        raise RuntimeError(err_msg) from er
+        raise RuntimeError(err_msg) from err
+    except HTTPError as err:
+        err_dict: dict[str, str] = {}
+        for line in f.getvalue().split("\n"):
+            if ": " not in line:
+                continue
+            key, value = line.split(": ", maxsplit=1)
+            key = key.replace('"', "").replace("\t", "").replace(" ", "")
+            value = value[0:len(value) - 1]
+            err_dict[key] = value
+        stderr = err_dict["stderr"]
+        err_msg = f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
+        raise RuntimeError(err_msg) from err
 
     # fourth step, move the blob to the cache directory
     blob_file = os.listdir(blob_dir)[0]

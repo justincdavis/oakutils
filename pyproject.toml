@@ -64,6 +64,7 @@ compiler = [
     "onnxruntime",
     "onnxsim",
     "blobconverter==1.4.2",
+    "requests",
 ]
 ci = [
     "pyupgrade>=3.10",
