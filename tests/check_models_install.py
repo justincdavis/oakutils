@@ -27,7 +27,7 @@ def test_models_install():
                 continue
             if model == "pkg_resources":
                 continue
-            model_path = getattr(shave_module, model)
+            model_path = str(getattr(shave_module, model))
             print(f"   model_path = {model_path}")
             print(f"       type(model_path) = {type(model_path)})")
             if "site-packages" not in model_path:

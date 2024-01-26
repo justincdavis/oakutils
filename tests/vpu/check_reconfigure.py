@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import time
 import concurrent
 from typing import Any

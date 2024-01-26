@@ -181,6 +181,7 @@ class VPU:
                     self._xin.out,
                     pathlib.Path(self._blob_path),
                 )
+                self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_yolo_model:
                 if yolo_data is None:
                     err_msg = "YOLO data must not be None."

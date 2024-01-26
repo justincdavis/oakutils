@@ -46,6 +46,7 @@ print("Camera Initialized")
 
 cam = create_color_camera(
     oak.pipeline,
+    fps=15,
     resolution=get_color_sensor_resolution_from_tuple(rgb_resolution),
 )
 xout_cam = create_xout(oak.pipeline, cam.video, "color")
@@ -53,10 +54,6 @@ stereo, left, right = create_stereo_depth(
     oak.pipeline,
     resolution=get_mono_sensor_resolution_from_tuple(mono_resolution),
 )
-xout_left = create_xout(oak.pipeline, stereo.rectifiedLeft, "left")
-xout_right = create_xout(oak.pipeline, stereo.rectifiedRight, "right")
-xout_depth = create_xout(oak.pipeline, stereo.depth, "depth")
-xout_disparity = create_xout(oak.pipeline, stereo.disparity, "disparity")
 point_cloud, xin_xyz, start_pcl = create_point_cloud(
     oak.pipeline,
     stereo.depth,
@@ -64,13 +61,8 @@ point_cloud, xin_xyz, start_pcl = create_point_cloud(
 )
 xout_point_cloud = create_xout(oak.pipeline, point_cloud.out, "point_cloud")
 
-# add the basic displays
+# add the basic display
 oak.add_display("color")
-oak.add_display("left")
-oak.add_display("right")
-oak.add_display("depth")
-oak.add_display("disparity")
-
 
 # adding outputs from onboard neural networks is easy, but requires the correct calls
 def pcl_callback(pcl: dai.NNData) -> None:

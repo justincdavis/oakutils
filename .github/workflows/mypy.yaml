@@ -18,6 +18,7 @@ jobs:
           pip install .[dev]
           pip install mypy
           pip install types-setuptools
+          pip install types-requests
 
       - name: Run MyPy check
         run: 
