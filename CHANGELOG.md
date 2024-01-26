@@ -6,6 +6,11 @@
     - Capture and parse error message from blobconverter
     - User receives exact error from OpenVINO instead of json dump
 
+### Fixed
+
+- VPU has no "vpu_out" stream, for generic networks.
+- Error in model install tests.
+
 ## 1.4.0 (01-22-2024)
 
 ### Added

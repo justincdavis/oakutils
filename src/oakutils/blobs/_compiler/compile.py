@@ -160,10 +160,12 @@ def _compile(
                 continue
             key, value = line.split(": ", maxsplit=1)
             key = key.replace('"', "").replace("\t", "").replace(" ", "")
-            value = value[0:len(value) - 1]
+            value = value[0 : len(value) - 1]
             err_dict[key] = value
         stderr = err_dict["stderr"]
-        err_msg = f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
+        err_msg = (
+            f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
+        )
         raise RuntimeError(err_msg) from err
 
     # fourth step, move the blob to the cache directory
