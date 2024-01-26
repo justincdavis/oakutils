@@ -73,6 +73,7 @@ ci = [
     "ruff>=0.1.14",
     "mypy>=1.8.0",
     "types-setuptools",
+    "types-requests",
 ]
 test = [
     "pytest",
