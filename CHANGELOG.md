@@ -1,3 +1,11 @@
+## 1.4.1 (01-25-2024)
+
+### Changed
+
+- Better error messages during blob compilation
+    - Capture and parse error message from blobconverter
+    - User receives exact error from OpenVINO instead of json dump
+
 ## 1.4.0 (01-22-2024)
 
 ### Added
