@@ -1,3 +1,9 @@
+## 1.4.2 (01-29-2024)
+
+### Changed
+
+- Exposed setting the onnx opset through the compile_model function
+
 ## 1.4.1 (01-25-2024)
 
 ### Changed

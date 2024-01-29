@@ -116,6 +116,7 @@ def _export_module_to_onnx(
     onnx_path: str,
     input_names: list[str],
     output_names: list[str],
+    onnx_opset: int = 12,
     *,
     verbose: bool | None = None,
 ) -> None:
@@ -134,6 +135,8 @@ def _export_module_to_onnx(
         The names of the input tensors
     output_names : List[str]
         The names of the output tensors
+    onnx_opset : int, optional
+        The opset to use for the onnx export, by default 12
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
@@ -152,7 +155,7 @@ def _export_module_to_onnx(
         tuple(dummy_input),
         onnx_path,
         export_params=True,
-        opset_version=12,
+        opset_version=onnx_opset,
         do_constant_folding=True,
         input_names=input_names,
         output_names=output_names,
@@ -167,6 +170,7 @@ def export(
     input_names: list[str],
     output_names: list[str],
     creation_func: Callable[[tuple[int, int, int, int]], torch.Tensor] = torch.rand,
+    onnx_opset: int = 12,
     *,
     verbose: bool | None = None,
 ) -> None:
@@ -188,6 +192,8 @@ def export(
     creation_func : Callable[[tuple[int, int, int, int]], torch.Tensor], optional
         The function to use to create the tensor, by default torch.rand
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
+    onnx_opset : int, optional
+        The opset to use for the onnx export, by default 12
     verbose : bool, optional
         Whether to print out information about the export, by default False
     """
@@ -206,9 +212,11 @@ def export(
         dummy_input = _create_multiple_dummy_input(dummy_input_shapes, creation_func)
 
     _export_module_to_onnx(
-        model_instance,
-        dummy_input,
-        onnx_path,
-        input_names,
-        output_names,
+        model_instance=model_instance,
+        dummy_input=dummy_input,
+        onnx_path=onnx_path,
+        input_names=input_names,
+        output_names=output_names,
+        onnx_opset=onnx_opset,
+        verbose=verbose,
     )

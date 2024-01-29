@@ -40,6 +40,7 @@ def _compile(
     | tuple[tuple[int, int, int], InputType],
     shaves: int = 6,
     creation_func: Callable = torch.rand,
+    onnx_opset: int = 12,
     *,
     cache: bool | None = None,
 ) -> Path:
@@ -66,6 +67,9 @@ def _compile(
         The number of shaves to use for the blob, by default 6
     creation_func : callable, optional
         The function to use to create the dummy input, by default torch.rand
+            Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
+    onnx_opset : int, optional
+        The opset to use for the onnx export, by default 12
 
     Returns
     -------
@@ -132,6 +136,7 @@ def _compile(
         input_names=input_names,
         output_names=output_names,
         creation_func=creation_func,
+        onnx_opset=onnx_opset,
     )
 
     # second step, simplify the onnx model
@@ -179,6 +184,7 @@ def compile_model(
     shaves: int = 6,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
     creation_func: Callable = torch.rand,
+    onnx_opset: int = 12,
     *,
     cache: bool | None = None,
 ) -> str:
@@ -210,6 +216,8 @@ def compile_model(
     creation_func: callable, optional
         The function to use to create the dummy input, by default torch.rand
           Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
+    onnx_opset : int, optional
+        The opset to use for the onnx export, by default 12
 
     Returns
     -------
@@ -243,5 +251,6 @@ def compile_model(
             cache=cache,
             shaves=shaves,
             creation_func=creation_func,
+            onnx_opset=onnx_opset,
         ).resolve(),
     )
