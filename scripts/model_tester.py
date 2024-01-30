@@ -79,12 +79,15 @@ def main():
         model_path, 
     )
     streamname = "network"
+    passname = "passthrough"
     xout_nn = create_xout(pipeline, custom_network.out, streamname)
+    xout_pass = create_xout(pipeline, custom_network.passthrough, passname)
     fps_buffer = deque(maxlen=60)
     with dai.Device(pipeline) as device:
         device.setLogLevel(dai.LogLevel.DEBUG)
         device.setLogOutputLevel(dai.LogLevel.DEBUG)
         queue: dai.DataOutputQueue = device.getOutputQueue(streamname)
+        pass_queue: dai.DataOutputQueue = device.getOutputQueue(passname)
         t0 = time.perf_counter()
         while True:
             t0 = time.perf_counter()
@@ -94,11 +97,16 @@ def main():
                 channels=3,
                 frame_size=IMAGE_SIZE, 
             )
+            passdata = pass_queue.get()
+            passimage: np.ndarray = passdata.getCvFrame()
             t1 = time.perf_counter()
             fps_buffer.append(1/(t1-t0))
             t0 = t1
             cv2.putText(frame, f"FPS: {np.mean(fps_buffer):.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.imshow(streamname, frame)
+            pshape = passimage.shape
+            frame = cv2.resize(frame, (pshape[1], pshape[0]))
+            sidebyside = np.hstack((frame, passimage))
+            cv2.imshow(streamname, sidebyside)
             if cv2.waitKey(1) == ord("q"):
                 break
 
