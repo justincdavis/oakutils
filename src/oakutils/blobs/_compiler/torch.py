@@ -164,8 +164,10 @@ def _export_module_to_onnx(
 
 def export(
     model_instance: torch.nn.Module,
-    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]]
-    | tuple[tuple[int, int, int], InputType],
+    dummy_input_shapes: (
+        list[tuple[tuple[int, int, int], InputType]]
+        | tuple[tuple[int, int, int], InputType]
+    ),
     onnx_path: str,
     input_names: list[str],
     output_names: list[str],

@@ -36,8 +36,10 @@ from .utils import dict_to_str, remove_suffix
 def _compile(
     model_type: AbstractModel,
     model_args: dict,
-    dummy_input_shapes: list[tuple[tuple[int, int, int], InputType]]
-    | tuple[tuple[int, int, int], InputType],
+    dummy_input_shapes: (
+        list[tuple[tuple[int, int, int], InputType]]
+        | tuple[tuple[int, int, int], InputType]
+    ),
     shaves: int = 6,
     creation_func: Callable = torch.rand,
     onnx_opset: int = 12,
