@@ -32,13 +32,13 @@ clean:
 	rm -rf .ruff_cache
 
 docs:
-	python3 scripts/build_example_docs.py
+	python3 ci/build_example_docs.py
 	rm -rf docs/source/*
 	sphinx-apidoc -o docs/source/ src/oakutils/
 	cd docs && make html
 
 blobs:
-	python3 scripts/compile_models.py --definitions
+	python3 ci/compile_models.py --definitions
 
 ci: pyupgrade ruff mypy isort black
 
@@ -49,7 +49,7 @@ pyright:
 	python3 -m pyright --project=pyproject.toml
 
 pyupgrade:
-	-./scripts/ci/pyupgrade.sh
+	-./pyupgrade.sh
 
 isort:
 	python3 -m isort src/oakutils
@@ -61,10 +61,10 @@ ruff:
 	python3 -m ruff ./src/oakutils --fix --preview
 
 stubs:
-	python3 scripts/make_stubs.py
+	python3 ci/make_stubs.py
 
 test:
-	./scripts/run_tests.sh
+	./ci/run_tests.sh
 
 example-ci: pyupgrade
 	python3 -m ruff ./examples --fix --preview --ignore=T201,INP001,F841

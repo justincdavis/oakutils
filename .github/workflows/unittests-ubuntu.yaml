@@ -26,5 +26,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          ./scripts/run_tests.sh
-
+          ./ci/run_tests.sh

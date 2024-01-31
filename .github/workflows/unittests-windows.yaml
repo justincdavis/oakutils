@@ -26,5 +26,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          ./scripts/run_tests.bat
-  
+          ./ci/run_tests.bat
