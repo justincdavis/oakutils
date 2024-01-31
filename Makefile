@@ -49,7 +49,7 @@ pyright:
 	python3 -m pyright --project=pyproject.toml
 
 pyupgrade:
-	-./pyupgrade.sh
+	-./ci/pyupgrade.sh
 
 isort:
 	python3 -m isort src/oakutils
