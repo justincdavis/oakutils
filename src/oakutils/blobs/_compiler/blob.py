@@ -55,7 +55,8 @@ def compile_blob(
 
     if "U8" in iop:
         _log.debug("Compiling with U8 input")
-        _log.debug(f"iop: {iop}")
+        _log.debug(f"   shaves: {shaves}")
+        _log.debug(f"   iop: {iop}")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
@@ -68,6 +69,7 @@ def compile_blob(
         )
     else:
         _log.debug("Compiling with FP16 input")
+        _log.debug(f"   shaves: {shaves}")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
