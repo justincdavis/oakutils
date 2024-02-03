@@ -145,11 +145,12 @@ def _export_module_to_onnx(
 
     if verbose:
         _log.debug(f"Exporting model to {onnx_path}")
-        _log.debug(f"Input names: {input_names}")
-        _log.debug(f"Output names: {output_names}")
+        _log.debug(f"   Input names: {input_names}")
+        _log.debug(f"   Output names: {output_names}")
+        _log.debug("   Dummy input shapes:")
         for idx, dummy_input_tensor in enumerate(dummy_input):
-            _log.debug(f"Dummy input {idx} shape: {dummy_input_tensor.shape}")
-        _log.debug(f"Opset version: {onnx_opset}")
+            _log.debug(f"       Dummy input {idx} shape: {dummy_input_tensor.shape}")
+        _log.debug(f"   Opset version: {onnx_opset}")
 
     torch.onnx.export(
         model_instance,
@@ -204,8 +205,9 @@ def export(
         verbose = False
 
     if verbose:
-        _log.debug(dummy_input_shapes)
-        _log.debug(type(dummy_input_shapes))
+        _log.debug("Exporting model to ONNX")
+        _log.debug(f"   Dummy input shapes: {dummy_input_shapes}")
+        _log.debug(f"   Dummy input shape type: {type(dummy_input_shapes)}")
 
     dummy_input: torch.Tensor | list[torch.Tensor] = torch.Tensor()
     if not isinstance(dummy_input_shapes, list):

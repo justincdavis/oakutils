@@ -130,10 +130,11 @@ def _compile(
     final_blob_path = Path(cache_dir) / f"{model_name}.blob"
 
     if verbose:
-        _log.debug(f"ONNX Path: {onnx_path}")
-        _log.debug(f"Simplified ONNX Path: {simplfiy_onnx_path}")
-        _log.debug(f"Blob Directory: {blob_dir}")
-        _log.debug(f"Final Blob Path: {final_blob_path}")
+        _log.debug("Model Paths")
+        _log.debug(f"   ONNX Path: {onnx_path}")
+        _log.debug(f"   Simplified ONNX Path: {simplfiy_onnx_path}")
+        _log.debug(f"   Blob Directory: {blob_dir}")
+        _log.debug(f"   Final Blob Path: {final_blob_path}")
 
     # check if the model has been made before
     if cache and Path.exists(final_blob_path):
@@ -157,6 +158,7 @@ def _compile(
         output_names=output_names,
         creation_func=creation_func,
         onnx_opset=onnx_opset,
+        verbose=verbose,
     )
 
     # second step, simplify the onnx model

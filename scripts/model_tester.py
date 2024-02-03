@@ -67,6 +67,7 @@ def main():
             InputType.FP16: (*IMAGE_SIZE, 3)
         },
         shaves=SHAVES,
+        verbose=True,
     )   
     pipeline = dai.Pipeline()
     cam = create_color_camera(
