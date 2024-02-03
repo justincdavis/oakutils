@@ -13,6 +13,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 import blobconverter  # type: ignore[import]
@@ -21,6 +22,8 @@ from oakutils.blobs.definitions.utils.types import input_type_to_str
 
 if TYPE_CHECKING:
     from oakutils.blobs.definitions import AbstractModel
+
+_log = logging.getLogger(__name__)
 
 
 def compile_blob(
@@ -51,6 +54,8 @@ def compile_blob(
     iop = iop[:-1]
 
     if "U8" in iop:
+        _log.debug("Compiling with U8 input")
+        _log.debug(f"iop: {iop}")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
@@ -62,6 +67,7 @@ def compile_blob(
             version="2021.4",  # change in version hack since U8 stuff is bad on 2022.1
         )
     else:
+        _log.debug("Compiling with FP16 input")
         blobconverter.from_onnx(
             model=onnx_path,
             output_dir=output_path,
