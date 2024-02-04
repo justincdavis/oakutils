@@ -62,9 +62,7 @@ import sys
 
 # Created from answer by Dennis at:
 # https://stackoverflow.com/questions/7621897/python-logging-module-globally
-def _setup_logger() -> None:
-    # get logging level environment variable
-    level = os.getenv("OAKUTILS_LOG_LEVEL")
+def _setup_logger(level: str | None = None) -> None:
     if level is not None:
         level = level.upper()
     level_map: dict[str | None, int] = {
@@ -76,7 +74,10 @@ def _setup_logger() -> None:
         "CRITICAL": logging.CRITICAL,
         None: logging.WARNING,
     }
-    log_level = level_map[level]
+    try:
+        log_level = level_map[level]
+    except KeyError:
+        log_level = logging.WARNING
 
     # create logger
     logger = logging.getLogger(__package__)
@@ -88,7 +89,28 @@ def _setup_logger() -> None:
     logger.addHandler(stdout_handler)
 
 
-_setup_logger()
+def set_log_level(level: str) -> None:
+    """
+    Set the log level for the oakutils package.
+    
+    Parameters
+    ----------
+    level : str
+        The log level to set. One of "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL".
+
+    Raises
+    ------
+    ValueError
+        If the level is not one of the allowed values.
+    """
+    if level.upper() not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+        err_msg = f"Invalid log level: {level}"
+        raise ValueError(err_msg)
+    _setup_logger(level)
+
+
+level = os.getenv("OAKUTILS_LOG_LEVEL")
+_setup_logger(level)
 _log = logging.getLogger(__name__)
 
 
@@ -120,12 +142,13 @@ __all__ = [
     "nodes",
     "optimizer",
     "point_clouds",
+    "set_log_level",
     "tools",
     "vpu",
 ]
 __version__ = "1.4.2"
 
-___doc__ = """
+__doc__ = """
 oakutils - Python utilities for the OpenCV AI Kit (OAK-D)
 
 This package contains Python utilities for the OpenCV AI Kit (OAK-D) and

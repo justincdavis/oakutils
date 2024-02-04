@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Callable
 
 import torch
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, ConnectionError
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 
@@ -197,6 +197,12 @@ def _compile(
         err_msg = (
             f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
         )
+        raise RuntimeError(err_msg) from err
+    except ConnectionError as err:
+        msg_str = "Error compiling blob. "
+        msg_str += "Could not connect to the blobconverter server. "
+        msg_str += "Check your internet connection and try again."
+        err_msg = msg_str
         raise RuntimeError(err_msg) from err
 
     # fourth step, move the blob to the cache directory
