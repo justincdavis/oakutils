@@ -82,3 +82,29 @@ def get_models_dir_path() -> Path:
         The path to the oakutils blobs models folder.
     """
     return Path(get_blobs_path()) / "models"
+
+
+def delete_folder(dir: Path) -> None:
+    """
+    Use to delete a folder and all of its contents.
+
+    Parameters
+    ----------
+    dir : Path
+        The path to the folder to delete.
+    """
+    for item in dir.iterdir():
+        if item.is_dir():
+            delete_folder(item)
+        else:
+            item.unlink()
+    dir.rmdir()
+
+
+def clear_cache() -> None:
+    """
+    Use to clear the cache folder for the oakutils blobs.
+    """
+    cache_dir = get_cache_dir_path()
+    delete_folder(cache_dir)
+    cache_dir.mkdir()

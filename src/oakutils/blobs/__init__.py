@@ -32,7 +32,8 @@ compile_model
     Compiles a model.
 compile_onnx
     Compiles an onnx model into a blob.
-
+clear_cache
+    Clears the cache of compiled blobs.
 """
 from . import models
 
@@ -42,11 +43,12 @@ __all__ = [
 
 try:
     from . import definitions
-    from ._compiler import compile_model, compile_onnx
+    from ._compiler import compile_model, compile_onnx, clear_cache
 
     __all__ = [
         "compile_model",
         "compile_onnx",
+        "clear_cache",
         "definitions",
         "models",
     ]
