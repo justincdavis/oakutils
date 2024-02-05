@@ -46,6 +46,7 @@ def _compile(
     shaves: int = 6,
     creation_func: Callable = torch.rand,
     onnx_opset: int = 12,
+    openvino_version: str | None = None,
     *,
     cache: bool | None = None,
     verbose: bool | None = None,
@@ -76,6 +77,9 @@ def _compile(
             Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
         The opset to use for the onnx export, by default 12
+    openvino_version : str, optional
+        The version of OpenVINO to use for the blob, by default None
+        If None, then the version is set based on the input type
     verbose : bool, optional
         Whether or not to print the output of the blob compilation, by default None
         If None, then the value is set to False
@@ -176,6 +180,7 @@ def _compile(
                 str(simplfiy_onnx_path.resolve()),
                 str(blob_dir.resolve()),
                 shaves=shaves,
+                version=openvino_version,
             )
     except json.JSONDecodeError as err:
         base_str = "Error compiling blob. "
@@ -217,6 +222,7 @@ def compile_model(
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
     creation_func: Callable = torch.rand,
     onnx_opset: int = 12,
+    openvino_version: str | None = None,
     *,
     cache: bool | None = None,
     verbose: bool | None = None,
@@ -251,6 +257,9 @@ def compile_model(
           Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
         The opset to use for the onnx export, by default 12
+    openvino_version : str, optional
+        The version of OpenVINO to use for the blob, by default None
+        If None, then the version is set based on the input type
     verbose : bool, optional
         Whether or not to print the output of the blob compilation, by default None
         If None, then the value is set to False
@@ -306,6 +315,7 @@ def compile_model(
             shaves=shaves,
             creation_func=creation_func,
             onnx_opset=onnx_opset,
+            openvino_version=openvino_version,
             verbose=verbose,
         ).resolve(),
     )
