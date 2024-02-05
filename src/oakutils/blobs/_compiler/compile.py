@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Callable
 
 import torch
-from requests.exceptions import HTTPError, ConnectionError
+from requests.exceptions import ConnectionError, HTTPError
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 

@@ -30,7 +30,7 @@ from .onnx import compile_onnx
 from .paths import clear_cache
 
 __all__ = [
+    "clear_cache",
     "compile_model",
     "compile_onnx",
-    "clear_cache",
 ]

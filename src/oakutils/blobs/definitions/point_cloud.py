@@ -82,4 +82,3 @@ class PointCloud(AbstractModel):
         # depth_fp16: torch.Tensor = convert_to_fp16(depth)
         # return _depth_to_3d(depth_fp16, xyz)
         return _depth_to_3d(depth, xyz)
-    
