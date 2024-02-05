@@ -64,8 +64,13 @@ def _create_dummy_input(
         # if we are using a single channel, should assume that it will be grayscale
         # need to double the columns due to the way data
         # is propagated through the pipeline
+        # return creation_func(
+        #     (1, input_shape[2], input_shape[1], input_shape[0] * 2),
+        #     dtype=torch.float32,  # type: ignore[call-arg]
+        # )
+        # FIXED IN DEPTHAI 2.22.0+, use regular input shape
         return creation_func(
-            (1, input_shape[2], input_shape[1], input_shape[0] * 2),
+            (1, input_shape[2], input_shape[1], input_shape[0]),
             dtype=torch.float32,  # type: ignore[call-arg]
         )
     if input_type == InputType.FP16:
