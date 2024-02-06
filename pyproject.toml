@@ -65,6 +65,8 @@ compiler = [
     "onnxsim",
     "blobconverter==1.4.2",
     "requests",
+    "boto3==1.7.84",
+    "botocore==1.10.84",
 ]
 ci = [
     "pyupgrade>=3.10",
