@@ -130,9 +130,14 @@ def main() -> None:
     pipeline = dai.Pipeline()
     cam = create_color_camera(
         pipeline,
+        fps=15,
         preview_size=FP16_IMAGE_SIZE,
     )
-    stereo, left, right = create_stereo_depth(pipeline)
+    stereo, left, right = create_stereo_depth(
+        pipeline,
+        fps=15,
+        resolution=dai.MonoCameraProperties.SensorResolution.THE_400_P,
+    )
     fp16_network = create_neural_network(
         pipeline,
         cam.preview,

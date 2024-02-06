@@ -1,8 +1,27 @@
 ## 1.4.2 (01-29-2024)
 
+### Improvements
+
+- Better logging for compiling custom models
+
+### Added
+
+- set_log_level function for controlling log levels programmatically
+- clear_cache function in blobs module for wiping all saved models
+
 ### Changed
 
 - Exposed setting the onnx opset through the compile_model function
+- Exposed setting the openvino version through the compile_model function
+- Failed connections from blobconverter are captured successfully
+- The model_tester script has been updated to have U8 and FP16 models
+
+### Fixed
+
+- uint8 input models can now be successfully compiled
+    - Previously, a double column hack was being used similiar to what was 
+      employed in the depthai-experiments for on-device point cloud generation.
+      This hack is no longer needed with new version of depthai.
 
 ## 1.4.1 (01-25-2024)
 
