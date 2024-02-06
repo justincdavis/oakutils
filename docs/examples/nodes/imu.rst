@@ -18,7 +18,9 @@ Example: nodes/imu.py
 	#
 	# You should have received a copy of the GNU General Public License
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
-	import cv2
+	"""Example showcasing how to make an imu node."""
+	from __future__ import annotations
+	
 	import depthai as dai
 	
 	from oakutils.nodes import create_imu, create_xout

@@ -18,12 +18,14 @@ Example: calibration/calibration.py
 	#
 	# You should have received a copy of the GNU General Public License
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
+	"""Example on getting calibration data from the OAK-D."""
 	import depthai_sdk as sdk
 	
-	from oakutils.calibration import get_camera_calibration
+	from oakutils.calibration import CalibrationData, get_camera_calibration
 	
 	
-	def print_calibration(calibration):
+	def print_calibration(calibration: CalibrationData) -> None:
+	    """Print out basic calibration information about the camera."""
 	    # print out the K matrices
 	    print(f"K matrix for rgb: {calibration.rgb.K}")
 	    print(f"K matrix for left: {calibration.left.K}")
@@ -37,7 +39,7 @@ Example: calibration/calibration.py
 	    print(f"Distortion coefficients for primary: {calibration.primary.D}")
 	
 	    # print out the stereo information
-	    print(f"Q matrix: {calibration.stereo.cv2_Q}")
+	    print(f"Q matrix: {calibration.stereo.Q_cv2}")
 	    print(f"Manual Left Q matrix: {calibration.stereo.Q_left}")
 	    print(f"Manual Right Q matrix: {calibration.stereo.Q_right}")
 	
@@ -50,8 +52,7 @@ Example: calibration/calibration.py
 	        mono_size=(640, 400),
 	        is_primary_mono_left=True,
 	    )
-	
-	print_calibration(calibration)
+	    print_calibration(calibration)
 	
 	# Create a CalibrationData object for the camera
 	# create_camera_calibration requires an open device through depthai
@@ -61,6 +62,5 @@ Example: calibration/calibration.py
 	    mono_size=(640, 400),
 	    is_primary_mono_left=True,
 	)
-	
 	print_calibration(calibration)
 

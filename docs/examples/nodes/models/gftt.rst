@@ -18,6 +18,9 @@ Example: nodes/models/gftt.py
 	#
 	# You should have received a copy of the GNU General Public License
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
+	"""Example showcasing how to use the GFTT model."""
+	from __future__ import annotations
+	
 	import cv2
 	import depthai as dai
 	
@@ -28,7 +31,7 @@ Example: nodes/models/gftt.py
 	
 	# create the color camera node
 	cam = create_color_camera(
-	    pipeline, 
+	    pipeline,
 	    fps=15,  # some "advanced" kornia based models require lower fps
 	    preview_size=(640, 480),
 	)  # set the preview size to the input of the nn

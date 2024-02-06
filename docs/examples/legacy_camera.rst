@@ -18,22 +18,19 @@ Example: legacy_camera.py
 	#
 	# You should have received a copy of the GNU General Public License
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
+	"""Example showcasing how to use the LegacyCamera abstraction."""
+	from __future__ import annotations
+	
 	import time
 	
 	from oakutils import LegacyCamera
 	
+	cam = LegacyCamera(
+	    display_depth=True,
+	)
+	cam.start(block=True)
 	
-	def main():
-	    cam = LegacyCamera(
-	        display_depth=True,
-	    )
-	    cam.start(block=True)
+	time.sleep(10)
 	
-	    time.sleep(10)
-	
-	    cam.stop()
-	
-	
-	if __name__ == "__main__":
-	    main()
+	cam.stop()
 
