@@ -11,10 +11,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
+Module for compiling models and onnx files into blob files.
+
+Functions
+---------
+compile_model
+    Use to compile a model into a blob file.
+compile_onnx
+    Use to compile an onnx file into a blob file.
+clear_cache
+    Use to clear the cache of compiled blob files.
+"""
+from __future__ import annotations
+
 from .compile import compile_model
 from .onnx import compile_onnx
+from .paths import clear_cache
 
 __all__ = [
+    "clear_cache",
     "compile_model",
     "compile_onnx",
 ]

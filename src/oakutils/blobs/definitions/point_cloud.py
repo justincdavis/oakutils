@@ -24,7 +24,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from .abstract_model import AbstractModel
-from .utils import InputType, ModelType, convert_to_fp16
+from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
     import torch
@@ -79,5 +79,6 @@ class PointCloud(AbstractModel):
         depth : torch.Tensor
             The input tensor to run the model on
         """
-        depth_fp16: torch.Tensor = convert_to_fp16(depth)
-        return _depth_to_3d(depth_fp16, xyz)
+        # depth_fp16: torch.Tensor = convert_to_fp16(depth)
+        # return _depth_to_3d(depth_fp16, xyz)
+        return _depth_to_3d(depth, xyz)

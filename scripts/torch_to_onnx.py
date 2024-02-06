@@ -11,14 +11,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+# ruff: noqa: TD002, TD003, FIX002, INP001, T201, TCH002, F401
+"""Script for converting a torch model to an ONNX model and simplifying it."""
+from __future__ import annotations
+
 import argparse
 
-import torch
 import onnx
 import onnxsim
+import torch
 
 
-def main():
+def main() -> None:
+    """Convert a torch model to an ONNX model and simplify it."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, required=True)
     parser.add_argument("--output", type=str, required=True)

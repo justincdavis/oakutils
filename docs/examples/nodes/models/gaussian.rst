@@ -18,6 +18,9 @@ Example: nodes/models/gaussian.py
 	#
 	# You should have received a copy of the GNU General Public License
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
+	"""Example showcasing how to use the Gaussian model."""
+	from __future__ import annotations
+	
 	import cv2
 	import depthai as dai
 	

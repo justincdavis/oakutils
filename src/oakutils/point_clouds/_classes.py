@@ -65,7 +65,9 @@ class PointCloudVisualizer:
             use_threading = True
 
         self._pcd: o3d.geometry.PointCloud | None = None
-        self._vis: o3d.visualization.Visualizer = (  # pyright: ignore[reportAttributeAccessIssue]
+        self._vis: (
+            o3d.visualization.Visualizer
+        ) = (  # pyright: ignore[reportAttributeAccessIssue]
             o3d.visualization.Visualizer()  # pyright: ignore[reportAttributeAccessIssue]
         )
         self._R_camera_to_world: np.ndarray = np.array(

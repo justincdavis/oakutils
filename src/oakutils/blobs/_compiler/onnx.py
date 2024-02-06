@@ -13,9 +13,15 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import contextlib
+import io
+import logging
+
 import blobconverter  # type: ignore[import]
 import onnx
 import onnxsim  # type: ignore[import]
+
+_log = logging.getLogger(__name__)
 
 
 def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
@@ -36,12 +42,14 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
     AssertionError
         If the simplified model could not be validated
     """
+    _log.debug("Simplifying model")
     model = onnx.load(model_path)
-    model_simp, check = onnxsim.simplify(
-        model,
-        check_n=check_num,
-        perform_optimization=True,
-    )
+    with contextlib.redirect_stdout(io.StringIO()):
+        model_simp, check = onnxsim.simplify(
+            model,
+            check_n=check_num,
+            perform_optimization=True,
+        )
     if not check:
         err_msg = "Simplified model could not be validated"
         raise AssertionError(err_msg)

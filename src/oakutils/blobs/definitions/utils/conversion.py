@@ -21,10 +21,13 @@ convert_to_fp16
 """
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import torch
+
+_log = logging.getLogger(__name__)
 
 
 def convert_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
@@ -41,5 +44,6 @@ def convert_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
     torch.Tensor
         The converted tensor
     """
+    _log.warning("Conversion of fp16 to uint8 is no longer needed as of depthai 2.22+")
     fp16: torch.Tensor = 256.0 * tensor[:, :, :, 1::2] + tensor[:, :, :, ::2]
     return fp16
