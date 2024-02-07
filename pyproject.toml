@@ -63,7 +63,7 @@ compiler = [
     "onnx>=1.12.0",
     "onnxruntime",
     "onnxsim",
-    "blobconverter==1.4.2",
+    "blobconverter==1.4.3",
     "requests",
     "boto3==1.7.84",
     "botocore==1.10.84",
