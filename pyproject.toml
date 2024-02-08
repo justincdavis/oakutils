@@ -65,7 +65,7 @@ compiler = [
     "onnxsim",
     "blobconverter==1.4.3",
     "requests",
-    "boto3==1.7.84",
+    "boto3==1.34.37",
     "botocore==1.10.84",
 ]
 ci = [
