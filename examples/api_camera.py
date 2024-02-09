@@ -64,6 +64,7 @@ xout_point_cloud = create_xout(oak.pipeline, point_cloud.out, "point_cloud")
 # add the basic display
 oak.add_display("color")
 
+
 # adding outputs from onboard neural networks is easy, but requires the correct calls
 def pcl_callback(pcl: dai.NNData) -> None:
     """Use as callback for processing the pointcloud. Need a callback for api cam processing."""

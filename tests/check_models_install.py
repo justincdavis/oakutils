@@ -45,7 +45,7 @@ def test_models_shave_equal():
     for shave_module in shave_modules:
         print(f"Searching {shave_module}")
         assert os.path.exists(shave_module.__file__)
-        contents = [c for c in dir(shave_module)]
+        contents = [c for c in dir(shave_module) if not c.startswith("_")]
         print(f"   Found {len(contents)} models in {shave_module}")
         lengths.append(len(contents))
         files.append(contents)
@@ -71,6 +71,6 @@ def test_models_shaves_equivalent():
     for shave_module in shave_modules:
         print(f"Searching {shave_module}")
         assert os.path.exists(shave_module.__file__)
-        contents.append([c for c in dir(shave_module)])
+        contents.append([c for c in dir(shave_module) if not c.startswith("_")])
     for data in zip(*contents):
         assert len(set(data)) == 1
