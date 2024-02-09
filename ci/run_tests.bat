@@ -10,6 +10,6 @@ setlocal enabledelayedexpansion
 @REM     python3 -m pytest --log-cli-level=WARNING --full-trace -rP "%%i"
 @REM )
 
-python3 -m pytest --log-cli-level=WARNING --full-trace -rP tests/*
+python3 -m pytest --log-cli-level=WARNING --full-trace -rP tests\*
 
 endlocal
