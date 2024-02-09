@@ -11,6 +11,8 @@ setlocal enabledelayedexpansion
 @REM )
 
 @REM python3 -m pytest --log-cli-level=WARNING --full-trace -rP .\tests\*
-python3 -m pytest --log-cli-level=WARNING --full-trace -rP tests
+python3 -m pytest --log-cli-level=WARNING --full-trace -rP .\tests\check_models_install.py
+python3 -m pytest --log-cli-level=WARNING --full-trace -rP .\tests\check_models_run.py
+python3 -m pytest --log-cli-level=WARNING --full-trace -rP .\tests\check_vpu.py
 
 endlocal
