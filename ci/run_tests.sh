@@ -9,4 +9,4 @@
 #     python3 -m pytest --log-cli-level=WARNING --full-trace -rP "$file"
 # done
 
-python3 -m pytest --log-cli-level=WARNING --full-trace -rP tests/*
+python3 -m pytest --log-cli-level=WARNING -rP tests/*
