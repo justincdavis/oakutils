@@ -75,6 +75,7 @@ def create_hessian(
     ------
     ValueError
         If the kernel_size is invalid
+
     """
     _log.warning("Hessian has errors running when color camera FPS is above 15")
 

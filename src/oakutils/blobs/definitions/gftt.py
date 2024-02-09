@@ -48,6 +48,7 @@ class GFTT(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self) -> None:
@@ -77,6 +78,7 @@ class GFTT(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.feature.gftt_response(image)
 
@@ -89,6 +91,7 @@ class GFTTBlur(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
@@ -101,6 +104,7 @@ class GFTTBlur(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -129,6 +133,7 @@ class GFTTBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.feature.gftt_response(
             kornia.filters.gaussian_blur2d(
@@ -147,6 +152,7 @@ class GFTTGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self) -> None:
@@ -176,6 +182,7 @@ class GFTTGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gftt = kornia.feature.gftt_response(image)
         return kornia.color.bgr_to_grayscale(gftt)
@@ -189,6 +196,7 @@ class GFTTBlurGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
@@ -201,6 +209,7 @@ class GFTTBlurGray(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -229,6 +238,7 @@ class GFTTBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gftt = kornia.feature.gftt_response(
             kornia.filters.gaussian_blur2d(

@@ -112,6 +112,7 @@ def create_yolo_detection_network(
     ------
     ValueError
         If spatial is True and depth_input_link is None
+
     """
     if spatial is None:
         spatial = False

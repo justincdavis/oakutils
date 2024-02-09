@@ -65,6 +65,7 @@ def create_xout(
     -------
     dai.node.XLinkOut
         The XLinkOut node
+
     """
     xout = pipeline.createXLinkOut()
     xout.setStreamName(stream_name)

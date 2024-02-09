@@ -131,6 +131,7 @@ def create_color_camera(
         If the luma_denoise is not between 0 and 4
     ValueError
         If the chroma_denoise is not between 0 and 4
+
     """
     if set_interleaved is None:
         set_interleaved = False

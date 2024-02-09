@@ -47,6 +47,7 @@ class Erosion(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -57,6 +58,7 @@ class Erosion(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel for the gaussian blur, by default 3
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size, kernel_size))
@@ -86,6 +88,7 @@ class Erosion(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.morphology.erosion(image, self._kernel)
 
@@ -98,6 +101,7 @@ class ErosionGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -108,6 +112,7 @@ class ErosionGray(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel for the gaussian blur, by default 3
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size, kernel_size))
@@ -137,6 +142,7 @@ class ErosionGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         erosion = kornia.morphology.erosion(image, self._kernel)
         return kornia.color.bgr_to_grayscale(erosion)
@@ -150,6 +156,7 @@ class ErosionBlur(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -169,6 +176,7 @@ class ErosionBlur(AbstractModel):
             The size of the second kernel to use, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size2, kernel_size2))
@@ -200,6 +208,7 @@ class ErosionBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,
@@ -217,6 +226,7 @@ class ErosionBlurGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -236,6 +246,7 @@ class ErosionBlurGray(AbstractModel):
             The size of the second kernel to use, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size2, kernel_size2))
@@ -267,6 +278,7 @@ class ErosionBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,

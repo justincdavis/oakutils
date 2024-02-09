@@ -101,6 +101,7 @@ class LegacyCamera:
         Computes the point cloud from the depth map.
     compute_im3d(block=True)
         Computes the 3D points from the disparity map.
+
     """
 
     def __init__(
@@ -220,6 +221,7 @@ class LegacyCamera:
             IMU accelerometer refresh rate.
         imu_gyroscope_refresh_rate : int, optional
             IMU gyroscope refresh rate.
+
         """
         if enable_rgb is None:
             enable_rgb = True
@@ -436,6 +438,7 @@ class LegacyCamera:
         -------
         np.ndarray
             The calibration data.
+
         """
         return self._calibration
 
@@ -448,6 +451,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The rectified RGB color frame, or None if the frame is not available.
+
         """
         return self._rgb_frame
 
@@ -460,6 +464,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The rectified RGB color frame, or None if the frame is not available.
+
         """
         return self._rectified_rgb_frame
 
@@ -472,6 +477,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The disparity frame, or None if the frame is not available.
+
         """
         return self._disparity
 
@@ -484,6 +490,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The depth frame, or None if the frame is not available.
+
         """
         return self._depth
 
@@ -496,6 +503,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The left frame, or None if the frame is not available.
+
         """
         return self._left_frame
 
@@ -508,6 +516,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The right frame, or None if the frame is not available.
+
         """
         return self._right_frame
 
@@ -520,6 +529,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The rectified left frame, or None if the frame is not available.
+
         """
         return self._left_rect_frame
 
@@ -532,6 +542,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The rectified right frame, or None if the frame is not available.
+
         """
         return self._right_rect_frame
 
@@ -544,6 +555,7 @@ class LegacyCamera:
         -------
         Optional[np.ndarray]
             The 3D image, or None if it is not available.
+
         """
         return self._im3d
 
@@ -556,6 +568,7 @@ class LegacyCamera:
         -------
         Optional[o3d.geometry.PointCloud]
             The point cloud, or None if it is not available.
+
         """
         return self._point_cloud
 
@@ -568,6 +581,7 @@ class LegacyCamera:
         -------
         List[float]
             The IMU pose as a list of floats.
+
         """
         return self._imu_pose
 
@@ -580,6 +594,7 @@ class LegacyCamera:
         -------
         List[float]
             The IMU rotation as a list of floats.
+
         """
         return self._imu_rotation
 
@@ -592,6 +607,7 @@ class LegacyCamera:
         -------
         bool
             True if the camera is started, False otherwise.
+
         """
         return self._cam_thread.is_alive()
 
@@ -603,6 +619,7 @@ class LegacyCamera:
         ----------
         block : bool, optional
             If True, blocks until the first set of data arrives. Defaults to False.
+
         """
         if block is None:
             block = True
@@ -839,6 +856,7 @@ class LegacyCamera:
         -------
         Optional[o3d.geometry.PointCloud]
             The computed point cloud, or None if no data is available.
+
         """
         if block is None:
             block = True
@@ -869,6 +887,7 @@ class LegacyCamera:
         Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]]
             A tuple containing the depth map, disparity map, and left frame
             (if available).
+
         """
         if block is None:
             block = True

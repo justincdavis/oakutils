@@ -40,6 +40,7 @@ class PointCloudVisualizer:
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/device-pointcloud/projector_device.py
+
     """
 
     def __init__(
@@ -60,6 +61,7 @@ class PointCloudVisualizer:
             The size of the visualization window. Defaults to (1920, 1080).
         use_threading : bool
             Whether to use threading for visualization. Defaults to True.
+
         """
         if use_threading is None:
             use_threading = True
@@ -155,6 +157,7 @@ class PointCloudVisualizer:
         ------
         TypeError
             If pcd is not an open3d.geometry.PointCloud object.
+
         """
         if not isinstance(pcd, o3d.geometry.PointCloud):
             err_msg = "pcd must be an open3d.geometry.PointCloud object."
@@ -182,5 +185,6 @@ class PointCloudVisualizer:
         ----------
         rot : np.ndarray
             The 3x3 rotation matrix.
+
         """
         self._R_camera_to_world = rot

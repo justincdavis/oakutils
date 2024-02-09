@@ -115,6 +115,7 @@ def create_mono_camera(
         If the luma_denoise is not between 0 and 4
     ValueError
         If the chroma_denoise is not between 0 and 4
+
     """
     if socket not in (dai.CameraBoardSocket.LEFT, dai.CameraBoardSocket.RIGHT):
         err_msg = "socket must be LEFT or RIGHT"
@@ -255,6 +256,7 @@ def create_left_right_cameras(
         The right mono camera node
     dai.node.XLinkOut
         The output node for the right mono camera
+
     """
     left_cam = create_mono_camera(
         pipeline=pipeline,

@@ -50,6 +50,7 @@ def compile_blob(
     version : str, optional
         The version of the blob to compile, by default None
         If None, 2022.1 will be used for FP16 input and 2021.4 will be used for U8 input
+
     """
     iop = "-iop "
     for input_name, input_type in model_type.input_names():

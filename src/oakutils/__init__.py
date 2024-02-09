@@ -102,6 +102,7 @@ def set_log_level(level: str) -> None:
     ------
     ValueError
         If the level is not one of the allowed values.
+
     """
     if level.upper() not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
         err_msg = f"Invalid log level: {level}"

@@ -58,6 +58,7 @@ class VPU:
         Use to reconfigure the VPU with a new blob file.
     run(data)
         Use to run an inference on the VPU.
+
     """
 
     def __init__(self: Self) -> None:
@@ -68,6 +69,7 @@ class VPU:
         ----------
         blob_path : str
             The path to the blob file.
+
         """
         self._blob_path: str | None = None
         self._pipeline: dai.Pipeline | None = None
@@ -107,6 +109,7 @@ class VPU:
         ------
         RuntimeError
             If the blob path is not set.
+
         """
         return self.run(data)
 
@@ -157,6 +160,7 @@ class VPU:
             If is_yolo_model is True and yolo_data is None
             If is_mobilenet_model is True and mobilenet_data is None
             If is_yolo_model is True and is_mobilenet_model is True
+
         """
         if is_yolo_model is None:
             is_yolo_model = False
@@ -317,6 +321,7 @@ class VPU:
             If the blob path is not set.
             If the VPU thread is not set or alive. (Should not happen.)
             If the VPU result is None.
+
         """
         if self._blob_path is None:
             err_msg = "Blob path not set."

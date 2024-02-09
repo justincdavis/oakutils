@@ -74,6 +74,7 @@ def create_point_cloud(
     -------
     o3d.geometry.PointCloud
         The point cloud created from the RGB and depth image.
+
     """
     # Create point cloud from RGB and depth image
     pcd = get_point_cloud_from_rgb_depth_image(

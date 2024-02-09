@@ -55,6 +55,7 @@ class HostSpatialsCalc:
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-calc-spatials-on-host/calc.py
+
     """
 
     def __init__(
@@ -81,6 +82,7 @@ class HostSpatialsCalc:
         thresh_high : int, optional
             The upper threshold for the spatial coordinates calculation.
             The default is 30000.
+
         """
         self._data: CalibrationData = data
         self._delta: int = delta
@@ -177,6 +179,7 @@ class HostSpatialsCalc:
         ------
         RuntimeError
             If the initialization failed. Should never occur.
+
         """
         depth_frame: np.ndarray = depth_data.getFrame()
 

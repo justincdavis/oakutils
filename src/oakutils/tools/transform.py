@@ -47,6 +47,7 @@ def create_rotation(theta_x: float, theta_y: float, theta_z: float) -> np.ndarra
     -------
     np.ndarray
         The rotation matrix
+
     """
     rotation_x = np.array(
         [
@@ -92,6 +93,7 @@ def create_translation(delta_x: float, delta_y: float, delta_z: float) -> np.nda
     -------
     np.ndarray
         The translation vector
+
     """
     return np.array([[delta_x, delta_y, delta_z]]).T
 
@@ -126,6 +128,7 @@ def create_transform(
     -------
     np.ndarray
         The transformation matrix
+
     """
     rotation_matrix = create_rotation(theta_x, theta_y, theta_z)
     translation_vector = create_translation(delta_x, delta_y, delta_z)

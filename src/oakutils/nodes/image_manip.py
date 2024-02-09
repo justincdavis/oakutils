@@ -105,6 +105,7 @@ def create_image_manip(
     -------
     dai.node.ImageManip
         The image manip node
+
     """
     manip = pipeline.create(dai.node.ImageManip)
     manip.initialConfig.setFrameType(frame_type)

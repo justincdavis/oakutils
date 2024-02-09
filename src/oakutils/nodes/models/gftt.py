@@ -75,6 +75,7 @@ def create_gftt(
     ------
     ValueError
         If the kernel_size is invalid
+
     """
     _log.warning("GFTT has errors running when color camera FPS is above 15")
 

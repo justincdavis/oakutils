@@ -408,6 +408,7 @@ Sobelblur_9x9 : str
 Sobelgray : str
     nn.Module wrapper for sobelgray operation.
 
+
 """
 
 from pathlib import Path

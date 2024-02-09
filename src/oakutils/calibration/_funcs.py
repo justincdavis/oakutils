@@ -52,6 +52,7 @@ def get_camera_calibration_basic(
     -------
     CalibrationData
         Object containing all the calibration data.
+
     """
     if device is None:
         device = dai.Device()
@@ -309,6 +310,7 @@ def get_camera_calibration_primary_mono(
     -------
     CalibrationData
         Object containing all the calibration data.
+
     """
     if is_primary_mono_left is None:
         is_primary_mono_left = True
@@ -426,6 +428,7 @@ def create_q_matrix(
         [0, 1, 0, -cy],
         [0, 0, 0, (fx + fy) / 2],
         [0, 0, -1 / baseline, 0]]
+
     """
     return np.array(
         [
@@ -468,6 +471,7 @@ def get_camera_calibration(
     -------
     CalibrationData
         Object containing all the calibration data.
+
     """
     if is_primary_mono_left is None:
         is_primary_mono_left = True

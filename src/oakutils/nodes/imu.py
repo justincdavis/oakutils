@@ -113,6 +113,7 @@ def create_imu(
     References
     ----------
     https://docs.luxonis.com/projects/api/en/latest/components/nodes/imu/
+
     """
     if enable_accelerometer_raw is None:
         enable_accelerometer_raw = False

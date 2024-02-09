@@ -93,6 +93,7 @@ def _compile(
     ------
     RuntimeError
         If there is an error compiling the blob
+
     """
     if cache is None:
         cache = True
@@ -268,6 +269,7 @@ def compile_model(
     -------
     str
         The path to the compiled blob
+
     """
     if cache is None:
         cache = True

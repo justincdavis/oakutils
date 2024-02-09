@@ -42,6 +42,7 @@ class ArucoLocalizer:
         Use to add a transform to the localizer.
     localize(markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
         Use to localize the camera in the world using ArUco markers.
+
     """
 
     def __init__(
@@ -67,6 +68,7 @@ class ArucoLocalizer:
         alpha : float, optional
             The alpha value to use for exponential smoothing,
         by default 0.95, must be in range [0, 1]
+
         """
         self._transforms: dict[int, np.ndarray] = {}
         min_alpha, max_alpha = 0.0, 1.0
@@ -91,6 +93,7 @@ class ArucoLocalizer:
             The id of the marker to use
         transform : np.ndarray
             The transform from the world to the marker
+
         """
         self._transforms[tag] = transform
 
@@ -105,6 +108,7 @@ class ArucoLocalizer:
         ----------
         markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
             A list of markers detected sin the image
+
         """
         transforms = []
         for tag, transform, _, _, _ in markers:

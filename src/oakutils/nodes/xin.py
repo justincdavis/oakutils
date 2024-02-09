@@ -48,6 +48,7 @@ def create_xin(
     -------
     dai.node.XLinkIn
         The XLinkIn node
+
     """
     xin = pipeline.createXLinkIn()
     xin.setStreamName(stream_name)

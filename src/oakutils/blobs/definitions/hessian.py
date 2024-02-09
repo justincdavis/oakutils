@@ -47,6 +47,7 @@ class Hessian(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self) -> None:
@@ -76,6 +77,7 @@ class Hessian(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.feature.hessian_response(image)
 
@@ -88,6 +90,7 @@ class HessianBlur(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
@@ -100,6 +103,7 @@ class HessianBlur(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -128,6 +132,7 @@ class HessianBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.feature.hessian_response(
             kornia.filters.gaussian_blur2d(
@@ -146,6 +151,7 @@ class HessianGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self) -> None:
@@ -175,6 +181,7 @@ class HessianGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         hessian = kornia.feature.hessian_response(image)
         return kornia.color.bgr_to_grayscale(hessian)
@@ -188,6 +195,7 @@ class HessianBlurGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3, sigma: float = 1.5) -> None:
@@ -200,6 +208,7 @@ class HessianBlurGray(AbstractModel):
             The size of the kernel for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -228,6 +237,7 @@ class HessianBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         hessian = kornia.feature.hessian_response(
             kornia.filters.gaussian_blur2d(

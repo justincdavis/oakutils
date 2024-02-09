@@ -194,6 +194,7 @@ def create_stereo_depth(
         The left mono camera node
     dai.node.MonoCamera
         The right mono camera node
+
     """
     if lr_check is None:
         lr_check = True
@@ -397,6 +398,7 @@ def create_stereo_depth_from_mono_cameras(
         If temporal_alpha is not between 0.0 and 1.0
     ValueError
         If decimation_factor is not 1,2,3,4
+
     """
     # parse the inputs
     if lr_check is None:

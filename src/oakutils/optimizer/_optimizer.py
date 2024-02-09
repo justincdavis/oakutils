@@ -68,6 +68,7 @@ class Optimizer:
         ------
         ValueError
             If the algorithm is invalid
+
         """
         if algorithm != "grid":
             err_msg = f"Invalid algorithm {algorithm}"
@@ -111,6 +112,7 @@ class Optimizer:
         dict[str, float]
             The average latency of each data packet in the pipeline
             Key is the name of the data stream
+
         """
         # overall averaging
         fps: list[float] = []
@@ -241,6 +243,7 @@ class Optimizer:
             The optimized arguments
         tuple[float, float, dict[str, float]]
             The best measurement results
+
         """
         # generate all possible assignments
         possible_args: list[dict[str, Any]] = [

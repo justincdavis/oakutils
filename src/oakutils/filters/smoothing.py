@@ -42,6 +42,7 @@ class ExpSmooth:
     -------
     smooth
         Use to smooth a numpy array.
+
     """
 
     def __init__(self: Self, alpha: float = 0.9) -> None:
@@ -53,6 +54,7 @@ class ExpSmooth:
         alpha : float
             The alpha parameter for the exponential smoothing.
             Defaults to 0.9.
+
         """
         self._alpha = alpha
 
@@ -65,6 +67,7 @@ class ExpSmooth:
         -------
         float
             The alpha parameter for the exponential smoothing.
+
         """
         return self._alpha
 
@@ -77,6 +80,7 @@ class ExpSmooth:
         ----------
         alpha : float
             The alpha parameter for the exponential smoothing.
+
         """
         self._alpha = alpha
 
@@ -94,6 +98,7 @@ class ExpSmooth:
         -------
         np.ndarray
             The smoothed data.
+
         """
         smoothed = data[0]
         for frame in data[1:]:

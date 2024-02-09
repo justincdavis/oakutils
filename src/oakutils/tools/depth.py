@@ -69,6 +69,7 @@ def align_depth_to_rgb(
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
+
     """
     # depth to 3d coordinates [x, y, z]
     cam_coords = (
@@ -130,6 +131,7 @@ def quantize_colormap_depth_frame(
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
+
     """
     if apply_colormap is None:
         apply_colormap = True
@@ -167,6 +169,7 @@ def overlay_depth_frame(
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/rgbd-pointcloud/utils.py
+
     """
     depth_three_channel: np.ndarray = np.zeros_like(rgb_frame)
     depth_three_channel[:, :, 2] = depth_frame

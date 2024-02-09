@@ -55,6 +55,7 @@ def get_color_sensor_resolution_from_str(
     -------
     dai.ColorCameraProperties.SensorResolution
         The SensorResolution
+
     """
     if resolution == "720p":
         return dai.ColorCameraProperties.SensorResolution.THE_720_P
@@ -104,6 +105,7 @@ def get_tuple_from_color_sensor_resolution(
     ------
     ValueError
         If the resolution is invalid
+
     """
     # P resolutions
     if resolution == dai.ColorCameraProperties.SensorResolution.THE_720_P:
@@ -158,6 +160,7 @@ def get_color_sensor_resolution_from_tuple(
     ------
     ValueError
         If the resolution is invalid
+
     """
     if resolution == (1280, 720):
         return dai.ColorCameraProperties.SensorResolution.THE_720_P
@@ -202,6 +205,7 @@ def get_color_sensor_info_from_str(
     -------
     Tuple[int, int, dai.ColorCameraProperties.SensorResolution]
         The tuple of (width, height, SensorResolution)
+
     """
     sensor_res = get_color_sensor_resolution_from_str(resolution)
     width, height = get_tuple_from_color_sensor_resolution(sensor_res)
@@ -223,6 +227,7 @@ def get_mono_sensor_resolution_from_str(
     -------
     dai.MonoCameraProperties.SensorResolution
         The SensorResolution
+
     """
     if resolution == "400p":
         return dai.MonoCameraProperties.SensorResolution.THE_400_P
@@ -258,6 +263,7 @@ def get_mono_sensor_resolution_from_tuple(
     ------
     ValueError
         If the resolution is invalid
+
     """
     if resolution == (640, 400):
         return dai.MonoCameraProperties.SensorResolution.THE_400_P
@@ -293,6 +299,7 @@ def get_tuple_from_mono_sensor_resolution(
     ------
     ValueError
         If the resolution is invalid
+
     """
     # P resolutions
     if resolution == dai.MonoCameraProperties.SensorResolution.THE_400_P:
@@ -325,6 +332,7 @@ def get_mono_sensor_info_from_str(
     -------
     Tuple[int, int, dai.MonoCameraProperties.SensorResolution]
         The tuple of (width, height, SensorResolution)
+
     """
     sensor_res = get_mono_sensor_resolution_from_str(resolution)
     width, height = get_tuple_from_mono_sensor_resolution(sensor_res)
@@ -346,6 +354,7 @@ def get_median_filter_from_str(
     -------
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
+
     """
     median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF
     median_3 = dai.StereoDepthProperties.MedianFilter.KERNEL_3x3
