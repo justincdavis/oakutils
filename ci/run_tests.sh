@@ -6,5 +6,5 @@ test_directory="./tests"
 # Loop through all Python files in the tests directory
 for file in "$test_directory"/*.py; do
     echo "Running pytest on $file"
-    python3 -m pytest "$file"
+    python3 -m pytest --log-cli-level=INFO --full-trace -rP "$file"
 done
