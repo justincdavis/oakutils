@@ -13,8 +13,8 @@ def test_models_install():
         assert os.path.exists(shave_module.__file__)
         contents = [c for c in dir(shave_module)]
         for model in contents:
-            print(f"   Checking {model}")
-            print(f"       type(model) = {type(model)})")
+            # print(f"   Checking {model}")
+            # print(f"       type(model) = {type(model)})")
             if model[0] == "_":
                 continue
             if model == "os":
@@ -28,8 +28,8 @@ def test_models_install():
             if model == "pkg_resources":
                 continue
             model_path = str(getattr(shave_module, model))
-            print(f"   model_path = {model_path}")
-            print(f"       type(model_path) = {type(model_path)})")
+            # print(f"   model_path = {model_path}")
+            # print(f"       type(model_path) = {type(model_path)})")
             if "site-packages" not in model_path:
                 continue
             assert os.path.exists(model_path)

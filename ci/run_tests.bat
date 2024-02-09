@@ -7,7 +7,7 @@ set "test_directory=.\tests"
 rem Loop through all Python files in the tests directory
 for %%i in ("%test_directory%\*.py") do (
     echo Running pytest on "%%i"
-    python3 -m pytest --log-cli-level=INFO --full-trace -rP "%%i"
+    python3 -m pytest --log-cli-level=WARNING --full-trace -rP "%%i"
 )
 
 endlocal
