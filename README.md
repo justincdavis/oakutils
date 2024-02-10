@@ -1,8 +1,8 @@
 # OakUtils
 
 ![Python](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-grey)
-![MyPy](https://github.com/justincdavis/oakutils/workflows/mypy/badge.svg)
-![Ruff](https://github.com/justincdavis/oakutils/workflows/ruff/badge.svg)
+![MyPy](https://github.com/justincdavis/oakutils/actions/workflows/mypy.yaml/badge.svg?branch=main)
+![Ruff](https://github.com/justincdavis/oakutils/actions/workflows/ruff.yaml/badge.svg?branch=main)
 ---
 
 A easy-to-use and robust library for interacting easily with OAK cameras and the DepthAI API. Aims to bridge the gap between DepthAI API and SDK allow with building in integration with OpenCV and Open3D "out-of-the-box".
