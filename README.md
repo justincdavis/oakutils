@@ -1,6 +1,12 @@
 # OakUtils
 
-![Python](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-grey?style=flat&logo=python&logoColor=blue)
+[![](https://img.shields.io/pypi/pyversions/oakutils.svg)](https://pypi.org/pypi/oakutils/)
+![PyPI](https://img.shields.io/pypi/v/oakutils.svg?style=plastic)
+
+![Linux](https://github.com/justincdavis/oakutils/actions/workflows/unittest-ubuntu.yaml/badge.svg?branch=main)
+![Windows](https://github.com/justincdavis/oakutils/actions/workflows/unittest-windows.yaml/badge.svg?branch=main)
+![MacOS](https://github.com/justincdavis/oakutils/actions/workflows/unittest-macos.yaml/badge.svg?branch=main)
+
 ![MyPy](https://github.com/justincdavis/oakutils/actions/workflows/mypy.yaml/badge.svg?branch=main)
 ![Ruff](https://github.com/justincdavis/oakutils/actions/workflows/ruff.yaml/badge.svg?branch=main)
 ![Black](https://github.com/justincdavis/oakutils/actions/workflows/black.yaml/badge.svg?branch=main)
