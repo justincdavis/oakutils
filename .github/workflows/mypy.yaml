@@ -1,4 +1,4 @@
-name: MyPy Check
+name: MyPy
 on: [ push ]
 jobs:
   build:

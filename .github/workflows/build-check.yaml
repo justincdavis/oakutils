@@ -1,4 +1,4 @@
-name: PyPI Build
+name: PyPi Build
 on: [ push ]
 jobs:
   build_check:
