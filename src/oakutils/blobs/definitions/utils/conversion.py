@@ -43,6 +43,7 @@ def convert_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
     -------
     torch.Tensor
         The converted tensor
+
     """
     _log.warning("Conversion of fp16 to uint8 is no longer needed as of depthai 2.22+")
     fp16: torch.Tensor = 256.0 * tensor[:, :, :, 1::2] + tensor[:, :, :, ::2]

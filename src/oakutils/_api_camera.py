@@ -64,6 +64,7 @@ class ApiCamera:
         Add a display callback to the camera.
     add_device_call(call)
         Add a device call to the camera.
+
     """
 
     def __init__(
@@ -85,6 +86,7 @@ class ApiCamera:
             The size of the color camera, by default (1920, 1080)
         mono_size : tuple[int, int], optional
             The size of the mono camera, by default (640, 400)
+
         """
         if primary_mono_left is None:
             primary_mono_left = True
@@ -138,6 +140,7 @@ class ApiCamera:
         ------
         RuntimeError
             If the pipeline is accessed once the camera has been started.
+
         """
         if self._started:
             err_msg = "Cannot access pipeline once camera has been started."
@@ -197,6 +200,7 @@ class ApiCamera:
             The name of the output queue to add the callback to.
         callback : Callable
             The callback to add.
+
         """
         self._callbacks[name] = callback
 
@@ -208,6 +212,7 @@ class ApiCamera:
         ----------
         name : str
             The name of the output queue to add the callback to.
+
         """
         self.add_callback(name, self.displays.callback(name))
 
@@ -224,6 +229,7 @@ class ApiCamera:
         ------
         RuntimeError
             If the camera has already been started.
+
         """
         if self._started:
             err_msg = "Cannot add device call after camera has been started."

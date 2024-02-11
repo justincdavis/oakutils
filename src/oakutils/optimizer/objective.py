@@ -47,6 +47,7 @@ def highest_fps(
         The arguments with the highest fps
     tuple[float, float, dict[str, float]]
         The measurement results
+
     """
     fps_values = [option[0][0] for option in options]
     max_fps = max(fps_values)
@@ -73,6 +74,7 @@ def lowest_avg_latency(
         The arguments with the lowest avg latency
     tuple[float, float, dict[str, float]]
         The measurement results
+
     """
     avg_latency_values = [option[0][1] for option in options]
     min_avg_latency = min(avg_latency_values)
@@ -102,6 +104,7 @@ def lowest_latency(
         The arguments with the lowest latency for the specified stream
     tuple[float, float, dict[str, float]]
         The measurement results for the specified stream
+
     """
     latency_values = [option[0][2][stream] for option in options]
     min_latency = min(latency_values)

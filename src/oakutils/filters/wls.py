@@ -49,6 +49,7 @@ class WLSFilter:
     -------
     filter_frame
         Use to filter the disparity image.
+
     """
 
     def __init__(
@@ -71,6 +72,7 @@ class WLSFilter:
             The sigma parameter for the WLS filter. Defaults to 1.0.
         disp_levels : int
             The number of disparity levels in the matcher. Defaults to 96.
+
         """
         self._data: StereoCalibrationData = cam_data
         self._lambda: int = lamb
@@ -93,6 +95,7 @@ class WLSFilter:
         -------
         int
             The lambda parameter.
+
         """
         return self._lambda
 
@@ -105,6 +108,7 @@ class WLSFilter:
         ----------
         value : int
             The new lambda parameter.
+
         """
         self._lambda = value
         self._filter.setLambda(self._lambda)
@@ -118,6 +122,7 @@ class WLSFilter:
         -------
         float
             The sigma parameter.
+
         """
         return self._sigma
 
@@ -130,6 +135,7 @@ class WLSFilter:
         ----------
         value : float
             The new sigma parameter.
+
         """
         self._sigma = value
         self._filter.setSigmaColor(self._sigma)
@@ -159,6 +165,7 @@ class WLSFilter:
             The filtered disparity image.
         np.ndarray
             The new depth image.
+
         """
         if use_mono_left is None:
             use_mono_left = True

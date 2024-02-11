@@ -1,4 +1,4 @@
-name: Ruff Check
+name: Ruff
 on: [ push ]
 jobs:
   ruff:

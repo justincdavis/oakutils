@@ -46,6 +46,7 @@ class ArucoFinder:
         Finds the aruco markers in the image
     draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
         Draws the detected markers onto the image
+
     """
 
     def __init__(
@@ -68,6 +69,7 @@ class ArucoFinder:
             The calibration data to use for finding the transformation matrix,
               by default None
             Will utilize an identity matrix if not provided
+
         """
         self._adict = cv2.aruco.getPredefinedDictionary(aruco_dict)
         self._marker_size = marker_size
@@ -87,6 +89,7 @@ class ArucoFinder:
         -------
         ColorCalibrationData, MonoCalibrationData, None
             The calibration data used by the ArucoFinder
+
         """
         return self._calibration
 
@@ -102,6 +105,7 @@ class ArucoFinder:
         ----------
         calibration : ColorCalibrationData, MonoCalibrationData
             The calibration data to use for finding the transformation matrix
+
         """
         self._calibration = calibration
         self._K = self._calibration.K
@@ -133,6 +137,7 @@ class ArucoFinder:
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
               rotation vector, translation vector, and corners
+
         """
         if rectified is None:
             rectified = False
@@ -189,6 +194,7 @@ class ArucoFinder:
         -------
         np.ndarray
             A copy of the image with the markers drawn on it
+
         """
         image = image.copy()
         for marker in markers:

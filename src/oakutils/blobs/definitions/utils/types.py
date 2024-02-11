@@ -66,6 +66,7 @@ def input_type_to_str(inputtype: InputType) -> str:
     ------
     ValueError
         If the input type is unknown
+
     """
     if inputtype == InputType.FP16:
         return "FP16"

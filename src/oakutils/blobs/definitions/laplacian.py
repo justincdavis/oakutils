@@ -47,6 +47,7 @@ class Laplacian(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -57,6 +58,7 @@ class Laplacian(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel to use, by default 3
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -84,6 +86,7 @@ class Laplacian(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.filters.laplacian(image, self._kernel_size)
 
@@ -96,6 +99,7 @@ class LaplacianGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -106,6 +110,7 @@ class LaplacianGray(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel to use, by default 3
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -133,6 +138,7 @@ class LaplacianGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         laplacian = kornia.filters.laplacian(image, self._kernel_size)
         return kornia.color.bgr_to_grayscale(laplacian)
@@ -146,6 +152,7 @@ class LaplacianBlur(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -165,6 +172,7 @@ class LaplacianBlur(AbstractModel):
             The size of the kernel to use for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -194,6 +202,7 @@ class LaplacianBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,
@@ -211,6 +220,7 @@ class LaplacianBlurGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -230,6 +240,7 @@ class LaplacianBlurGray(AbstractModel):
             The size of the kernel to use for the gaussian blur, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel_size = kernel_size
@@ -259,6 +270,7 @@ class LaplacianBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,

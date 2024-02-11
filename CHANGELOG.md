@@ -1,3 +1,19 @@
+## 1.4.3 (02-10-2024)
+
+### Added
+
+- Support for Python 3.11
+
+### Changed
+
+- Dependency versions for almost every package to ensure more consistent behavior
+
+### Fixed
+
+- CI test workflows not correctly propagating error codes
+- Bug with queues on color camera, mono camera, image manip, xout, and stereo depth. 
+    Queue flags should all be none and then only assigned if user provides.
+
 ## 1.4.2 (01-29-2024)
 
 ### Improvements

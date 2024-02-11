@@ -51,6 +51,7 @@ def _create_dummy_input(
     ------
     ValueError
         If the input_shape is not in the correct form
+
     """
     whc = 3
     if len(input_shape) != whc:
@@ -108,6 +109,7 @@ def _create_multiple_dummy_input(
     -------
     Tuple[torch.Tensor, ...]
         The dummy input tensors
+
     """
     return [
         _create_dummy_input(input_shape, input_type, creation_func)
@@ -144,6 +146,7 @@ def _export_module_to_onnx(
         The opset to use for the onnx export, by default 12
     verbose : bool, optional
         Whether to print out information about the export, by default False
+
     """
     if verbose is None:
         verbose = False
@@ -205,6 +208,7 @@ def export(
         The opset to use for the onnx export, by default 12
     verbose : bool, optional
         Whether to print out information about the export, by default False
+
     """
     if verbose is None:
         verbose = False

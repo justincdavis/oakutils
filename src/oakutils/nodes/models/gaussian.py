@@ -67,6 +67,7 @@ def create_gaussian(
     ------
     ValueError
         If the kernel_size is invalid
+
     """
     if grayscale_out is None:
         grayscale_out = False

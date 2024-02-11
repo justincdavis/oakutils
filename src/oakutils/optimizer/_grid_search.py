@@ -60,6 +60,7 @@ def grid_search(
         The arguments maximizing the objective functions
     tuple[float, float, dict[str, float]]
         The best measurement results
+
     """
     results: list[tuple[tuple[float, float, dict[str, float]], dict[str, Any]]] = []
     for arg in possible_args:

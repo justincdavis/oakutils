@@ -75,6 +75,7 @@ def create_harris(
     ------
     ValueError
         If the kernel_size is invalid
+
     """
     _log.warning("Harris has errors running when color camera FPS is above 15")
 

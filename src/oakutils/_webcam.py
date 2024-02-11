@@ -53,6 +53,7 @@ class Webcam:
         Stop the camera.
     read()
         Read a frame from the camera.
+
     """
 
     def __init__(
@@ -69,6 +70,7 @@ class Webcam:
             The resolution of the webcam, by default (1920, 1080)
         fps : int, optional
             The framerate of the webcam, by default 30
+
         """
         self._resolution = resolution
         self._fps = fps
@@ -114,6 +116,7 @@ class Webcam:
         -------
         ColorCalibrationData
             The calibration info for the camera
+
         """
         return self._calibration.rgb
 
@@ -135,6 +138,7 @@ class Webcam:
         -------
         tuple[bool, np.ndarray]
             A tuple containing a boolean indicating if the frame was read successfully and the frame itself.
+
         """
         # get data
         return self._frame is not None, self._frame

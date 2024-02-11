@@ -41,6 +41,7 @@ def simplify(model_path: str, output_path: str, check_num: int = 5) -> None:
     ------
     AssertionError
         If the simplified model could not be validated
+
     """
     _log.debug("Simplifying model")
     model = onnx.load(model_path)
@@ -84,6 +85,7 @@ def compile_onnx(
     ------
     AssertionError
         If the simplified model could not be validated
+
     """
     if simplify_model is None:
         simplify_model = True

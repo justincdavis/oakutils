@@ -81,6 +81,7 @@ def create_model(
     ------
     ValueError
         If the kernel_size is invalid
+
     """
     potential_blobs = get_candidates(
         model_type=model_name,
@@ -150,6 +151,7 @@ def create_no_args_multi_link_model(
     -------
     dai.node.NeuralNetwork
         The model node
+
     """
     _log.warning(
         f"Multi-link models do not have passthrough! Creating model {model_name} with multiple input links...",
@@ -205,6 +207,7 @@ def create_no_args_model(
     -------
     dai.node.NeuralNetwork
         The model node
+
     """
     return create_model(
         pipeline=pipeline,
@@ -261,6 +264,7 @@ def create_single_kernel_model(
     -------
     dai.node.NeuralNetwork
         The model node
+
     """
     _ = parse_kernel_size(
         kernel_size,
@@ -323,6 +327,7 @@ def create_double_kernel_model(
     -------
     dai.node.NeuralNetwork
         The model node
+
     """
     _ = parse_kernel_size(
         kernel_size1,

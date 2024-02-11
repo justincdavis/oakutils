@@ -47,6 +47,7 @@ class Dilation(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -57,6 +58,7 @@ class Dilation(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel for the gaussian blur, by default 3
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size, kernel_size))
@@ -86,6 +88,7 @@ class Dilation(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         return kornia.morphology.dilation(image, self._kernel)
 
@@ -98,6 +101,7 @@ class DilationGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self, kernel_size: int = 3) -> None:
@@ -108,6 +112,7 @@ class DilationGray(AbstractModel):
         ----------
         kernel_size : int, optional
             The size of the kernel for the gaussian blur, by default 3
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size, kernel_size))
@@ -137,6 +142,7 @@ class DilationGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         dilation = kornia.morphology.dilation(image, self._kernel)
         return kornia.color.bgr_to_grayscale(dilation)
@@ -150,6 +156,7 @@ class DilationBlur(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -169,6 +176,7 @@ class DilationBlur(AbstractModel):
             The size of the second kernel to use, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size2, kernel_size2))
@@ -200,6 +208,7 @@ class DilationBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,
@@ -217,6 +226,7 @@ class DilationBlurGray(AbstractModel):
     -------
     forward(image: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(
@@ -236,6 +246,7 @@ class DilationBlurGray(AbstractModel):
             The size of the second kernel to use, by default 3
         sigma : float, optional
             The sigma value for the gaussian blur, by default 1.5
+
         """
         super().__init__()
         self._kernel = torch.zeros((kernel_size2, kernel_size2))
@@ -267,6 +278,7 @@ class DilationBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
         """
         gaussian = kornia.filters.gaussian_blur2d(
             image,

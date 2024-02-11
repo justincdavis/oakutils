@@ -1,5 +1,17 @@
 # OakUtils
 
+[![](https://img.shields.io/pypi/pyversions/oakutils.svg)](https://pypi.org/pypi/oakutils/)
+![PyPI](https://img.shields.io/pypi/v/oakutils.svg?style=plastic)
+
+![Linux](https://github.com/justincdavis/oakutils/actions/workflows/unittests-ubuntu.yaml/badge.svg?branch=main)
+![Windows](https://github.com/justincdavis/oakutils/actions/workflows/unittests-windows.yaml/badge.svg?branch=main)
+![MacOS](https://github.com/justincdavis/oakutils/actions/workflows/unittests-macos.yaml/badge.svg?branch=main)
+
+![MyPy](https://github.com/justincdavis/oakutils/actions/workflows/mypy.yaml/badge.svg?branch=main)
+![Ruff](https://github.com/justincdavis/oakutils/actions/workflows/ruff.yaml/badge.svg?branch=main)
+![Black](https://github.com/justincdavis/oakutils/actions/workflows/black.yaml/badge.svg?branch=main)
+![PyPi Build](https://github.com/justincdavis/oakutils/actions/workflows/build-check.yaml/badge.svg?branch=main)
+
 A easy-to-use and robust library for interacting easily with OAK cameras and the DepthAI API. Aims to bridge the gap between DepthAI API and SDK allow with building in integration with OpenCV and Open3D "out-of-the-box".
 Alongside this it aims to provide better tooling for creating custom functionality on the cameras and handling typical CV tasks.
 

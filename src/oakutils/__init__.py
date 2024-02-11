@@ -102,6 +102,7 @@ def set_log_level(level: str) -> None:
     ------
     ValueError
         If the level is not one of the allowed values.
+
     """
     if level.upper() not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
         err_msg = f"Invalid log level: {level}"
@@ -154,6 +155,6 @@ __all__ = [
     "tools",
     "vpu",
 ]
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 _log.info(f"Initialized oakutils with version {__version__}")

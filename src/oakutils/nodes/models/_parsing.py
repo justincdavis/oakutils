@@ -34,6 +34,7 @@ def parse_kernel_size(kernel_size: int) -> bool:
     -------
     bool
         True if the kernel size is valid, False otherwise
+
     """
     valid = False
     min_kernel_size, max_kernel_size = 3, 15
@@ -65,6 +66,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
     -------
     Tuple[bool, List[str]]
         A tuple of the validity of the model type and the list of valid names
+
     """
     valid_names = [
         "gaussian",
@@ -128,6 +130,7 @@ def get_candidates(
     ------
     ValueError
         If the model type is invalid (i.e. the name is not in the list of valid names)
+
     """
     valid, valid_names = _valid_model_names(model_type)
     if not valid:

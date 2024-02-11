@@ -62,6 +62,7 @@ def get_point_cloud_from_rgb_depth_image(
     -------
     o3d.geometry.PointCloud
         The point cloud created from the RGB and depth images.
+
     """
     if image_is_bgr is None:
         image_is_bgr = True
@@ -141,6 +142,7 @@ def get_point_cloud_from_depth_image(
     -------
     o3d.geometry.PointCloud
         The point cloud created from the depth image.
+
     """
     if project_valid_depth_only is None:
         project_valid_depth_only = True
@@ -198,6 +200,7 @@ def filter_point_cloud(
     -------
     o3d.geometry.PointCloud
         The filtered point cloud.
+
     """
     if downsample_first is None:
         downsample_first = True
@@ -230,6 +233,7 @@ def get_point_cloud_from_np_buffer(pcl_data: np.ndarray) -> o3d.geometry.PointCl
     -------
     o3d.geometry.PointCloud
         The open3d point cloud.
+
     """
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(pcl_data)

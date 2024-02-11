@@ -58,6 +58,7 @@ def create_xyz_matrix(width: int, height: int, camera_matrix: np.ndarray) -> np.
     -------
     np.ndarray
         The reprojection matrix
+
     """
     xs: np.ndarray = np.linspace(0, width - 1, width, dtype=np.float32)
     ys: np.ndarray = np.linspace(0, height - 1, height, dtype=np.float32)
@@ -119,6 +120,7 @@ def create_point_cloud(
         The input link to connect to the point_cloud node.
     Callable[[dai.Device], None]
         Function to pass the device, which will start the point cloud generation
+
     """
     model_type = "pointcloud"
     xin = create_xin(pipeline, input_stream_name)

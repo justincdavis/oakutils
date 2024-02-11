@@ -40,6 +40,7 @@ def frame_norm(
     References
     ----------
     https://docs.luxonis.com/projects/api/en/latest/samples/Yolo/tiny_yolo/#rgb-tiny-yolo
+
     """
     norm_vals: np.ndarray = np.full(len(bbox), frame.shape[0])
     norm_vals[::2] = frame.shape[1]

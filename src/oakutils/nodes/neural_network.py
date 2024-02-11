@@ -108,6 +108,7 @@ def create_neural_network(
     TypeError
         If input_link is an iterable and input_names is not an iterable
         If input_link is an iterable and reuse_messages is not an iterable
+
     """
     if isinstance(input_link, list):
         if input_names is None:
@@ -206,6 +207,7 @@ def _normalize(
     -------
     np.ndarray
         The normalized frame.
+
     """
     if factor is None:
         return frame
@@ -229,6 +231,7 @@ def _resize(frame: np.ndarray, factor: float | None = None) -> np.ndarray:
     -------
     np.ndarray
         The resized frame.
+
     """
     if factor is None:
         return frame
@@ -281,6 +284,7 @@ def get_nn_frame(
     -------
     np.ndarray
         Frame usable by cv2.
+
     """
     if swap_rb is None:
         swap_rb = False
@@ -342,6 +346,7 @@ def get_nn_bgr_frame(
     -------
     np.ndarray
         BGR frame usable by cv2.
+
     """
     return get_nn_frame(
         data=data,
@@ -381,6 +386,7 @@ def get_nn_gray_frame(
     -------
     np.ndarray
         Grayscale frame usable by cv2.
+
     """
     return get_nn_frame(
         data=data,
@@ -423,6 +429,7 @@ def get_nn_point_cloud_buffer(
     -------
     np.ndarray
         Point cloud buffer
+
     """
     if remove_zeros is None:
         remove_zeros = True

@@ -100,6 +100,7 @@ class DisplayManager:
         Sets a transform for the given name
     update(data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]], transform: Callable | None = None)
         Updates the display with the given data
+
     """
 
     def __init__(
@@ -116,6 +117,7 @@ class DisplayManager:
             The fps of the display manager, by default 30
         display_size : Tuple[int, int], optional
             The size of the display, by default (640, 480)
+
         """
         self._displays: dict[str, _Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
@@ -132,6 +134,7 @@ class DisplayManager:
         -------
         int
             The fps of the display manager
+
         """
         return self._fps
 
@@ -144,6 +147,7 @@ class DisplayManager:
         ----------
         fps : int
             The fps to set the display manager to
+
         """
         self._fps = fps
         for display in self._displays.values():
@@ -181,6 +185,7 @@ class DisplayManager:
             The name of the transform
         transform : Callable
             The transform to set
+
         """
         self._transforms[name] = transform
 
@@ -200,6 +205,7 @@ class DisplayManager:
         transform : Optional[Callable], optional
             A transform to call on each frame, by default None
             The transform should take in an np.ndarray and return an np.ndarray
+
         """
         # whether or not we are in Tuple or list case
         if isinstance(data, tuple):
@@ -231,6 +237,7 @@ class DisplayManager:
         -------
         Callable[[dai.ImgFrame], None]
             The callback to be used with the Camera class.
+
         """
 
         def callback(frame: dai.ImgFrame) -> None:
@@ -253,6 +260,7 @@ def get_resolution_area(resolution: tuple[int, int]) -> int:
     -------
     int
         The area of the resolution
+
     """
     return resolution[0] * resolution[1]
 
@@ -277,6 +285,7 @@ def order_resolutions(
     -------
     list[Tuple[int, int]]
         The ordered resolutions
+
     """
     if reverse is None:
         reverse = False
@@ -298,5 +307,6 @@ def get_smaller_size(size1: tuple[int, int], size2: tuple[int, int]) -> tuple[in
     -------
     Tuple[int, int]
         The smaller size
+
     """
     return order_resolutions([size1, size2])[0]

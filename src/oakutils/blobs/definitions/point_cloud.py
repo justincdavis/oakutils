@@ -47,6 +47,7 @@ class PointCloud(AbstractModel):
     -------
     forward(xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor
         Use to run the model on the input tensor.
+
     """
 
     def __init__(self: Self) -> None:
@@ -78,6 +79,7 @@ class PointCloud(AbstractModel):
             Pre-provided xyz tensor, only one should ever be provided and then reused.
         depth : torch.Tensor
             The input tensor to run the model on
+
         """
         # depth_fp16: torch.Tensor = convert_to_fp16(depth)
         # return _depth_to_3d(depth_fp16, xyz)
