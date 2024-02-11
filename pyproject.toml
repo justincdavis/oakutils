@@ -67,7 +67,7 @@ compiler = [
     "blobconverter==1.4.3",
     "requests>=2.25.0",
     "boto3>=1.34.37",  # Removes the need for search during install
-    "botocore==1.34.37",  # Removes the need for search during install
+    "botocore>=1.34.37",  # Removes the need for search during install
 ]
 ci = [
     "pyupgrade>=3.10",

@@ -38,7 +38,7 @@ def create_stereo_depth(
     sharpness: int = 1,
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
-    isp_3a_fps: int | None = 15,
+    isp_3a_fps: int | None = None,
     input_queue_size: int | None = None,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
@@ -103,7 +103,7 @@ def create_stereo_depth(
     chroma_denoise: int, optional
         The chroma denoise of the mono camera, by default 1
     isp_3a_fps: int, optional
-        The 3a fps of the mono camera, by default 15
+        The 3a fps of the mono camera, by default None
     input_queue_size : int, optional
         The queue size of the input, by default None
     input_reuse : Optional[bool], optional
