@@ -11,7 +11,8 @@
 ### Fixed
 
 - CI test workflows not correctly propagating error codes
-- Bug with queues on color camera, mono camera, image manip, and stereo depth. Queue flags should all be none and then only assigned if user provides.
+- Bug with queues on color camera, mono camera, image manip, xout, and stereo depth. 
+    Queue flags should all be none and then only assigned if user provides.
 
 ## 1.4.2 (01-29-2024)
 
