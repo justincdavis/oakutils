@@ -40,7 +40,7 @@ def create_color_camera(
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
     isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     *,
     set_interleaved: bool | None = None,
     input_reuse: bool | None = None,
@@ -98,17 +98,13 @@ def create_color_camera(
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
     input_queue_size: int, optional
-        The size of the input queue, by default 3
+        The size of the input queue, by default None
     input_reuse: bool, optional
         Whether to reuse inputs or not, by default None
-        If none, will be set to False
     input_blocking: bool, optional
         Whether to block the input or not, by default None
-        If none, will be set to False
     input_wait_for_message: bool, optional
         Whether to wait for a message or not, by default None
-        If none, will be set to False
-
 
     Returns
     -------
@@ -164,12 +160,6 @@ def create_color_camera(
     if chroma_denoise < min_chroma_denoise or chroma_denoise > max_chroma_denoise:
         err_msg = "chroma_denoise must be between 0 and 4"
         raise ValueError(err_msg)
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
 
     size_tuple = get_tuple_from_color_sensor_resolution(resolution)
 
@@ -200,9 +190,13 @@ def create_color_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
-    cam.inputConfig.setQueueSize(input_queue_size)
-    cam.inputConfig.setReusePreviousMessage(input_reuse)
-    cam.inputConfig.setBlocking(input_blocking)
-    cam.inputConfig.setWaitForMessage(input_wait_for_message)
+    if input_queue_size is not None:
+        cam.inputConfig.setQueueSize(input_queue_size)
+    if input_reuse is not None:
+        cam.inputConfig.setReusePreviousMessage(input_reuse)
+    if input_blocking is not None:
+        cam.inputConfig.setBlocking(input_blocking)
+    if input_wait_for_message is not None:
+        cam.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return cam

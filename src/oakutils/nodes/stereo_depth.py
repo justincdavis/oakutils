@@ -39,7 +39,7 @@ def create_stereo_depth(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     preset: dai.node.StereoDepth.PresetMode = dai.node.StereoDepth.PresetMode.HIGH_DENSITY,
     align_socket: dai.CameraBoardSocket = dai.CameraBoardSocket.LEFT,
     confidence_threshold: int = 255,
@@ -61,7 +61,7 @@ def create_stereo_depth(
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-    stereo_input_queue_size: int = 3,
+    stereo_input_queue_size: int | None = None,
     *,
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
@@ -105,16 +105,13 @@ def create_stereo_depth(
     isp_3a_fps: int, optional
         The 3a fps of the mono camera, by default 15
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
     left : dai.node.MonoCamera
         The left mono camera node
     right : dai.node.MonoCamera
@@ -174,16 +171,13 @@ def create_stereo_depth(
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
     stereo_input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     stereo_input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     stereo_input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     stereo_input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
 
 
     Returns
@@ -293,7 +287,7 @@ def create_stereo_depth_from_mono_cameras(
     threshold_min_range: int = 200,
     threshold_max_range: int = 25000,
     bilateral_sigma: int = 1,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     *,
     lr_check: bool | None = None,
     extended_disparity: bool | None = None,
@@ -374,16 +368,13 @@ def create_stereo_depth_from_mono_cameras(
     bilateral_sigma : int, optional
         The bilateral sigma of the stereo depth node, by default 1
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
 
     Returns
     -------
@@ -480,17 +471,14 @@ def create_stereo_depth_from_mono_cameras(
     # write back the config
     stereo.initialConfig.set(config)
 
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
-
-    stereo.inputConfig.setQueueSize(input_queue_size)
-    stereo.inputConfig.setReusePreviousMessage(input_reuse)
-    stereo.inputConfig.setBlocking(input_blocking)
-    stereo.inputConfig.setWaitForMessage(input_wait_for_message)
+    if input_queue_size is not None:
+        stereo.inputConfig.setQueueSize(input_queue_size)
+    if input_reuse is not None:
+        stereo.inputConfig.setReusePreviousMessage(input_reuse)
+    if input_blocking is not None:
+        stereo.inputConfig.setBlocking(input_blocking)
+    if input_wait_for_message is not None:
+        stereo.inputConfig.setWaitForMessage(input_wait_for_message)
 
     # link nodes
     left.out.link(stereo.left)

@@ -39,7 +39,7 @@ def create_image_manip(
     warp_border_fill_color: tuple[int, int, int] | None = None,
     warp_transform_four_points: tuple[list[dai.Point2f], bool] | None = None,
     warp_transform_matrix_3x3: list[float] | None = None,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     *,
     horizontal_flip: bool | None = None,
     keep_aspect_ratio: bool | None = None,
@@ -90,16 +90,13 @@ def create_image_manip(
     warp_transform_matrix_3x3 : Optional[List[float]], optional
         The warp transform matrix 3x3 to apply, by default None
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
 
     Returns
     -------
@@ -141,16 +138,13 @@ def create_image_manip(
 
     input_link.link(manip.inputImage)
 
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
-
-    manip.inputConfig.setQueueSize(input_queue_size)
-    manip.inputConfig.setReusePreviousMessage(input_reuse)
-    manip.inputConfig.setBlocking(input_blocking)
-    manip.inputConfig.setWaitForMessage(input_wait_for_message)
+    if input_queue_size is not None:
+        manip.inputConfig.setQueueSize(input_queue_size)
+    if input_reuse is not None:
+        manip.inputConfig.setReusePreviousMessage(input_reuse)
+    if input_blocking is not None:
+        manip.inputConfig.setBlocking(input_blocking)
+    if input_wait_for_message is not None:
+        manip.inputConfig.setWaitForMessage(input_wait_for_message)
 
     return manip

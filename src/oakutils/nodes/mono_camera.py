@@ -38,7 +38,7 @@ def create_mono_camera(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     *,
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
@@ -81,16 +81,13 @@ def create_mono_camera(
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
 
     Returns
     -------
@@ -167,17 +164,14 @@ def create_mono_camera(
     if isp_3a_fps is not None:
         cam.setIsp3aFps(isp_3a_fps)
 
-    if input_reuse is None:
-        input_reuse = False
-    if input_blocking is None:
-        input_blocking = False
-    if input_wait_for_message is None:
-        input_wait_for_message = False
-
-    cam.inputControl.setQueueSize(input_queue_size)
-    cam.inputControl.setReusePreviousMessage(input_reuse)
-    cam.inputControl.setBlocking(input_blocking)
-    cam.inputControl.setWaitForMessage(input_wait_for_message)
+    if input_queue_size is not None:
+        cam.inputControl.setQueueSize(input_queue_size)
+    if input_reuse is not None:
+        cam.inputControl.setReusePreviousMessage(input_reuse)
+    if input_blocking is not None:
+        cam.inputControl.setBlocking(input_blocking)
+    if input_wait_for_message is not None:
+        cam.inputControl.setWaitForMessage(input_wait_for_message)
 
     return cam
 
@@ -193,7 +187,7 @@ def create_left_right_cameras(
     luma_denoise: int = 1,
     chroma_denoise: int = 1,
     isp_3a_fps: int | None = 15,
-    input_queue_size: int = 3,
+    input_queue_size: int | None = None,
     *,
     input_reuse: bool | None = None,
     input_blocking: bool | None = None,
@@ -234,16 +228,13 @@ def create_left_right_cameras(
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
     input_queue_size : int, optional
-        The queue size of the input, by default 3
+        The queue size of the input, by default None
     input_reuse : Optional[bool], optional
         Whether to reuse the previous message, by default None
-        If None, will be set to False
     input_blocking : Optional[bool], optional
         Whether to block the input, by default None
-        If None, will be set to False
     input_wait_for_message : Optional[bool], optional
         Whether to wait for a message, by default None
-        If None, will be set to False
 
 
     Returns
