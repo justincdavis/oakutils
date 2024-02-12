@@ -101,7 +101,9 @@ class CustomU8(AbstractModel):
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model."""
         # TODO: Fill in with custom functionality and compile
-        return image
+        # When compiling with the version of openvino used by default for U8 inputs
+        # the network must not be an identity network (i.e. it must do something to the input)
+        return image + 1
 
 
 def main() -> None:
@@ -118,7 +120,7 @@ def main() -> None:
         verbose=True,
     )
     u8_model_path = compile_model(
-        CustomFP16,
+        CustomU8,
         {},  # Add any arguments here as a dictionary
         cache=False,
         shape_mapping={
@@ -145,7 +147,7 @@ def main() -> None:
     )
     u8_network = create_neural_network(
         pipeline,
-        cam.depth,
+        stereo.depth,
         u8_model_path,
     )
     streamname_fp16 = "network_fp16"
