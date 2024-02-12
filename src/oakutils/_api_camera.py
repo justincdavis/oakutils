@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import atexit
 import contextlib
-from functools import partial
+from queue import Empty, Full, Queue
 from threading import Condition, Thread
 from typing import TYPE_CHECKING, Callable, Iterable
 
@@ -102,7 +102,7 @@ class ApiCamera:
             mono_size=self._mono_size,
             is_primary_mono_left=self._primary_mono_left,
         )
-        self._callbacks: dict[str | Iterable[str], Callable] = {}
+        self._callbacks: dict[str, Callable] = {}
         self._pipeline: dai.Pipeline = dai.Pipeline()
         self._is_built: bool = False
         self._custom_device_calls: list[Callable[[dai.DeviceBase], None]] = []
@@ -114,6 +114,10 @@ class ApiCamera:
         )
         self._displays: DisplayManager | None = None
         self._pcv: PointCloudVisualizer | None = None
+
+        # create maps for the threads for handling callbacks
+        self._callback_threads: dict[str, Thread] = {}
+        self._callback_queues: dict[str, Queue] = {}
 
         # thread for reading camera
         self._started = False
@@ -182,6 +186,8 @@ class ApiCamera:
     def stop(self: Self) -> None:
         """Use to stop the camera."""
         self._stopped = True
+        if self._displays is not None:
+            self._displays.stop()
 
         # call conditions if system never started
         with self._start_condition:
@@ -190,19 +196,34 @@ class ApiCamera:
         with contextlib.suppress(RuntimeError):
             self._thread.join()
 
+        for callback_thread in self._callback_threads.values():
+            with contextlib.suppress(RuntimeError):
+                callback_thread.join()
+
     def add_callback(self: Self, name: str | Iterable[str], callback: Callable) -> None:
         """
         Use to add a callback to be run on the output queue with the given name.
 
         Parameters
         ----------
-        name : str
-            The name of the output queue to add the callback to.
+        name : str, Iterable[str]
+            The name of the output queue to add the callback to or,
+            an iterable of names to add the callback to.
         callback : Callable
             The callback to add.
 
         """
-        self._callbacks[name] = callback
+        if isinstance(name, str):
+            name = [name]
+        for n in name:
+            self._callbacks[n] = callback
+            self._callback_threads[n] = Thread(
+                target=self._callback_thread,
+                args=(n,),
+                daemon=True,
+            )
+            self._callback_queues[n] = Queue(maxsize=1)
+            self._callback_threads[n].start()
 
     def add_display(self: Self, name: str) -> None:
         """
@@ -236,7 +257,15 @@ class ApiCamera:
             raise RuntimeError(err_msg)
         self._custom_device_calls.append(call)
 
+    def _callback_thread(self: Self, name: str) -> None:
+        """Use to run a callback in a thread."""
+        while not self._stopped:
+            with contextlib.suppress(Empty):
+                data = self._callback_queues[name].get(timeout=0.25)
+                self._callbacks[name](data)
+
     def _run(self: Self) -> None:
+        """Use to run the camera."""
         # wait for the start call, this allows user to define pipeline
         with self._start_condition:
             self._start_condition.wait()
@@ -252,23 +281,17 @@ class ApiCamera:
             }
 
             # create a cache for queue results to enable multi queue callbacks
-            data_cache = {name: None for name, _ in self._callbacks.items()}
+            data_cache = list(self._callbacks.keys())
 
             while not self._stopped:
                 # cache results
                 for name in data_cache:
-                    data_cache[name] = queues[name].get()
-                # create callback partials
-                partials = []
-                for name, callback in self._callbacks.items():
-                    if isinstance(name, str):
-                        data = data_cache[name]
-                    else:
-                        data = [data_cache[n] for n in name]
-                    partials.append(partial(callback, data))
-                # run/dispatch the callback partials
-                for callback in partials:
-                    callback()
+                    data_packet = queues[name].tryGet()
+                    if data_packet is None:
+                        continue
+                    # propagate the data to the callback threads
+                    with contextlib.suppress(Full):
+                        self._callback_queues[name].put(data_packet, block=False)
 
         # call stop conditions if start was called with blocking
         with self._stop_condition:
