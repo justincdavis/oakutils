@@ -28,6 +28,7 @@ def main() -> None:
     parser.add_argument("--model", type=str, required=True)
     parser.add_argument("--output", type=str, required=True)
     parser.add_argument("--input_size", type=str, default="3,224,224")
+    parser.add_argument("--opset", type=int, default=11)
     args = parser.parse_args()
 
     # Load model
@@ -44,7 +45,7 @@ def main() -> None:
         args.output,
         input_names=["input"],
         output_names=["output"],
-        opset_version=11,
+        opset_version=args.opset,
         do_constant_folding=True,
         verbose=True,
     )
