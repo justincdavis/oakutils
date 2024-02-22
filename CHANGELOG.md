@@ -1,3 +1,11 @@
+## 1.4.5 (02-22-2024)
+
+### Fixed
+
+- VPU
+    - Incorrect return type for run
+    - blob_path listed incorrectly as parameter for init
+
 ## 1.4.4 (02-21-2024)
 
 ### Fixed

@@ -47,30 +47,10 @@ _log = logging.getLogger(__name__)
 
 
 class VPU:
-    """
-    Class for using the onboard VPU as a standalone processor.
-
-    Methods
-    -------
-    stop()
-        Use to stop the VPU.
-    reconfigure(blob_path, input_names=None)
-        Use to reconfigure the VPU with a new blob file.
-    run(data)
-        Use to run an inference on the VPU.
-
-    """
+    """Class for using the onboard VPU as a standalone processor."""
 
     def __init__(self: Self) -> None:
-        """
-        Use to create a VPU object.
-
-        Parameters
-        ----------
-        blob_path : str
-            The path to the blob file.
-
-        """
+        """Use to create a VPU object."""
         self._blob_path: str | None = None
         self._pipeline: dai.Pipeline | None = None
         self._xin: dai.node.XLinkIn | list[dai.node.XLinkIn] | None = None
@@ -90,7 +70,10 @@ class VPU:
         """Use to stop the VPU."""
         self.stop()
 
-    def __call__(self: Self, data: np.ndarray | list[np.ndarray]) -> np.ndarray:
+    def __call__(
+        self: Self,
+        data: np.ndarray | list[np.ndarray],
+    ) -> np.ndarray | dai.ImgDetections:
         """
         Use to run an inference on the VPU.
 
@@ -102,7 +85,7 @@ class VPU:
 
         Returns
         -------
-        np.ndarray
+        np.ndarray | dai.ImgDetections
             The result of the inference.
 
         Raises
@@ -300,7 +283,10 @@ class VPU:
                 with self._condition:
                     self._condition.notify()
 
-    def run(self: Self, data: np.ndarray | list[np.ndarray]) -> np.ndarray:
+    def run(
+        self: Self,
+        data: np.ndarray | list[np.ndarray],
+    ) -> np.ndarray | dai.ImgDetections:
         """
         Use to run an inference on the VPU.
 
@@ -312,7 +298,7 @@ class VPU:
 
         Returns
         -------
-        np.ndarray
+        np.ndarray | dai.ImgDetections
             The result of the inference.
 
         Raises
