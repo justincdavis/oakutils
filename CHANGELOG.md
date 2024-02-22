@@ -5,6 +5,7 @@
 - VPU
     - Incorrect return type for run
     - blob_path listed incorrectly as parameter for init
+    - Changed reconfigure to accept str | Path
 
 ## 1.4.4 (02-21-2024)
 

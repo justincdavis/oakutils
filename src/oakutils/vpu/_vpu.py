@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import atexit
 import logging
-import pathlib
+from pathlib import Path
 from threading import Condition, Thread
 from typing import TYPE_CHECKING
 
@@ -109,7 +109,7 @@ class VPU:
 
     def reconfigure(
         self: Self,
-        blob_path: str,
+        blob_path: str | Path,
         input_names: list[str] | None = None,
         yolo_data: YolomodelData | None = None,
         mobilenet_data: MobilenetData | None = None,
@@ -122,7 +122,7 @@ class VPU:
 
         Parameters
         ----------
-        blob_path : str
+        blob_path : str | Path
             The path to the blob file.
         input_names : list[str]
             The names of the input layers. Defaults to None.
@@ -143,6 +143,8 @@ class VPU:
             If is_yolo_model is True and yolo_data is None
             If is_mobilenet_model is True and mobilenet_data is None
             If is_yolo_model is True and is_mobilenet_model is True
+        FileNotFoundError
+            If the blob file does not exist.
 
         """
         if is_yolo_model is None:
@@ -156,7 +158,12 @@ class VPU:
         if self._thread is not None:
             self.stop()
         self._stopped = False
-        self._blob_path = blob_path
+        self._blob_path = (
+            blob_path if isinstance(blob_path, str) else str(blob_path.resolve())
+        )
+        if not Path.exists(Path(self._blob_path)):
+            err_msg = f"Blob file {self._blob_path} does not exist."
+            raise FileNotFoundError(err_msg)
         # create pipeline with neural network
         self._pipeline = dai.Pipeline()
         if input_names is None:
@@ -166,7 +173,7 @@ class VPU:
                 self._nn = create_neural_network(
                     self._pipeline,
                     self._xin.out,
-                    pathlib.Path(self._blob_path),
+                    Path(self._blob_path),
                 )
                 self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
             if is_yolo_model:
@@ -177,7 +184,7 @@ class VPU:
                 self._nn = create_yolo_detection_network(
                     self._pipeline,
                     self._xin.out,
-                    pathlib.Path(self._blob_path),
+                    Path(self._blob_path),
                     confidence_threshold=yolo_data.confidence_threshold,
                     iou_threshold=yolo_data.iou_threshold,
                     num_classes=yolo_data.num_classes,
@@ -207,7 +214,7 @@ class VPU:
                 self._nn = create_mobilenet_detection_network(
                     self._pipeline,
                     self._xin.out,
-                    pathlib.Path(self._blob_path),
+                    Path(self._blob_path),
                     confidence_threshold=mobilenet_data.confidence_threshold,
                     bounding_box_scale_factor=mobilenet_data.bounding_box_scale_factor,
                     depth_input_link=mobilenet_data.depth_input_link,
@@ -234,7 +241,7 @@ class VPU:
             self._nn = create_neural_network(
                 self._pipeline,
                 [xin.out for xin in self._xin],
-                pathlib.Path(self._blob_path),
+                Path(self._blob_path),
                 self._input_names,
             )
             self._xout = create_xout(self._pipeline, self._nn.out, "vpu_out")
