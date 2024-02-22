@@ -1,3 +1,9 @@
+## 1.4.4 (02-21-2024)
+
+### Fixed
+
+- Package gets detected as being fully typed.
+
 ## 1.4.3 (02-10-2024)
 
 ### Added
