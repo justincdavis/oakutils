@@ -115,7 +115,7 @@ push            = false
 where = ["src"]
 
 [tool.setuptools.package-data]
-oakutils = ["src/*.blob"]
+oakutils = ["src/*.blob", "src/oakutils/py.typed"]
 
 [tool.ruff]
 fix = true

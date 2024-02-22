@@ -1,3 +1,4 @@
+include src/oakutils/py.typed
 include src/oakutils/blobs/models/shave1/*.blob
 include src/oakutils/blobs/models/shave2/*.blob
 include src/oakutils/blobs/models/shave3/*.blob
