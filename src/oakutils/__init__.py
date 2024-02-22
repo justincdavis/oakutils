@@ -155,6 +155,6 @@ __all__ = [
     "tools",
     "vpu",
 ]
-__version__ = "1.4.4"
+__version__ = "1.4.5"
 
 _log.info(f"Initialized oakutils with version {__version__}")
