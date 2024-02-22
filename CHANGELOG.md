@@ -7,6 +7,10 @@
     - blob_path listed incorrectly as parameter for init
     - Changed reconfigure to accept str | Path
 
+### Changed
+
+- Removed README from doc homepage
+
 ## 1.4.4 (02-21-2024)
 
 ### Fixed

@@ -30,11 +30,6 @@ Contents
    API <api>
    Changelog <changelog>
 
-README
-======
-
-.. include:: ../README.md
-
 Indices and Tables
 ==================
 
