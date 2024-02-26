@@ -61,6 +61,8 @@ create_yolo_detection_network
     Creates a yolo detection network node.
 create_mobilenet_detection_network
     Creates a mobilenet detection network node.
+get_nn_data
+    Gets generic data from a neural network node.
 get_nn_frame
     Gets the output frame from the neural network node.
 get_nn_bgr_frame
@@ -92,6 +94,7 @@ from .mono_camera import create_left_right_cameras, create_mono_camera
 from .neural_network import (
     create_neural_network,
     get_nn_bgr_frame,
+    get_nn_data,
     get_nn_frame,
     get_nn_gray_frame,
     get_nn_point_cloud_buffer,
@@ -117,6 +120,7 @@ __all__ = [
     "create_yolo_detection_network",
     "frame_norm",
     "get_nn_bgr_frame",
+    "get_nn_data",
     "get_nn_frame",
     "get_nn_gray_frame",
     "get_nn_point_cloud_buffer",

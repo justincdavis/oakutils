@@ -450,3 +450,25 @@ def get_nn_point_cloud_buffer(
         pcl_data = pcl_data[pcl_data[:, 2] != zero_val]
 
     return pcl_data
+
+
+def get_nn_data(
+    data: np.ndarray | dai.NNData,
+) -> np.ndarray:
+    """
+    Use to get arbitrary shaped data from a neural network execution.
+
+    Parameters
+    ----------
+    data : Union[np.ndarray, dai.NNData]
+        Raw data output from a neural network execution.
+
+    Returns
+    -------
+    np.ndarray
+        The data from the neural network execution.
+
+    """
+    if isinstance(data, dai.NNData):
+        data = data.getData()
+    return data
