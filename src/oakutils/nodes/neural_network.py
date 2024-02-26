@@ -453,15 +453,37 @@ def get_nn_point_cloud_buffer(
 
 
 def get_nn_data(
-    data: np.ndarray | dai.NNData,
+    data: dai.NNData,
+    reshape_to: tuple[int, ...] | None = None,
+    scale: float | None = None,
+    astype: type | None = None,
+    *,
+    use_first_layer: bool | None = None,
 ) -> np.ndarray:
     """
     Use to get arbitrary shaped data from a neural network execution.
+
+    This function is used for getting an arbitrarily shaped data from
+    a custom neural network execution.
+    The data is reshaped, type cast, then scaled in that order.
+    If the NN returns a single element, an example could be:
+        get_nn_data(nndata, reshape_to(1, 1))[0]
+    The (1, 1) shape is important since all returned tensors
+    have a starting dimension of 1.
 
     Parameters
     ----------
     data : Union[np.ndarray, dai.NNData]
         Raw data output from a neural network execution.
+    reshape_to : Optional[tuple[int, ...]], optional
+        The shape to reshape the data to, by default None
+    scale : Optional[float], optional
+        The scale to apply to the data, by default None
+    astype : Optional[type], optional
+        The type to cast the data to, by default None
+    use_first_layer : Optional[bool], optional
+        Whether to use the first layer of the data, by default None
+        If None, then False is used and instead getData is used
 
     Returns
     -------
@@ -469,6 +491,13 @@ def get_nn_data(
         The data from the neural network execution.
 
     """
-    if isinstance(data, dai.NNData):
-        data = data.getData()
-    return data
+    if use_first_layer is None:
+        use_first_layer = False
+    raw_data = data.getFirstLayerFp16() if use_first_layer else data.getData()
+    if reshape_to is not None:
+        raw_data = raw_data.reshape(reshape_to)
+    if astype is not None:
+        raw_data = raw_data.astype(astype)
+    if scale is not None:
+        raw_data = raw_data / scale
+    return raw_data
