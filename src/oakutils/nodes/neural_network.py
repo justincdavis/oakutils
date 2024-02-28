@@ -493,7 +493,7 @@ def get_nn_data(
     """
     if use_first_layer is None:
         use_first_layer = False
-    raw_data = data.getFirstLayerFp16() if use_first_layer else data.getData()
+    raw_data = np.array(data.getFirstLayerFp16()) if use_first_layer else data.getData()
     if reshape_to is not None:
         raw_data = raw_data.reshape(reshape_to)
     if astype is not None:
