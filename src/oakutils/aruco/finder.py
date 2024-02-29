@@ -33,21 +33,7 @@ if TYPE_CHECKING:
 
 
 class ArucoFinder:
-    """
-    Class for finding aruco markers in images and acquiring transformation matrices to them.
-
-    Attributes
-    ----------
-    calibration : ColorCalibrationData, MonoCalibrationData, None
-
-    Methods
-    -------
-    find(image: np.ndarray, rectified: bool | None = None)
-        Finds the aruco markers in the image
-    draw(image: np.ndarray, markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
-        Draws the detected markers onto the image
-
-    """
+    """Class for finding aruco markers in images and acquiring transformation matrices to them."""
 
     def __init__(
         self: Self,
@@ -62,12 +48,12 @@ class ArucoFinder:
         ----------
         aruco_dict : int, optional
             The aruco dictionary to use for finding markers,
-              by default cv2.aruco.DICT_4X4_100
+            by default cv2.aruco.DICT_4X4_100
         marker_size : float, optional
             The size of the markers in meters, by default 0.05
         calibration : ColorCalibrationData, MonoCalibrationData, optional
             The calibration data to use for finding the transformation matrix,
-              by default None
+            by default None
             Will utilize an identity matrix if not provided
 
         """
@@ -136,7 +122,7 @@ class ArucoFinder:
         list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
-              rotation vector, translation vector, and corners
+            rotation vector, translation vector, and corners
 
         """
         if rectified is None:
@@ -188,7 +174,7 @@ class ArucoFinder:
         markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
             The list of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
-                rotation vector, translation vector, and corners
+            rotation vector, translation vector, and corners
 
         Returns
         -------

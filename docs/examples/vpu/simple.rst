@@ -25,7 +25,6 @@ Example: vpu/simple.py
 	from collections import deque
 	
 	import numpy as np
-	
 	from oakutils import VPU
 	from oakutils.blobs.models.shave6 import GAUSSIAN_15X15
 	

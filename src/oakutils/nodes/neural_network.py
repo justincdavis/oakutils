@@ -90,7 +90,7 @@ def create_neural_network(
         The number of inference threads, by default 2
     num_nce_per_inference_thread : Optional[int], optional
         The number of NCEs per inference thread, by default None
-         NCE: Neural Compute Engine
+        NCE: Neural Compute Engine
     num_pool_frames : Optional[int], optional
         The number of pool frames, by default None
 
@@ -450,3 +450,54 @@ def get_nn_point_cloud_buffer(
         pcl_data = pcl_data[pcl_data[:, 2] != zero_val]
 
     return pcl_data
+
+
+def get_nn_data(
+    data: dai.NNData,
+    reshape_to: tuple[int, ...] | None = None,
+    scale: float | None = None,
+    astype: type | None = None,
+    *,
+    use_first_layer: bool | None = None,
+) -> np.ndarray:
+    """
+    Use to get arbitrary shaped data from a neural network execution.
+
+    This function is used for getting an arbitrarily shaped data from
+    a custom neural network execution.
+    The data is reshaped, type cast, then scaled in that order.
+    If the NN returns a single element, an example could be:
+    get_nn_data(nndata, reshape_to(1, 1))[0]
+    The (1, 1) shape is important since all returned tensors
+    have a starting dimension of 1.
+
+    Parameters
+    ----------
+    data : Union[np.ndarray, dai.NNData]
+        Raw data output from a neural network execution.
+    reshape_to : Optional[tuple[int, ...]], optional
+        The shape to reshape the data to, by default None
+    scale : Optional[float], optional
+        The scale to apply to the data, by default None
+    astype : Optional[type], optional
+        The type to cast the data to, by default None
+    use_first_layer : Optional[bool], optional
+        Whether to use the first layer of the data, by default None
+        If None, then False is used and instead getData is used
+
+    Returns
+    -------
+    np.ndarray
+        The data from the neural network execution.
+
+    """
+    if use_first_layer is None:
+        use_first_layer = False
+    raw_data = np.array(data.getFirstLayerFp16()) if use_first_layer else data.getData()
+    if reshape_to is not None:
+        raw_data = raw_data.reshape(reshape_to)
+    if astype is not None:
+        raw_data = raw_data.astype(astype)
+    if scale is not None:
+        raw_data = raw_data / scale
+    return raw_data

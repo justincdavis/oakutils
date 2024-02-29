@@ -74,7 +74,7 @@ def _compile(
         The number of shaves to use for the blob, by default 6
     creation_func : callable, optional
         The function to use to create the dummy input, by default torch.rand
-            Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
+        Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
         The opset to use for the onnx export, by default 12
     openvino_version : str, optional
@@ -250,12 +250,12 @@ def compile_model(
         of the camera.
         If None, then the default mapping is used, by default None
         Default mapping:
-            InputType.FP16 -> (640, 480, 3)
-            InputType.XYZ -> (640, 400, 3)
-            InputType.U8 -> (640, 400, 1)
+        InputType.FP16 -> (640, 480, 3)
+        InputType.XYZ -> (640, 400, 3)
+        InputType.U8 -> (640, 400, 1)
     creation_func: callable, optional
         The function to use to create the dummy input, by default torch.rand
-          Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
+        Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
         The opset to use for the onnx export, by default 12
     openvino_version : str, optional

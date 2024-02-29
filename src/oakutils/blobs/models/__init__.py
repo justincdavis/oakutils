@@ -38,7 +38,6 @@ shave5 : module
 shave6 : module
     Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
 
-
 """
 
 from . import shave1, shave2, shave3, shave4, shave5, shave6

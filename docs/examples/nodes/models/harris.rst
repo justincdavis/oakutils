@@ -23,7 +23,6 @@ Example: nodes/models/harris.py
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame
 	from oakutils.nodes.models import create_harris
 	

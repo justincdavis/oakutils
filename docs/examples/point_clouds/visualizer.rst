@@ -23,7 +23,6 @@ Example: point_clouds/visualizer.py
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.calibration import get_camera_calibration
 	from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 	from oakutils.point_clouds import (

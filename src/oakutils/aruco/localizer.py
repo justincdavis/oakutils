@@ -33,17 +33,7 @@ if TYPE_CHECKING:
 
 
 class ArucoLocalizer:
-    """
-    Localizes the camera in the world using ArUco markers.
-
-    Methods
-    -------
-    add_transform(tag: int, transform: np.ndarray)
-        Use to add a transform to the localizer.
-    localize(markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]])
-        Use to localize the camera in the world using ArUco markers.
-
-    """
+    """Localizes the camera in the world using ArUco markers."""
 
     def __init__(
         self: Self,

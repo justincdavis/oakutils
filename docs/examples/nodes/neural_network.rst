@@ -23,7 +23,6 @@ Example: nodes/neural_network.py
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.blobs import models
 	from oakutils.nodes import (
 	    create_color_camera,

@@ -35,22 +35,7 @@ if TYPE_CHECKING:
 
 
 class WLSFilter:
-    """
-    A class for computing the weighted-least-squares filter on disparity images.
-
-    Attributes
-    ----------
-    lamb : int
-        The lambda parameter for the WLS filter.
-    sigma : float
-        The sigma parameter for the WLS filter.
-
-    Methods
-    -------
-    filter_frame
-        Use to filter the disparity image.
-
-    """
+    """A class for computing the weighted-least-squares filter on disparity images."""
 
     def __init__(
         self: Self,
