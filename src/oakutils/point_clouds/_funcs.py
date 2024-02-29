@@ -194,7 +194,7 @@ def filter_point_cloud(
     downsample_first : bool, optional
         If True, performs voxel downsampling first, then outlier removal.
         If False, performs outlier removal first, then voxel downsampling.
-          Defaults to True.
+        Defaults to True.
 
     Returns
     -------

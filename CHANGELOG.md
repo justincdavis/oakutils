@@ -1,11 +1,18 @@
 ## 1.4.5 (02-22-2024)
 
+### Added
+
+- get_nn_data function
+    - allows getting generic data from an executed neuralnetwork
+
 ### Fixed
 
 - VPU
     - Incorrect return type for run
     - blob_path listed incorrectly as parameter for init
     - Changed reconfigure to accept str | Path
+- Documentation
+    - Resolved indentation errors in docs
 
 ### Changed
 

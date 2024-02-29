@@ -13,6 +13,4 @@ oakutils
     source/oakutils.optimizer
     source/oakutils.point_clouds
     source/oakutils.tools
-    source/oakutils.utils
     source/modules.rst
-    

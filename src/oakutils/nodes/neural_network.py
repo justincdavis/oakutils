@@ -90,7 +90,7 @@ def create_neural_network(
         The number of inference threads, by default 2
     num_nce_per_inference_thread : Optional[int], optional
         The number of NCEs per inference thread, by default None
-         NCE: Neural Compute Engine
+        NCE: Neural Compute Engine
     num_pool_frames : Optional[int], optional
         The number of pool frames, by default None
 
@@ -467,7 +467,7 @@ def get_nn_data(
     a custom neural network execution.
     The data is reshaped, type cast, then scaled in that order.
     If the NN returns a single element, an example could be:
-        get_nn_data(nndata, reshape_to(1, 1))[0]
+    get_nn_data(nndata, reshape_to(1, 1))[0]
     The (1, 1) shape is important since all returned tensors
     have a starting dimension of 1.
 

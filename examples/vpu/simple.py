@@ -24,11 +24,12 @@ from oakutils.blobs.models.shave6 import GAUSSIAN_15X15
 
 vpu = VPU()
 vpu.reconfigure(GAUSSIAN_15X15)
+rng = np.random.Generator()
 
 fps_buffer = deque(maxlen=30)
 while True:
     # generate some random data, then send to camera and wait for the result
-    data = np.array(np.random.random((640, 480, 3)) * 255.0, dtype=np.uint8)
+    data = np.array(rng.integers(0, 255, (640, 480, 3)), dtype=np.uint8)
     t0 = time.perf_counter()
     vpu.run(data)
     t1 = time.perf_counter()

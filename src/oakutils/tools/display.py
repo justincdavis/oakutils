@@ -89,19 +89,7 @@ class _Display:
 
 
 class DisplayManager:
-    """
-    Used in the Camera class to display all the image streams.
-
-    Methods
-    -------
-    stop()
-        Stops the display manager
-    set_transform(name: str, transform: Callable)
-        Sets a transform for the given name
-    update(data: tuple[str, np.ndarray] | Iterable[tuple[str, np.ndarray]], transform: Callable | None = None)
-        Updates the display with the given data
-
-    """
+    """Used in the Camera class to display all the image streams."""
 
     def __init__(
         self: Self,

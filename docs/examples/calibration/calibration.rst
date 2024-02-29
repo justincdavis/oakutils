@@ -20,7 +20,6 @@ Example: calibration/calibration.py
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
 	"""Example on getting calibration data from the OAK-D."""
 	import depthai_sdk as sdk
-	
 	from oakutils.calibration import CalibrationData, get_camera_calibration
 	
 	

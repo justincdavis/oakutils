@@ -37,6 +37,7 @@ def get_model(current_model: str) -> str:
 vpu = VPU()
 current_model = GAUSSIAN_15X15
 vpu.reconfigure(current_model)
+rng = np.random.Generator()
 fps_buffer = deque(maxlen=SWAP_TIME)
 counter = 0
 while True:
@@ -47,7 +48,7 @@ while True:
         counter = 0
         fps_buffer.clear()
     # generate some random data, then send to camera and wait for the result
-    data = np.array(np.random.random((640, 480, 3)) * 255.0, dtype=np.uint8)
+    data = np.array(rng.integers(0, 255, (640, 480, 3)), dtype=np.uint8)
     t0 = time.perf_counter()
     vpu.run(data)
     t1 = time.perf_counter()

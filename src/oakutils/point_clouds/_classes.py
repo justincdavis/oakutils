@@ -28,15 +28,6 @@ class PointCloudVisualizer:
     """
     A class to visualize open3d point clouds.
 
-    Methods
-    -------
-    stop()
-        Use to stop the visualizer.
-    update(pcd: o3d.geometry.PointCloud)
-        Use to update the point cloud to visualize.
-    update_rotation(R_camera_to_world: np.ndarray)
-        Use to update the rotation matrix to use for the point cloud.
-
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-pointcloud/device-pointcloud/projector_device.py

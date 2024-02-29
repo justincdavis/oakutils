@@ -37,21 +37,6 @@ class HostSpatialsCalc:
     """
     Class for calculating spatial coordinates on the host.
 
-    Attributes
-    ----------
-    delta : int
-        The delta parameter for the spatial coordinates calculation.
-        Determines how many neighboring pixels to include in the calculation.
-    thresh_low : int
-        The lower threshold for the spatial coordinates calculation.
-    thresh_high : int
-        The upper threshold for the spatial coordinates calculation.
-
-    Methods
-    -------
-    calc_spatials(depth_frame: np.ndarray) -> np.ndarray
-        Calculates the spatial coordinates for the given depth frame.
-
     References
     ----------
     https://github.com/luxonis/depthai-experiments/blob/master/gen2-calc-spatials-on-host/calc.py
