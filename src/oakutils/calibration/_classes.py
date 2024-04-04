@@ -21,14 +21,14 @@ from typing_extensions import TypeAlias
 if TYPE_CHECKING:
     import numpy as np
 
-    try:
-        import open3d as o3d
+try:
+    import open3d as o3d  # type: ignore[import-not-found]
 
-        PinholeCameraIntrinsicType: o3d.camera.PinholeCameraIntrinsic = (
-            o3d.camera.PinholeCameraIntrinsic
-        )
-    except ImportError:
-        PinholeCameraIntrinsicType = None
+    PinholeCameraIntrinsicType: o3d.camera.PinholeCameraIntrinsic = (
+        o3d.camera.PinholeCameraIntrinsic
+    )
+except ImportError:
+    PinholeCameraIntrinsicType = None
 
 PinholeCameraIntrinsic: TypeAlias = "PinholeCameraIntrinsicType | None"  # type: ignore[name-defined]
 

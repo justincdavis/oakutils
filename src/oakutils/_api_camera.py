@@ -28,13 +28,20 @@ from threading import Condition, Thread
 from typing import TYPE_CHECKING, Callable, Iterable
 
 import depthai as dai
+from typing_extensions import TypeAlias
 
 from .calibration import CalibrationData, get_camera_calibration
-from .point_clouds import PointCloudVisualizer
 from .tools.display import DisplayManager, get_smaller_size
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+try:
+    from .point_clouds import PointCloudVisualizer
+except ImportError:
+    PointCloudVisualizer = None  # type: ignore[assignment, misc]
+
+PCVisualizer: TypeAlias = "PointCloudVisualizer | None"  # type: ignore[name-defined]
 
 
 class ApiCamera:
@@ -49,7 +56,7 @@ class ApiCamera:
         The calibration info for the camera
     displays : DisplayManager
         The display manager for the camera
-    pcv : PointCloudVisualizer
+    pcv : PCVisualizer
         The point cloud visualizer for the camera
 
     Methods
@@ -113,7 +120,7 @@ class ApiCamera:
             self._mono_size,
         )
         self._displays: DisplayManager | None = None
-        self._pcv: PointCloudVisualizer | None = None
+        self._pcv: PCVisualizer | None = None
 
         # thread for reading camera
         self._started = False
@@ -160,9 +167,19 @@ class ApiCamera:
         return self._displays
 
     @property
-    def pcv(self: Self) -> PointCloudVisualizer:
-        """Use to get the point cloud visualizer."""
-        if self._pcv is None:
+    def pcv(self: Self) -> PCVisualizer | None:
+        """
+        Use to get the point cloud visualizer.
+
+        If open3d is not installed, this will always return None.
+
+        Returns
+        -------
+        PointCloudVisualizer | None
+            The point cloud visualizer.
+
+        """
+        if self._pcv is None and PCVisualizer is not None:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
