@@ -47,7 +47,6 @@ requires-python=">=3.8, <3.12"
 dependencies = [
     "depthai>=2.24",
     "numpy>=1.20,<2.0",
-    "open3d>=0.18.0",
     "opencv-contrib-python>=4.9.0",
     "typing_extensions>=4.9.0",
     "setuptools>=57.0.0",
@@ -58,6 +57,9 @@ dependencies = [
 "Bug Tracker" = "https://github.com/justincdavis/oakutils/issues"
 
 [project.optional-dependencies]
+o3d = [
+    "open3d>=0.18.0",
+]
 compiler = [
     "kornia>=0.6.0",
     "torch>=1.9.0",
@@ -87,6 +89,7 @@ docs = [
     "myst_parser>=1.0.0",
 ]
 dev = [
+    "oakutils[o3d]",
     "oakutils[compiler]",
     "oakutils[ci]",
     "oakutils[test]",
