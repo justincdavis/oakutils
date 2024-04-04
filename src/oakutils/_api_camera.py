@@ -179,7 +179,7 @@ class ApiCamera:
             The point cloud visualizer.
 
         """
-        if self._pcv is None and PCVisualizer is not None:
+        if self._pcv is None and PointCloudVisualizer is not None:
             self._pcv = PointCloudVisualizer(window_size=self._display_size)
         return self._pcv
 
