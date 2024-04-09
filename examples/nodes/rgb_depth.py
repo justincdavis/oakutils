@@ -20,7 +20,6 @@ import depthai as dai
 from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 
-
 pipeline = dai.Pipeline()
 calibration = get_camera_calibration(
     rgb_size=(1920, 1080),
@@ -38,7 +37,7 @@ xout_depth = create_xout(pipeline, stereo.depth, "depth")
 with dai.Device(pipeline) as device:
     device.setLogLevel(dai.LogLevel.DEBUG)
     device.setLogOutputLevel(dai.LogLevel.DEBUG)
-    
+
     rgb_q: dai.DataOutputQueue = device.getOutputQueue("rgb")
     depth_q: dai.DataOutputQueue = device.getOutputQueue("depth")
 

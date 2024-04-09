@@ -416,6 +416,16 @@ import pkg_resources
 
 _RELATIVE_BLOB_FOLDER = Path("oakutils") / "blobs" / "models" / "shave5"
 _PACKAGE_LOCATION = pkg_resources.get_distribution("oakutils").location
+if _PACKAGE_LOCATION is None:
+    err_msg = "Could not find package location"
+    raise RuntimeError(err_msg)
+_PACKAGE_LOCATION_PATH = Path(_PACKAGE_LOCATION)
+if not _PACKAGE_LOCATION_PATH.exists():
+    err_msg = "Package location does not exist"
+    raise RuntimeError(err_msg)
+if not _PACKAGE_LOCATION_PATH.is_dir():
+    err_msg = "Package location is not a directory"
+    raise RuntimeError(err_msg)
 _BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER
 
 GFTT = Path(Path(_BLOB_FOLDER) / "GFTT.blob").resolve()

@@ -290,6 +290,20 @@ def compiles_models():
                 "_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils').location\n"
             )
 
+            # perform a check on _PACKAGE_LOCATION since it could be None?
+            f.write("if _PACKAGE_LOCATION is None:\n")
+            f.write("    err_msg = 'Could not find package location'\n")
+            f.write("    raise RuntimeError(err_msg)\n")
+
+            # perform a check on _PACKAGE_LOCATION to ensure it exists and is a directory
+            f.write("_PACKAGE_LOCATION_PATH = Path(_PACKAGE_LOCATION)\n")
+            f.write("if not _PACKAGE_LOCATION_PATH.exists():\n")
+            f.write("    err_msg = 'Package location does not exist'\n")
+            f.write("    raise RuntimeError(err_msg)\n")
+            f.write("if not _PACKAGE_LOCATION_PATH.is_dir():\n")
+            f.write("    err_msg = 'Package location is not a directory'\n")
+            f.write("    raise RuntimeError(err_msg)\n")
+
             # get the path to the blob folder
             f.write(
                 f"_BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
