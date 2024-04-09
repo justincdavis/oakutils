@@ -20,6 +20,7 @@ Example: aruco/webcam.py
 	# along with this program. If not, see <https://www.gnu.org/licenses/>.
 	"""Example showcasing how to use ArucoStream on the Webcam abstraction."""
 	import cv2
+	
 	from oakutils import Webcam
 	from oakutils.aruco import ArucoStream
 	

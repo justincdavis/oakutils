@@ -135,10 +135,10 @@ class ArucoFinder:
                 None,
                 self._K,
             )
-        corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)
+        corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)  # type: ignore[attr-defined]
         ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
-            rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
+            rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(  # type: ignore[attr-defined]
                 [corner],
                 self._marker_size,
                 self._K,

@@ -23,6 +23,7 @@ Example: nodes/models/grayscale_laplacian.py
 	
 	import cv2
 	import depthai as dai
+	
 	from oakutils.nodes import create_color_camera, create_xout, get_nn_gray_frame
 	from oakutils.nodes.models import create_laplacian
 	

@@ -22,6 +22,7 @@ Example: nodes/imu.py
 	from __future__ import annotations
 	
 	import depthai as dai
+	
 	from oakutils.nodes import create_imu, create_xout
 	
 	pipeline = dai.Pipeline()

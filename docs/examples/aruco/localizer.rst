@@ -25,6 +25,7 @@ Example: aruco/localizer.py
 	import matplotlib.pyplot as plt
 	import numpy as np
 	from matplotlib.axes import Axes
+	
 	from oakutils.aruco import ArucoLocalizer, ArucoStream
 	from oakutils.calibration import get_camera_calibration_basic
 	from oakutils.nodes import create_color_camera, create_xout

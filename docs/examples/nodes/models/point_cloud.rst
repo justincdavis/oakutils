@@ -22,6 +22,7 @@ Example: nodes/models/point_cloud.py
 	from __future__ import annotations
 	
 	import depthai as dai
+	
 	from oakutils.calibration import get_camera_calibration
 	from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 	from oakutils.nodes.models.point_cloud import create_point_cloud

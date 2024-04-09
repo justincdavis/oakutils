@@ -16,7 +16,13 @@ from __future__ import annotations
 import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
-import open3d as o3d  # type: ignore[import]
+
+try:
+    import open3d as o3d  # type: ignore[import]
+
+    PinholeCameraIntrinsic = o3d.camera.PinholeCameraIntrinsic
+except ImportError:
+    PinholeCameraIntrinsic = None
 
 from ._classes import (
     CalibrationData,
@@ -511,14 +517,16 @@ def get_camera_calibration(
         rgb_size,
         cv2.CV_16SC2,  # type: ignore[attr-defined]
     )  # type: ignore[call-overload]
-    pinhole_rgb = o3d.camera.PinholeCameraIntrinsic(
-        width=rgb_size[0],
-        height=rgb_size[1],
-        fx=data.rgb.fx,
-        fy=data.rgb.fy,
-        cx=data.rgb.cx,
-        cy=data.rgb.cy,
-    )
+    pinhole_rgb = None
+    if PinholeCameraIntrinsic is not None:
+        pinhole_rgb = PinholeCameraIntrinsic(
+            width=rgb_size[0],
+            height=rgb_size[1],
+            fx=data.rgb.fx,
+            fy=data.rgb.fy,
+            cx=data.rgb.cx,
+            cy=data.rgb.cy,
+        )
 
     # add the pinhole data and maps to the data.rgb object
     rgb = ColorCalibrationData(
@@ -579,22 +587,26 @@ def get_camera_calibration(
     map_2_primary = map_left_2 if is_primary_mono_left else map_right_2
 
     # create o3d PinholeCameraIntrinsic objects for left, right, and primary mono cams
-    pinhole_left = o3d.camera.PinholeCameraIntrinsic(
-        width=mono_size[0],
-        height=mono_size[1],
-        fx=data.left.fx,
-        fy=data.left.fy,
-        cx=data.left.cx,
-        cy=data.left.cy,
-    )
-    pinhole_right = o3d.camera.PinholeCameraIntrinsic(
-        width=mono_size[0],
-        height=mono_size[1],
-        fx=data.right.fx,
-        fy=data.right.fy,
-        cx=data.right.cx,
-        cy=data.right.cy,
-    )
+    pinhole_left = None
+    if PinholeCameraIntrinsic is not None:
+        pinhole_left = PinholeCameraIntrinsic(
+            width=mono_size[0],
+            height=mono_size[1],
+            fx=data.left.fx,
+            fy=data.left.fy,
+            cx=data.left.cx,
+            cy=data.left.cy,
+        )
+    pinhole_right = None
+    if PinholeCameraIntrinsic is not None:
+        pinhole_right = PinholeCameraIntrinsic(
+            width=mono_size[0],
+            height=mono_size[1],
+            fx=data.right.fx,
+            fy=data.right.fy,
+            cx=data.right.cx,
+            cy=data.right.cy,
+        )
     pinhole_primary = pinhole_left if is_primary_mono_left else pinhole_right
 
     # add the data to the data.left, data.right, and data.primary objects

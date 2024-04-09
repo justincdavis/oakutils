@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-import concurrent
+import concurrent.futures
 from typing import Any
 
 import numpy as np

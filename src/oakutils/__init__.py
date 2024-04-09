@@ -55,6 +55,7 @@ VPU
 from __future__ import annotations
 
 # setup the logger before importing anything else
+import contextlib
 import logging
 import os
 import sys
@@ -135,14 +136,12 @@ from . import (
     vpu,
 )
 from ._api_camera import ApiCamera
-from ._legacy_camera import LegacyCamera
 from ._webcam import Webcam
 from .vpu import VPU
 
 __all__ = [
     "VPU",
     "ApiCamera",
-    "LegacyCamera",
     "Webcam",
     "aruco",
     "blobs",
@@ -155,6 +154,12 @@ __all__ = [
     "tools",
     "vpu",
 ]
-__version__ = "1.4.5"
+
+with contextlib.suppress(ImportError):
+    from ._legacy_camera import LegacyCamera
+
+    __all__ += ["LegacyCamera"]
+
+__version__ = "1.5.0"
 
 _log.info(f"Initialized oakutils with version {__version__}")

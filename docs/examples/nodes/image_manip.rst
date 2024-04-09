@@ -23,6 +23,7 @@ Example: nodes/image_manip.py
 	
 	import cv2
 	import depthai as dai
+	
 	from oakutils.nodes import create_color_camera, create_image_manip, create_xout
 	
 	pipeline = dai.Pipeline()
