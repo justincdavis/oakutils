@@ -1,3 +1,15 @@
+## 1.5.0 (04-08-2024)
+
+### Changed
+
+- Removed Open3d as a strict requirement
+    - point_clouds submodule only imported if open3d is found
+    - Pinhole models in calibration will be None unless open3d is found
+    - If open3d is found then oakutils will function identically as pre 1.5
+    - open3d can be installed with oakutils[o3d]
+- Added cv2ext as a strict requirment
+    - Switched the DisplayManager to use cv2ext.Display
+
 ## 1.4.5 (02-22-2024)
 
 ### Added

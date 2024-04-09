@@ -23,6 +23,7 @@ Example: nodes/mono_camera.py
 	
 	import cv2
 	import depthai as dai
+	
 	from oakutils.nodes import create_mono_camera, create_xout
 	
 	pipeline = dai.Pipeline()

@@ -23,6 +23,7 @@ Example: nodes/stereo_depth.py
 	
 	import cv2
 	import depthai as dai
+	
 	from oakutils.nodes import create_stereo_depth, create_xout
 	
 	pipeline = dai.Pipeline()

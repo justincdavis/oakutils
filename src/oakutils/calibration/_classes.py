@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     import numpy as np
 
 try:
-    import open3d as o3d  # type: ignore[import-not-found]
+    import open3d as o3d  # type: ignore[import-not-found, import-untyped]
 
     PinholeCameraIntrinsicType: o3d.camera.PinholeCameraIntrinsic = (
         o3d.camera.PinholeCameraIntrinsic

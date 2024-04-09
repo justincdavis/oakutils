@@ -31,61 +31,16 @@ get_smaller_size
 from __future__ import annotations
 
 import atexit
-import contextlib
-import time
 from collections import defaultdict
-from threading import Thread
 from typing import TYPE_CHECKING, Callable, Iterable
 
 import cv2  # type: ignore[import]
+from cv2ext import Display
 
 if TYPE_CHECKING:
     import depthai as dai
     import numpy as np
     from typing_extensions import Self
-
-
-class _Display:
-    def __init__(self: Self, name: str, fps: int = 15) -> None:
-        self._name = name
-        self._fps = fps
-        self._delay_time: float = 1 / fps
-        self._frame: np.ndarray | None = None
-        self._stopped = False
-        self._thread = Thread(target=self._run)
-        atexit.register(self.stop)
-        self._thread.start()
-
-    @property
-    def fps(self: Self) -> int:
-        return self._fps
-
-    @fps.setter
-    def fps(self: Self, fps: int) -> None:
-        self._fps = fps
-        self._delay_time = 1 / fps
-
-    def __call__(self: Self, frame: np.ndarray) -> None:
-        self._frame = frame
-
-    def __del__(self: Self) -> None:
-        self.stop()
-
-    def stop(self: Self) -> None:
-        self._stopped = True
-        with contextlib.suppress(RuntimeError):
-            self._thread.join()
-
-    def _run(self: Self) -> None:
-        while not self._stopped:
-            if self._frame is not None:
-                s = time.time()
-                cv2.imshow(self._name, self._frame)
-                self._frame = None
-                e = time.time()
-                cv2.waitKey(max(1, int((self._delay_time - (e - s)) * 1000)))
-            time.sleep(self._delay_time)
-        cv2.destroyWindow(self._name)
 
 
 class DisplayManager:
@@ -107,7 +62,7 @@ class DisplayManager:
             The size of the display, by default (640, 480)
 
         """
-        self._displays: dict[str, _Display] = {}
+        self._displays: dict[str, Display] = {}
         self._transforms: dict[str, Callable] = defaultdict(lambda: lambda x: x)
         self._display_size = display_size
         self._fps = fps
@@ -138,8 +93,6 @@ class DisplayManager:
 
         """
         self._fps = fps
-        for display in self._displays.values():
-            display.fps = fps
 
     def _stop(self: Self) -> None:
         for display in self._displays.values():
@@ -154,14 +107,22 @@ class DisplayManager:
             frame.shape[1] != self._display_size[0]
             or frame.shape[0] != self._display_size[1]
         ):
-            frame = cv2.resize(frame, self._display_size)
+            frame = cv2.resize(
+                frame,
+                self._display_size,
+                interpolation=cv2.INTER_LINEAR,
+            )
         try:
             self._displays[name](frame)
         except KeyError:
-            self._displays[name] = _Display(name, self._fps)
+            self._displays[name] = Display(name, fps=self._fps)
             self._displays[name](frame)
 
-    def set_transform(self: Self, name: str, transform: Callable) -> None:
+    def set_transform(
+        self: Self,
+        name: str,
+        transform: Callable[[np.ndarray], np.ndarray],
+    ) -> None:
         """
         Use to set a transform for the given name.
 
@@ -171,7 +132,7 @@ class DisplayManager:
         ----------
         name : str
             The name of the transform
-        transform : Callable
+        transform : Callable[[np.ndarray], np.ndarray]
             The transform to set
 
         """

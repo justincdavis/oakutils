@@ -27,6 +27,8 @@ Example: blobs/compile_model.py
 	import depthai as dai
 	import kornia
 	import torch
+	from typing_extensions import Self
+	
 	from oakutils.blobs import compile_model
 	from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
 	from oakutils.nodes import (
@@ -35,7 +37,6 @@ Example: blobs/compile_model.py
 	    create_xout,
 	    get_nn_bgr_frame,
 	)
-	from typing_extensions import Self
 	
 	
 	class Custom(AbstractModel):

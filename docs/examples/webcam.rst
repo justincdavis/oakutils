@@ -22,6 +22,7 @@ Example: webcam.py
 	from __future__ import annotations
 	
 	import cv2
+	
 	from oakutils import Webcam
 	
 	cam = Webcam()

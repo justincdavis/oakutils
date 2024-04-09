@@ -58,7 +58,7 @@ black:
 	python3 -m black src/oakutils --safe
 
 ruff:
-	python3 -m ruff ./src/oakutils --fix --preview
+	python3 -m ruff check ./src/oakutils --fix --preview
 
 stubs:
 	python3 ci/make_stubs.py
