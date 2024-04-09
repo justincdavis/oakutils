@@ -160,6 +160,6 @@ with contextlib.suppress(ImportError):
 
     __all__ += ["LegacyCamera"]
 
-__version__ = "1.4.5"
+__version__ = "1.5.0"
 
 _log.info(f"Initialized oakutils with version {__version__}")
