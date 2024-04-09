@@ -1,5 +1,5 @@
 import time
-import concurrent
+import concurrent.futures
 from typing import Any
 
 import depthai as dai
