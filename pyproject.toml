@@ -61,6 +61,9 @@ dependencies = [
 o3d = [
     "open3d>=0.18.0",
 ]
+jit = [
+    "numba>=0.59.0",
+]
 compiler = [
     "kornia>=0.6.0",
     "torch>=1.9.0",

@@ -40,7 +40,7 @@ docs:
 blobs:
 	python3 ci/compile_models.py --definitions
 
-ci: pyupgrade ruff mypy isort black
+ci: pyupgrade ruff isort black mypy
 
 mypy:
 	python3 -m mypy src/oakutils --config-file=pyproject.toml

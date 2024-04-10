@@ -123,6 +123,89 @@ if level is not None and level.upper() not in [
 ]:
     _log.warning(f"Invalid log level: {level}. Using default log level: WARNING")
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+import cv2
+
+if not cv2.useOptimized():
+    cv2.setUseOptimized(True)
+
+from dataclasses import dataclass
+
+
+@dataclass
+class _FLAGSOBJ:
+    """
+    Class for storing flags for oakutils.
+
+    Attributes
+    ----------
+    USEJIT : bool
+        Whether or not to use jit.
+    JIT_CACHE : bool
+        Whether or not to cache jit functions.
+    JIT_FASTMATH : bool
+        Whether or not to use fastmath with jit.
+
+    """
+
+    USEJIT: bool = False
+    JIT_CACHE: bool = False
+    JIT_FASTMATH: bool = False
+
+    def checkjit(self: Self) -> None:
+        """
+        Check if jit is enabled.
+
+        Raises
+        ------
+        ImportError
+            If the jit is not enabled.
+
+        """
+        if not self.USEJIT:
+            err_msg = "The jit module is not enabled."
+            raise ImportError(err_msg)
+
+
+_FLAGS = _FLAGSOBJ()
+
+
+def enable_jit(
+    *,
+    on: bool | None = None,
+    cache: bool | None = None,
+    fastmath: bool | None = None,
+) -> None:
+    """
+    Enable just-in-time compilation using Numba for some functions.
+
+    Parameters
+    ----------
+    on : bool | None
+        If True, enable jit. If False, disable jit. If None, enable jit.
+    cache : bool | None
+        If True, cache jit functions. If False, do not cache jit functions. If None, do not cache.
+    fastmath : bool | None
+        If True, use fastmath with jit. If False, do not use fastmath with jit. If None, do not use fastmath.
+
+    """
+    if on is None:
+        on = True
+    _FLAGSOBJ.USEJIT = on
+    _log.info(f"JIT is {'enabled' if on else 'disabled'}.")
+    if cache is None:
+        cache = False
+    _FLAGSOBJ.JIT_CACHE = cache
+    _log.info(f"JIT cache is {'enabled' if cache else 'disabled'}.")
+    if fastmath is None:
+        fastmath = False
+    _FLAGSOBJ.JIT_FASTMATH = fastmath
+    _log.info(f"JIT fastmath is {'enabled' if fastmath else 'disabled'}.")
+
 
 from . import (
     aruco,
@@ -141,11 +224,13 @@ from .vpu import VPU
 
 __all__ = [
     "VPU",
+    "_FLAGS",
     "ApiCamera",
     "Webcam",
     "aruco",
     "blobs",
     "calibration",
+    "enable_jit",
     "filters",
     "nodes",
     "optimizer",
