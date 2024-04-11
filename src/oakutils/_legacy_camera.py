@@ -51,58 +51,7 @@ if TYPE_CHECKING:
 # KNOWN BUGS:
 # - Enabling the speckle filter crashes the camera
 class LegacyCamera:
-    """
-    Class for interfacing with the OAK-D camera.
-
-    Attributes
-    ----------
-    calibration : CalibrationData
-        The calibration data for the camera.
-    rgb : Optional[np.ndarray]
-        The most recent RGB image from the camera.
-    rectified_rgb : Optional[np.ndarray]
-        The most recent rectified RGB image from the camera.
-    disparity: Optional[np.ndarray]
-        The most recent disparity image from the camera.
-    depth: Optional[np.ndarray]
-        The most recent depth image from the camera.
-    left: Optional[np.ndarray]
-        The most recent left mono image from the camera.
-    right: Optional[np.ndarray]
-        The most recent right mono image from the camera.
-    rectified_left: Optional[np.ndarray]
-        The most recent rectified left mono image from the camera.
-    rectified_right: Optional[np.ndarray]
-        The most recent rectified right mono image from the camera.
-    im3d: Optional[np.ndarray]
-        The most recent im3d image from the camera.
-    point_cloud: Optional[o3d.geometry.PointCloud]
-        The most recent point cloud from the camera.
-    imu_pose: Optional[List[float]]
-        The most recent IMU pose from the camera.
-    imu_rotation: Optional[List[float]]
-        The most recent IMU rotation from the camera.
-    started: bool
-        Whether or not the camera has been started.
-
-    Methods
-    -------
-    start()
-        Starts the camera.
-    stop()
-        Stops the camera.
-    wait_for_data()
-        Waits for the data packet to be ready.
-    start_display()
-        Starts the display.
-    stop_display()
-        Stops the display.
-    compute_point_cloud(block=True)
-        Computes the point cloud from the depth map.
-    compute_im3d(block=True)
-        Computes the 3D points from the disparity map.
-
-    """
+    """Class for interfacing with the OAK-D camera."""
 
     def __init__(
         self: Self,
@@ -291,11 +240,15 @@ class LegacyCamera:
 
         self._median_filter = get_median_filter_from_str(median_filter)
 
-        self._calibration: CalibrationData = get_camera_calibration(
+        calib = get_camera_calibration(
             (self._rgb_size[0], self._rgb_size[1]),
             (self._mono_size[0], self._mono_size[1]),
             is_primary_mono_left=self._primary_mono_left,
         )
+        if not isinstance(calib, CalibrationData):
+            err_msg = "LegacyCamera only supports OAK-D devices."
+            raise TypeError(err_msg)
+        self._calibration: CalibrationData = calib
         self._Q = (
             self._calibration.stereo.Q_cv2
             if self._use_cv2_q_matrix

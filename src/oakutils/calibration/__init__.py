@@ -29,12 +29,18 @@ Functions
 ---------
 create_q_matrix
     Creates a Q matrix from a stereo calibration.
+get_camera_calibration
+    Gets the camera calibration data from any device.
+get_oak1_calibration
+    Gets the camera calibration data from the OAK-1 device.
+get_oak1_calibration_basic
+    Gets the camera calibration data from the OAK-1 device, without computed info.
 get_oakd_calibration
-    Gets the camera calibration data from the device.
+    Gets the camera calibration data from the OAK-D device.
 get_oakd_calibration_basic
-    Gets the camera calibration data from the device, using a basic resolution.
+    Gets the camera calibration data from the OAK-D device, without computed info.
 get_oakd_calibration_primary_mono
-    Gets the camera calibration data from the device, using the primary mono camera.
+    Gets the camera calibration data from the OAK-D device, using the primary mono camera.
 """
 from ._classes import (
     CalibrationData,
@@ -42,10 +48,8 @@ from ._classes import (
     MonoCalibrationData,
     StereoCalibrationData,
 )
-from ._oak1 import (
-    get_oak1_calibration,
-    get_oak1_calibration_basic,
-)
+from ._funcs import get_camera_calibration
+from ._oak1 import get_oak1_calibration, get_oak1_calibration_basic
 from ._oakd import (
     create_q_matrix,
     get_oakd_calibration,
@@ -59,6 +63,7 @@ __all__ = [
     "MonoCalibrationData",
     "StereoCalibrationData",
     "create_q_matrix",
+    "get_camera_calibration",
     "get_oak1_calibration",
     "get_oak1_calibration_basic",
     "get_oakd_calibration",

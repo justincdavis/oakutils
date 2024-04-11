@@ -24,13 +24,11 @@ try:
 except ImportError:
     PinholeCameraIntrinsic = None
 
-from ._classes import (
-    ColorCalibrationData,
-)
+from ._classes import ColorCalibrationData
 
 
 def get_oak1_calibration_basic(
-    device: dai.Device | None = None,
+    device: dai.DeviceBase | None = None,
     rgb_size: tuple[int, int] = (1920, 1080),
 ) -> ColorCalibrationData:
     """
@@ -90,12 +88,12 @@ def get_oak1_calibration_basic(
         )
 
 
-def get_oakd_calibration(
+def get_oak1_calibration(
     rgb_size: tuple[int, int],
-    device: dai.Device | None = None,
+    device: dai.DeviceBase | None = None,
 ) -> ColorCalibrationData:
     """
-    Use to create the full CalibrationData object.
+    Use to create the full ColorCalibrationData object.
 
     This includes the calibration data for the RGB camera.
 
@@ -113,7 +111,7 @@ def get_oakd_calibration(
 
     Returns
     -------
-    CalibrationData
+    ColorCalibrationData
         Object containing all the calibration data.
 
     """

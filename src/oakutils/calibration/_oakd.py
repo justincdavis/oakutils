@@ -33,7 +33,7 @@ from ._classes import (
 
 
 def get_oakd_calibration_basic(
-    device: dai.Device | None = None,
+    device: dai.DeviceBase | None = None,
     rgb_size: tuple[int, int] = (1920, 1080),
     mono_size: tuple[int, int] = (640, 400),
 ) -> CalibrationData:
@@ -288,7 +288,7 @@ def get_oakd_calibration_basic(
 
 
 def get_oakd_calibration_primary_mono(
-    device: dai.Device | None = None,
+    device: dai.DeviceBase | None = None,
     rgb_size: tuple[int, int] = (1920, 1080),
     mono_size: tuple[int, int] = (640, 400),
     *,
@@ -449,7 +449,7 @@ def create_q_matrix(
 def get_oakd_calibration(
     rgb_size: tuple[int, int],
     mono_size: tuple[int, int],
-    device: dai.Device | None = None,
+    device: dai.DeviceBase | None = None,
     *,
     is_primary_mono_left: bool | None = None,
 ) -> CalibrationData:

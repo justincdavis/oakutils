@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
-from .calibration import ColorCalibrationData, get_camera_calibration_basic
+from .calibration import ColorCalibrationData, get_oak1_calibration
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
@@ -38,23 +38,7 @@ if TYPE_CHECKING:
 
 
 class Webcam:
-    """
-    A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
-
-    Attributes
-    ----------
-    calibration : ColorCalibrationData
-        The calibration info for the camera
-
-
-    Methods
-    -------
-    stop()
-        Stop the camera.
-    read()
-        Read a frame from the camera.
-
-    """
+    """A class for reading frames from an OAK using the same interface as cv2.VideoCapture."""
 
     def __init__(
         self: Self,
@@ -76,7 +60,7 @@ class Webcam:
         self._fps = fps
 
         # get the calibration
-        self._calibration = get_camera_calibration_basic(
+        self._calibration = get_oak1_calibration(
             rgb_size=self._resolution,
         )
 
@@ -118,7 +102,7 @@ class Webcam:
             The calibration info for the camera
 
         """
-        return self._calibration.rgb
+        return self._calibration
 
     def __del__(self: Self) -> None:
         """Stop the camera when the object is deleted."""
