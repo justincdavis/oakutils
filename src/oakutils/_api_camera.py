@@ -30,7 +30,7 @@ from typing import TYPE_CHECKING, Callable, Iterable
 import depthai as dai
 from typing_extensions import TypeAlias
 
-from .calibration import CalibrationData, get_camera_calibration
+from .calibration import CalibrationData, ColorCalibrationData, get_camera_calibration
 from .tools.display import DisplayManager, get_smaller_size
 
 if TYPE_CHECKING:
@@ -45,34 +45,7 @@ PCVisualizer: TypeAlias = "PointCloudVisualizer | None"  # type: ignore[name-def
 
 
 class ApiCamera:
-    """
-    A lightweight class for creating custom pipelines using callbacks.
-
-    Attributes
-    ----------
-    pipeline:
-        The pipeline for the camera
-    calibration : CalibrationData
-        The calibration info for the camera
-    displays : DisplayManager
-        The display manager for the camera
-    pcv : PCVisualizer
-        The point cloud visualizer for the camera
-
-    Methods
-    -------
-    start(blocking=False)
-        Start the camera.
-    stop()
-        Stop the camera.
-    add_callback(name, callback)
-        Add a callback to the camera.
-    add_display(name)
-        Add a display callback to the camera.
-    add_device_call(call)
-        Add a device call to the camera.
-
-    """
+    """A lightweight class for creating custom pipelines using callbacks."""
 
     def __init__(
         self: Self,
@@ -104,10 +77,12 @@ class ApiCamera:
         self._primary_mono_left: bool = primary_mono_left
 
         # handle attributes
-        self._calibration: CalibrationData = get_camera_calibration(
-            rgb_size=self._color_size,
-            mono_size=self._mono_size,
-            is_primary_mono_left=self._primary_mono_left,
+        self._calibration: CalibrationData | ColorCalibrationData = (
+            get_camera_calibration(
+                rgb_size=self._color_size,
+                mono_size=self._mono_size,
+                is_primary_mono_left=self._primary_mono_left,
+            )
         )
         self._callbacks: dict[str | Iterable[str], Callable] = {}
         self._pipeline: dai.Pipeline = dai.Pipeline()
@@ -155,7 +130,7 @@ class ApiCamera:
         return self._pipeline
 
     @property
-    def calibration(self: Self) -> CalibrationData:
+    def calibration(self: Self) -> CalibrationData | ColorCalibrationData:
         """Use to get the calibration data."""
         return self._calibration
 

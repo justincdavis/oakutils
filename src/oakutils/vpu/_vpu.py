@@ -11,14 +11,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-"""
-Module for using the onboard VPU as a standalone processor.
-
-Classes
--------
-VPU
-    A class for using the onboard VPU as a standalone processor.
-"""
+"""Module for using the onboard VPU as a standalone processor."""
 from __future__ import annotations
 
 import atexit

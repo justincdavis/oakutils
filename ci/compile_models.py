@@ -259,7 +259,7 @@ def compiles_models():
             f.write('"""')
             f.write(f"Module for {shave} shave models.\n\n")
             f.write("Note\n")
-            f.write("-----\n")
+            f.write("----\n")
             f.write("This module is auto-generated\n\n")
             f.write("Attributes\n")
             f.write("----------\n")
