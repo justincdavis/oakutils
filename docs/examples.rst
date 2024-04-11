@@ -10,7 +10,8 @@ Examples
     examples/aruco/stream.rst
     examples/aruco/webcam.rst
     examples/blobs/compile_model.rst
-    examples/calibration/calibration.rst
+    examples/calibration/oak1_calibration.rst
+    examples/calibration/oakd_calibration.rst
     examples/legacy_camera.rst
     examples/nodes/color_camera.rst
     examples/nodes/image_manip.rst
