@@ -29,11 +29,11 @@ Functions
 ---------
 create_q_matrix
     Creates a Q matrix from a stereo calibration.
-get_camera_calibration
+get_oakd_calibration
     Gets the camera calibration data from the device.
-get_camera_calibration_basic
+get_oakd_calibration_basic
     Gets the camera calibration data from the device, using a basic resolution.
-get_camera_calibration_primary_mono
+get_oakd_calibration_primary_mono
     Gets the camera calibration data from the device, using the primary mono camera.
 """
 from ._classes import (
@@ -42,11 +42,15 @@ from ._classes import (
     MonoCalibrationData,
     StereoCalibrationData,
 )
-from ._funcs import (
+from ._oak1 import (
+    get_oak1_calibration,
+    get_oak1_calibration_basic,
+)
+from ._oakd import (
     create_q_matrix,
-    get_camera_calibration,
-    get_camera_calibration_basic,
-    get_camera_calibration_primary_mono,
+    get_oakd_calibration,
+    get_oakd_calibration_basic,
+    get_oakd_calibration_primary_mono,
 )
 
 __all__ = [
@@ -55,7 +59,9 @@ __all__ = [
     "MonoCalibrationData",
     "StereoCalibrationData",
     "create_q_matrix",
-    "get_camera_calibration",
-    "get_camera_calibration_basic",
-    "get_camera_calibration_primary_mono",
+    "get_oak1_calibration",
+    "get_oak1_calibration_basic",
+    "get_oakd_calibration",
+    "get_oakd_calibration_basic",
+    "get_oakd_calibration_primary_mono",
 ]
