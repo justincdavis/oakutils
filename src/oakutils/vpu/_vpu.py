@@ -43,9 +43,9 @@ class VPU:
     """Class for using the onboard VPU as a standalone processor."""
 
     def __init__(
-            self: Self,
-            device_id: str | None = None,
-        ) -> None:
+        self: Self,
+        device_id: str | None = None,
+    ) -> None:
         """
         Use to create a VPU object.
 
@@ -266,7 +266,7 @@ class VPU:
             raise RuntimeError(err_msg)
         if self._mxid is not None:
             device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
-            device_object = dai.Device(self._pipeline, deviceInfo=device_info)
+            device_object = dai.Device(self._pipeline, device_info)
         else:
             device_object = dai.Device(self._pipeline)
         with device_object as device:
