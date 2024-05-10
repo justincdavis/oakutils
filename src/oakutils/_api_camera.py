@@ -52,6 +52,7 @@ class ApiCamera:
         # custom args, only related to configuration
         color_size: tuple[int, int] = (1920, 1080),
         mono_size: tuple[int, int] = (640, 400),
+        device_id: str | None = None,
         *,
         primary_mono_left: bool | None = None,
     ) -> None:
@@ -60,12 +61,16 @@ class ApiCamera:
 
         Parameters
         ----------
-        primary_mono_left : bool, optional
-            Whether the primary mono camera is on the left or not, by default None
         color_size : tuple[int, int], optional
             The size of the color camera, by default (1920, 1080)
         mono_size : tuple[int, int], optional
             The size of the mono camera, by default (640, 400)
+        device_id : str, optional
+            The id of the device to use, by default None
+            This can be a MXID, IP address, or USB port name.
+            Examples: "14442C108144F1D000", "192.168.1.44", "3.3.3"
+        primary_mono_left : bool, optional
+            Whether the primary mono camera is on the left or not, by default None
 
         """
         if primary_mono_left is None:
@@ -75,6 +80,7 @@ class ApiCamera:
         self._color_size: tuple[int, int] = color_size
         self._mono_size: tuple[int, int] = mono_size
         self._primary_mono_left: bool = primary_mono_left
+        self._mxid: str | None = device_id
 
         # handle attributes
         self._calibration: CalibrationData | ColorCalibrationData = (
@@ -233,7 +239,12 @@ class ApiCamera:
         with self._start_condition:
             self._start_condition.wait()
 
-        with dai.Device(self._pipeline) as device:
+        if self._mxid is not None:
+            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
+            device_object = dai.Device(self._pipeline, deviceInfo=device_info)
+        else:
+            device_object = dai.Device(self._pipeline)
+        with device_object as device:
             # run any custom devices calls added ahead of time
             for custom in self._custom_device_calls:
                 custom(device)

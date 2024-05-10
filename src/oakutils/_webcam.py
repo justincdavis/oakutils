@@ -44,6 +44,7 @@ class Webcam:
         self: Self,
         resolution: tuple[int, int] = (1920, 1080),
         fps: int = 30,
+        device_id: str | None = None,
     ) -> None:
         """
         Create a new Webcam object.
@@ -54,10 +55,15 @@ class Webcam:
             The resolution of the webcam, by default (1920, 1080)
         fps : int, optional
             The framerate of the webcam, by default 30
+        device_id : str, optional
+            The id of the device to use, by default None
+            This can be a MXID, IP address, or USB port name.
+            Examples: "14442C108144F1D000", "192.168.1.44", "3.3.3"
 
         """
         self._resolution = resolution
         self._fps = fps
+        self._mxid: str | None = device_id
 
         # get the calibration
         self._calibration = get_oak1_calibration(
@@ -129,7 +135,12 @@ class Webcam:
 
     def _run(self: Self) -> None:
         """Run the camera."""
-        with dai.Device(self._pipeline) as device:
+        if self._mxid is not None:
+            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
+            device_object = dai.Device(self._pipeline, deviceInfo=device_info)
+        else:
+            device_object = dai.Device(self._pipeline)
+        with device_object as device:
             # get data queues
             q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)  # type: ignore[attr-defined]
 

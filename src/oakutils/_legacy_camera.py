@@ -59,6 +59,7 @@ class LegacyCamera:
         mono_size: str = "400p",
         rgb_fps: int = 30,
         mono_fps: int = 60,
+        device_id: str | None = None,
         display_size: tuple[int, int] = (640, 400),
         median_filter: int | None = 7,
         stereo_confidence_threshold: int = 200,
@@ -170,6 +171,10 @@ class LegacyCamera:
             IMU accelerometer refresh rate.
         imu_gyroscope_refresh_rate : int, optional
             IMU gyroscope refresh rate.
+        device_id : str, optional
+            The id of the device to use, by default None
+            This can be a MXID, IP address, or USB port name.
+            Examples: "14442C108144F1D000", "192.168.1.44", "3.3.3"
 
         """
         if enable_rgb is None:
@@ -210,6 +215,8 @@ class LegacyCamera:
             stereo_spatial_filter_enable = True
         if enable_imu is None:
             enable_imu = False
+
+        self._mxid: str | None = device_id
 
         self._nodes: list[dai.Node] = []
 
@@ -679,7 +686,12 @@ class LegacyCamera:
         self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)  # type: ignore[arg-type]
 
     def _target(self: Self) -> None:
-        with dai.Device(self._pipeline) as device:
+        if self._mxid is not None:
+            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
+            device_object = dai.Device(self._pipeline, deviceInfo=device_info)
+        else:
+            device_object = dai.Device(self._pipeline)
+        with device_object as device:
             queues = {}
             for stream in self._streams:
                 queues[stream] = device.getOutputQueue(  # type: ignore[attr-defined]
