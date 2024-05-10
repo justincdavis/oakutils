@@ -32,6 +32,8 @@ def main():
 
     os.makedirs(os.path.join("docs", "examples"), exist_ok=True)
 
+    example_files = sorted(example_files)
+
     # create rst files for each example file in the same directory structure
     for example_file in example_files:
         # get the relative path of the example file

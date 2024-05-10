@@ -1,3 +1,20 @@
+## 1.?.? (04-11-2024)
+
+### Added
+
+- Supported for OAK-1 devices through the calibration API
+    - get_camera_calibration now reads device type and pulls
+        correct information.
+
+### Changed
+
+- get_camera_calibration
+    - New return type of CalibrationData | ColorCalibrationData
+        This comes from the OAK-1 support
+    - Could break old code which utilized this function, but
+        would primarily affect static type-checkers like mypy
+    - Can replace with get_oakd_calibration to achieve 1:1
+
 ## 1.5.0 (04-08-2024)
 
 ### Changed

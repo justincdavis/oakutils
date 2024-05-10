@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: Microsoft :: Windows",
@@ -43,7 +44,7 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Typing :: Typed",
 ]
-requires-python=">=3.8, <3.12"
+requires-python=">=3.8, <3.13"
 dependencies = [
     "depthai>=2.24",
     "numpy>=1.20,<2.0",
