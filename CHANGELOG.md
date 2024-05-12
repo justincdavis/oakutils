@@ -5,6 +5,9 @@
 - Supported for OAK-1 devices through the calibration API
     - get_camera_calibration now reads device type and pulls
         correct information.
+- ApiCamera, LegacyCamera, VPU, and Webcam now accept
+    a device_id for specifying which physical OAK device
+    to utilize.
 
 ### Changed
 

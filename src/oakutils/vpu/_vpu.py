@@ -42,8 +42,21 @@ _log = logging.getLogger(__name__)
 class VPU:
     """Class for using the onboard VPU as a standalone processor."""
 
-    def __init__(self: Self) -> None:
-        """Use to create a VPU object."""
+    def __init__(
+        self: Self,
+        device_id: str | None = None,
+    ) -> None:
+        """
+        Use to create a VPU object.
+
+        Parameters
+        ----------
+        device_id : str, optional
+            The id of the device to use, by default None
+            This can be a MXID, IP address, or USB port name.
+            Examples: "14442C108144F1D000", "192.168.1.44", "3.3.3"
+
+        """
         self._blob_path: str | None = None
         self._pipeline: dai.Pipeline | None = None
         self._xin: dai.node.XLinkIn | list[dai.node.XLinkIn] | None = None
@@ -56,6 +69,8 @@ class VPU:
         self._stopped = False
         self._data: np.ndarray | list[np.ndarray] | None = None
         self._result: np.ndarray | None = None
+
+        self._mxid: str | None = device_id
 
         atexit.register(self.stop)
 
@@ -249,7 +264,12 @@ class VPU:
         if self._pipeline is None:
             err_msg = "Pipeline not set."
             raise RuntimeError(err_msg)
-        with dai.Device(self._pipeline) as device:
+        if self._mxid is not None:
+            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
+            device_object = dai.Device(self._pipeline, device_info)
+        else:
+            device_object = dai.Device(self._pipeline)
+        with device_object as device:
             _log.debug("VPU thread started.")
             with self._start_condition:
                 self._start_condition.notify()
