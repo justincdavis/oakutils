@@ -35,6 +35,13 @@ xout
 models
     Module for creating nodes for pre-compiled models.
 
+Classes
+-------
+MobilenetData
+    Dataclass for mobilenet detection network data.
+YolomodelData
+    Dataclass for yolo detection network data.
+
 Functions
 ---------
 create_color_camera
@@ -86,6 +93,7 @@ from . import (
     xout,
 )
 from ._misc import frame_norm
+from ._model_data import MobilenetData, YolomodelData
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
@@ -105,6 +113,8 @@ from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
 
 __all__ = [
+    "MobilenetData",
+    "YolomodelData",
     "color_camera",
     "create_color_camera",
     "create_image_manip",

@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     import numpy as np
     from typing_extensions import Self
 
-    from ._model_data import MobilenetData, YolomodelData
+    from oakutils.nodes import MobilenetData, YolomodelData
 
 _log = logging.getLogger(__name__)
 

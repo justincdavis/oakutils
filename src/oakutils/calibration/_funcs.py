@@ -76,7 +76,7 @@ def get_camera_calibration(
     if device is None:
         device = dai.Device()
 
-    camtype: str = device.getDeviceName()
+    camtype: str = str(device.getDeviceName())
 
     if "OAK-D" in camtype:
         if rgb_size is None or mono_size is None:
