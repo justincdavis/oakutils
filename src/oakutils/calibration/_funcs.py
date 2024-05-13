@@ -76,9 +76,9 @@ def get_camera_calibration(
     if device is None:
         device = dai.Device()
 
-    camtype = device.getDeviceName()
+    camtype: str = device.getDeviceName()
 
-    if camtype == "OAK-D":
+    if "OAK-D" in camtype:
         if rgb_size is None or mono_size is None:
             err_msg = "RGB and mono sizes are required for OAK-D devices."
             raise ValueError(err_msg)
@@ -94,7 +94,7 @@ def get_camera_calibration(
             mono_size=mono_size,
             is_primary_mono_left=is_primary_mono_left,
         )
-    if camtype == "OAK-1":
+    if "OAK-1" in camtype:
         if rgb_size is None:
             err_msg = "RGB size is required for OAK-1 devices."
             raise ValueError(err_msg)
