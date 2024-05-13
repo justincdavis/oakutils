@@ -193,20 +193,7 @@ class VPU:
                     self._pipeline,
                     self._xin.out,
                     Path(self._blob_path),
-                    confidence_threshold=yolo_data.confidence_threshold,
-                    iou_threshold=yolo_data.iou_threshold,
-                    num_classes=yolo_data.num_classes,
-                    coordinate_size=yolo_data.coordinate_size,
-                    anchors=yolo_data.anchors,
-                    anchor_masks=yolo_data.anchor_masks,
-                    depth_input_link=yolo_data.depth_input_link,
-                    lower_depth_threshold=yolo_data.lower_depth_threshold,
-                    upper_depth_threshold=yolo_data.upper_depth_threshold,
-                    num_inference_threads=yolo_data.num_inference_threads,
-                    num_nce_per_inference_thread=yolo_data.num_nce_per_inference_thread,
-                    num_pool_frames=yolo_data.num_pool_frames,
-                    spatial=yolo_data.spatial,
-                    input_blocking=yolo_data.input_blocking,
+                    yolo_data=yolo_data,
                 )
                 if self._nn is None:
                     err_msg = "Neural network is None, major internal error occured."
@@ -223,16 +210,7 @@ class VPU:
                     self._pipeline,
                     self._xin.out,
                     Path(self._blob_path),
-                    confidence_threshold=mobilenet_data.confidence_threshold,
-                    bounding_box_scale_factor=mobilenet_data.bounding_box_scale_factor,
-                    depth_input_link=mobilenet_data.depth_input_link,
-                    lower_depth_threshold=mobilenet_data.lower_depth_threshold,
-                    upper_depth_threshold=mobilenet_data.upper_depth_threshold,
-                    num_inference_threads=mobilenet_data.num_inference_threads,
-                    num_nce_per_inference_thread=mobilenet_data.num_nce_per_inference_thread,
-                    num_pool_frames=mobilenet_data.num_pool_frames,
-                    spatial=mobilenet_data.spatial,
-                    input_blocking=mobilenet_data.input_blocking,
+                    mobilenet_data=mobilenet_data,
                 )
                 if self._nn is None:
                     err_msg = "Neural network is None, major internal error occured."
