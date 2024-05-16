@@ -277,10 +277,11 @@ class VPU:
             # allocate neural network
             if mdata is None:
                 # handle single or multi link
+                links: list[dai.node.XLinkIn.Output] | dai.node.XLinkIn.Output = []
                 if isinstance(self._xins[-1], list):
                     links = [xin.out for xin in self._xins[-1]]
                 else:
-                    links = self._xins[-1].out  # type: ignore[assignment]
+                    links = self._xins[-1].out
                 self._nns.append(
                     create_neural_network(
                         self._pipeline,
