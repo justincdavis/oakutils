@@ -441,6 +441,15 @@ class VPU:
         """
         Use to run an inference on the VPU.
 
+        If the VPU was configured with multiple networks, then data must be a list of data.
+        If the VPU was configured with a single network, then data can be a single np.ndarray
+        or a list of np.ndarray if the network has multiple inputs.
+        The return type will change based on whether the VPU was configured with multiple networks.
+        If configured with a single network, then the return will be
+            a single np.ndarray or dai.ImgDetections.
+        If configured with multiple networks, then the return will be
+            a list of np.ndarray or dai.ImgDetections.
+
         Parameters
         ----------
         data : np.ndarray | list[np.ndarray]
