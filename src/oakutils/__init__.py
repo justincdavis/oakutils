@@ -51,6 +51,14 @@ Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 VPU
     A class for using the onboard VPU as a standalone processor.
+
+Functions
+---------
+set_log_level
+    Set the log level for the oakutils package.
+create_device
+    Create a DepthAI device object from a pipeline.
+
 """
 from __future__ import annotations
 
@@ -136,6 +144,7 @@ from . import (
     vpu,
 )
 from ._api_camera import ApiCamera
+from ._basic import create_device
 from ._webcam import Webcam
 from .vpu import VPU
 
@@ -146,6 +155,7 @@ __all__ = [
     "aruco",
     "blobs",
     "calibration",
+    "create_device",
     "filters",
     "nodes",
     "optimizer",

@@ -1,4 +1,4 @@
-## 1.?.? (04-11-2024)
+## 1.6.0 (05-15-2024)
 
 ### Added
 
@@ -8,6 +8,17 @@
 - ApiCamera, LegacyCamera, VPU, and Webcam now accept
     a device_id for specifying which physical OAK device
     to utilize.
+- create_device: A function for creating a DepthAI Device
+    from a pre-defined pipeline. Accepts parameters for
+    where to create said device.
+
+### Improvements
+
+- VPU methods refactored to handle multiple neural networks
+    - reconfigure parameters changed
+    - Added reconfigure_multi
+    - Function signature changed for run
+    - Pipeline generation and VPU thread use new backend
 
 ### Changed
 
