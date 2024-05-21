@@ -37,6 +37,8 @@ models
 
 Classes
 -------
+Buffer
+    Class for creating a buffer for sending and receiving data from the OAK-D.
 MobilenetData
     Dataclass for mobilenet detection network data.
 YolomodelData
@@ -92,6 +94,7 @@ from . import (
     xin,
     xout,
 )
+from ._buffer import Buffer
 from ._misc import frame_norm
 from ._model_data import MobilenetData, YolomodelData
 from .color_camera import create_color_camera
@@ -113,6 +116,7 @@ from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
 
 __all__ = [
+    "Buffer",
     "MobilenetData",
     "YolomodelData",
     "color_camera",
