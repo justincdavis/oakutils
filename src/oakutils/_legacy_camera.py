@@ -30,8 +30,8 @@ import cv2  # type: ignore[import]
 import depthai as dai
 import numpy as np
 
-from .core import create_device
 from .calibration import CalibrationData, get_camera_calibration
+from .core import create_device
 from .nodes import create_color_camera, create_imu, create_stereo_depth, create_xout
 from .point_clouds import (
     PointCloudVisualizer,

@@ -29,8 +29,8 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
-from .core import create_device
 from .calibration import ColorCalibrationData, get_oak1_calibration
+from .core import create_device
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 

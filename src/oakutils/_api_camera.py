@@ -30,8 +30,8 @@ from typing import TYPE_CHECKING, Callable, Iterable
 import depthai as dai
 from typing_extensions import TypeAlias
 
-from .core import create_device
 from .calibration import CalibrationData, ColorCalibrationData, get_camera_calibration
+from .core import create_device
 from .tools.display import DisplayManager, get_smaller_size
 
 if TYPE_CHECKING:

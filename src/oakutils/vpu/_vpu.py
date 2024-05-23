@@ -11,6 +11,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+# ruff: noqa: TID252
 """Module for using the onboard VPU as a standalone processor."""
 from __future__ import annotations
 
@@ -24,7 +25,6 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
-from ..core import create_device
 from oakutils.nodes import (
     MobilenetData,
     YolomodelData,
@@ -35,6 +35,8 @@ from oakutils.nodes import (
     create_yolo_detection_network,
 )
 from oakutils.nodes.buffer import MultiBuffer
+
+from ..core import create_device
 
 if TYPE_CHECKING:
     from typing_extensions import Self

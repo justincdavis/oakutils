@@ -135,6 +135,7 @@ if level is not None and level.upper() not in [
 
 # handle imports which must occur first
 from . import core
+
 _log.debug("Imported core module")
 
 # handle other imports
