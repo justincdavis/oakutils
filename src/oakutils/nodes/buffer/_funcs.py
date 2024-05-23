@@ -11,29 +11,24 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-"""
-Submodule for making sending and receiving data from the OAK-D easier.
-
-Classes
--------
-Buffer
-    Class for creating a buffer for sending and receiving data from the OAK-D.
-MultiBuffer
-    Class for creating a buffer for sending and receiving multiple data streams from the OAK-D.
-SimpleBuffer
-    Class for creating a buffer for sending and receiving data from the OAK-D.
-
-Functions
----------
-create_synced_buffer
-    Creates a function for getting packets of data from multiple streams.
-
-"""
 from __future__ import annotations
 
-from ._buffer import Buffer
-from ._funcs import create_synced_buffer
-from ._multi_buffer import MultiBuffer
-from ._simple_buffer import SimpleBuffer
+from functools import partial
+from typing import TYPE_CHECKING, Callable
 
-__all__ = ["Buffer", "MultiBuffer", "SimpleBuffer", "create_synced_buffer"]
+from ._multi_buffer import MultiBuffer
+
+if TYPE_CHECKING:
+    import depthai as dai
+
+
+def create_synced_buffer(
+    device: dai.DeviceBase,
+    streams: list[str],
+) -> Callable[[], list[dai.ADatatype]]:
+    def _get_packet(buffer: MultiBuffer) -> list[dai.ADatatype]:
+        return buffer.receive()
+
+    buffer = MultiBuffer(device, [], streams)
+
+    return partial(_get_packet, buffer)
