@@ -26,5 +26,6 @@ from __future__ import annotations
 
 from ._buffer import Buffer
 from ._multi_buffer import MultiBuffer
+from ._simple_buffer import SimpleBuffer
 
-__all__ = ["Buffer", "MultiBuffer"]
+__all__ = ["Buffer", "MultiBuffer", "SimpleBuffer"]

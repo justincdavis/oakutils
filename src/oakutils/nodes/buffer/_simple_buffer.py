@@ -15,23 +15,21 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import numpy as np
-
-from ._multi_buffer import MultiBuffer
+import depthai as dai
 
 if TYPE_CHECKING:
-    import depthai as dai
+    import numpy as np
     from typing_extensions import Self
 
 
-class Buffer:
+class SimpleBuffer:
     """Buffer for sending and receiving data from OAK-D."""
 
     def __init__(
         self: Self,
         device: dai.DeviceBase,
-        input_stream: str | list[str],
-        output_stream: str | list[str],
+        input_stream: str,
+        output_stream: str,
     ) -> None:
         """
         Create the buffer.
@@ -46,31 +44,27 @@ class Buffer:
             The output stream name or names for the buffer to receive data from.
 
         """
-        if isinstance(input_stream, str):
-            input_streams = [input_stream]
-        else:
-            input_streams = input_stream
-        if isinstance(output_stream, str):
-            output_streams = [output_stream]
-        else:
-            output_streams = output_stream
-        self._buffer = MultiBuffer(device, input_streams, output_streams)
+        self._buffer = dai.Buffer()
+        self._input_stream = input_stream
+        self._output_stream = output_stream
+        self._input_queue: dai.DataInputQueue = device.getInputQueue(self._input_stream)  # type: ignore[attr-defined]
+        self._output_queue: dai.DataOutputQueue = device.getOutputQueue(self._output_stream)  # type: ignore[attr-defined]
 
     def __call__(
         self: Self,
-        data: np.ndarray | list[np.ndarray],
-    ) -> dai.ADatatype | list[dai.ADatatype]:
+        data: np.ndarray,
+    ) -> dai.ADatatype:
         """
         Cycle data through the buffer.
 
         Parameters
         ----------
-        data : np.ndarray | list[np.ndarray]
+        data : np.ndarray
             The data to cycle through the buffer.
 
         Returns
         -------
-        dai.ADatatype | list[dai.ADatatype]
+        dai.ADatatype
             The data cycled through the buffer.
 
         """
@@ -78,49 +72,46 @@ class Buffer:
 
     def cycle(
         self: Self,
-        data: np.ndarray | list[np.ndarray],
-    ) -> dai.ADatatype | list[dai.ADatatype]:
+        data: np.ndarray,
+    ) -> dai.ADatatype:
         """
         Cycle data through the buffer.
 
         Parameters
         ----------
-        data : np.ndarray | list[np.ndarray]
+        data : np.ndarray
             The data to cycle through the buffer.
 
         Returns
         -------
-        dai.ADatatype | list[dai.ADatatype]
+        dai.ADatatype
             The data cycled through the buffer.
 
         """
         self.send(data)
         return self.receive()
 
-    def send(self: Self, data: np.ndarray | list[np.ndarray]) -> None:
+    def send(self: Self, data: np.ndarray) -> None:
         """
         Send data through the buffer.
 
         Parameters
         ----------
-        data : np.ndarray | list[np.ndarray]
+        data : np.ndarray
             The data to send through the buffer.
 
         """
-        datas = [data] if isinstance(data, np.ndarray) else data
-        self._buffer.send(datas)
+        self._buffer.setData(data)
+        self._input_queue.send(self._buffer)
 
-    def receive(self: Self) -> dai.ADatatype | list[dai.ADatatype]:
+    def receive(self: Self) -> dai.ADatatype:
         """
         Receive data from the buffer.
 
         Returns
         -------
-        dai.ADataType | list[dai.ADatatype]
+        dai.ADataType
             The data received from the buffer.
 
         """
-        data = self._buffer.receive()
-        if len(data) == 1:
-            return data[0]
-        return data
+        return self._output_queue.get()
