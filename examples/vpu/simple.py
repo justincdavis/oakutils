@@ -24,7 +24,7 @@ from oakutils.blobs.models.shave6 import GAUSSIAN_15X15
 
 vpu = VPU()
 vpu.reconfigure(GAUSSIAN_15X15)
-rng = np.random.Generator()
+rng = np.random.Generator(np.random.PCG64())
 
 fps_buffer = deque(maxlen=30)
 while True:
