@@ -13,23 +13,28 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-import depthai as dai
+from typing import TYPE_CHECKING, Sequence
 
 from ._buffer import Buffer
 
 if TYPE_CHECKING:
+    import depthai as dai
     import numpy as np
     from typing_extensions import Self
 
 
 class MultiBuffer:
     """Class for creating multiple Buffers for sending and receiving data from the OAK-D."""
-    def __init__(self: Self, device: dai.DeviceBase, input_streams: list[str | list[str]], output_streams: list[str | list[str]]) -> None:
+
+    def __init__(
+        self: Self,
+        device: dai.DeviceBase,
+        input_streams: Sequence[str | list[str]],
+        output_streams: Sequence[str | list[str]],
+    ) -> None:
         """
         Create the multi buffer from streams.
-        
+
         Parameters
         ----------
         device : dai.DeviceBase
@@ -43,14 +48,14 @@ class MultiBuffer:
         self._buffers: list[Buffer] = []
         for input_stream, output_stream in zip(input_streams, output_streams):
             self._buffers.append(Buffer(device, input_stream, output_stream))
-        
+
     def __call__(
         self: Self,
         data: list[np.ndarray | list[np.ndarray]],
     ) -> list[dai.ADatatype | list[dai.ADatatype]]:
         """
         Cycle data through the multi buffer.
-        
+
         Parameters
         ----------
         data : list[np.ndarray | list[np.ndarray]]
@@ -63,14 +68,14 @@ class MultiBuffer:
 
         """
         return self.cycle(data)
-    
+
     def cycle(
         self: Self,
         data: list[np.ndarray | list[np.ndarray]],
     ) -> list[dai.ADatatype | list[dai.ADatatype]]:
         """
         Cycle data through the multi buffer.
-        
+
         Parameters
         ----------
         data : list[np.ndarray | list[np.ndarray]]
@@ -82,23 +87,23 @@ class MultiBuffer:
             The data received from the buffer.
 
         """
-        return [buffer.cycle(data) for buffer in self._buffers]
-    
+        return [buffer.cycle(d) for buffer, d in zip(self._buffers, data)]
+
     def send(
         self: Self,
         data: list[np.ndarray | list[np.ndarray]],
     ) -> None:
         """
         Send data through the multi buffer.
-        
+
         Parameters
         ----------
         data : list[np.ndarray | list[np.ndarray]]
             The data to send through the buffer.
 
         """
-        for buffer, data in zip(self._buffers, data):
-            buffer.send(data)
+        for buffer, d in zip(self._buffers, data):
+            buffer.send(d)
 
     def receive(
         self: Self,

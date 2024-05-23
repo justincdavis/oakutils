@@ -15,10 +15,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import depthai as dai
 import numpy as np
 
 if TYPE_CHECKING:
-    import depthai as dai
     from typing_extensions import Self
 
 

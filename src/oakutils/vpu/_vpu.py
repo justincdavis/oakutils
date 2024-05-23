@@ -66,7 +66,7 @@ class VPU:
         self._thread: Thread | None = None
         self._start_condition = Condition()
         self._data_queue: Queue[list[np.ndarray | list[np.ndarray]]] = Queue()
-        self._result_queue: Queue[list[np.ndarray | dai.ImgDetections]] = Queue()
+        self._result_queue: Queue[list[dai.ADatatype | list[dai.ADatatype]]] = Queue()
         self._stopped = False
 
         # attributes for multi model execution
@@ -92,7 +92,9 @@ class VPU:
         data: np.ndarray | list[np.ndarray] | list[np.ndarray | list[np.ndarray]],
         *,
         safe: bool | None = None,
-    ) -> np.ndarray | dai.ImgDetections | list[np.ndarray | dai.ImgDetections]:
+    ) -> (
+        dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
+    ):
         """
         Use to run an inference on the VPU.
 
@@ -107,7 +109,7 @@ class VPU:
 
         Returns
         -------
-        np.ndarray | dai.ImgDetections | list[np.ndarray | dai.ImgDetections]
+        dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
             The result of the inference.
 
         Raises
@@ -389,7 +391,9 @@ class VPU:
         data: np.ndarray | list[np.ndarray] | list[np.ndarray | list[np.ndarray]],
         *,
         safe: bool | None = None,
-    ) -> np.ndarray | dai.ImgDetections | list[np.ndarray | dai.ImgDetections]:
+    ) -> (
+        dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
+    ):
         """
         Use to run an inference on the VPU.
 
@@ -413,7 +417,7 @@ class VPU:
 
         Returns
         -------
-        np.ndarray | dai.ImgDetections | list[np.ndarray | dai.ImgDetections]
+        dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
             The result of the inference.
 
         Raises
@@ -443,7 +447,7 @@ class VPU:
         data: np.ndarray | list[np.ndarray],
         *,
         safe: bool | None = None,
-    ) -> np.ndarray | dai.ImgDetections:
+    ) -> dai.ADatatype | list[dai.ADatatype]:
         if safe is None:
             safe = True
         if safe:
@@ -469,7 +473,7 @@ class VPU:
         data: list[np.ndarray | list[np.ndarray]],
         *,
         safe: bool | None = None,
-    ) -> list[np.ndarray | dai.ImgDetections]:
+    ) -> list[dai.ADatatype | list[dai.ADatatype]]:
         if safe is None:
             safe = True
         if safe:

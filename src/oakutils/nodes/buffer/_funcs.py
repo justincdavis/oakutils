@@ -16,7 +16,7 @@ from __future__ import annotations
 from functools import partial
 from typing import TYPE_CHECKING, Callable
 
-from ._multi_buffer import MultiBuffer
+from ._buffer import Buffer
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -26,9 +26,12 @@ def create_synced_buffer(
     device: dai.DeviceBase,
     streams: list[str],
 ) -> Callable[[], list[dai.ADatatype]]:
-    def _get_packet(buffer: MultiBuffer) -> list[dai.ADatatype]:
-        return buffer.receive()
+    def _get_packet(buffer: Buffer) -> list[dai.ADatatype]:
+        data = buffer.receive()
+        if isinstance(data, list):
+            return data
+        return [data]
 
-    buffer = MultiBuffer(device, [], streams)
+    buffer = Buffer(device, [], streams)
 
     return partial(_get_packet, buffer)
