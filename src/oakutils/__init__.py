@@ -28,6 +28,8 @@ blobs
     Contains utilities for working with blobs.
 calibration
     Contains utilities for working with calibration.
+core
+    Contains core utilities for working with the OAK-D.
 filters
     Contains utilities for working with filters.
 nodes
@@ -131,7 +133,11 @@ if level is not None and level.upper() not in [
 ]:
     _log.warning(f"Invalid log level: {level}. Using default log level: WARNING")
 
+# handle imports which must occur first
+from . import core
+_log.debug("Imported core module")
 
+# handle other imports
 from . import (
     aruco,
     blobs,
@@ -144,7 +150,6 @@ from . import (
     vpu,
 )
 from ._api_camera import ApiCamera
-from ._basic import create_device
 from ._webcam import Webcam
 from .vpu import VPU
 
@@ -155,6 +160,7 @@ __all__ = [
     "aruco",
     "blobs",
     "calibration",
+    "core",
     "create_device",
     "filters",
     "nodes",

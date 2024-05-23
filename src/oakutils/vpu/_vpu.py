@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
-from oakutils import create_device
+from ..core import create_device
 from oakutils.nodes import (
     MobilenetData,
     YolomodelData,

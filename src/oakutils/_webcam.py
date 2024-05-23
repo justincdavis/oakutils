@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
-from ._basic import create_device
+from .core import create_device
 from .calibration import ColorCalibrationData, get_oak1_calibration
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
