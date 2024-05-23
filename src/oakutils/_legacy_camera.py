@@ -31,6 +31,7 @@ import depthai as dai
 import numpy as np
 
 from .calibration import CalibrationData, get_camera_calibration
+from .core import create_device
 from .nodes import create_color_camera, create_imu, create_stereo_depth, create_xout
 from .point_clouds import (
     PointCloudVisualizer,
@@ -686,11 +687,7 @@ class LegacyCamera:
         self._im3d = cv2.reprojectImageTo3D(self._disparity, self._Q)  # type: ignore[arg-type]
 
     def _target(self: Self) -> None:
-        if self._mxid is not None:
-            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
-            device_object = dai.Device(self._pipeline, device_info)
-        else:
-            device_object = dai.Device(self._pipeline)
+        device_object = create_device(self._pipeline, device_id=self._mxid)
         with device_object as device:
             queues = {}
             for stream in self._streams:

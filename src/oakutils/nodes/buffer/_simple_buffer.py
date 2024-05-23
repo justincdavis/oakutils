@@ -1,0 +1,117 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+import depthai as dai
+
+if TYPE_CHECKING:
+    import numpy as np
+    from typing_extensions import Self
+
+
+class SimpleBuffer:
+    """Buffer for sending and receiving data from OAK-D."""
+
+    def __init__(
+        self: Self,
+        device: dai.DeviceBase,
+        input_stream: str,
+        output_stream: str,
+    ) -> None:
+        """
+        Create the buffer.
+
+        Parameters
+        ----------
+        device : dai.DeviceBase
+            The OAK-D device which the streams are built on.
+        input_stream : str | list[str]
+            The input stream name or names for the buffer to send data through.
+        output_stream : str | list[str]
+            The output stream name or names for the buffer to receive data from.
+
+        """
+        self._buffer = dai.Buffer()
+        self._input_stream = input_stream
+        self._output_stream = output_stream
+        self._input_queue: dai.DataInputQueue = device.getInputQueue(self._input_stream)  # type: ignore[attr-defined]
+        self._output_queue: dai.DataOutputQueue = device.getOutputQueue(self._output_stream)  # type: ignore[attr-defined]
+
+    def __call__(
+        self: Self,
+        data: np.ndarray,
+    ) -> dai.ADatatype:
+        """
+        Cycle data through the buffer.
+
+        Parameters
+        ----------
+        data : np.ndarray
+            The data to cycle through the buffer.
+
+        Returns
+        -------
+        dai.ADatatype
+            The data cycled through the buffer.
+
+        """
+        return self.cycle(data)
+
+    def cycle(
+        self: Self,
+        data: np.ndarray,
+    ) -> dai.ADatatype:
+        """
+        Cycle data through the buffer.
+
+        Parameters
+        ----------
+        data : np.ndarray
+            The data to cycle through the buffer.
+
+        Returns
+        -------
+        dai.ADatatype
+            The data cycled through the buffer.
+
+        """
+        self.send(data)
+        return self.receive()
+
+    def send(self: Self, data: np.ndarray) -> None:
+        """
+        Send data through the buffer.
+
+        Parameters
+        ----------
+        data : np.ndarray
+            The data to send through the buffer.
+
+        """
+        self._buffer.setData(data)
+        self._input_queue.send(self._buffer)
+
+    def receive(self: Self) -> dai.ADatatype:
+        """
+        Receive data from the buffer.
+
+        Returns
+        -------
+        dai.ADataType
+            The data received from the buffer.
+
+        """
+        return self._output_queue.get()

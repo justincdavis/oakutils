@@ -11,17 +11,27 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-"""
-Submodule for using the onboard VPU as a standalone processor.
+from __future__ import annotations
 
-Classes
--------
-VPU
-    A class for using the onboard VPU as a standalone processor.
-"""
+from functools import partial
+from typing import TYPE_CHECKING, Callable
 
-from ._vpu import VPU
+from ._buffer import Buffer
 
-__all__ = [
-    "VPU",
-]
+if TYPE_CHECKING:
+    import depthai as dai
+
+
+def create_synced_buffer(
+    device: dai.DeviceBase,
+    streams: list[str],
+) -> Callable[[], list[dai.ADatatype]]:
+    def _get_packet(buffer: Buffer) -> list[dai.ADatatype]:
+        data = buffer.receive()
+        if isinstance(data, list):
+            return data
+        return [data]
+
+    buffer = Buffer(device, [], streams)
+
+    return partial(_get_packet, buffer)

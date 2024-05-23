@@ -16,6 +16,8 @@ Module for creating nodes for the OAK-D.
 
 Submodules
 ----------
+buffer
+    Module for handling buffer communication with the OAK-D.
 color_camera
     Module for creating color camera nodes.
 image_manip
@@ -34,6 +36,15 @@ xout
     Module for creating xout nodes.
 models
     Module for creating nodes for pre-compiled models.
+
+Classes
+-------
+Buffer
+    Class for creating a buffer for sending and receiving data from the OAK-D.
+MobilenetData
+    Dataclass for mobilenet detection network data.
+YolomodelData
+    Dataclass for yolo detection network data.
 
 Functions
 ---------
@@ -75,6 +86,7 @@ frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
 from . import (
+    buffer,
     color_camera,
     image_manip,
     imu,
@@ -86,6 +98,8 @@ from . import (
     xout,
 )
 from ._misc import frame_norm
+from ._model_data import MobilenetData, YolomodelData
+from .buffer import Buffer, MultiBuffer
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
@@ -105,6 +119,11 @@ from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
 
 __all__ = [
+    "Buffer",
+    "MobilenetData",
+    "MultiBuffer",
+    "YolomodelData",
+    "buffer",
     "color_camera",
     "create_color_camera",
     "create_image_manip",

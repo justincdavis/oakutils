@@ -30,6 +30,7 @@ import depthai as dai
 import numpy as np
 
 from .calibration import ColorCalibrationData, get_oak1_calibration
+from .core import create_device
 from .nodes import create_color_camera, create_xout
 from .tools.parsing import get_color_sensor_resolution_from_tuple
 
@@ -135,11 +136,7 @@ class Webcam:
 
     def _run(self: Self) -> None:
         """Run the camera."""
-        if self._mxid is not None:
-            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
-            device_object = dai.Device(self._pipeline, device_info)
-        else:
-            device_object = dai.Device(self._pipeline)
+        device_object = create_device(self._pipeline, device_id=self._mxid)
         with device_object as device:
             # get data queues
             q_camera = device.getOutputQueue(name="cam", maxSize=1, blocking=False)  # type: ignore[attr-defined]

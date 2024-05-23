@@ -28,6 +28,8 @@ blobs
     Contains utilities for working with blobs.
 calibration
     Contains utilities for working with calibration.
+core
+    Contains core utilities for working with the OAK-D.
 filters
     Contains utilities for working with filters.
 nodes
@@ -51,6 +53,14 @@ Webcam
     A class for reading frames from an OAK using the same interface as cv2.VideoCapture.
 VPU
     A class for using the onboard VPU as a standalone processor.
+
+Functions
+---------
+set_log_level
+    Set the log level for the oakutils package.
+create_device
+    Create a DepthAI device object from a pipeline.
+
 """
 from __future__ import annotations
 
@@ -123,7 +133,12 @@ if level is not None and level.upper() not in [
 ]:
     _log.warning(f"Invalid log level: {level}. Using default log level: WARNING")
 
+# handle imports which must occur first
+from . import core
 
+_log.debug("Imported core module")
+
+# handle other imports
 from . import (
     aruco,
     blobs,
@@ -146,6 +161,8 @@ __all__ = [
     "aruco",
     "blobs",
     "calibration",
+    "core",
+    "create_device",
     "filters",
     "nodes",
     "optimizer",

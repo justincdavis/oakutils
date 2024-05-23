@@ -31,6 +31,7 @@ import depthai as dai
 from typing_extensions import TypeAlias
 
 from .calibration import CalibrationData, ColorCalibrationData, get_camera_calibration
+from .core import create_device
 from .tools.display import DisplayManager, get_smaller_size
 
 if TYPE_CHECKING:
@@ -239,11 +240,7 @@ class ApiCamera:
         with self._start_condition:
             self._start_condition.wait()
 
-        if self._mxid is not None:
-            device_info: dai.DeviceInfo = dai.DeviceInfo(self._mxid)
-            device_object = dai.Device(self._pipeline, device_info)
-        else:
-            device_object = dai.Device(self._pipeline)
+        device_object = create_device(self._pipeline, device_id=self._mxid)
         with device_object as device:
             # run any custom devices calls added ahead of time
             for custom in self._custom_device_calls:
