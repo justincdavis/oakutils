@@ -34,6 +34,7 @@ from oakutils.nodes import (
     create_xout,
     create_yolo_detection_network,
 )
+from oakutils.nodes.buffer import MultiBuffer
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -357,24 +358,7 @@ class VPU:
         device_object = create_device(self._pipeline, device_id=self._mxid)
         with device_object as device:
             # pre-fetch queues and allocate buffers
-            input_buffers: list[dai.Buffer | list[dai.Buffer]] = []
-            input_queues: list[dai.DataInputQueue | list[dai.DataInputQueue]] = []
-            output_queues: list[dai.DataOutputQueue] = []
-            for xin_name, xout_name in zip(self._xin_names, self._xout_names):
-                # handle multi-input networks
-                if isinstance(xin_name, list):
-                    in_buffers = []
-                    in_queues = []
-                    for xname in xin_name:
-                        in_buffers.append(dai.Buffer())
-                        in_queues.append(device.getInputQueue(xname))  # type: ignore[attr-defined]
-                    input_buffers.append(in_buffers)
-                    input_queues.append(in_queues)
-                else:
-                    input_buffers.append(dai.Buffer())
-                    input_queues.append(device.getInputQueue(xin_name))  # type: ignore[attr-defined]
-                # all networks have one output
-                output_queues.append(device.getOutputQueue(xout_name))  # type: ignore[attr-defined]
+            buffer: MultiBuffer = MultiBuffer(device, self._xin_names, self._xout_names)
 
             # notify the main thread that VPU is ready
             # this will allow the reconfigure call to return
@@ -395,42 +379,10 @@ class VPU:
                     continue
 
                 # push data to networks
-                for idx, (data, buffers, queues) in enumerate(
-                    zip(all_data, input_buffers, input_queues),
-                ):
-                    # handle multi-input networks
-                    if (
-                        isinstance(buffers, list)
-                        or isinstance(queues, list)
-                        or isinstance(data, list)
-                    ):
-                        # check for mismatched types
-                        if (
-                            isinstance(buffers, list)
-                            and isinstance(queues, list)
-                            and isinstance(data, list)
-                        ):
-                            for sub_data, buff, queue in zip(data, buffers, queues):
-                                buff.setData(sub_data)
-                                queue.send(buff)
-                        else:
-                            err_msg = f"Error Network #{idx}: Mismatched data, buffers, and queues."
-                            err_msg += (
-                                " All must be lists or all must be single objects."
-                            )
-                            err_msg += " Mismatched types: "
-                            err_msg += f"buffers: {type(buffers)}, queues: {type(queues)}, data: {type(data)}"
-                            raise TypeError(err_msg)
-                    # all yolo/mobilenet and most networks will be single input
-                    else:
-                        buffers.setData(data)
-                        queues.send(buffers)
+                buffer.send(all_data)
 
                 # get the results
-                results: list[np.ndarray | dai.ImgDetections] = [
-                    queue.get() for queue in output_queues  # type: ignore[misc]
-                ]
-                self._result_queue.put(results)
+                self._result_queue.put(buffer.receive())
 
     def run(
         self: Self,
