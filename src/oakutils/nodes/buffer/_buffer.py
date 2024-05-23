@@ -53,7 +53,7 @@ class Buffer:
     def __call__(
         self: Self,
         data: np.ndarray,
-    ) -> tuple[np.ndarray, dai.ImgDetections, dai.NNData]:
+    ) -> dai.ADatatype:
         """
         Cycle data through the buffer.
 
@@ -64,7 +64,7 @@ class Buffer:
 
         Returns
         -------
-        tuple[np.ndarray, dai.ImgDetections, dai.NNData]
+        dai.ADatatype
             The data cycled through the buffer.
 
         """
@@ -73,7 +73,7 @@ class Buffer:
     def cycle(
         self: Self,
         data: np.ndarray,
-    ) -> tuple[np.ndarray, dai.ImgDetections, dai.NNData]:
+    ) -> dai.ADatatype:
         """
         Cycle data through the buffer.
 
@@ -84,7 +84,7 @@ class Buffer:
 
         Returns
         -------
-        tuple[np.ndarray, dai.ImgDetections, dai.NNData]
+        dai.ADatatype
             The data cycled through the buffer.
 
         """
@@ -104,17 +104,14 @@ class Buffer:
         self._buffer.setData(data)
         self._input_queue.send(self._buffer)
 
-    def receive(self: Self) -> tuple[np.ndarray, dai.ImgDetections, dai.NNData]:
+    def receive(self: Self) -> dai.ADatatype:
         """
         Receive data from the buffer.
 
         Returns
         -------
-        tuple[np.ndarray, dai.ImgDetections, dai.NNData]
+        dai.ADataType
             The data received from the buffer.
 
         """
-        # there are more datatypes that can be received,
-        # but manual created links will have only these types
-        # (that I have observed)
-        return self._output_queue.get()  # type: ignore[return-value]
+        return self._output_queue.get()
