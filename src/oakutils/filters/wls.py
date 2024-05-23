@@ -171,6 +171,6 @@ class WLSFilter:
 
         filtered_disp: np.ndarray = self._filter.filter(disparity, mono_frame)
         with np.errstate(divide="ignore"):
-            depth = (depth_scale / filtered_disp).astype(np.uint16)
+            depth: np.ndarray = (depth_scale / filtered_disp).astype(np.uint16)
 
         return filtered_disp, depth
