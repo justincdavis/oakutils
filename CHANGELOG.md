@@ -11,6 +11,13 @@
 - create_device: A function for creating a DepthAI Device
     from a pre-defined pipeline. Accepts parameters for
     where to create said device.
+- nodes.buffer submodule
+    - Buffer, MultiBuffer, SimpleBuffer classes. Each class
+        enables methods for making DataInput/OutputQueues easier
+        to use in bulk.
+    - create_synced_buffer, allows wrapping multiple output
+        streams with a single function getting a single output
+        from each stream at once.
 
 ### Improvements
 
