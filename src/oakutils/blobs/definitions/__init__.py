@@ -116,14 +116,15 @@ from .gaussian import Gaussian, GaussianGray
 from .gftt import GFTT, GFTTBlur, GFTTBlurGray, GFTTGray
 from .harris import Harris, HarrisBlur, HarrisBlurGray, HarrisGray
 from .hessian import Hessian, HessianBlur, HessianBlurGray, HessianGray
-from .laserscan import Laserscan
 from .laplacian import Laplacian, LaplacianBlur, LaplacianBlurGray, LaplacianGray
+from .laserscan import Laserscan
 from .opening import Opening, OpeningBlur, OpeningBlurGray, OpeningGray
 from .point_cloud import PointCloud
 from .sobel import Sobel, SobelBlur, SobelBlurGray, SobelGray
 from .utils import InputType, ModelType, convert_to_fp16
 
 __all__ = [
+    "GFTT",
     "AbstractModel",
     "Closing",
     "ClosingBlur",
@@ -137,7 +138,6 @@ __all__ = [
     "ErosionBlur",
     "ErosionBlurGray",
     "ErosionGray",
-    "GFTT",
     "GFTTBlur",
     "GFTTBlurGray",
     "GFTTGray",
@@ -152,11 +152,11 @@ __all__ = [
     "HessianBlurGray",
     "HessianGray",
     "InputType",
-    "Laserscan",
     "Laplacian",
     "LaplacianBlur",
     "LaplacianBlurGray",
     "LaplacianGray",
+    "Laserscan",
     "ModelType",
     "Opening",
     "OpeningBlur",

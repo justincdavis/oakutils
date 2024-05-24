@@ -11,6 +11,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import argparse
 import itertools
 import os
@@ -240,12 +242,18 @@ def compiles_models():
         GFTTBlurGray,
     ]
     shaves = [1, 2, 3, 4, 5, 6]
+
+    # store failed models
+    failed_models: list[tuple[AbstractModel, int, str]] = []
+
+    # compile models and write the __init__.py files
     for shave in shaves:
         for model in models:
             try:
                 compile_model(model, shave)
             except Exception as e:
                 print(f"Failed to compile model {model.__name__} with error {e}")
+                failed_models.append((model, shave, str(e)))
 
         # handle writing the __init__.py file
         var_names = []
@@ -265,7 +273,7 @@ def compiles_models():
             )
 
             # write the docstring
-            f.write('"""')
+            f.write('"""\n')
             f.write(f"Module for {shave} shave models.\n\n")
             f.write("Note\n")
             f.write("----\n")
@@ -377,9 +385,9 @@ def compiles_models():
         f.write("This module is auto-generated\n\n")
         f.write("Attributes\n")
         f.write("----------\n")
-        for shave in shaves:
+        for idx, shave in enumerate(shaves):
             f.write(f"shave{shave} : module\n")
-            f.write(f"    Contains all the models compiled for {shaves} shaves\n")
+            f.write(f"    Contains all the models compiled for {shaves[idx]} shaves\n")
         f.write('"""\n\n')
         for shave in shaves:
             f.write(f"from . import shave{shave}\n")
@@ -391,6 +399,12 @@ def compiles_models():
             f.write(f"    'shave{shave}',\n")
         f.write("]\n")
 
+    # write a summary of the failed models
+    if len(failed_models) > 0:
+        print(f"\nFailed to compile the following {len(failed_models)} models:")
+        print("===============================================================")
+        for model, shave, error in failed_models:
+            print(f"Model: {model.__name__}, with {shave} shaves.\n\tFailed with error: {error}")
 
 def verify_blobs():
     shaves = [1, 2, 3, 4, 5, 6]

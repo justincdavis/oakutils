@@ -29,11 +29,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import torch
+
 from .abstract_model import AbstractModel
 from .utils import InputType, ModelType
 
 if TYPE_CHECKING:
-    import torch
     from typing_extensions import Self
 
 
@@ -89,9 +90,14 @@ class Laserscan(AbstractModel):
         # get the shape of the image
         _, _, height, _ = image.shape
         middle_height = height // 2
-        
+
         # extract the subimage, which is the center ~width*2 pixels horizontally
-        sub_image = image[:, :, middle_height - self._width : middle_height + self._width, :]
+        sub_image = image[
+            :,
+            :,
+            middle_height - self._width : middle_height + self._width,
+            :,
+        ]
 
         # average each column in sub_image into a single value and create a vector
         return torch.mean(sub_image, dim=2)
