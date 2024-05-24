@@ -32,6 +32,7 @@ from oakutils.blobs.definitions import (
     SobelGray,
     SobelBlurGray,
     PointCloud,
+    Laserscan,
     Closing,
     ClosingBlur,
     ClosingGray,
@@ -106,6 +107,7 @@ def _compile_model(model_type, model_arg, shave):
 def compile_model(model_type: AbstractModel, shave: int):
     model_args = {}
     kernel_size_list = [3, 5, 7, 9, 11, 13, 15]
+    width_list = [5, 10, 20]
     arg_mapping = {
         ModelType.NONE: {},
         ModelType.KERNEL: {"kernel_size": kernel_size_list},
@@ -113,6 +115,9 @@ def compile_model(model_type: AbstractModel, shave: int):
             "kernel_size": kernel_size_list,
             "kernel_size2": kernel_size_list,
         },
+        ModelType.WIDTH: {
+            "width": width_list
+        }
     }
     if model_type.model_type() == ModelType.NONE:
         model_args = [{}]
@@ -129,6 +134,9 @@ def compile_model(model_type: AbstractModel, shave: int):
                 kernel_list2,
             )
         ]
+    elif model_type.model_type() == ModelType.WIDTH:
+        width_list = arg_mapping[model_type.model_type()]["width"]
+        model_args = [{"width": t} for t in width_list]
     else:
         raise RuntimeError("Unknown model type")
 
@@ -201,6 +209,7 @@ def compiles_models():
         SobelGray,
         SobelBlurGray,
         PointCloud,
+        Laserscan,
         # Closing,
         # ClosingBlur,
         # ClosingGray,
@@ -430,9 +439,13 @@ def build_from_cache():
 
 
 def main():
+    # copies compiled models from oakutils cache directory
+    # and into correct folder structure
     if BUILD_FROM_CACHE:
         build_from_cache()
         verify_blobs()
+    # rebuils all models from definition files, will skip
+    # if model already exists
     if BUILD_FROM_DEFINITIONS:
         compiles_models()
         verify_blobs()
