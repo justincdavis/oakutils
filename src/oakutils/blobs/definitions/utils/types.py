@@ -38,7 +38,7 @@ class ModelType(Enum):
     NONE = 0
     KERNEL = 1
     DUAL_KERNEL = 2
-    WIDTH = 3
+    LASERSCAN = 3
 
 
 class InputType(Enum):

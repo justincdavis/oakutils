@@ -23,7 +23,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ._load import create_width_model as _create_width_model
+from ._load import create_laserscan_model as _create_laserscan_model
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -33,6 +33,7 @@ def create_laserscan(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     width: int = 10,
+    scans: int = 1,
     shaves: int = 1,
 ) -> dai.node.NeuralNetwork:
     """
@@ -49,6 +50,13 @@ def create_laserscan(
     width : int, optional
         The width of the laserscan, by default 10
         Options are [5, 10, 20]
+    scans : int, optional
+        The number of scans to use, by default 1
+        Options are [1, 3, 5]
+        Scans are horizontal lines of depth data, each scan
+        is sampled from a different row of the depth image, with
+        even spacing. A center scan is always generated and is
+        always the middle entry in the output scans.
     shaves : int, optional
         The number of shaves to use, by default 1
         Must be between 1 and 6
@@ -65,15 +73,21 @@ def create_laserscan(
 
     """
     model_type = "laserscan"
+
     valid_widths: list[int] = [5, 10, 20]
     if width not in valid_widths:
         err_msg = "Invalid width, must be one of [5, 10, 20]"
         raise ValueError(err_msg)
+    valid_scans: list[int] = [1, 3, 5]
+    if scans not in valid_scans:
+        err_msg = "Invalid scans, must be one of [1, 3, 5]"
+        raise ValueError(err_msg)
 
-    return _create_width_model(
+    return _create_laserscan_model(
         pipeline=pipeline,
         input_link=input_link,
         model_name=model_type,
         width=width,
+        scans=scans,
         shaves=shaves,
     )

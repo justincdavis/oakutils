@@ -359,11 +359,12 @@ def create_double_kernel_model(
     )
 
 
-def create_width_model(
+def create_laserscan_model(
     pipeline: dai.Pipeline,
     input_link: dai.Node.Output,
     model_name: str,
     width: int,
+    scans: int,
     shaves: int,
     input_names: str | None = None,
     input_sizes: int | None = None,
@@ -372,7 +373,7 @@ def create_width_model(
     reuse_messages: bool | None = None,
 ) -> dai.node.NeuralNetwork:
     """
-    Use to create a model with a specified width.
+    Use to create a laserscan model.
 
     Parameters
     ----------
@@ -385,6 +386,8 @@ def create_width_model(
         The name of the model to use
     width : int
         The width of the model to use
+    scans : int
+        The number of scans to use
     shaves : int
         The number of shaves to use
     input_names : str, optional
@@ -405,13 +408,17 @@ def create_width_model(
     ------
     TypeError
         If the width is not an integer
+        If the scans is not an integer
 
     """
     if not isinstance(width, int):
         err_msg = "Width must be an integer."
         raise TypeError(err_msg)
+    if not isinstance(scans, int):
+        err_msg = "Scans must be an integer."
+        raise TypeError(err_msg)
 
-    attributes = [str(width)]
+    attributes = [str(width), str(scans)]
     return create_model(
         pipeline=pipeline,
         input_link=input_link,

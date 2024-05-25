@@ -14,11 +14,13 @@
 from __future__ import annotations
 
 import argparse
+import getpass
 import itertools
 import os
 import shutil
 import multiprocessing as mp
 from io import TextIOWrapper
+from pathlib import Path
 
 from oakutils.blobs import compile_model as internal_compile_model
 from oakutils.blobs.definitions import AbstractModel, ModelType
@@ -110,6 +112,7 @@ def compile_model(model_type: AbstractModel, shave: int):
     model_args = {}
     kernel_size_list = [3, 5, 7, 9, 11, 13, 15]
     width_list = [5, 10, 20]
+    scan_list = [1, 3, 5]
     arg_mapping = {
         ModelType.NONE: {},
         ModelType.KERNEL: {"kernel_size": kernel_size_list},
@@ -117,8 +120,9 @@ def compile_model(model_type: AbstractModel, shave: int):
             "kernel_size": kernel_size_list,
             "kernel_size2": kernel_size_list,
         },
-        ModelType.WIDTH: {
-            "width": width_list
+        ModelType.LASERSCAN: {
+            "width": width_list,
+            "scans": scan_list,
         }
     }
     if model_type.model_type() == ModelType.NONE:
@@ -136,9 +140,16 @@ def compile_model(model_type: AbstractModel, shave: int):
                 kernel_list2,
             )
         ]
-    elif model_type.model_type() == ModelType.WIDTH:
+    elif model_type.model_type() == ModelType.LASERSCAN:
         width_list = arg_mapping[model_type.model_type()]["width"]
-        model_args = [{"width": t} for t in width_list]
+        scan_list = arg_mapping[model_type.model_type()]["scans"]
+        model_args = [
+            {"width": w, "scans": s}
+            for w, s in itertools.product(
+                width_list,
+                scan_list,
+            )
+        ]
     else:
         raise RuntimeError("Unknown model type")
 
@@ -149,7 +160,7 @@ def compile_model(model_type: AbstractModel, shave: int):
         arg_str = dict_to_str(model_args)
 
         # for 3.8 compatibility
-        def remove_suffix(input_string, suffix):
+        def remove_suffix(input_string: str, suffix: str):
             if suffix and input_string.endswith(suffix):
                 return input_string[: -len(suffix)]
             return input_string
@@ -184,14 +195,35 @@ def compile_model(model_type: AbstractModel, shave: int):
             )
     model_args = missing_model_args
 
-    model_paths = []
-    with mp.Pool() as pool:
-        results = [
-            pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
-            for model_arg in model_args
-        ]
-        model_paths = [r.get() for r in results]
+    try:
+        model_paths = []
+        with mp.Pool() as pool:
+            results = [
+                pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
+                for model_arg in model_args
+            ]
+            model_paths = [r.get() for r in results]
+    except RuntimeError as e:
+        # if a runtime error occurs, it could be because the blobconverter
+        # cache got corrupted, so delete the cache and try again
+        # 1: get cache directory and check if it exists
+        username = getpass.getuser()
+        linux_cache_dir = Path(f"/home/{username}/.cache/blobconverter")
+        windows_cache_dir = Path(f"C:/Users/{username}/.cache/blobconverter")
+        cache_dir = linux_cache_dir if os.name == "posix" else windows_cache_dir
+        if not cache_dir.exists():
+            raise e
 
+        # 2: delete the cache directory
+        delete_folder(str(cache_dir.resolve()))
+
+        # 3: process the compilations in serial
+        model_paths = []
+        for model_arg in model_args:
+            model_path = _compile_model(model_type, model_arg, shave)
+            model_paths.append(model_path)
+
+    # copy the models to the correct folders internally
     for model_path in model_paths:
         shutil.copy(
             model_path, os.path.join(shave_folder, os.path.basename(model_path))

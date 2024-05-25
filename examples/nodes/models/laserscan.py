@@ -21,16 +21,16 @@ from oakutils.nodes.models import create_laserscan
 
 pipeline = dai.Pipeline()
 
-# create the color camera node
+# create the stereo node
 stereo, left, right = create_stereo_depth(
     pipeline,
-    preview_size=(640, 480),
-)  # set the preview size to the input of the nn
+)
 
 laser = create_laserscan(
     pipeline,
     input_link=stereo.depth,
     width=10,
+    scans=1,
     shaves=1,
 )
 xout_sobel = create_xout(pipeline, laser.out, "sobel")
@@ -40,6 +40,6 @@ with dai.Device(pipeline) as device:
 
     while True:
         data = queue.get()
-        scan = get_nn_data(data, reshape_to=(400))
+        scan = get_nn_data(data, reshape_to=(1, 1, 400))[0]
 
         print(f"Scan shape: {scan.shape}, max: {scan.max()}, min: {scan.min()}")

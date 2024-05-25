@@ -49,7 +49,7 @@ class Laserscan(AbstractModel):
 
     """
 
-    def __init__(self: Self, width: int = 5) -> None:
+    def __init__(self: Self, width: int = 5, scans: int = 1) -> None:
         """
         Use to create an instance of the model.
 
@@ -57,15 +57,22 @@ class Laserscan(AbstractModel):
         ----------
         width : int, optional
             The width of either side of center to average on, by default 5
+        scans : int, optional
+            The number of scans to use, by default 1
+            Scans are horizontal lines of depth data, each scan
+            is sampled from a different row of the depth image, with
+            even spacing. A center scan is always generated and is
+            always the middle entry in the output scans.
 
         """
         super().__init__()
         self._width = width
+        self._scans = scans
 
     @classmethod
     def model_type(cls: type[Laserscan]) -> ModelType:
         """Use to get the type of input this model takes."""
-        return ModelType.WIDTH
+        return ModelType.LASERSCAN
 
     @classmethod
     def input_names(cls: type[Laserscan]) -> list[tuple[str, InputType]]:
@@ -89,15 +96,21 @@ class Laserscan(AbstractModel):
         """
         # get the shape of the image
         _, _, height, _ = image.shape
-        middle_height = height // 2
 
-        # extract the subimage, which is the center ~width*2 pixels horizontally
-        sub_image = image[
-            :,
-            :,
-            middle_height - self._width : middle_height + self._width,
-            :,
-        ]
+        # heights to create laserscans at
+        heights = [(i + 1) * (height // (self._scans + 1)) for i in range(self._scans)]
 
-        # average each column in sub_image into a single value and create a vector
-        return torch.mean(sub_image, dim=2)
+        scans = []
+        for h_idx in heights:
+            # extract the subimage, which is the center ~width*2 pixels horizontally
+            sub_image = image[
+                :,
+                :,
+                h_idx - self._width : h_idx + self._width,
+                :,
+            ]
+
+            # average each column in sub_image into a single value and create a vector
+            scans.append(torch.mean(sub_image, dim=2))
+
+        return torch.cat(scans, dim=1)
