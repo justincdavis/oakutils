@@ -40,6 +40,6 @@ with dai.Device(pipeline) as device:
 
     while True:
         data = queue.get()
-        scan = get_nn_data(data, reshape_to=(1, 1, 400))[0]
+        scan = get_nn_data(data, use_first_layer=True)
 
         print(f"Scan shape: {scan.shape}, max: {scan.max()}, min: {scan.min()}")
