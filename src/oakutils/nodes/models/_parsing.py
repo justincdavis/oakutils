@@ -13,6 +13,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from oakutils.blobs import models
@@ -152,21 +153,16 @@ def get_candidates(
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
     for blob in potential_blobs:
-        # path: str = Path(blob).name  # drop the extension
-        # path = os.path.split(path)[-1]  # just the file name
-        path = Path(blob).stem
-        data = path.split("_")  # split into name and attributes
-        if len(data) == 1:  # if there are no extra attributes
-            data = data[0].split(".")  # split on the dot to ensure good name
-        name = data[0]  # name is the first piece
-        # if the name is not equal to the model_type, maybe gaussian_gray instead of gaussian
-        # print(f"Checking {name.upper()} against {model_type}")
-        if model_type != name.upper():  # throw out if the case
+        try:
+            path = Path(blob).stem
+            candidate_packet = _parse_candidate_path(path, model_type)
+        except IndexError:
+            path = Path(blob).name  # drop the extension
+            path = os.path.split(path)[-1]  # just the file name
+            candidate_packet = _parse_candidate_path(path, model_type)
+        if candidate_packet is None:
             continue
-        data.pop(0)  # remove name from list
-        data = [d.split("X")[0] for d in data]  # split NxN attributes into N
-        if "x" in data[0]:  # need to split on x or X
-            data = [d.split("x")[0] for d in data]
+        name, data = candidate_packet
         candidate_blobs.append((name, data, blob))  # add to list
     # print(f"Candidate blobs: {candidate_blobs}")
 
@@ -183,3 +179,19 @@ def get_candidates(
 
     # print(f"Candidate models: {candidate_models}")
     return candidate_models
+
+
+def _parse_candidate_path(path: str, model_type: str) -> tuple[str, list[str]] | None:
+    data = path.split("_")  # split into name and attributes
+    if len(data) == 1:  # if there are no extra attributes
+        data = data[0].split(".")  # split on the dot to ensure good name
+    name = data[0]  # name is the first piece
+    # if the name is not equal to the model_type, maybe gaussian_gray instead of gaussian
+    # print(f"Checking {name.upper()} against {model_type}")
+    if model_type != name.upper():  # throw out if the case
+        return None
+    data.pop(0)  # remove name from list
+    data = [d.split("X")[0] for d in data]  # split NxN attributes into N
+    if "x" in data[0]:  # need to split on x or X
+        data = [d.split("x")[0] for d in data]
+    return name, data
