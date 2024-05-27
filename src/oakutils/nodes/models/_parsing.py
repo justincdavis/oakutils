@@ -70,6 +70,7 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
     """
     valid_names = [
         "gaussian",
+        "gaussiangray",
         "gftt",
         "gfttblur",
         "gfttgray",
@@ -83,10 +84,10 @@ def _valid_model_names(model_type: str) -> tuple[bool, list[str]]:
         "hessiangray",
         "hessianblurgray",
         "laplacian",
-        "gaussiangray",
         "laplaciangray",
         "laplacianblur",
         "laplacianblurgray",
+        "laserscan",
         "sobel",
         "sobelgray",
         "sobelblur",
