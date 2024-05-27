@@ -153,8 +153,9 @@ def get_candidates(
     # parse the model names into 3 pieces, name, attribute, and extension
     candidate_blobs = []
     for blob in potential_blobs:
-        path: str = Path(blob).name  # drop the extension
-        path = os.path.split(path)[-1]  # just the file name
+        # path: str = Path(blob).name  # drop the extension
+        # path = os.path.split(path)[-1]  # just the file name
+        path = Path(blob).stem
         data = path.split("_")  # split into name and attributes
         if len(data) == 1:  # if there are no extra attributes
             data = data[0].split(".")  # split on the dot to ensure good name
