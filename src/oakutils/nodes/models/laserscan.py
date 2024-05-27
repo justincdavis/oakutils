@@ -23,7 +23,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from oakutils.nodes import get_nn_data
+from oakutils.nodes.neural_network import get_nn_data
 
 from ._load import create_laserscan_model as _create_laserscan_model
 

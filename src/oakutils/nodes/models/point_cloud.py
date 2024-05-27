@@ -29,7 +29,8 @@ from typing import TYPE_CHECKING, Callable
 import depthai as dai
 import numpy as np
 
-from oakutils.nodes import create_xin, get_nn_data
+from oakutils.nodes.neural_network import get_nn_data
+from oakutils.nodes.xin import create_xin
 
 from ._load import create_no_args_multi_link_model as _create_no_args_multi_link_model
 
