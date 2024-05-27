@@ -53,6 +53,10 @@ create_sobel
     Creates a sobel model with a specified kernel size.
 create_xyz_matrix
     Use to create a constant reprojection matrix for the given camera matrix and image size.
+get_laserscan
+    Use to get the laserscan data from the laserscan model.
+get_point_cloud_buffer
+    Use to get the point cloud buffer from the point cloud model.
 """
 from . import gaussian, gftt, harris, hessian, laplacian, point_cloud, sobel
 from .gaussian import create_gaussian
@@ -60,8 +64,8 @@ from .gftt import create_gftt
 from .harris import create_harris
 from .hessian import create_hessian
 from .laplacian import create_laplacian
-from .laserscan import create_laserscan
-from .point_cloud import create_point_cloud, create_xyz_matrix
+from .laserscan import create_laserscan, get_laserscan
+from .point_cloud import create_point_cloud, create_xyz_matrix, get_point_cloud_buffer
 from .sobel import create_sobel
 
 __all__ = [
@@ -75,6 +79,8 @@ __all__ = [
     "create_sobel",
     "create_xyz_matrix",
     "gaussian",
+    "get_laserscan",
+    "get_point_cloud_buffer",
     "gftt",
     "harris",
     "hessian",

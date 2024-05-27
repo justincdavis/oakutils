@@ -23,10 +23,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from oakutils.nodes import get_nn_data
+
 from ._load import create_laserscan_model as _create_laserscan_model
 
 if TYPE_CHECKING:
     import depthai as dai
+    import numpy as np
 
 
 def create_laserscan(
@@ -91,3 +94,21 @@ def create_laserscan(
         scans=scans,
         shaves=shaves,
     )
+
+
+def get_laserscan(data: dai.NNData) -> np.ndarray:
+    """
+    Use to get the laserscan data from the output tensor.
+
+    Parameters
+    ----------
+    data : dai.NNData
+        The data from the output tensor
+
+    Returns
+    -------
+    np.ndarray
+        The laserscan data
+
+    """
+    return get_nn_data(data, use_first_layer=True)

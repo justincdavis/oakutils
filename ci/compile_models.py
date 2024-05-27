@@ -444,10 +444,14 @@ def verify_blobs():
     num_files = []
     for shave in shaves:
         shave_model_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
-        num_files.append(len(os.listdir(shave_model_folder)))
-    assert (
-        len(set(num_files)) == 1
-    ), "Not all shave folders have the same number of models"
+        shave_folder_files = os.listdir(shave_model_folder)
+        valid_files = [f for f  in shave_folder_files if not f.startswith("_")]
+        num_files.append(len(valid_files))
+    if len(set(num_files)) != 1:
+        for idx, nf in enumerate(num_files):
+            print(f"Shave {idx + 1}: {nf} files")
+
+        raise RuntimeError("Not all shave folders have the same number of files")
 
     # verify each __init__.py file has the same number of models
     num_files = []
@@ -456,9 +460,11 @@ def verify_blobs():
         init_final_path = os.path.join(shave_model_folder, "__init__.py")
         with open(init_final_path) as f:
             num_files.append(len(f.readlines()))
-    assert (
-        len(set(num_files)) == 1
-    ), "Not all __init__.py files have the same number of models"
+    if len(set(num_files)) != 1:
+        for idx, nf in enumerate(num_files):
+            print(f"Shave {idx + 1}: {nf} lines")
+
+        raise RuntimeError("Not all __init__.py files have the same number of lines")
 
 
 def build_from_cache():

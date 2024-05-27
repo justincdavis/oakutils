@@ -189,7 +189,9 @@ def _compile(
         base_str += "Try deleting the blobconverter cache directory and json file. "
         base_str += "Then recompile the blob. "
         base_str += "Linux cache directory: /home/username/.cache/blobconverter, "
-        base_str += "Windows cache directory: C:\\Users\\username\\.cache\\blobconverter"
+        base_str += (
+            "Windows cache directory: C:\\Users\\username\\.cache\\blobconverter"
+        )
         err_msg = base_str
         raise RuntimeError(err_msg) from err
     except HTTPError as err:

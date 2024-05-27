@@ -16,8 +16,8 @@ from __future__ import annotations
 
 import depthai as dai
 
-from oakutils.nodes import create_stereo_depth, create_xout, get_nn_data
-from oakutils.nodes.models import create_laserscan
+from oakutils.nodes import create_stereo_depth, create_xout
+from oakutils.nodes.models import create_laserscan, get_laserscan
 
 pipeline = dai.Pipeline()
 
@@ -40,6 +40,6 @@ with dai.Device(pipeline) as device:
 
     while True:
         data = queue.get()
-        scan = get_nn_data(data, reshape_to=(1, 1, 400))[0]
+        scan = get_laserscan(data)
 
         print(f"Scan shape: {scan.shape}, max: {scan.max()}, min: {scan.min()}")

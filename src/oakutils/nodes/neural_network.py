@@ -397,61 +397,6 @@ def get_nn_gray_frame(
     )
 
 
-def get_nn_point_cloud_buffer(
-    data: dai.NNData,
-    frame_size: tuple[int, int] = (640, 400),
-    scale: float = 1000.0,
-    *,
-    remove_zeros: bool | None = None,
-) -> np.ndarray:
-    """
-    Use to convert the raw data output from a neural network execution and converts it to a point cloud.
-
-    Parameters
-    ----------
-    data : dai.NNData
-        Raw data output from a neural network execution.
-    frame_size : tuple[int, int], optional
-        The size of the buffer, by default (640, 400)
-        Usually this will be the size of the depth frame.
-        Which inherits its shape from the MonoCamera resolutions.
-    scale: float, optional
-        The scale to apply to the point cloud, by default 1000.0
-        This will convert from mm to m.
-    remove_zeros: bool, optional
-        Whether to remove zero points, by default None
-        If None, then True is used
-        Recommended to set to True to remove zero points
-        Can speedup reading and filtering of the point cloud
-        by up to 10x
-
-    Returns
-    -------
-    np.ndarray
-        Point cloud buffer
-
-    """
-    if remove_zeros is None:
-        remove_zeros = True
-
-    pcl_data = np.array(data.getFirstLayerFp16()).reshape(
-        1,
-        3,
-        frame_size[1],
-        frame_size[0],
-    )
-    pcl_data = pcl_data.reshape(3, -1).T.astype(np.float64) / scale
-
-    if remove_zeros:
-        # optimization over an np.all since it performs less checks
-        # and realisticlly it does not matter if there is a few points
-        # difference over hundreds of interations
-        zero_val = 0.0
-        pcl_data = pcl_data[pcl_data[:, 2] != zero_val]
-
-    return pcl_data
-
-
 def get_nn_data(
     data: dai.NNData,
     reshape_to: tuple[int, ...] | None = None,
@@ -464,12 +409,14 @@ def get_nn_data(
     Use to get arbitrary shaped data from a neural network execution.
 
     This function is used for getting an arbitrarily shaped data from
-    a custom neural network execution.
-    The data is reshaped, type cast, then scaled in that order.
+    a custom neural network execution, and can handle U8 input models.
+    The data retrieved, reshaped, type cast, then scaled in that order.
     If the NN returns a single element, an example could be:
     get_nn_data(nndata, reshape_to(1, 1))[0]
     The (1, 1) shape is important since all returned tensors
     have a starting dimension of 1.
+    If the model utilizes U8 inputs, then an example could be:
+    get_nn_data(nndata, use_first_layer=True)
 
     Parameters
     ----------
@@ -484,6 +431,9 @@ def get_nn_data(
     use_first_layer : Optional[bool], optional
         Whether to use the first layer of the data, by default None
         If None, then False is used and instead getData is used
+        This should be set to true for networks which take U8 input.
+        The U8 input process means that the first layer fp16 data is
+        the correct output and not the entire buffer.
 
     Returns
     -------
