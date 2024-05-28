@@ -373,6 +373,30 @@ Laplacian_7x7 : str
     nn.Module wrapper for laplacian_7x7 operation.
 Laplacian_9x9 : str
     nn.Module wrapper for laplacian_9x9 operation.
+Laserscan_10 : str
+    nn.Module wrapper for laserscan_10 operation.
+Laserscan_10_1 : str
+    nn.Module wrapper for laserscan_10_1 operation.
+Laserscan_10_3 : str
+    nn.Module wrapper for laserscan_10_3 operation.
+Laserscan_10_5 : str
+    nn.Module wrapper for laserscan_10_5 operation.
+Laserscan_20 : str
+    nn.Module wrapper for laserscan_20 operation.
+Laserscan_20_1 : str
+    nn.Module wrapper for laserscan_20_1 operation.
+Laserscan_20_3 : str
+    nn.Module wrapper for laserscan_20_3 operation.
+Laserscan_20_5 : str
+    nn.Module wrapper for laserscan_20_5 operation.
+Laserscan_5 : str
+    nn.Module wrapper for laserscan_5 operation.
+Laserscan_5_1 : str
+    nn.Module wrapper for laserscan_5_1 operation.
+Laserscan_5_3 : str
+    nn.Module wrapper for laserscan_5_3 operation.
+Laserscan_5_5 : str
+    nn.Module wrapper for laserscan_5_5 operation.
 Pointcloud : str
     nn.Module wrapper for pointcloud operation.
 Sobel : str
@@ -804,6 +828,18 @@ LAPLACIAN_3X3 = Path(Path(_BLOB_FOLDER) / "Laplacian_3x3.blob").resolve()
 LAPLACIAN_5X5 = Path(Path(_BLOB_FOLDER) / "Laplacian_5x5.blob").resolve()
 LAPLACIAN_7X7 = Path(Path(_BLOB_FOLDER) / "Laplacian_7x7.blob").resolve()
 LAPLACIAN_9X9 = Path(Path(_BLOB_FOLDER) / "Laplacian_9x9.blob").resolve()
+LASERSCAN_10 = Path(Path(_BLOB_FOLDER) / "Laserscan_10.blob").resolve()
+LASERSCAN_10_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_1.blob").resolve()
+LASERSCAN_10_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_3.blob").resolve()
+LASERSCAN_10_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_5.blob").resolve()
+LASERSCAN_20 = Path(Path(_BLOB_FOLDER) / "Laserscan_20.blob").resolve()
+LASERSCAN_20_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_1.blob").resolve()
+LASERSCAN_20_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_3.blob").resolve()
+LASERSCAN_20_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_5.blob").resolve()
+LASERSCAN_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_5.blob").resolve()
+LASERSCAN_5_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_1.blob").resolve()
+LASERSCAN_5_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_3.blob").resolve()
+LASERSCAN_5_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_5.blob").resolve()
 POINTCLOUD = Path(Path(_BLOB_FOLDER) / "PointCloud.blob").resolve()
 SOBEL = Path(Path(_BLOB_FOLDER) / "Sobel.blob").resolve()
 SOBELBLURGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_11x11.blob").resolve()
@@ -997,6 +1033,18 @@ __all__ = [
     "LAPLACIAN_11X11",
     "LAPLACIAN_13X13",
     "LAPLACIAN_15X15",
+    "LASERSCAN_5",
+    "LASERSCAN_5_1",
+    "LASERSCAN_5_3",
+    "LASERSCAN_5_5",
+    "LASERSCAN_10",
+    "LASERSCAN_10_1",
+    "LASERSCAN_10_3",
+    "LASERSCAN_10_5",
+    "LASERSCAN_20",
+    "LASERSCAN_20_1",
+    "LASERSCAN_20_3",
+    "LASERSCAN_20_5",
     "POINTCLOUD",
     "SOBEL",
     "SOBELBLURGRAY_3X3",

@@ -265,6 +265,11 @@ def create_single_kernel_model(
     dai.node.NeuralNetwork
         The model node
 
+    Raises
+    ------
+    ValueError
+        If the kernel_size is invalid
+
     """
     _ = parse_kernel_size(
         kernel_size,
@@ -328,6 +333,11 @@ def create_double_kernel_model(
     dai.node.NeuralNetwork
         The model node
 
+    Raises
+    ------
+    ValueError
+        If either kernel_size is invalid
+
     """
     _ = parse_kernel_size(
         kernel_size1,
@@ -336,6 +346,79 @@ def create_double_kernel_model(
         kernel_size2,
     )  # raises ValueError if invalid, so no need to check
     attributes = [str(kernel_size1), str(kernel_size2)]
+    return create_model(
+        pipeline=pipeline,
+        input_link=input_link,
+        model_name=model_name,
+        attributes=attributes,
+        shaves=shaves,
+        input_names=input_names,
+        input_sizes=input_sizes,
+        input_blocking=input_blocking,
+        reuse_messages=reuse_messages,
+    )
+
+
+def create_laserscan_model(
+    pipeline: dai.Pipeline,
+    input_link: dai.Node.Output,
+    model_name: str,
+    width: int,
+    scans: int,
+    shaves: int,
+    input_names: str | None = None,
+    input_sizes: int | None = None,
+    *,
+    input_blocking: bool | None = None,
+    reuse_messages: bool | None = None,
+) -> dai.node.NeuralNetwork:
+    """
+    Use to create a laserscan model.
+
+    Parameters
+    ----------
+    pipeline : dai.Pipeline
+        The pipeline to add the model to
+    input_link : dai.node.XLinkOut
+        The input link to connect to the model node.
+        Example: cam_rgb.preview
+    model_name : str
+        The name of the model to use
+    width : int
+        The width of the model to use
+    scans : int
+        The number of scans to use
+    shaves : int
+        The number of shaves to use
+    input_names : str, optional
+        The names of the input layers
+    input_sizes : int, optional
+        The sizes of the queue for each input stream
+    input_blocking : bool, optional
+        Whether or not the input stream will be blocking
+    reuse_messages : bool, optional
+        Whether or not the data on the stream data will be reused
+
+    Returns
+    -------
+    dai.node.NeuralNetwork
+        The model node
+
+    Raises
+    ------
+    TypeError
+        If the width is not an integer
+        If the scans is not an integer
+
+    """
+    if not isinstance(width, int):
+        err_msg = "Width must be an integer."
+        raise TypeError(err_msg)
+    if not isinstance(scans, int):
+        err_msg = "Scans must be an integer."
+        raise TypeError(err_msg)
+
+    attributes = [str(width), str(scans)]
     return create_model(
         pipeline=pipeline,
         input_link=input_link,

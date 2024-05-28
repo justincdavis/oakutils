@@ -104,6 +104,7 @@ from .color_camera import create_color_camera
 from .image_manip import create_image_manip
 from .imu import create_imu
 from .mobilenet_detection_network import create_mobilenet_detection_network
+from .models import get_point_cloud_buffer as get_nn_point_cloud_buffer
 from .mono_camera import create_left_right_cameras, create_mono_camera
 from .neural_network import (
     create_neural_network,
@@ -111,7 +112,6 @@ from .neural_network import (
     get_nn_data,
     get_nn_frame,
     get_nn_gray_frame,
-    get_nn_point_cloud_buffer,
 )
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
 from .xin import create_xin

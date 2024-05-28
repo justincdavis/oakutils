@@ -26,17 +26,17 @@ This module is auto-generated
 Attributes:
 ----------
 shave1 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 1 shaves
 shave2 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 2 shaves
 shave3 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 3 shaves
 shave4 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 4 shaves
 shave5 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 5 shaves
 shave6 : module
-    Contains all the models compiled for [1, 2, 3, 4, 5, 6] shaves
+    Contains all the models compiled for 6 shaves
 
 """
 

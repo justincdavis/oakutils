@@ -13,10 +13,9 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from functools import partial
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
-from ._buffer import Buffer
+from ._packet_buffer import PacketBuffer
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -25,13 +24,21 @@ if TYPE_CHECKING:
 def create_synced_buffer(
     device: dai.DeviceBase,
     streams: list[str],
-) -> Callable[[], list[dai.ADatatype]]:
-    def _get_packet(buffer: Buffer) -> list[dai.ADatatype]:
-        data = buffer.receive()
-        if isinstance(data, list):
-            return data
-        return [data]
+) -> PacketBuffer:
+    """
+    Create a function for getting packets of data from multiple streams.
 
-    buffer = Buffer(device, [], streams)
+    Parameters
+    ----------
+    device : dai.DeviceBase
+        The OAK-D device which the streams are built on.
+    streams : list[str]
+        The output stream names for the buffer to receive data from.
 
-    return partial(_get_packet, buffer)
+    Returns
+    -------
+    PacketBuffer
+        The buffer for receiving a packet of outputs from multiple streams.
+
+    """
+    return PacketBuffer(device, streams)

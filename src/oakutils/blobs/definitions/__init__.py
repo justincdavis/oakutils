@@ -70,6 +70,8 @@ HessianGray
     nn.Module wrapper for kornia.feature.Hessian_response, with grayscale output.
 HessianBlurGray
     nn.Module wrapper for kornia.feature.Hessian_response, with grayscale output and gaussian blur.
+Laserscan
+    nn.Module for creating a laserscan from a depth image.
 Laplacian
     nn.Module wrapper for kornia.filters.laplacian.
 LaplacianBlur
@@ -115,6 +117,7 @@ from .gftt import GFTT, GFTTBlur, GFTTBlurGray, GFTTGray
 from .harris import Harris, HarrisBlur, HarrisBlurGray, HarrisGray
 from .hessian import Hessian, HessianBlur, HessianBlurGray, HessianGray
 from .laplacian import Laplacian, LaplacianBlur, LaplacianBlurGray, LaplacianGray
+from .laserscan import Laserscan
 from .opening import Opening, OpeningBlur, OpeningBlurGray, OpeningGray
 from .point_cloud import PointCloud
 from .sobel import Sobel, SobelBlur, SobelBlurGray, SobelGray
@@ -122,7 +125,6 @@ from .utils import InputType, ModelType, convert_to_fp16
 
 __all__ = [
     "GFTT",
-    # abstract model and utils
     "AbstractModel",
     "Closing",
     "ClosingBlur",
@@ -139,7 +141,6 @@ __all__ = [
     "GFTTBlur",
     "GFTTBlurGray",
     "GFTTGray",
-    # model definitions
     "Gaussian",
     "GaussianGray",
     "Harris",
@@ -155,6 +156,7 @@ __all__ = [
     "LaplacianBlur",
     "LaplacianBlurGray",
     "LaplacianGray",
+    "Laserscan",
     "ModelType",
     "Opening",
     "OpeningBlur",
@@ -165,6 +167,5 @@ __all__ = [
     "SobelBlur",
     "SobelBlurGray",
     "SobelGray",
-    # utility functions
     "convert_to_fp16",
 ]

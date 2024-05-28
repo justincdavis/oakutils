@@ -11,12 +11,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import argparse
+import getpass
 import itertools
 import os
 import shutil
 import multiprocessing as mp
 from io import TextIOWrapper
+from pathlib import Path
 
 from oakutils.blobs import compile_model as internal_compile_model
 from oakutils.blobs.definitions import AbstractModel, ModelType
@@ -32,6 +36,7 @@ from oakutils.blobs.definitions import (
     SobelGray,
     SobelBlurGray,
     PointCloud,
+    Laserscan,
     Closing,
     ClosingBlur,
     ClosingGray,
@@ -106,6 +111,8 @@ def _compile_model(model_type, model_arg, shave):
 def compile_model(model_type: AbstractModel, shave: int):
     model_args = {}
     kernel_size_list = [3, 5, 7, 9, 11, 13, 15]
+    width_list = [5, 10, 20]
+    scan_list = [1, 3, 5]
     arg_mapping = {
         ModelType.NONE: {},
         ModelType.KERNEL: {"kernel_size": kernel_size_list},
@@ -113,6 +120,10 @@ def compile_model(model_type: AbstractModel, shave: int):
             "kernel_size": kernel_size_list,
             "kernel_size2": kernel_size_list,
         },
+        ModelType.LASERSCAN: {
+            "width": width_list,
+            "scans": scan_list,
+        }
     }
     if model_type.model_type() == ModelType.NONE:
         model_args = [{}]
@@ -129,6 +140,16 @@ def compile_model(model_type: AbstractModel, shave: int):
                 kernel_list2,
             )
         ]
+    elif model_type.model_type() == ModelType.LASERSCAN:
+        width_list = arg_mapping[model_type.model_type()]["width"]
+        scan_list = arg_mapping[model_type.model_type()]["scans"]
+        model_args = [
+            {"width": w, "scans": s}
+            for w, s in itertools.product(
+                width_list,
+                scan_list,
+            )
+        ]
     else:
         raise RuntimeError("Unknown model type")
 
@@ -139,7 +160,7 @@ def compile_model(model_type: AbstractModel, shave: int):
         arg_str = dict_to_str(model_args)
 
         # for 3.8 compatibility
-        def remove_suffix(input_string, suffix):
+        def remove_suffix(input_string: str, suffix: str):
             if suffix and input_string.endswith(suffix):
                 return input_string[: -len(suffix)]
             return input_string
@@ -174,14 +195,35 @@ def compile_model(model_type: AbstractModel, shave: int):
             )
     model_args = missing_model_args
 
-    model_paths = []
-    with mp.Pool() as pool:
-        results = [
-            pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
-            for model_arg in model_args
-        ]
-        model_paths = [r.get() for r in results]
+    try:
+        model_paths = []
+        with mp.Pool() as pool:
+            results = [
+                pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
+                for model_arg in model_args
+            ]
+            model_paths = [r.get() for r in results]
+    except RuntimeError as e:
+        # if a runtime error occurs, it could be because the blobconverter
+        # cache got corrupted, so delete the cache and try again
+        # 1: get cache directory and check if it exists
+        username = getpass.getuser()
+        linux_cache_dir = Path(f"/home/{username}/.cache/blobconverter")
+        windows_cache_dir = Path(f"C:/Users/{username}/.cache/blobconverter")
+        cache_dir = linux_cache_dir if os.name == "posix" else windows_cache_dir
+        if not cache_dir.exists():
+            raise e
 
+        # 2: delete the cache directory
+        delete_folder(str(cache_dir.resolve()))
+
+        # 3: process the compilations in serial
+        model_paths = []
+        for model_arg in model_args:
+            model_path = _compile_model(model_type, model_arg, shave)
+            model_paths.append(model_path)
+
+    # copy the models to the correct folders internally
     for model_path in model_paths:
         shutil.copy(
             model_path, os.path.join(shave_folder, os.path.basename(model_path))
@@ -201,6 +243,7 @@ def compiles_models():
         SobelGray,
         SobelBlurGray,
         PointCloud,
+        Laserscan,
         # Closing,
         # ClosingBlur,
         # ClosingGray,
@@ -231,12 +274,18 @@ def compiles_models():
         GFTTBlurGray,
     ]
     shaves = [1, 2, 3, 4, 5, 6]
+
+    # store failed models
+    failed_models: list[tuple[AbstractModel, int, str]] = []
+
+    # compile models and write the __init__.py files
     for shave in shaves:
         for model in models:
             try:
                 compile_model(model, shave)
             except Exception as e:
                 print(f"Failed to compile model {model.__name__} with error {e}")
+                failed_models.append((model, shave, str(e)))
 
         # handle writing the __init__.py file
         var_names = []
@@ -256,7 +305,7 @@ def compiles_models():
             )
 
             # write the docstring
-            f.write('"""')
+            f.write('"""\n')
             f.write(f"Module for {shave} shave models.\n\n")
             f.write("Note\n")
             f.write("----\n")
@@ -368,9 +417,9 @@ def compiles_models():
         f.write("This module is auto-generated\n\n")
         f.write("Attributes\n")
         f.write("----------\n")
-        for shave in shaves:
+        for idx, shave in enumerate(shaves):
             f.write(f"shave{shave} : module\n")
-            f.write(f"    Contains all the models compiled for {shaves} shaves\n")
+            f.write(f"    Contains all the models compiled for {shaves[idx]} shaves\n")
         f.write('"""\n\n')
         for shave in shaves:
             f.write(f"from . import shave{shave}\n")
@@ -382,6 +431,12 @@ def compiles_models():
             f.write(f"    'shave{shave}',\n")
         f.write("]\n")
 
+    # write a summary of the failed models
+    if len(failed_models) > 0:
+        print(f"\nFailed to compile the following {len(failed_models)} models:")
+        print("===============================================================")
+        for model, shave, error in failed_models:
+            print(f"Model: {model.__name__}, with {shave} shaves.\n\tFailed with error: {error}")
 
 def verify_blobs():
     shaves = [1, 2, 3, 4, 5, 6]
@@ -389,10 +444,14 @@ def verify_blobs():
     num_files = []
     for shave in shaves:
         shave_model_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
-        num_files.append(len(os.listdir(shave_model_folder)))
-    assert (
-        len(set(num_files)) == 1
-    ), "Not all shave folders have the same number of models"
+        shave_folder_files = os.listdir(shave_model_folder)
+        valid_files = [f for f  in shave_folder_files if not f.startswith("_")]
+        num_files.append(len(valid_files))
+    if len(set(num_files)) != 1:
+        for idx, nf in enumerate(num_files):
+            print(f"Shave {idx + 1}: {nf} files")
+
+        raise RuntimeError("Not all shave folders have the same number of files")
 
     # verify each __init__.py file has the same number of models
     num_files = []
@@ -401,9 +460,11 @@ def verify_blobs():
         init_final_path = os.path.join(shave_model_folder, "__init__.py")
         with open(init_final_path) as f:
             num_files.append(len(f.readlines()))
-    assert (
-        len(set(num_files)) == 1
-    ), "Not all __init__.py files have the same number of models"
+    if len(set(num_files)) != 1:
+        for idx, nf in enumerate(num_files):
+            print(f"Shave {idx + 1}: {nf} lines")
+
+        raise RuntimeError("Not all __init__.py files have the same number of lines")
 
 
 def build_from_cache():
@@ -430,9 +491,13 @@ def build_from_cache():
 
 
 def main():
+    # copies compiled models from oakutils cache directory
+    # and into correct folder structure
     if BUILD_FROM_CACHE:
         build_from_cache()
         verify_blobs()
+    # rebuils all models from definition files, will skip
+    # if model already exists
     if BUILD_FROM_DEFINITIONS:
         compiles_models()
         verify_blobs()
