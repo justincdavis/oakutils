@@ -12,3 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
+
+from . import models
+from .test_install import test_model_paths_valid, test_model_shave_dirs_equal, test_model_shave_dirs_equivalent
+
+__all__ = ["models", "test_model_paths_valid", "test_model_shave_dirs_equal", "test_model_shave_dirs_equivalent"]

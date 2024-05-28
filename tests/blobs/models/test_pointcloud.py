@@ -1,6 +1,19 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import time
-import concurrent.futures
-from typing import Any
 
 import depthai as dai
 
@@ -8,23 +21,7 @@ from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 from oakutils.nodes.models import create_point_cloud
 
-
-TIME_TO_RUN = 10
-
-
-def check_method_timout(method: callable, name: str, timeout=5) -> Any:
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(method)
-        try:
-            result = future.result(timeout=timeout)
-            assert result == 0
-        except concurrent.futures.TimeoutError:
-            future.cancel()
-            raise TimeoutError(f"{name}, timed out after {timeout} seconds")
-    return result
-
-def check_network(func: callable):
-    check_method_timout(func, func.__name__, timeout=TIME_TO_RUN * 2)  # add 5 seconds to timeout to account for setup time
+from ...helpers import check_device, TIME_TO_RUN
 
 
 def check_pointcloud(shaves: int):
@@ -37,7 +34,6 @@ def check_pointcloud(shaves: int):
     calibration = get_camera_calibration(
         (1920, 1080),
         (640, 400),
-        True,
     )
     stereo, left, right = create_stereo_depth(pipeline)
     pcl, xin_xyz, start_pcl = create_point_cloud(
@@ -61,19 +57,19 @@ def check_pointcloud(shaves: int):
     return 0
 
 def test_pointcloud_1_shave():
-    check_network(lambda: check_pointcloud(1))
+    check_device(lambda: check_pointcloud(1), TIME_TO_RUN)
 
 def test_pointcloud_2_shave():
-    check_network(lambda: check_pointcloud(2))
+    check_device(lambda: check_pointcloud(2), TIME_TO_RUN)
 
 def test_pointcloud_3_shave():
-    check_network(lambda: check_pointcloud(3))
+    check_device(lambda: check_pointcloud(3), TIME_TO_RUN)
 
 def test_pointcloud_4_shave():
-    check_network(lambda: check_pointcloud(4))
+    check_device(lambda: check_pointcloud(4), TIME_TO_RUN)
 
 def test_pointcloud_5_shave():
-    check_network(lambda: check_pointcloud(5))
+    check_device(lambda: check_pointcloud(5), TIME_TO_RUN)
 
 def test_pointcloud_6_shave():
-    check_network(lambda: check_pointcloud(6))
+    check_device(lambda: check_pointcloud(6), TIME_TO_RUN)

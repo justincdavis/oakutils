@@ -1,9 +1,24 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 
 import oakutils.blobs.models as models
 
 
-def test_models_install():
+def test_model_paths_valid():
     """Test that the models are installed correctly"""
     assert os.path.exists(models.__file__)
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
@@ -35,7 +50,7 @@ def test_models_install():
             assert os.path.exists(model_path)
 
 
-def test_models_shave_equal():
+def test_model_shave_dirs_equal():
     """Tests all the shave modules have the same number of models"""
     assert os.path.exists(models.__file__)
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
@@ -62,7 +77,7 @@ def test_models_shave_equal():
                         print(f"File {file} from shave {idx1+1} not in other module shave {idx2+1}")
         raise err
 
-def test_models_shaves_equivalent():
+def test_model_shave_dirs_equivalent():
     """Tests all the shave modules have the same models"""
     assert os.path.exists(models.__file__)
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
