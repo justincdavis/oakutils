@@ -21,7 +21,6 @@ create_laplacian
 """
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 from ._load import create_double_kernel_model as _create_double_kernel_model
@@ -29,8 +28,6 @@ from ._load import create_single_kernel_model as _create_single_kernel_model
 
 if TYPE_CHECKING:
     import depthai as dai
-
-_log = logging.getLogger(__name__)
 
 
 def create_laplacian(
@@ -86,11 +83,6 @@ def create_laplacian(
         use_blur = False
     if grayscale_out is None:
         grayscale_out = False
-
-    if use_blur:
-        _log.warning(
-            "Laplacian with Blur has trouble running with color camera FPS above 15",
-        )
 
     model_type = "laplacian"
     if use_blur:
