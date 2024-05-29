@@ -21,6 +21,7 @@ from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 from oakutils.nodes.models import create_point_cloud
 
+from utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 
@@ -73,3 +74,6 @@ def test_pointcloud_5_shave():
 
 def test_pointcloud_6_shave():
     check_device(lambda: check_pointcloud(6), TIME_TO_RUN)
+
+def test_results():
+    eval_model("pointcloud", (640, 400, 1))

@@ -20,6 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_gaussian
 
+from utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 
@@ -64,3 +65,6 @@ def test_gaussian_15x15_6_shave():
 
 def test_gaussian_15x15_6_shave_gray():
     check_device(lambda: check_gaussian(15, 6, True), TIME_TO_RUN)
+
+def test_results():
+    eval_model("gaussian", (640, 480, 3))

@@ -20,6 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_hessian
 
+from utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 
@@ -65,3 +66,6 @@ def test_hessian_3x3_1_shave_blur():
 
 def test_hessian_3x3_1_shave_blur_gray():
     check_device(lambda: check_hessian(3, 1, True, True), TIME_TO_RUN)
+
+def test_results():
+    eval_model("hessian", (640, 480, 3))

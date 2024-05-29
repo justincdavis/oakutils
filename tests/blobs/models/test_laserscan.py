@@ -20,6 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_stereo_depth, create_xout
 from oakutils.nodes.models import create_laserscan, get_laserscan
 
+from utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 
@@ -68,3 +69,6 @@ def test_laserscan_5_shaves_1_scans():
 
 def test_laserscan_6_shaves_1_scans():
     check_device(lambda: check_laserscan(6, 1), TIME_TO_RUN)
+
+def test_results():
+    eval_model("laserscan", (640, 400, 1))

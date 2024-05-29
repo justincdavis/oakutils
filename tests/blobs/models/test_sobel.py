@@ -20,6 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_sobel
 
+from utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 
@@ -66,3 +67,6 @@ def test_sobel_1_shave_3x3_blur():
 
 def test_sobel_1_shave_3x3_blur_gray():
     check_device(lambda: check_sobel(3, 1, True, True), TIME_TO_RUN)
+
+def test_results():
+    eval_model("sobel", (640, 480, 3))
