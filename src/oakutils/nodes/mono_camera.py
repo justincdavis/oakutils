@@ -30,7 +30,7 @@ def create_mono_camera(
     pipeline: dai.Pipeline,
     socket: dai.CameraBoardSocket,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
-    fps: int = 60,
+    fps: int = 15,
     brightness: int = 0,
     saturation: int = 0,
     contrast: int = 0,

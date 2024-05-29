@@ -30,7 +30,7 @@ def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
     preview_size: tuple[int, int] = (640, 480),
-    fps: int = 30,
+    fps: int = 15,
     brightness: int = 0,
     saturation: int = 0,
     contrast: int = 0,

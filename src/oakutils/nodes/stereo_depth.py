@@ -31,7 +31,7 @@ from .mono_camera import create_left_right_cameras
 def create_stereo_depth(
     pipeline: dai.Pipeline,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
-    fps: int = 60,
+    fps: int = 15,
     brightness: int = 1,
     saturation: int = 1,
     contrast: int = 1,
