@@ -21,7 +21,6 @@ create_sobel
 """
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 from ._load import create_no_args_model as _create_no_args_model
@@ -29,8 +28,6 @@ from ._load import create_single_kernel_model as _create_single_kernel_model
 
 if TYPE_CHECKING:
     import depthai as dai
-
-_log = logging.getLogger(__name__)
 
 
 def create_sobel(
@@ -81,11 +78,6 @@ def create_sobel(
         use_blur = False
     if grayscale_out is None:
         grayscale_out = False
-
-    if use_blur:
-        _log.warning(
-            "Sobel with Blur has trouble running with color camera FPS above 15",
-        )
 
     model_type = "sobel"
     if use_blur:

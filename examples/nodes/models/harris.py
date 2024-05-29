@@ -25,7 +25,7 @@ pipeline = dai.Pipeline()
 # create the color camera node
 cam = create_color_camera(
     pipeline,
-    fps=15,  # some "advanced" kornia based models require lower fps
+    fps=30,
     preview_size=(640, 480),
 )  # set the preview size to the input of the nn
 
