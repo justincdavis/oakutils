@@ -63,7 +63,7 @@ ruff:
 stubs:
 	python3 ci/make_stubs.py
 
-test:
+test: install
 	./ci/run_tests.sh
 
 example-ci: pyupgrade

@@ -21,7 +21,7 @@ from oakutils.calibration import get_camera_calibration
 from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 from oakutils.nodes.models import create_point_cloud
 
-from utils import eval_model
+from .utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 

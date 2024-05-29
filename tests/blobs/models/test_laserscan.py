@@ -20,7 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_stereo_depth, create_xout
 from oakutils.nodes.models import create_laserscan, get_laserscan
 
-from utils import eval_model
+from .utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 

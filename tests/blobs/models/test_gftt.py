@@ -20,7 +20,7 @@ import depthai as dai
 from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_gftt
 
-from utils import eval_model
+from .utils import eval_model
 from ...helpers import check_device, TIME_TO_RUN
 
 

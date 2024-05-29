@@ -82,6 +82,12 @@ def eval_model(model_type: str, input_size: tuple[int, int, int]):
         assert len(results) == len(model_packet)
         for res in results:
             if not np.allclose(res, results[0]):
-                raise ValueError(f"Results are not the same id: {idx}, for models: {model_packet}")
+                err_msg = f"Results are not the same id: {idx}, for models:\n"
+                for m in model_packet:
+                    err_msg += f"\t{m}\n"
+                raise ValueError(err_msg)
+        else:
+            # if all results the same, hash the files and record
+            pass
 
     vpu.stop()
