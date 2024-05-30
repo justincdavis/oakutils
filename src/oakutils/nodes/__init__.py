@@ -85,6 +85,8 @@ get_nn_point_cloud_buffer
 frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
+from __future__ import annotations
+
 import logging
 
 from . import (

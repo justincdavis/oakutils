@@ -19,6 +19,8 @@ Classes
 VPU
     A class for using the onboard VPU as a standalone processor.
 """
+from __future__ import annotations
+
 import logging
 
 from ._vpu import VPU

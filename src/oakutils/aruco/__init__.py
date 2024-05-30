@@ -23,6 +23,8 @@ ArucoLocalizer
 ArucoStream
     Used on a video stream to find ArUco markers.
 """
+from __future__ import annotations
+
 import logging
 
 from .finder import ArucoFinder

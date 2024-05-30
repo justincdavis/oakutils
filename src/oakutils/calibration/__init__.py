@@ -42,6 +42,8 @@ get_oakd_calibration_basic
 get_oakd_calibration_primary_mono
     Gets the camera calibration data from the OAK-D device, using the primary mono camera.
 """
+from __future__ import annotations
+
 import logging
 
 from ._classes import (

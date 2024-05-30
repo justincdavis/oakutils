@@ -58,6 +58,8 @@ get_laserscan
 get_point_cloud_buffer
     Use to get the point cloud buffer from the point cloud model.
 """
+from __future__ import annotations
+
 import logging
 
 from . import gaussian, gftt, harris, hessian, laplacian, point_cloud, sobel

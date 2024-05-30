@@ -47,6 +47,8 @@ get_tuple_from_color_sensor_resolution
 get_tuple_from_mono_sensor_resolution
     Use to get a tuple from a mono sensor resolution.
 """
+from __future__ import annotations
+
 import logging
 
 from . import depth, display, parsing, pixel, spatial, transform

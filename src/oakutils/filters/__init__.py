@@ -25,6 +25,8 @@ WLSFilter
     A class for computing the weighted-least-squares filter,
     on disparity images.
 """
+from __future__ import annotations
+
 import logging
 
 from . import wls

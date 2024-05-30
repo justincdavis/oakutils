@@ -321,22 +321,23 @@ def compiles_models():
                 model_name = model_name.split(".")[0]
                 f.write(f"{model_name.capitalize()} : str\n")
                 f.write(f"    nn.Module wrapper for {model_name.lower()} operation.\n")
-            f.write('"""\n\n')
+            f.write('"""\n')
+            f.write("from __future__ import annotations\n\n")
 
             # handle imports first
             # f.write("import abc\n")
-            f.write("import os\n")
+            # f.write("import os\n")
             f.write("from pathlib import Path\n")
             f.write("import pkg_resources\n\n")
 
             # get the path to the blob folder
             f.write(
-                f"_RELATIVE_BLOB_FOLDER = Path('oakutils') / 'blobs' / 'models' / 'shave{shave}'\n"
+                f"_RELATIVE_BLOB_FOLDER: Path = Path('oakutils') / 'blobs' / 'models' / 'shave{shave}'\n"
             )
 
             # get the site packages path
             f.write(
-                "_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils').location\n"
+                "_PACKAGE_LOCATION: str = pkg_resources.get_distribution('oakutils').location\n"
             )
 
             # perform a check on _PACKAGE_LOCATION since it could be None?
@@ -345,7 +346,7 @@ def compiles_models():
             f.write("    raise RuntimeError(err_msg)\n")
 
             # perform a check on _PACKAGE_LOCATION to ensure it exists and is a directory
-            f.write("_PACKAGE_LOCATION_PATH = Path(_PACKAGE_LOCATION)\n")
+            f.write("_PACKAGE_LOCATION_PATH: Path = Path(_PACKAGE_LOCATION)\n")
             f.write("if not _PACKAGE_LOCATION_PATH.exists():\n")
             f.write("    err_msg = 'Package location does not exist'\n")
             f.write("    raise RuntimeError(err_msg)\n")
@@ -355,7 +356,7 @@ def compiles_models():
 
             # get the path to the blob folder
             f.write(
-                f"_BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
+                f"_BLOB_FOLDER: Path = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
             )
 
             # add a space
@@ -376,7 +377,7 @@ def compiles_models():
                 # var_name = var_name[1:]
                 var_names.append(var_name)
                 f.write(
-                    f"{var_name} = Path(Path(_BLOB_FOLDER) / '{model_name}').resolve()\n"
+                    f"{var_name}: Path = Path(Path(_BLOB_FOLDER) / '{model_name}').resolve()\n"
                 )
                 # f.write(f"{var_name} = _Blob(os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}')))\n")
                 # f.write(f"{var_name}.__doc__ = 'Absolute file path for {model_name} file'\n")
@@ -420,7 +421,8 @@ def compiles_models():
         for idx, shave in enumerate(shaves):
             f.write(f"shave{shave} : module\n")
             f.write(f"    Contains all the models compiled for {shaves[idx]} shaves\n")
-        f.write('"""\n\n')
+        f.write('"""\n')
+        f.write("from __future__ import annotations\n\n")
         for shave in shaves:
             f.write(f"from . import shave{shave}\n")
         f.write("\n")

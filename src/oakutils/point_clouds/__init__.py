@@ -43,6 +43,8 @@ get_point_cloud_from_rgb_depth_image
 create_point_cloud
     Use to create a point cloud from a RGB and depth image as a callback.
 """
+from __future__ import annotations
+
 import logging
 
 _log = logging.getLogger(__name__)

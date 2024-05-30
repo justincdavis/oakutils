@@ -33,6 +33,8 @@ lowest_avg_latency
 lowest_latency
     Use to get the set of arguments with the lowest latency for a specific stream
 """
+from __future__ import annotations
+
 import logging
 
 from . import objective

@@ -433,430 +433,477 @@ Sobelgray : str
     nn.Module wrapper for sobelgray operation.
 
 """
+from __future__ import annotations
 
 from pathlib import Path
 
 import pkg_resources
 
-_RELATIVE_BLOB_FOLDER = Path("oakutils") / "blobs" / "models" / "shave3"
-_PACKAGE_LOCATION = pkg_resources.get_distribution("oakutils").location
+_RELATIVE_BLOB_FOLDER: Path = Path("oakutils") / "blobs" / "models" / "shave3"
+_PACKAGE_LOCATION: str = pkg_resources.get_distribution("oakutils").location
 if _PACKAGE_LOCATION is None:
     err_msg = "Could not find package location"
     raise RuntimeError(err_msg)
-_PACKAGE_LOCATION_PATH = Path(_PACKAGE_LOCATION)
+_PACKAGE_LOCATION_PATH: Path = Path(_PACKAGE_LOCATION)
 if not _PACKAGE_LOCATION_PATH.exists():
     err_msg = "Package location does not exist"
     raise RuntimeError(err_msg)
 if not _PACKAGE_LOCATION_PATH.is_dir():
     err_msg = "Package location is not a directory"
     raise RuntimeError(err_msg)
-_BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER
+_BLOB_FOLDER: Path = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER
 
-GFTT = Path(Path(_BLOB_FOLDER) / "GFTT.blob").resolve()
-GFTTBLURGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_11x11.blob").resolve()
-GFTTBLURGRAY_13X13 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_13x13.blob").resolve()
-GFTTBLURGRAY_15X15 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_15x15.blob").resolve()
-GFTTBLURGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_3x3.blob").resolve()
-GFTTBLURGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_5x5.blob").resolve()
-GFTTBLURGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_7x7.blob").resolve()
-GFTTBLURGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_9x9.blob").resolve()
-GFTTBLUR_11X11 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_11x11.blob").resolve()
-GFTTBLUR_13X13 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_13x13.blob").resolve()
-GFTTBLUR_15X15 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_15x15.blob").resolve()
-GFTTBLUR_3X3 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_3x3.blob").resolve()
-GFTTBLUR_5X5 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_5x5.blob").resolve()
-GFTTBLUR_7X7 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_7x7.blob").resolve()
-GFTTBLUR_9X9 = Path(Path(_BLOB_FOLDER) / "GFTTBlur_9x9.blob").resolve()
-GFTTGRAY = Path(Path(_BLOB_FOLDER) / "GFTTGray.blob").resolve()
-GAUSSIANGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "GaussianGray_11x11.blob").resolve()
-GAUSSIANGRAY_13X13 = Path(Path(_BLOB_FOLDER) / "GaussianGray_13x13.blob").resolve()
-GAUSSIANGRAY_15X15 = Path(Path(_BLOB_FOLDER) / "GaussianGray_15x15.blob").resolve()
-GAUSSIANGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "GaussianGray_3x3.blob").resolve()
-GAUSSIANGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "GaussianGray_5x5.blob").resolve()
-GAUSSIANGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "GaussianGray_7x7.blob").resolve()
-GAUSSIANGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "GaussianGray_9x9.blob").resolve()
-GAUSSIAN_11X11 = Path(Path(_BLOB_FOLDER) / "Gaussian_11x11.blob").resolve()
-GAUSSIAN_13X13 = Path(Path(_BLOB_FOLDER) / "Gaussian_13x13.blob").resolve()
-GAUSSIAN_15X15 = Path(Path(_BLOB_FOLDER) / "Gaussian_15x15.blob").resolve()
-GAUSSIAN_3X3 = Path(Path(_BLOB_FOLDER) / "Gaussian_3x3.blob").resolve()
-GAUSSIAN_5X5 = Path(Path(_BLOB_FOLDER) / "Gaussian_5x5.blob").resolve()
-GAUSSIAN_7X7 = Path(Path(_BLOB_FOLDER) / "Gaussian_7x7.blob").resolve()
-GAUSSIAN_9X9 = Path(Path(_BLOB_FOLDER) / "Gaussian_9x9.blob").resolve()
-HARRIS = Path(Path(_BLOB_FOLDER) / "Harris.blob").resolve()
-HARRISBLURGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_11x11.blob").resolve()
-HARRISBLURGRAY_13X13 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_13x13.blob").resolve()
-HARRISBLURGRAY_15X15 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_15x15.blob").resolve()
-HARRISBLURGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_3x3.blob").resolve()
-HARRISBLURGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_5x5.blob").resolve()
-HARRISBLURGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_7x7.blob").resolve()
-HARRISBLURGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "HarrisBlurGray_9x9.blob").resolve()
-HARRISBLUR_11X11 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_11x11.blob").resolve()
-HARRISBLUR_13X13 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_13x13.blob").resolve()
-HARRISBLUR_15X15 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_15x15.blob").resolve()
-HARRISBLUR_3X3 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_3x3.blob").resolve()
-HARRISBLUR_5X5 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_5x5.blob").resolve()
-HARRISBLUR_7X7 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_7x7.blob").resolve()
-HARRISBLUR_9X9 = Path(Path(_BLOB_FOLDER) / "HarrisBlur_9x9.blob").resolve()
-HARRISGRAY = Path(Path(_BLOB_FOLDER) / "HarrisGray.blob").resolve()
-HESSIAN = Path(Path(_BLOB_FOLDER) / "Hessian.blob").resolve()
-HESSIANBLURGRAY_11X11 = Path(
+GFTT: Path = Path(Path(_BLOB_FOLDER) / "GFTT.blob").resolve()
+GFTTBLURGRAY_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_11x11.blob",
+).resolve()
+GFTTBLURGRAY_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_13x13.blob",
+).resolve()
+GFTTBLURGRAY_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_15x15.blob",
+).resolve()
+GFTTBLURGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_3x3.blob").resolve()
+GFTTBLURGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_5x5.blob").resolve()
+GFTTBLURGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_7x7.blob").resolve()
+GFTTBLURGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_9x9.blob").resolve()
+GFTTBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_11x11.blob").resolve()
+GFTTBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_13x13.blob").resolve()
+GFTTBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_15x15.blob").resolve()
+GFTTBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_3x3.blob").resolve()
+GFTTBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_5x5.blob").resolve()
+GFTTBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_7x7.blob").resolve()
+GFTTBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_9x9.blob").resolve()
+GFTTGRAY: Path = Path(Path(_BLOB_FOLDER) / "GFTTGray.blob").resolve()
+GAUSSIANGRAY_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_11x11.blob",
+).resolve()
+GAUSSIANGRAY_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_13x13.blob",
+).resolve()
+GAUSSIANGRAY_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_15x15.blob",
+).resolve()
+GAUSSIANGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_3x3.blob").resolve()
+GAUSSIANGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_5x5.blob").resolve()
+GAUSSIANGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_7x7.blob").resolve()
+GAUSSIANGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_9x9.blob").resolve()
+GAUSSIAN_11X11: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_11x11.blob").resolve()
+GAUSSIAN_13X13: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_13x13.blob").resolve()
+GAUSSIAN_15X15: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_15x15.blob").resolve()
+GAUSSIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_3x3.blob").resolve()
+GAUSSIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_5x5.blob").resolve()
+GAUSSIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_7x7.blob").resolve()
+GAUSSIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_9x9.blob").resolve()
+HARRIS: Path = Path(Path(_BLOB_FOLDER) / "Harris.blob").resolve()
+HARRISBLURGRAY_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_11x11.blob",
+).resolve()
+HARRISBLURGRAY_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_13x13.blob",
+).resolve()
+HARRISBLURGRAY_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_15x15.blob",
+).resolve()
+HARRISBLURGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_3x3.blob",
+).resolve()
+HARRISBLURGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_5x5.blob",
+).resolve()
+HARRISBLURGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_7x7.blob",
+).resolve()
+HARRISBLURGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_9x9.blob",
+).resolve()
+HARRISBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_11x11.blob").resolve()
+HARRISBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_13x13.blob").resolve()
+HARRISBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_15x15.blob").resolve()
+HARRISBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_3x3.blob").resolve()
+HARRISBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_5x5.blob").resolve()
+HARRISBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_7x7.blob").resolve()
+HARRISBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_9x9.blob").resolve()
+HARRISGRAY: Path = Path(Path(_BLOB_FOLDER) / "HarrisGray.blob").resolve()
+HESSIAN: Path = Path(Path(_BLOB_FOLDER) / "Hessian.blob").resolve()
+HESSIANBLURGRAY_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "HessianBlurGray_11x11.blob",
 ).resolve()
-HESSIANBLURGRAY_13X13 = Path(
+HESSIANBLURGRAY_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "HessianBlurGray_13x13.blob",
 ).resolve()
-HESSIANBLURGRAY_15X15 = Path(
+HESSIANBLURGRAY_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "HessianBlurGray_15x15.blob",
 ).resolve()
-HESSIANBLURGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "HessianBlurGray_3x3.blob").resolve()
-HESSIANBLURGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "HessianBlurGray_5x5.blob").resolve()
-HESSIANBLURGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "HessianBlurGray_7x7.blob").resolve()
-HESSIANBLURGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "HessianBlurGray_9x9.blob").resolve()
-HESSIANBLUR_11X11 = Path(Path(_BLOB_FOLDER) / "HessianBlur_11x11.blob").resolve()
-HESSIANBLUR_13X13 = Path(Path(_BLOB_FOLDER) / "HessianBlur_13x13.blob").resolve()
-HESSIANBLUR_15X15 = Path(Path(_BLOB_FOLDER) / "HessianBlur_15x15.blob").resolve()
-HESSIANBLUR_3X3 = Path(Path(_BLOB_FOLDER) / "HessianBlur_3x3.blob").resolve()
-HESSIANBLUR_5X5 = Path(Path(_BLOB_FOLDER) / "HessianBlur_5x5.blob").resolve()
-HESSIANBLUR_7X7 = Path(Path(_BLOB_FOLDER) / "HessianBlur_7x7.blob").resolve()
-HESSIANBLUR_9X9 = Path(Path(_BLOB_FOLDER) / "HessianBlur_9x9.blob").resolve()
-HESSIANGRAY = Path(Path(_BLOB_FOLDER) / "HessianGray.blob").resolve()
-LAPLACIANBLURGRAY_11X11_11X11 = Path(
+HESSIANBLURGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlurGray_3x3.blob",
+).resolve()
+HESSIANBLURGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlurGray_5x5.blob",
+).resolve()
+HESSIANBLURGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlurGray_7x7.blob",
+).resolve()
+HESSIANBLURGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlurGray_9x9.blob",
+).resolve()
+HESSIANBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_11x11.blob").resolve()
+HESSIANBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_13x13.blob").resolve()
+HESSIANBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_15x15.blob").resolve()
+HESSIANBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_3x3.blob").resolve()
+HESSIANBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_5x5.blob").resolve()
+HESSIANBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_7x7.blob").resolve()
+HESSIANBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_9x9.blob").resolve()
+HESSIANGRAY: Path = Path(Path(_BLOB_FOLDER) / "HessianGray.blob").resolve()
+LAPLACIANBLURGRAY_11X11_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_13X13 = Path(
+LAPLACIANBLURGRAY_11X11_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_15X15 = Path(
+LAPLACIANBLURGRAY_11X11_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_3X3 = Path(
+LAPLACIANBLURGRAY_11X11_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_5X5 = Path(
+LAPLACIANBLURGRAY_11X11_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_7X7 = Path(
+LAPLACIANBLURGRAY_11X11_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_11X11_9X9 = Path(
+LAPLACIANBLURGRAY_11X11_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_11X11 = Path(
+LAPLACIANBLURGRAY_13X13_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_13X13 = Path(
+LAPLACIANBLURGRAY_13X13_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_15X15 = Path(
+LAPLACIANBLURGRAY_13X13_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_3X3 = Path(
+LAPLACIANBLURGRAY_13X13_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_5X5 = Path(
+LAPLACIANBLURGRAY_13X13_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_7X7 = Path(
+LAPLACIANBLURGRAY_13X13_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_13X13_9X9 = Path(
+LAPLACIANBLURGRAY_13X13_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_11X11 = Path(
+LAPLACIANBLURGRAY_15X15_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_13X13 = Path(
+LAPLACIANBLURGRAY_15X15_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_15X15 = Path(
+LAPLACIANBLURGRAY_15X15_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_3X3 = Path(
+LAPLACIANBLURGRAY_15X15_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_5X5 = Path(
+LAPLACIANBLURGRAY_15X15_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_7X7 = Path(
+LAPLACIANBLURGRAY_15X15_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_15X15_9X9 = Path(
+LAPLACIANBLURGRAY_15X15_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_11X11 = Path(
+LAPLACIANBLURGRAY_3X3_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_13X13 = Path(
+LAPLACIANBLURGRAY_3X3_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_15X15 = Path(
+LAPLACIANBLURGRAY_3X3_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_3X3 = Path(
+LAPLACIANBLURGRAY_3X3_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_5X5 = Path(
+LAPLACIANBLURGRAY_3X3_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_7X7 = Path(
+LAPLACIANBLURGRAY_3X3_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_3X3_9X9 = Path(
+LAPLACIANBLURGRAY_3X3_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_11X11 = Path(
+LAPLACIANBLURGRAY_5X5_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_13X13 = Path(
+LAPLACIANBLURGRAY_5X5_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_15X15 = Path(
+LAPLACIANBLURGRAY_5X5_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_3X3 = Path(
+LAPLACIANBLURGRAY_5X5_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_5X5 = Path(
+LAPLACIANBLURGRAY_5X5_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_7X7 = Path(
+LAPLACIANBLURGRAY_5X5_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_5X5_9X9 = Path(
+LAPLACIANBLURGRAY_5X5_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_11X11 = Path(
+LAPLACIANBLURGRAY_7X7_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_13X13 = Path(
+LAPLACIANBLURGRAY_7X7_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_15X15 = Path(
+LAPLACIANBLURGRAY_7X7_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_3X3 = Path(
+LAPLACIANBLURGRAY_7X7_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_5X5 = Path(
+LAPLACIANBLURGRAY_7X7_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_7X7 = Path(
+LAPLACIANBLURGRAY_7X7_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_7X7_9X9 = Path(
+LAPLACIANBLURGRAY_7X7_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_9x9.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_11X11 = Path(
+LAPLACIANBLURGRAY_9X9_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_11x11.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_13X13 = Path(
+LAPLACIANBLURGRAY_9X9_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_13x13.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_15X15 = Path(
+LAPLACIANBLURGRAY_9X9_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_15x15.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_3X3 = Path(
+LAPLACIANBLURGRAY_9X9_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_3x3.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_5X5 = Path(
+LAPLACIANBLURGRAY_9X9_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_5x5.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_7X7 = Path(
+LAPLACIANBLURGRAY_9X9_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_7x7.blob",
 ).resolve()
-LAPLACIANBLURGRAY_9X9_9X9 = Path(
+LAPLACIANBLURGRAY_9X9_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_11X11 = Path(
+LAPLACIANBLUR_11X11_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_13X13 = Path(
+LAPLACIANBLUR_11X11_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_15X15 = Path(
+LAPLACIANBLUR_11X11_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_3X3 = Path(
+LAPLACIANBLUR_11X11_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_5X5 = Path(
+LAPLACIANBLUR_11X11_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_7X7 = Path(
+LAPLACIANBLUR_11X11_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_11X11_9X9 = Path(
+LAPLACIANBLUR_11X11_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_11X11 = Path(
+LAPLACIANBLUR_13X13_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_13X13 = Path(
+LAPLACIANBLUR_13X13_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_15X15 = Path(
+LAPLACIANBLUR_13X13_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_3X3 = Path(
+LAPLACIANBLUR_13X13_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_5X5 = Path(
+LAPLACIANBLUR_13X13_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_7X7 = Path(
+LAPLACIANBLUR_13X13_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_13X13_9X9 = Path(
+LAPLACIANBLUR_13X13_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_11X11 = Path(
+LAPLACIANBLUR_15X15_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_13X13 = Path(
+LAPLACIANBLUR_15X15_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_15X15 = Path(
+LAPLACIANBLUR_15X15_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_3X3 = Path(
+LAPLACIANBLUR_15X15_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_5X5 = Path(
+LAPLACIANBLUR_15X15_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_7X7 = Path(
+LAPLACIANBLUR_15X15_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_15X15_9X9 = Path(
+LAPLACIANBLUR_15X15_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_11X11 = Path(
+LAPLACIANBLUR_3X3_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_13X13 = Path(
+LAPLACIANBLUR_3X3_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_15X15 = Path(
+LAPLACIANBLUR_3X3_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_3X3 = Path(
+LAPLACIANBLUR_3X3_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_5X5 = Path(
+LAPLACIANBLUR_3X3_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_7X7 = Path(
+LAPLACIANBLUR_3X3_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_3X3_9X9 = Path(
+LAPLACIANBLUR_3X3_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_11X11 = Path(
+LAPLACIANBLUR_5X5_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_13X13 = Path(
+LAPLACIANBLUR_5X5_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_15X15 = Path(
+LAPLACIANBLUR_5X5_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_3X3 = Path(
+LAPLACIANBLUR_5X5_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_5X5 = Path(
+LAPLACIANBLUR_5X5_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_7X7 = Path(
+LAPLACIANBLUR_5X5_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_5X5_9X9 = Path(
+LAPLACIANBLUR_5X5_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_11X11 = Path(
+LAPLACIANBLUR_7X7_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_13X13 = Path(
+LAPLACIANBLUR_7X7_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_15X15 = Path(
+LAPLACIANBLUR_7X7_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_3X3 = Path(
+LAPLACIANBLUR_7X7_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_5X5 = Path(
+LAPLACIANBLUR_7X7_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_7X7 = Path(
+LAPLACIANBLUR_7X7_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_7X7_9X9 = Path(
+LAPLACIANBLUR_7X7_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_9x9.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_11X11 = Path(
+LAPLACIANBLUR_9X9_11X11: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_11x11.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_13X13 = Path(
+LAPLACIANBLUR_9X9_13X13: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_13x13.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_15X15 = Path(
+LAPLACIANBLUR_9X9_15X15: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_15x15.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_3X3 = Path(
+LAPLACIANBLUR_9X9_3X3: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_3x3.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_5X5 = Path(
+LAPLACIANBLUR_9X9_5X5: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_5x5.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_7X7 = Path(
+LAPLACIANBLUR_9X9_7X7: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_7x7.blob",
 ).resolve()
-LAPLACIANBLUR_9X9_9X9 = Path(
+LAPLACIANBLUR_9X9_9X9: Path = Path(
     Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_9x9.blob",
 ).resolve()
-LAPLACIANGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_11x11.blob").resolve()
-LAPLACIANGRAY_13X13 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_13x13.blob").resolve()
-LAPLACIANGRAY_15X15 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_15x15.blob").resolve()
-LAPLACIANGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_3x3.blob").resolve()
-LAPLACIANGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_5x5.blob").resolve()
-LAPLACIANGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_7x7.blob").resolve()
-LAPLACIANGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "LaplacianGray_9x9.blob").resolve()
-LAPLACIAN_11X11 = Path(Path(_BLOB_FOLDER) / "Laplacian_11x11.blob").resolve()
-LAPLACIAN_13X13 = Path(Path(_BLOB_FOLDER) / "Laplacian_13x13.blob").resolve()
-LAPLACIAN_15X15 = Path(Path(_BLOB_FOLDER) / "Laplacian_15x15.blob").resolve()
-LAPLACIAN_3X3 = Path(Path(_BLOB_FOLDER) / "Laplacian_3x3.blob").resolve()
-LAPLACIAN_5X5 = Path(Path(_BLOB_FOLDER) / "Laplacian_5x5.blob").resolve()
-LAPLACIAN_7X7 = Path(Path(_BLOB_FOLDER) / "Laplacian_7x7.blob").resolve()
-LAPLACIAN_9X9 = Path(Path(_BLOB_FOLDER) / "Laplacian_9x9.blob").resolve()
-LASERSCAN_10 = Path(Path(_BLOB_FOLDER) / "Laserscan_10.blob").resolve()
-LASERSCAN_10_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_1.blob").resolve()
-LASERSCAN_10_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_3.blob").resolve()
-LASERSCAN_10_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_10_5.blob").resolve()
-LASERSCAN_20 = Path(Path(_BLOB_FOLDER) / "Laserscan_20.blob").resolve()
-LASERSCAN_20_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_1.blob").resolve()
-LASERSCAN_20_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_3.blob").resolve()
-LASERSCAN_20_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_20_5.blob").resolve()
-LASERSCAN_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_5.blob").resolve()
-LASERSCAN_5_1 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_1.blob").resolve()
-LASERSCAN_5_3 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_3.blob").resolve()
-LASERSCAN_5_5 = Path(Path(_BLOB_FOLDER) / "Laserscan_5_5.blob").resolve()
-POINTCLOUD = Path(Path(_BLOB_FOLDER) / "PointCloud.blob").resolve()
-SOBEL = Path(Path(_BLOB_FOLDER) / "Sobel.blob").resolve()
-SOBELBLURGRAY_11X11 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_11x11.blob").resolve()
-SOBELBLURGRAY_13X13 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_13x13.blob").resolve()
-SOBELBLURGRAY_15X15 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_15x15.blob").resolve()
-SOBELBLURGRAY_3X3 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_3x3.blob").resolve()
-SOBELBLURGRAY_5X5 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_5x5.blob").resolve()
-SOBELBLURGRAY_7X7 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_7x7.blob").resolve()
-SOBELBLURGRAY_9X9 = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_9x9.blob").resolve()
-SOBELBLUR_11X11 = Path(Path(_BLOB_FOLDER) / "SobelBlur_11x11.blob").resolve()
-SOBELBLUR_13X13 = Path(Path(_BLOB_FOLDER) / "SobelBlur_13x13.blob").resolve()
-SOBELBLUR_15X15 = Path(Path(_BLOB_FOLDER) / "SobelBlur_15x15.blob").resolve()
-SOBELBLUR_3X3 = Path(Path(_BLOB_FOLDER) / "SobelBlur_3x3.blob").resolve()
-SOBELBLUR_5X5 = Path(Path(_BLOB_FOLDER) / "SobelBlur_5x5.blob").resolve()
-SOBELBLUR_7X7 = Path(Path(_BLOB_FOLDER) / "SobelBlur_7x7.blob").resolve()
-SOBELBLUR_9X9 = Path(Path(_BLOB_FOLDER) / "SobelBlur_9x9.blob").resolve()
-SOBELGRAY = Path(Path(_BLOB_FOLDER) / "SobelGray.blob").resolve()
+LAPLACIANGRAY_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_11x11.blob",
+).resolve()
+LAPLACIANGRAY_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_13x13.blob",
+).resolve()
+LAPLACIANGRAY_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_15x15.blob",
+).resolve()
+LAPLACIANGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_3x3.blob").resolve()
+LAPLACIANGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_5x5.blob").resolve()
+LAPLACIANGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_7x7.blob").resolve()
+LAPLACIANGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_9x9.blob").resolve()
+LAPLACIAN_11X11: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_11x11.blob").resolve()
+LAPLACIAN_13X13: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_13x13.blob").resolve()
+LAPLACIAN_15X15: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_15x15.blob").resolve()
+LAPLACIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_3x3.blob").resolve()
+LAPLACIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_5x5.blob").resolve()
+LAPLACIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_7x7.blob").resolve()
+LAPLACIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_9x9.blob").resolve()
+LASERSCAN_10: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10.blob").resolve()
+LASERSCAN_10_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_1.blob").resolve()
+LASERSCAN_10_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_3.blob").resolve()
+LASERSCAN_10_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_5.blob").resolve()
+LASERSCAN_20: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20.blob").resolve()
+LASERSCAN_20_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_1.blob").resolve()
+LASERSCAN_20_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_3.blob").resolve()
+LASERSCAN_20_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_5.blob").resolve()
+LASERSCAN_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5.blob").resolve()
+LASERSCAN_5_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_1.blob").resolve()
+LASERSCAN_5_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_3.blob").resolve()
+LASERSCAN_5_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_5.blob").resolve()
+POINTCLOUD: Path = Path(Path(_BLOB_FOLDER) / "PointCloud.blob").resolve()
+SOBEL: Path = Path(Path(_BLOB_FOLDER) / "Sobel.blob").resolve()
+SOBELBLURGRAY_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_11x11.blob",
+).resolve()
+SOBELBLURGRAY_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_13x13.blob",
+).resolve()
+SOBELBLURGRAY_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_15x15.blob",
+).resolve()
+SOBELBLURGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_3x3.blob").resolve()
+SOBELBLURGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_5x5.blob").resolve()
+SOBELBLURGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_7x7.blob").resolve()
+SOBELBLURGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_9x9.blob").resolve()
+SOBELBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_11x11.blob").resolve()
+SOBELBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_13x13.blob").resolve()
+SOBELBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_15x15.blob").resolve()
+SOBELBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_3x3.blob").resolve()
+SOBELBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_5x5.blob").resolve()
+SOBELBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_7x7.blob").resolve()
+SOBELBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_9x9.blob").resolve()
+SOBELGRAY: Path = Path(Path(_BLOB_FOLDER) / "SobelGray.blob").resolve()
 
 __all__ = [
     "GAUSSIANGRAY_3X3",

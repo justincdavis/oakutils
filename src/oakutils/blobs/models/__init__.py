@@ -39,6 +39,7 @@ shave6 : module
     Contains all the models compiled for 6 shaves
 
 """
+from __future__ import annotations
 
 from . import shave1, shave2, shave3, shave4, shave5, shave6
 
