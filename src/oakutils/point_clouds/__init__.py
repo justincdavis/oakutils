@@ -67,7 +67,9 @@ try:
         "get_point_cloud_from_np_buffer",
         "get_point_cloud_from_rgb_depth_image",
     ]
+
+    _log.debug("Loaded point_clouds")
 except ImportError:
-    _log.warning(
+    _log.info(
         "The 'open3d' package is not installed. Point cloud submodule will not be available.",
     )

@@ -23,12 +23,18 @@ ArucoLocalizer
 ArucoStream
     Used on a video stream to find ArUco markers.
 """
+import logging
+
 from .finder import ArucoFinder
 from .localizer import ArucoLocalizer
 from .stream import ArucoStream
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "ArucoFinder",
     "ArucoLocalizer",
     "ArucoStream",
 ]
+
+_log.debug("Loaded aruco")

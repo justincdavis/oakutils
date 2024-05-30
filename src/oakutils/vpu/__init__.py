@@ -19,9 +19,15 @@ Classes
 VPU
     A class for using the onboard VPU as a standalone processor.
 """
+import logging
 
 from ._vpu import VPU
+
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "VPU",
 ]
+
+_log.debug("Loaded vpu")

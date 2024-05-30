@@ -42,6 +42,8 @@ get_oakd_calibration_basic
 get_oakd_calibration_primary_mono
     Gets the camera calibration data from the OAK-D device, using the primary mono camera.
 """
+import logging
+
 from ._classes import (
     CalibrationData,
     ColorCalibrationData,
@@ -57,6 +59,8 @@ from ._oakd import (
     get_oakd_calibration_primary_mono,
 )
 
+_log = logging.getLogger(__name__)
+
 __all__ = [
     "CalibrationData",
     "ColorCalibrationData",
@@ -70,3 +74,5 @@ __all__ = [
     "get_oakd_calibration_basic",
     "get_oakd_calibration_primary_mono",
 ]
+
+_log.debug("Loaded calibration")

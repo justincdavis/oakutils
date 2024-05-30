@@ -47,6 +47,8 @@ get_tuple_from_color_sensor_resolution
 get_tuple_from_mono_sensor_resolution
     Use to get a tuple from a mono sensor resolution.
 """
+import logging
+
 from . import depth, display, parsing, pixel, spatial, transform
 from .depth import align_depth_to_rgb
 from .parsing import (
@@ -56,6 +58,9 @@ from .parsing import (
     get_tuple_from_mono_sensor_resolution,
 )
 from .spatial import HostSpatialsCalc
+
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "HostSpatialsCalc",
@@ -71,3 +76,5 @@ __all__ = [
     "spatial",
     "transform",
 ]
+
+_log.debug("Loaded tools")

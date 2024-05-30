@@ -33,9 +33,14 @@ lowest_avg_latency
 lowest_latency
     Use to get the set of arguments with the lowest latency for a specific stream
 """
+import logging
+
 from . import objective
 from ._optimizer import Optimizer
 from .objective import highest_fps, lowest_avg_latency, lowest_latency
+
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "Optimizer",
@@ -44,3 +49,5 @@ __all__ = [
     "lowest_latency",
     "objective",
 ]
+
+_log.debug("Loaded optimizer")

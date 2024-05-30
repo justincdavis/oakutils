@@ -37,11 +37,17 @@ clear_cache
 
 
 """
+import logging
+
 from . import models
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "models",
 ]
+
+_log.debug("Loaded blobs.models")
 
 try:
     from . import definitions
@@ -54,5 +60,9 @@ try:
         "definitions",
         "models",
     ]
+
+    _log.debug("Loaded blobs.definitions")
 except ImportError:
     pass
+
+_log.debug("Loaded blobs")

@@ -11,15 +11,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-"""
-Submodule for core utilities for working with the OAK-D.
-
-Functions
----------
-create_device
-    Create a DepthAI device object from a pipeline.
-
-"""
 from __future__ import annotations
 
 import depthai as dai

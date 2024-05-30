@@ -36,7 +36,7 @@ from oakutils.nodes import (
 )
 from oakutils.nodes.buffer import MultiBuffer
 
-from ..core import create_device
+from oakutils.core import create_device
 
 if TYPE_CHECKING:
     from typing_extensions import Self

@@ -12,29 +12,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
-Module for performing filtering on typical datatypes.
+Submodule for core utilities for working with the OAK-D.
 
-Submodules
-----------
-wls
-    Module for performing WLS filtering.
+Functions
+---------
+create_device
+    Create a DepthAI device object from a pipeline.
 
-Classes
--------
-WLSFilter
-    A class for computing the weighted-least-squares filter,
-    on disparity images.
 """
+from __future__ import annotations
+
 import logging
 
-from . import wls
-from .wls import WLSFilter
+from ._device import create_device
 
 _log = logging.getLogger(__name__)
 
-__all__ = [
-    "WLSFilter",
-    "wls",
-]
+__all__ = ["create_device"]
 
-_log.debug("Loaded filters")
+_log.debug("Loaded core")

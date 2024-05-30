@@ -85,6 +85,8 @@ get_nn_point_cloud_buffer
 frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
+import logging
+
 from . import (
     buffer,
     color_camera,
@@ -117,6 +119,9 @@ from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cam
 from .xin import create_xin
 from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
+
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "Buffer",
@@ -152,3 +157,5 @@ __all__ = [
     "xin",
     "xout",
 ]
+
+_log.debug("Loaded nodes")
