@@ -120,7 +120,6 @@ from .xin import create_xin
 from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = [

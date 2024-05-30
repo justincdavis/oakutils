@@ -39,7 +39,6 @@ from . import objective
 from ._optimizer import Optimizer
 from .objective import highest_fps, lowest_avg_latency, lowest_latency
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = [

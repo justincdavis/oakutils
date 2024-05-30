@@ -38,7 +38,6 @@ from ._funcs import create_synced_buffer
 from ._multi_buffer import MultiBuffer
 from ._simple_buffer import SimpleBuffer
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = ["Buffer", "MultiBuffer", "SimpleBuffer", "create_synced_buffer"]

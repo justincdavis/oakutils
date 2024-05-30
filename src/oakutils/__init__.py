@@ -136,7 +136,9 @@ if level is not None and level.upper() not in [
 # handle imports which must occur first
 from . import core
 
-_log.debug("Imported core module")
+if "create_device" not in dir(core):
+    err_msg = "The 'core' module must contain a 'create_device' function."
+    raise ImportError(err_msg)
 
 # handle other imports
 from . import (

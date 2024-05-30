@@ -70,7 +70,6 @@ from .laserscan import create_laserscan, get_laserscan
 from .point_cloud import create_point_cloud, create_xyz_matrix, get_point_cloud_buffer
 from .sobel import create_sobel
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = [

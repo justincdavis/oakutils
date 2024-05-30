@@ -23,7 +23,6 @@ import logging
 
 from ._vpu import VPU
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = [

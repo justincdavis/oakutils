@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING
 import depthai as dai
 import numpy as np
 
+from oakutils.core import create_device
 from oakutils.nodes import (
     MobilenetData,
     YolomodelData,
@@ -35,8 +36,6 @@ from oakutils.nodes import (
     create_yolo_detection_network,
 )
 from oakutils.nodes.buffer import MultiBuffer
-
-from oakutils.core import create_device
 
 if TYPE_CHECKING:
     from typing_extensions import Self

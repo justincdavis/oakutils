@@ -59,7 +59,6 @@ from .parsing import (
 )
 from .spatial import HostSpatialsCalc
 
-
 _log = logging.getLogger(__name__)
 
 __all__ = [
