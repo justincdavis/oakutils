@@ -421,11 +421,52 @@ def compiles_models():
         for idx, shave in enumerate(shaves):
             f.write(f"shave{shave} : module\n")
             f.write(f"    Contains all the models compiled for {shaves[idx]} shaves\n")
+        f.write("\n")
         f.write('"""\n')
         f.write("from __future__ import annotations\n\n")
+        f.write("import importlib\n")
+        f.write("import sys\n")
+        f.write("from typing import TYPE_CHECKING\n\n")
+
+        # not used due to lazy imports
+        # # from . import shave modules
+        # for shave in shaves:
+        #     f.write(f"from . import shave{shave}\n")
+        # f.write("\n")
+
+        # add TYPE_CHECKING import
+        f.write("if TYPE_CHECKING:\n")
+        f.write("    from types import ModuleType\n\n")
+
+        # create _submodules for lazy loading
+        f.write("_submodules = [\n")
         for shave in shaves:
-            f.write(f"from . import shave{shave}\n")
-        f.write("\n")
+            f.write(f"    'shave{shave}',\n")
+        f.write("]\n\n")
+
+        # create _loaded_modules for lazy loading
+        f.write("_loaded_modules: dict[str, ModuleType | None] = {\n")
+        for shave in shaves:
+            f.write(f'    "shave{shave}": None,\n')
+        f.write("}\n\n")
+
+        # write the new __getattr__ function
+        f.write("def __getattr__(name: str) -> ModuleType:\n")
+        f.write("    if name in _submodules:\n")
+        f.write('        _loaded_modules[name] = importlib.import_module(f"{__name__}.{name}")\n')
+        f.write("        setattr(sys.modules[__name__], name, _loaded_modules[name])\n")
+        f.write("        module = _loaded_modules[name]\n")
+        f.write("        if module is None:\n")
+        f.write('            err_msg = f"Could not import module {name}"\n')
+        f.write("            raise ImportError(err_msg)\n")
+        f.write("        return module\n")
+        f.write('    err_msg = f"module {__name__} has no attribute {name}"\n')
+        f.write("    raise AttributeError(err_msg)\n\n")
+
+        # write new __dir__ method
+        f.write("def __dir__() -> list[str]:\n")
+        f.write("    module_attrs = list(object.__dir__(sys.modules[__name__]))\n")
+        f.write("    return list(set(module_attrs + _submodules))\n\n")
 
         # write the __all__ variable
         f.write("\n__all__ = [\n")

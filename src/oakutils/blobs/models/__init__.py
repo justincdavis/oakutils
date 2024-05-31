@@ -41,7 +41,49 @@ shave6 : module
 """
 from __future__ import annotations
 
-from . import shave1, shave2, shave3, shave4, shave5, shave6
+import importlib
+import sys
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import ModuleType
+
+_submodules = [
+    "shave1",
+    "shave2",
+    "shave3",
+    "shave4",
+    "shave5",
+    "shave6",
+]
+
+_loaded_modules: dict[str, ModuleType | None] = {
+    "shave1": None,
+    "shave2": None,
+    "shave3": None,
+    "shave4": None,
+    "shave5": None,
+    "shave6": None,
+}
+
+
+def __getattr__(name: str) -> ModuleType:
+    if name in _submodules:
+        _loaded_modules[name] = importlib.import_module(f"{__name__}.{name}")
+        # setattr(sys.modules[__name__], name, _loaded_modules[name])
+        module = _loaded_modules[name]
+        if module is None:
+            err_msg = f"Could not import module {name}"
+            raise ImportError(err_msg)
+        return module
+    err_msg = f"module {__name__} has no attribute {name}"
+    raise AttributeError(err_msg)
+
+
+def __dir__() -> list[str]:
+    module_attrs = list(object.__dir__(sys.modules[__name__]))
+    return list(set(module_attrs + _submodules))
+
 
 __all__ = [
     "shave1",
