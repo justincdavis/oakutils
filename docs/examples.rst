@@ -22,6 +22,7 @@ Examples
     examples/nodes/models/harris.rst
     examples/nodes/models/hessian.rst
     examples/nodes/models/laplacian.rst
+    examples/nodes/models/laserscan.rst
     examples/nodes/models/point_cloud.rst
     examples/nodes/models/sobel.rst
     examples/nodes/mono_camera.rst
@@ -31,5 +32,6 @@ Examples
     examples/optimizer/optimizer.rst
     examples/point_clouds/visualizer.rst
     examples/vpu/multi_configure.rst
+    examples/vpu/multi_model.rst
     examples/vpu/simple.rst
     examples/webcam.rst

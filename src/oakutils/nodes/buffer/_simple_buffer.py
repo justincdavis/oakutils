@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -48,7 +38,9 @@ class SimpleBuffer:
         self._input_stream = input_stream
         self._output_stream = output_stream
         self._input_queue: dai.DataInputQueue = device.getInputQueue(self._input_stream)  # type: ignore[attr-defined]
-        self._output_queue: dai.DataOutputQueue = device.getOutputQueue(self._output_stream)  # type: ignore[attr-defined]
+        self._output_queue: dai.DataOutputQueue = device.getOutputQueue(  # type: ignore[attr-defined]
+            self._output_stream,
+        )
 
     def __call__(
         self: Self,

@@ -84,6 +84,14 @@ oakutils.blobs.definitions.laplacian module
    :undoc-members:
    :show-inheritance:
 
+oakutils.blobs.definitions.laserscan module
+-------------------------------------------
+
+.. automodule:: oakutils.blobs.definitions.laserscan
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 oakutils.blobs.definitions.opening module
 -----------------------------------------
 

@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 from __future__ import annotations
 
 import argparse
@@ -70,20 +60,8 @@ from oakutils.blobs.definitions import (
 
 def write_copyright(f: TextIOWrapper):
     f.write("# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)\n")
-    f.write("# This program is free software: you can redistribute it and/or modify\n")
-    f.write("# it under the terms of the GNU General Public License as published by\n")
-    f.write("# the Free Software Foundation, either version 3 of the License, or\n")
-    f.write("# (at your option) any later version.\n")
     f.write("#\n")
-    f.write("# This program is distributed in the hope that it will be useful,\n")
-    f.write("# but WITHOUT ANY WARRANTY; without even the implied warranty of\n")
-    f.write("# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n")
-    f.write("# GNU General Public License for more details.\n")
-    f.write("#\n")
-    f.write("# You should have received a copy of the GNU General Public License\n")
-    f.write(
-        "# along with this program. If not, see <https://www.gnu.org/licenses/>.\n\n"
-    )
+    f.write("# MIT License\n")
 
 
 def delete_folder(folder_path: str):
@@ -403,6 +381,7 @@ def compiles_models():
 
     with open(os.path.join(MODEL_FOLDER, "__init__.py"), "w") as f:
         write_copyright(f)
+        f.write("# ruff: noqa: F822\n")
         # add big comment saying this is an auto-generated file
         f.write(
             "# =============================================================================\n"

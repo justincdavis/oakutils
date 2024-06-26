@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for localizing the camera in the world using ArUco markers.
 
@@ -19,6 +9,7 @@ Classes
 ArucoLocalizer
     Use to localize the camera in the world using ArUco markers.
 """
+
 from __future__ import annotations
 
 from collections import deque
@@ -29,6 +20,8 @@ import numpy as np
 from oakutils.tools.transform import create_transform
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from typing_extensions import Self
 
 
@@ -89,15 +82,15 @@ class ArucoLocalizer:
 
     def localize(
         self: Self,
-        markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+        markers: Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
         """
         Use to localize the camera in the world using ArUco markers.
 
         Parameters
         ----------
-        markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
-            A list of markers detected sin the image
+        markers : Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            A sequence of markers detected sin the image
 
         """
         transforms = []

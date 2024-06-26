@@ -1,17 +1,8 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """Example showcasing how to use the compile_model function."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -20,8 +11,6 @@ import cv2
 import depthai as dai
 import kornia
 import torch
-from typing_extensions import Self
-
 from oakutils.blobs import compile_model
 from oakutils.blobs.definitions import AbstractModel, InputType, ModelType
 from oakutils.nodes import (
@@ -30,6 +19,7 @@ from oakutils.nodes import (
     create_xout,
     get_nn_bgr_frame,
 )
+from typing_extensions import Self
 
 
 class Custom(AbstractModel):
