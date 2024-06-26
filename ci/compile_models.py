@@ -315,7 +315,7 @@ def compiles_models():
 
             # get the site packages path
             f.write(
-                "_PACKAGE_LOCATION: str = pkg_resources.get_distribution('oakutils').location\n"
+                "_PACKAGE_LOCATION: str | None = pkg_resources.get_distribution('oakutils').location\n"
             )
 
             # perform a check on _PACKAGE_LOCATION since it could be None?

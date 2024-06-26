@@ -430,7 +430,7 @@ from pathlib import Path
 import pkg_resources
 
 _RELATIVE_BLOB_FOLDER: Path = Path("oakutils") / "blobs" / "models" / "shave5"
-_PACKAGE_LOCATION: str = pkg_resources.get_distribution("oakutils").location
+_PACKAGE_LOCATION: str | None = pkg_resources.get_distribution("oakutils").location
 if _PACKAGE_LOCATION is None:
     err_msg = "Could not find package location"
     raise RuntimeError(err_msg)
