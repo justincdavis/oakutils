@@ -1,3 +1,6 @@
+# Cached blob files
+src/oakutils/blobs/_cache/*.blob
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
