@@ -9,8 +9,8 @@ Example: aruco/webcam.py
 	#
 	# MIT License
 	"""Example showcasing how to use ArucoStream on the Webcam abstraction."""
-	import cv2
 	
+	import cv2
 	from oakutils import Webcam
 	from oakutils.aruco import ArucoStream
 	

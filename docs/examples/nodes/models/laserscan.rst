@@ -9,10 +9,10 @@ Example: nodes/models/laserscan.py
 	#
 	# MIT License
 	"""Example showcasing how to use the Sobel model."""
+	
 	from __future__ import annotations
 	
 	import depthai as dai
-	
 	from oakutils.nodes import create_stereo_depth, create_xout
 	from oakutils.nodes.models import create_laserscan, get_laserscan
 	

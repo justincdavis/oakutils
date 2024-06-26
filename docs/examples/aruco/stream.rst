@@ -9,9 +9,9 @@ Example: aruco/stream.py
 	#
 	# MIT License
 	"""Example showcasing how to use the ArucoStream."""
+	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.aruco import ArucoStream
 	from oakutils.calibration import get_camera_calibration_basic
 	from oakutils.nodes import create_color_camera, create_xout

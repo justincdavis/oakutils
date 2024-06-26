@@ -9,11 +9,11 @@ Example: nodes/models/hessian.py
 	#
 	# MIT License
 	"""Example showcasing how to use the HarrisCornerDetector model."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame
 	from oakutils.nodes.models import create_hessian
 	

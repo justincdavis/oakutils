@@ -9,11 +9,11 @@ Example: nodes/color_camera.py
 	#
 	# MIT License
 	"""Example showcasing making a color_camera node."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_color_camera, create_xout
 	
 	pipeline = dai.Pipeline()

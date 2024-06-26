@@ -9,10 +9,10 @@ Example: nodes/imu.py
 	#
 	# MIT License
 	"""Example showcasing how to make an imu node."""
+	
 	from __future__ import annotations
 	
 	import depthai as dai
-	
 	from oakutils.nodes import create_imu, create_xout
 	
 	pipeline = dai.Pipeline()

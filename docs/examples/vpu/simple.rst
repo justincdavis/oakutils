@@ -9,13 +9,13 @@ Example: vpu/simple.py
 	#
 	# MIT License
 	"""Example showcasing how to use the VPU abstraction."""
+	
 	from __future__ import annotations
 	
 	import time
 	from collections import deque
 	
 	import numpy as np
-	
 	from oakutils import VPU
 	from oakutils.blobs.models.shave6 import GAUSSIAN_15X15
 	

@@ -9,6 +9,7 @@ Example: legacy_camera.py
 	#
 	# MIT License
 	"""Example showcasing how to use the LegacyCamera abstraction."""
+	
 	from __future__ import annotations
 	
 	import time

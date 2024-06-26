@@ -9,6 +9,7 @@ Example: optimizer/optimizer.py
 	#
 	# MIT License
 	"""Example showcasing how to use the optimizer."""
+	
 	from __future__ import annotations
 	
 	from typing import TYPE_CHECKING, Any, Callable

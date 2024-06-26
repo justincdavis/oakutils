@@ -9,9 +9,9 @@ Example: aruco/finder.py
 	#
 	# MIT License
 	"""Example showcasing how to use the ArucoFinder."""
+	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.aruco import ArucoFinder
 	from oakutils.calibration import get_camera_calibration_basic
 	from oakutils.nodes import create_color_camera, create_xout

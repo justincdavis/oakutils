@@ -9,13 +9,13 @@ Example: vpu/multi_configure.py
 	#
 	# MIT License
 	"""Example showcasing how to reconfigure the VPU on the fly."""
+	
 	from __future__ import annotations
 	
 	import time
 	from collections import deque
 	
 	import numpy as np
-	
 	from oakutils import VPU
 	from oakutils.blobs.models.shave6 import GAUSSIAN_15X15, LAPLACIAN_15X15
 	

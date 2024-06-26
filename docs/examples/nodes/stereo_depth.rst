@@ -9,11 +9,11 @@ Example: nodes/stereo_depth.py
 	#
 	# MIT License
 	"""Example showcasing how to make a stereo_depth node."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_stereo_depth, create_xout
 	
 	pipeline = dai.Pipeline()

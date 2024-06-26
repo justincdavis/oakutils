@@ -9,11 +9,11 @@ Example: nodes/models/grayscale_laplacian.py
 	#
 	# MIT License
 	"""Example showcasing how to use the Laplacian model."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_color_camera, create_xout, get_nn_gray_frame
 	from oakutils.nodes.models import create_laplacian
 	

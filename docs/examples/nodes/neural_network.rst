@@ -9,11 +9,11 @@ Example: nodes/neural_network.py
 	#
 	# MIT License
 	"""Example showcasing how to make a neural_network node."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.blobs import models
 	from oakutils.nodes import (
 	    create_color_camera,

@@ -9,11 +9,11 @@ Example: nodes/image_manip.py
 	#
 	# MIT License
 	"""Example showcasing how to make an image_manip node."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.nodes import create_color_camera, create_image_manip, create_xout
 	
 	pipeline = dai.Pipeline()

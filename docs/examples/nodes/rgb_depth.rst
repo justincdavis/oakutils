@@ -9,11 +9,11 @@ Example: nodes/rgb_depth.py
 	#
 	# MIT License
 	"""Example showcasing how to start rgb and depth streams."""
+	
 	from __future__ import annotations
 	
 	import cv2
 	import depthai as dai
-	
 	from oakutils.calibration import get_camera_calibration
 	from oakutils.nodes import create_color_camera, create_stereo_depth, create_xout
 	

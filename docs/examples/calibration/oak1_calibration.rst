@@ -9,8 +9,8 @@ Example: calibration/oak1_calibration.py
 	#
 	# MIT License
 	"""Example on getting calibration data from the OAK-D."""
-	import depthai_sdk as sdk
 	
+	import depthai_sdk as sdk
 	from oakutils.calibration import ColorCalibrationData, get_camera_calibration
 	
 	

@@ -9,10 +9,10 @@ Example: webcam.py
 	#
 	# MIT License
 	"""Example showcasing how to use the Webcam abstraction."""
+	
 	from __future__ import annotations
 	
 	import cv2
-	
 	from oakutils import Webcam
 	
 	cam = Webcam()

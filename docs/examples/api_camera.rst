@@ -9,6 +9,7 @@ Example: api_camera.py
 	#
 	# MIT License
 	"""File showcasing an example usecase of the ApiCamera class."""
+	
 	from __future__ import annotations
 	
 	from typing import TYPE_CHECKING

@@ -9,12 +9,12 @@ Example: nodes/models/point_cloud.py
 	#
 	# MIT License
 	"""Example showcasing how to use the onboard point cloud model."""
+	
 	from __future__ import annotations
 	
 	from typing import TYPE_CHECKING
 	
 	import depthai as dai
-	
 	from oakutils.calibration import get_camera_calibration
 	from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
 	from oakutils.nodes.models import create_point_cloud
