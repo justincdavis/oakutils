@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 # ruff: noqa: E402
 """
 Package for Python utilities for the OpenCV AI Kit (OAK-D) and related hardware.
@@ -62,6 +52,7 @@ create_device
     Create a DepthAI device object from a pipeline.
 
 """
+
 from __future__ import annotations
 
 # setup the logger before importing anything else
@@ -136,7 +127,9 @@ if level is not None and level.upper() not in [
 # handle imports which must occur first
 from . import core
 
-_log.debug("Imported core module")
+if "create_device" not in dir(core):
+    err_msg = "The 'core' module must contain a 'create_device' function."
+    raise ImportError(err_msg)
 
 # handle other imports
 from . import (
@@ -152,6 +145,7 @@ from . import (
 )
 from ._api_camera import ApiCamera
 from ._webcam import Webcam
+from .core import create_device
 from .vpu import VPU
 
 __all__ = [
@@ -177,6 +171,6 @@ with contextlib.suppress(ImportError):
 
     __all__ += ["LegacyCamera"]
 
-__version__ = "1.5.0"
+__version__ = "1.5.1"
 
 _log.info(f"Initialized oakutils with version {__version__}")

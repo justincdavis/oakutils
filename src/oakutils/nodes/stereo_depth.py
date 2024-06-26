@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for creating stereo depth nodes.
 
@@ -21,6 +11,7 @@ create_stereo_depth
 create_stereo_depth_from_mono_cameras
     Creates a stereo depth node from a pipeline and two mono cameras.
 """
+
 from __future__ import annotations
 
 import depthai as dai
@@ -31,7 +22,7 @@ from .mono_camera import create_left_right_cameras
 def create_stereo_depth(
     pipeline: dai.Pipeline,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
-    fps: int = 60,
+    fps: int = 15,
     brightness: int = 1,
     saturation: int = 1,
     contrast: int = 1,

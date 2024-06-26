@@ -10,8 +10,10 @@ setlocal enabledelayedexpansion
 @REM     python3 -m pytest --log-cli-level=WARNING --full-trace -rP "%%i"
 @REM )
 
-python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_models_install.py || exit /b 1
-python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_models_run.py || exit /b 1
-python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_vpu.py || exit /b 1
+@REM python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_models_install.py || exit /b 1
+@REM python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_models_run.py || exit /b 1
+@REM python3 -m pytest --log-cli-level=WARNING -rP .\tests\check_vpu.py || exit /b 1
+
+python3 -m pytest -x --log-cli-level=WARNING -rP tests/ || exit /b 1
 
 endlocal

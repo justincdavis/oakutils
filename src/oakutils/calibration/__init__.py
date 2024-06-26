@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for camera calibration utilities.
 
@@ -42,6 +32,11 @@ get_oakd_calibration_basic
 get_oakd_calibration_primary_mono
     Gets the camera calibration data from the OAK-D device, using the primary mono camera.
 """
+
+from __future__ import annotations
+
+import logging
+
 from ._classes import (
     CalibrationData,
     ColorCalibrationData,
@@ -57,6 +52,8 @@ from ._oakd import (
     get_oakd_calibration_primary_mono,
 )
 
+_log = logging.getLogger(__name__)
+
 __all__ = [
     "CalibrationData",
     "ColorCalibrationData",
@@ -70,3 +67,5 @@ __all__ = [
     "get_oakd_calibration_basic",
     "get_oakd_calibration_primary_mono",
 ]
+
+_log.debug("Loaded calibration")

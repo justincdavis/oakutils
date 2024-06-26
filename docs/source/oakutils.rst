@@ -10,6 +10,7 @@ Subpackages
    oakutils.aruco
    oakutils.blobs
    oakutils.calibration
+   oakutils.core
    oakutils.filters
    oakutils.nodes
    oakutils.optimizer

@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for creating nodes for the OAK-D.
 
@@ -85,6 +75,11 @@ get_nn_point_cloud_buffer
 frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
+
+from __future__ import annotations
+
+import logging
+
 from . import (
     buffer,
     color_camera,
@@ -117,6 +112,8 @@ from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cam
 from .xin import create_xin
 from .xout import create_xout
 from .yolo_detection_network import create_yolo_detection_network
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "Buffer",
@@ -152,3 +149,5 @@ __all__ = [
     "xin",
     "xout",
 ]
+
+_log.debug("Loaded nodes")

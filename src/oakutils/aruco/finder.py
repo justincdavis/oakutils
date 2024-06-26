@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for finding aruco markers in images and acquiring transformation matrices to them.
 
@@ -19,6 +9,7 @@ Classes
 ArucoFinder
     Use to find ArUco markers in an image.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -27,6 +18,8 @@ import cv2  # type: ignore[import]
 import numpy as np
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from typing_extensions import Self
 
     from oakutils.calibration import ColorCalibrationData, MonoCalibrationData
@@ -102,7 +95,7 @@ class ArucoFinder:
         image: np.ndarray,
         *,
         rectified: bool | None = None,
-    ) -> list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
+    ) -> Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
         """
         Use to find the aruco markers in the image.
 
@@ -119,8 +112,8 @@ class ArucoFinder:
 
         Returns
         -------
-        list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
-            The list of aruco markers found in the image
+        Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            The sequence of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
             rotation vector, translation vector, and corners
 
@@ -135,15 +128,19 @@ class ArucoFinder:
                 None,
                 self._K,
             )
-        corners, ids, _ = cv2.aruco.detectMarkers(image, self._adict)  # type: ignore[attr-defined]
+        marker_data = cv2.aruco.detectMarkers(image, self._adict)  # type: ignore[attr-defined]
+        corners: Sequence[np.ndarray] = marker_data[0]
+        ids: list[np.ndarray] = marker_data[1]
         ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
-            rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(  # type: ignore[attr-defined]
-                [corner],
+            pose_data = cv2.aruco.estimatePoseSingleMarkers(  # type: ignore[attr-defined]
+                [corner],  # type: ignore[list-item]
                 self._marker_size,
                 self._K,
                 self._D,
             )
+            rvecs: list[np.ndarray] = pose_data[0]
+            tvecs: list[np.ndarray] = pose_data[1]
             try:
                 rvec = rvecs[0]
                 tvec = tvecs[0]
@@ -162,7 +159,7 @@ class ArucoFinder:
     def draw(
         self: Self,
         image: np.ndarray,
-        markers: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+        markers: Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
     ) -> np.ndarray:
         """
         Use to draw the detected markers onto the image.
@@ -171,8 +168,8 @@ class ArucoFinder:
         ----------
         image : np.ndarray
             The image to draw the markers on
-        markers : list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
-            The list of aruco markers found in the image
+        markers : Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+            The sequence of aruco markers found in the image
             Each tuple contains the id, transformation matrix,
             rotation vector, translation vector, and corners
 

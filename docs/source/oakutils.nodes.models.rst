@@ -44,6 +44,14 @@ oakutils.nodes.models.laplacian module
    :undoc-members:
    :show-inheritance:
 
+oakutils.nodes.models.laserscan module
+--------------------------------------
+
+.. automodule:: oakutils.nodes.models.laserscan
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 oakutils.nodes.models.point\_cloud module
 -----------------------------------------
 

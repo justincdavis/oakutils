@@ -1,4 +1,4 @@
-.PHONY: help install clean docs blobs test ci mypy pyright pyupgrade isort black ruff release example-ci
+.PHONY: help install clean docs blobs test ci mypy pyright ruff release example-ci
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -8,9 +8,6 @@ help:
 	@echo "  ci 	    to run the CI workflows"
 	@echo "  mypy       to run the mypy static type checker"
 	@echo "  pyright    to run the pyright static type checker"
-	@echo "  pyupgrade  to run pyupgrade"
-	@echo "  isort      to run isort"
-	@echo "  black      to run black"
 	@echo "  ruff 	    to run ruff"
 	@echo "  blobs      to compile the models"
 	@echo "  stubs      to generate the stubs"
@@ -40,7 +37,7 @@ docs:
 blobs:
 	python3 ci/compile_models.py --definitions
 
-ci: pyupgrade ruff mypy isort black
+ci: ruff mypy
 
 mypy:
 	python3 -m mypy src/oakutils --config-file=pyproject.toml
@@ -48,27 +45,18 @@ mypy:
 pyright:
 	python3 -m pyright --project=pyproject.toml
 
-pyupgrade:
-	-./ci/pyupgrade.sh
-
-isort:
-	python3 -m isort src/oakutils
-
-black:
-	python3 -m black src/oakutils --safe
-
 ruff:
+	python3 -m ruff format ./src/oakutils
 	python3 -m ruff check ./src/oakutils --fix --preview
 
 stubs:
 	python3 ci/make_stubs.py
 
-test:
+test: install
 	./ci/run_tests.sh
 
-example-ci: pyupgrade
+example-ci:
+	python3 -m ruff format ./examples
 	python3 -m ruff check ./examples --fix --preview --ignore=T201,INP001,F841
-	python3 -m isort examples
-	python3 -m black examples --safe
 
 release: clean blobs ci test docs example-ci

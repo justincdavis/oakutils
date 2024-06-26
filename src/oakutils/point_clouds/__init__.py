@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Moudule for creating, filtering, and visualizing point clouds.
 
@@ -43,6 +33,9 @@ get_point_cloud_from_rgb_depth_image
 create_point_cloud
     Use to create a point cloud from a RGB and depth image as a callback.
 """
+
+from __future__ import annotations
+
 import logging
 
 _log = logging.getLogger(__name__)
@@ -67,7 +60,9 @@ try:
         "get_point_cloud_from_np_buffer",
         "get_point_cloud_from_rgb_depth_image",
     ]
+
+    _log.debug("Loaded point_clouds")
 except ImportError:
-    _log.warning(
+    _log.info(
         "The 'open3d' package is not installed. Point cloud submodule will not be available.",
     )

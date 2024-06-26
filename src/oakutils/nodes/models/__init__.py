@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Functions for creating models for use in the OAK-D pipeline.
 
@@ -58,6 +48,11 @@ get_laserscan
 get_point_cloud_buffer
     Use to get the point cloud buffer from the point cloud model.
 """
+
+from __future__ import annotations
+
+import logging
+
 from . import gaussian, gftt, harris, hessian, laplacian, point_cloud, sobel
 from .gaussian import create_gaussian
 from .gftt import create_gftt
@@ -67,6 +62,8 @@ from .laplacian import create_laplacian
 from .laserscan import create_laserscan, get_laserscan
 from .point_cloud import create_point_cloud, create_xyz_matrix, get_point_cloud_buffer
 from .sobel import create_sobel
+
+_log = logging.getLogger(__name__)
 
 __all__ = [
     "create_gaussian",
@@ -88,3 +85,5 @@ __all__ = [
     "point_cloud",
     "sobel",
 ]
+
+_log.debug("Loaded nodes.models")

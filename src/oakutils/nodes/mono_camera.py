@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for creating mono camera nodes.
 
@@ -21,6 +11,7 @@ create_mono_camera
 create_left_right_cameras
     Wrapper function for creating the left and right mono cameras.
 """
+
 from __future__ import annotations
 
 import depthai as dai
@@ -30,7 +21,7 @@ def create_mono_camera(
     pipeline: dai.Pipeline,
     socket: dai.CameraBoardSocket,
     resolution: dai.MonoCameraProperties.SensorResolution = dai.MonoCameraProperties.SensorResolution.THE_400_P,
-    fps: int = 60,
+    fps: int = 15,
     brightness: int = 0,
     saturation: int = 0,
     contrast: int = 0,

@@ -1,29 +1,17 @@
+# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
+#
+# MIT License
+from __future__ import annotations
+
 import time
-import concurrent.futures
-from typing import Any
 
 import depthai as dai
 
 from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
 from oakutils.nodes.models import create_harris
 
-
-TIME_TO_RUN = 10
-
-
-def check_method_timout(method: callable, name: str, timeout=5) -> Any:
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(method)
-        try:
-            result = future.result(timeout=timeout)
-            assert result == 0
-        except concurrent.futures.TimeoutError:
-            future.cancel()
-            raise TimeoutError(f"{name}, timed out after {timeout} seconds")
-    return result
-
-def check_network(func: callable):
-    check_method_timout(func, func.__name__, timeout=TIME_TO_RUN + 5)  # add 5 seconds to timeout to account for setup time
+from .utils import eval_model
+from ...helpers import check_device, TIME_TO_RUN
 
 
 def check_harris(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: bool):
@@ -58,13 +46,16 @@ def check_harris(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: b
     return 0
 
 def test_harris_3x3_1_shave():
-    check_network(lambda: check_harris(3, 1, False, False))
+    check_device(lambda: check_harris(3, 1, False, False), TIME_TO_RUN)
 
 def test_harris_3x3_1_shave_gray():
-    check_network(lambda: check_harris(3, 1, False, True))
+    check_device(lambda: check_harris(3, 1, False, True), TIME_TO_RUN)
 
 def test_harris_3x3_1_shave_blur():
-    check_network(lambda: check_harris(3, 1, True, False))
+    check_device(lambda: check_harris(3, 1, True, False), TIME_TO_RUN)
 
 def test_harris_3x3_1_shave_blur_gray():
-    check_network(lambda: check_harris(3, 1, True, True))
+    check_device(lambda: check_harris(3, 1, True, True), TIME_TO_RUN)
+
+def test_results():
+    eval_model("harris", (640, 480, 3))

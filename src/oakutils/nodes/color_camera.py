@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 """
 Module for creating a color camera node in the pipeline.
 
@@ -19,6 +9,7 @@ Functions
 create_color_camera
     Creates a pipeline for the color camera.
 """
+
 from __future__ import annotations
 
 import depthai as dai
@@ -30,7 +21,7 @@ def create_color_camera(
     pipeline: dai.Pipeline,
     resolution: dai.ColorCameraProperties.SensorResolution = dai.ColorCameraProperties.SensorResolution.THE_1080_P,
     preview_size: tuple[int, int] = (640, 480),
-    fps: int = 30,
+    fps: int = 15,
     brightness: int = 0,
     saturation: int = 0,
     contrast: int = 0,

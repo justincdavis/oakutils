@@ -1,16 +1,6 @@
 # Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# MIT License
 from __future__ import annotations
 
 import argparse
@@ -70,20 +60,8 @@ from oakutils.blobs.definitions import (
 
 def write_copyright(f: TextIOWrapper):
     f.write("# Copyright (c) 2024 Justin Davis (davisjustin302@gmail.com)\n")
-    f.write("# This program is free software: you can redistribute it and/or modify\n")
-    f.write("# it under the terms of the GNU General Public License as published by\n")
-    f.write("# the Free Software Foundation, either version 3 of the License, or\n")
-    f.write("# (at your option) any later version.\n")
     f.write("#\n")
-    f.write("# This program is distributed in the hope that it will be useful,\n")
-    f.write("# but WITHOUT ANY WARRANTY; without even the implied warranty of\n")
-    f.write("# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n")
-    f.write("# GNU General Public License for more details.\n")
-    f.write("#\n")
-    f.write("# You should have received a copy of the GNU General Public License\n")
-    f.write(
-        "# along with this program. If not, see <https://www.gnu.org/licenses/>.\n\n"
-    )
+    f.write("# MIT License\n")
 
 
 def delete_folder(folder_path: str):
@@ -321,22 +299,23 @@ def compiles_models():
                 model_name = model_name.split(".")[0]
                 f.write(f"{model_name.capitalize()} : str\n")
                 f.write(f"    nn.Module wrapper for {model_name.lower()} operation.\n")
-            f.write('"""\n\n')
+            f.write('"""\n')
+            f.write("from __future__ import annotations\n\n")
 
             # handle imports first
             # f.write("import abc\n")
-            f.write("import os\n")
+            # f.write("import os\n")
             f.write("from pathlib import Path\n")
             f.write("import pkg_resources\n\n")
 
             # get the path to the blob folder
             f.write(
-                f"_RELATIVE_BLOB_FOLDER = Path('oakutils') / 'blobs' / 'models' / 'shave{shave}'\n"
+                f"_RELATIVE_BLOB_FOLDER: Path = Path('oakutils') / 'blobs' / 'models' / 'shave{shave}'\n"
             )
 
             # get the site packages path
             f.write(
-                "_PACKAGE_LOCATION = pkg_resources.get_distribution('oakutils').location\n"
+                "_PACKAGE_LOCATION: str | None = pkg_resources.get_distribution('oakutils').location\n"
             )
 
             # perform a check on _PACKAGE_LOCATION since it could be None?
@@ -345,7 +324,7 @@ def compiles_models():
             f.write("    raise RuntimeError(err_msg)\n")
 
             # perform a check on _PACKAGE_LOCATION to ensure it exists and is a directory
-            f.write("_PACKAGE_LOCATION_PATH = Path(_PACKAGE_LOCATION)\n")
+            f.write("_PACKAGE_LOCATION_PATH: Path = Path(_PACKAGE_LOCATION)\n")
             f.write("if not _PACKAGE_LOCATION_PATH.exists():\n")
             f.write("    err_msg = 'Package location does not exist'\n")
             f.write("    raise RuntimeError(err_msg)\n")
@@ -355,7 +334,7 @@ def compiles_models():
 
             # get the path to the blob folder
             f.write(
-                f"_BLOB_FOLDER = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
+                f"_BLOB_FOLDER: Path = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER\n"
             )
 
             # add a space
@@ -376,7 +355,7 @@ def compiles_models():
                 # var_name = var_name[1:]
                 var_names.append(var_name)
                 f.write(
-                    f"{var_name} = Path(Path(_BLOB_FOLDER) / '{model_name}').resolve()\n"
+                    f"{var_name}: Path = Path(Path(_BLOB_FOLDER) / '{model_name}').resolve()\n"
                 )
                 # f.write(f"{var_name} = _Blob(os.path.abspath(os.path.join(_BLOB_FOLDER, '{model_name}')))\n")
                 # f.write(f"{var_name}.__doc__ = 'Absolute file path for {model_name} file'\n")
@@ -402,6 +381,7 @@ def compiles_models():
 
     with open(os.path.join(MODEL_FOLDER, "__init__.py"), "w") as f:
         write_copyright(f)
+        f.write("# ruff: noqa: F822\n")
         # add big comment saying this is an auto-generated file
         f.write(
             "# =============================================================================\n"
@@ -420,10 +400,52 @@ def compiles_models():
         for idx, shave in enumerate(shaves):
             f.write(f"shave{shave} : module\n")
             f.write(f"    Contains all the models compiled for {shaves[idx]} shaves\n")
-        f.write('"""\n\n')
-        for shave in shaves:
-            f.write(f"from . import shave{shave}\n")
         f.write("\n")
+        f.write('"""\n')
+        f.write("from __future__ import annotations\n\n")
+        f.write("import importlib\n")
+        f.write("import sys\n")
+        f.write("from typing import TYPE_CHECKING\n\n")
+
+        # not used due to lazy imports
+        # # from . import shave modules
+        # for shave in shaves:
+        #     f.write(f"from . import shave{shave}\n")
+        # f.write("\n")
+
+        # add TYPE_CHECKING import
+        f.write("if TYPE_CHECKING:\n")
+        f.write("    from types import ModuleType\n\n")
+
+        # create _submodules for lazy loading
+        f.write("_submodules = [\n")
+        for shave in shaves:
+            f.write(f"    'shave{shave}',\n")
+        f.write("]\n\n")
+
+        # create _loaded_modules for lazy loading
+        f.write("_loaded_modules: dict[str, ModuleType | None] = {\n")
+        for shave in shaves:
+            f.write(f'    "shave{shave}": None,\n')
+        f.write("}\n\n")
+
+        # write the new __getattr__ function
+        f.write("def __getattr__(name: str) -> ModuleType:\n")
+        f.write("    if name in _submodules:\n")
+        f.write('        _loaded_modules[name] = importlib.import_module(f"{__name__}.{name}")\n')
+        f.write("        setattr(sys.modules[__name__], name, _loaded_modules[name])\n")
+        f.write("        module = _loaded_modules[name]\n")
+        f.write("        if module is None:\n")
+        f.write('            err_msg = f"Could not import module {name}"\n')
+        f.write("            raise ImportError(err_msg)\n")
+        f.write("        return module\n")
+        f.write('    err_msg = f"module {__name__} has no attribute {name}"\n')
+        f.write("    raise AttributeError(err_msg)\n\n")
+
+        # write new __dir__ method
+        f.write("def __dir__() -> list[str]:\n")
+        f.write("    module_attrs = list(object.__dir__(sys.modules[__name__]))\n")
+        f.write("    return list(set(module_attrs + _submodules))\n\n")
 
         # write the __all__ variable
         f.write("\n__all__ = [\n")
