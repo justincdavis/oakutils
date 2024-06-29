@@ -2,6 +2,7 @@
 
 [![](https://img.shields.io/pypi/pyversions/oakutils.svg)](https://pypi.org/pypi/oakutils/)
 ![PyPI](https://img.shields.io/pypi/v/oakutils.svg?style=plastic)
+[![CodeFactor](https://www.codefactor.io/repository/github/justincdavis/oakutils/badge)](https://www.codefactor.io/repository/github/justincdavis/oakutils)
 
 ![Linux](https://github.com/justincdavis/oakutils/actions/workflows/unittests-ubuntu.yaml/badge.svg?branch=main)
 ![Windows](https://github.com/justincdavis/oakutils/actions/workflows/unittests-windows.yaml/badge.svg?branch=main)
