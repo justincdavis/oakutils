@@ -9,9 +9,12 @@ Examples
     examples/aruco/localizer.rst
     examples/aruco/stream.rst
     examples/aruco/webcam.rst
+    examples/benchmark/latency.rst
+    examples/benchmark/throughput.rst
     examples/blobs/compile_model.rst
     examples/calibration/oak1_calibration.rst
     examples/calibration/oakd_calibration.rst
+    examples/core/create_device.rst
     examples/legacy_camera.rst
     examples/nodes/color_camera.rst
     examples/nodes/image_manip.rst
