@@ -24,7 +24,14 @@ compile_onnx
     Compiles an onnx model into a blob.
 clear_cache
     Clears the cache of compiled blobs.
-
+get_blob
+    Load a blob from a path.
+get_input_layer_data
+    Get the input layer data for a blob.
+get_output_layer_data
+    Get the output layer data for a blob.
+get_layer_data
+    Get the input and output layer data for a blob.
 
 """
 
@@ -33,10 +40,20 @@ from __future__ import annotations
 import logging
 
 from . import models
+from ._analysis import (
+    get_blob,
+    get_input_layer_data,
+    get_layer_data,
+    get_output_layer_data,
+)
 
 _log = logging.getLogger(__name__)
 
 __all__ = [
+    "get_blob",
+    "get_input_layer_data",
+    "get_layer_data",
+    "get_output_layer_data",
     "models",
 ]
 
@@ -46,12 +63,11 @@ try:
     from . import definitions
     from ._compiler import clear_cache, compile_model, compile_onnx
 
-    __all__ = [
+    __all__ += [
         "clear_cache",
         "compile_model",
         "compile_onnx",
         "definitions",
-        "models",
     ]
 
     _log.debug("Loaded blobs.definitions")

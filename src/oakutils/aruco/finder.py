@@ -130,7 +130,7 @@ class ArucoFinder:
             )
         marker_data = cv2.aruco.detectMarkers(image, self._adict)  # type: ignore[attr-defined]
         corners: Sequence[np.ndarray] = marker_data[0]
-        ids: list[np.ndarray] = marker_data[1]
+        ids: np.ndarray = marker_data[1]
         ret_val: list[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
         for idx, corner in enumerate(corners):
             pose_data = cv2.aruco.estimatePoseSingleMarkers(  # type: ignore[attr-defined]
@@ -139,8 +139,8 @@ class ArucoFinder:
                 self._K,
                 self._D,
             )
-            rvecs: list[np.ndarray] = pose_data[0]
-            tvecs: list[np.ndarray] = pose_data[1]
+            rvecs: np.ndarray = pose_data[0]
+            tvecs: np.ndarray = pose_data[1]
             try:
                 rvec = rvecs[0]
                 tvec = tvecs[0]
