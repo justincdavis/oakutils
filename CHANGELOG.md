@@ -1,4 +1,23 @@
-## 1.6.0 (05-15-2024)
+## 1.5.2 (07-09-2024)
+
+### Added 
+
+- benchmark submodule
+    - measure_latency and measure_throughput functions.
+        Allow measuring roundtrip latency and max 
+        uplink and downlink throughput.
+- Info functions for compiled blobs
+    - Can get the layer information for input/output layers
+        of compiled blob files.
+    - Added function for getting blob objects via paths
+        with verification.
+
+### Improvements
+
+- create_device
+    - Now accepts a usb speed parameter.
+
+## 1.5.1 (05-15-2024)
 
 ### Added
 

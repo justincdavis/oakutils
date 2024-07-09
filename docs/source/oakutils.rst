@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    oakutils.aruco
+   oakutils.benchmark
    oakutils.blobs
    oakutils.calibration
    oakutils.core

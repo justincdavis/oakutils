@@ -14,6 +14,8 @@ Submodules
 ----------
 aruco
     Contains utilities for working with ArUco markers.
+benchmark
+    Contains utilities for benchmarking characteristics of OAK devices.
 blobs
     Contains utilities for working with blobs.
 calibration
@@ -134,6 +136,7 @@ if "create_device" not in dir(core):
 # handle other imports
 from . import (
     aruco,
+    benchmark,
     blobs,
     calibration,
     filters,
@@ -153,6 +156,7 @@ __all__ = [
     "ApiCamera",
     "Webcam",
     "aruco",
+    "benchmark",
     "blobs",
     "calibration",
     "core",
@@ -171,6 +175,6 @@ with contextlib.suppress(ImportError):
 
     __all__ += ["LegacyCamera"]
 
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 
 _log.info(f"Initialized oakutils with version {__version__}")
