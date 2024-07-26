@@ -1,4 +1,4 @@
-.PHONY: help install clean docs blobs test ci mypy pyright ruff release example-ci
+.PHONY: help install clean docs blobs test ci mypy pyright ruff release example-ci upgrade-ci
 
 help: 
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -13,6 +13,7 @@ help:
 	@echo "  stubs      to generate the stubs"
 	@echo "  test       to run the tests"
 	@echo "  release    to perform all actions required for a release"
+	@echo "  upgrade-ci to upgrade the CI tools"
 	@echo "  example-ci to run the CI workflows for the example scripts"
 
 install:
@@ -54,6 +55,10 @@ stubs:
 
 test: install
 	./ci/run_tests.sh
+
+upgrade-ci:
+	pip3 install --upgrade ruff
+	pip3 install --upgrade mypy
 
 example-ci:
 	python3 -m ruff format ./examples
