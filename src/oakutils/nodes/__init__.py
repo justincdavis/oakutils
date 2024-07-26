@@ -72,6 +72,8 @@ get_nn_gray_frame
     Gets the output frame from the neural network node in grayscale format.
 get_nn_point_cloud_buffer
     Gets the output point cloud buffer from the neural network node.
+get_yolo_data
+    Get a YolomodelData object from a json file produced during compilation.
 frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
 """
@@ -93,7 +95,7 @@ from . import (
     xout,
 )
 from ._misc import frame_norm
-from ._model_data import MobilenetData, YolomodelData
+from ._model_data import MobilenetData, YolomodelData, get_yolo_data
 from .buffer import Buffer, MultiBuffer
 from .color_camera import create_color_camera
 from .image_manip import create_image_manip
@@ -140,6 +142,7 @@ __all__ = [
     "get_nn_frame",
     "get_nn_gray_frame",
     "get_nn_point_cloud_buffer",
+    "get_yolo_data",
     "image_manip",
     "imu",
     "models",
