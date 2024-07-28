@@ -52,6 +52,11 @@ class ArucoLocalizer:
             The alpha value to use for exponential smoothing,
         by default 0.95, must be in range [0, 1]
 
+        Raises
+        ------
+        ValueError
+            If alpha is not in range [0, 1]
+
         """
         self._transforms: dict[int, np.ndarray] = {}
         min_alpha, max_alpha = 0.0, 1.0

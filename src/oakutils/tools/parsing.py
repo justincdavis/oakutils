@@ -47,6 +47,11 @@ def get_color_sensor_resolution_from_str(
     dai.ColorCameraProperties.SensorResolution
         The SensorResolution
 
+    Raises
+    ------
+    ValueError
+        If the resolution is invalid
+
     """
     if resolution == "720p":
         return dai.ColorCameraProperties.SensorResolution.THE_720_P
@@ -219,6 +224,11 @@ def get_mono_sensor_resolution_from_str(
     dai.MonoCameraProperties.SensorResolution
         The SensorResolution
 
+    Raises
+    ------
+    ValueError
+        If the resolution is invalid
+
     """
     if resolution == "400p":
         return dai.MonoCameraProperties.SensorResolution.THE_400_P
@@ -345,6 +355,11 @@ def get_median_filter_from_str(
     -------
     dai.StereoDepthProperties.MedianFilter
         The MedianFilter
+
+    Raises
+    ------
+    ValueError
+        If the filter size is invalid
 
     """
     median_off = dai.StereoDepthProperties.MedianFilter.MEDIAN_OFF

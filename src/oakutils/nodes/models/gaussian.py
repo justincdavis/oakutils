@@ -54,11 +54,6 @@ def create_gaussian(
     dai.node.NeuralNetwork
         The gaussian node
 
-    Raises
-    ------
-    ValueError
-        If the kernel_size is invalid
-
     """
     if grayscale_out is None:
         grayscale_out = False

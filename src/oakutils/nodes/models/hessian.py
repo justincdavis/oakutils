@@ -59,11 +59,6 @@ def create_hessian(
     dai.node.NeuralNetwork
         The hessian node
 
-    Raises
-    ------
-    ValueError
-        If the kernel_size is invalid
-
     """
     if use_blur is None:
         use_blur = False

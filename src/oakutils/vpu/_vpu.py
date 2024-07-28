@@ -104,11 +104,6 @@ class VPU:
         dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
             The result of the inference.
 
-        Raises
-        ------
-        RuntimeError
-            If the blob path is not set.
-
         """
         return self.run(data, safe=safe)
 
@@ -158,13 +153,6 @@ class VPU:
             Can be used to set the YoloModelData or MobilenetData.
             If None, then a generic neural network will be created.
 
-        Raises
-        ------
-        FileNotFoundError
-            If the blob file does not exist.
-        TypeError
-            If model_data is not YoloModelData or MobilenetData.
-
         """
         self._multimode = False
         # repackage as input to backend function
@@ -195,16 +183,6 @@ class VPU:
             Should be filled in if the model is a YOLO or Mobilenet model.
             If None, then a generic neural network will be created.
 
-        Raises
-        ------
-        FileNotFoundError
-            If a blob file does not exist.
-        ValueError
-            If input_names is not None and does not match the length of blob_paths.
-            If modeldata is not None and does not match the length of blob_paths.
-        TypeError
-            If modeldata is not YoloModelData or MobilenetData.
-
         """
         self._multimode = True
         self._reconfigure(
@@ -219,7 +197,35 @@ class VPU:
         input_names: list[list[str] | None] | None = None,
         modeldata: list[YolomodelData | MobilenetData | None] | None = None,
     ) -> None:
-        """Handle reconfiguration of the VPU."""
+        """
+        Handle reconfiguration of the VPU.
+
+        Parameters
+        ----------
+        blob_paths : list[str | Path]
+            The paths to the blob files.
+        input_names : list[list[str] | None]
+            The names of the input layers. Defaults to None.
+            Should be filled in if a model has multiple inputs.
+        modeldata : list[YolomodelData | MobilenetData | None]
+            The model data. Defaults to None.
+
+        Raises
+        ------
+        FileNotFoundError
+            If a blob file does not exist.
+        ValueError
+            If input_names is not None and does not match the length of blob_paths.
+        ValueError
+            If modeldata is not None and does not match the length of blob_paths.
+        ValueError
+            If a yolo model does not have a single input.
+        ValueError
+            If a mobilenet model does not have a single input.
+        TypeError
+            If modeldata is not YoloModelData or MobilenetData.
+
+        """
         # reset the VPU
         self._reset()
 

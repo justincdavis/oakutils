@@ -264,6 +264,11 @@ def compile_model(
     str
         The path to the compiled blob
 
+    Raises
+    ------
+    ValueError
+        If the input type is not recognized
+
     """
     if cache is None:
         cache = True

@@ -4,8 +4,8 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -33,12 +33,12 @@ class YolomodelData:
 def get_yolo_data(yolo_json_path: Path | str) -> YolomodelData:
     """
     Create a YolomodelData object from a json file.
-    
+
     Parameters
     ----------
     yolo_json_path : Path | str
         The path to the json file
-        
+
     Returns
     -------
     YolomodelData
@@ -48,6 +48,7 @@ def get_yolo_data(yolo_json_path: Path | str) -> YolomodelData:
     ------
     FileNotFoundError
         If the file does not exist
+
     """
     json_path = Path(yolo_json_path)
     if not json_path.exists():
