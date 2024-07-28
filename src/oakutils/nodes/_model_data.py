@@ -3,7 +3,9 @@
 # MIT License
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -26,6 +28,43 @@ class YolomodelData:
     num_nce_per_inference_thread: int | None = None
     num_pool_frames: int | None = None
     input_blocking: bool | None = None
+
+
+def get_yolo_data(yolo_json_path: Path | str) -> YolomodelData:
+    """
+    Create a YolomodelData object from a json file.
+
+    Parameters
+    ----------
+    yolo_json_path : Path | str
+        The path to the json file
+
+    Returns
+    -------
+    YolomodelData
+        The YolomodelData object
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file does not exist
+
+    """
+    json_path = Path(yolo_json_path)
+    if not json_path.exists():
+        err_msg = f"File does not exist: {json_path}"
+        raise FileNotFoundError(err_msg)
+    with json_path.open("r") as f:
+        yolo_data: dict = json.load(f)["nn_config"]["NN_specific_metadata"]
+
+    return YolomodelData(
+        confidence_threshold=yolo_data["confidence_threshold"],
+        iou_threshold=yolo_data["iou_threshold"],
+        num_classes=yolo_data["classes"],
+        coordinate_size=yolo_data["coordinates"],
+        anchors=yolo_data["anchors"],
+        anchor_masks=yolo_data["anchor_masks"],
+    )
 
 
 @dataclass

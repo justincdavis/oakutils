@@ -11,6 +11,7 @@ Examples
     examples/aruco/webcam.rst
     examples/benchmark/latency.rst
     examples/benchmark/throughput.rst
+    examples/blobs/benchmark_blob.rst
     examples/blobs/compile_model.rst
     examples/calibration/oak1_calibration.rst
     examples/calibration/oakd_calibration.rst

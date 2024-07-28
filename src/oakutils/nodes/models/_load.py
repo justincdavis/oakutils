@@ -70,7 +70,7 @@ def create_model(
     Raises
     ------
     ValueError
-        If the kernel_size is invalid
+        If the model blob cannot be acquired
 
     """
     potential_blobs = get_candidates(
@@ -255,11 +255,6 @@ def create_single_kernel_model(
     dai.node.NeuralNetwork
         The model node
 
-    Raises
-    ------
-    ValueError
-        If the kernel_size is invalid
-
     """
     _ = parse_kernel_size(
         kernel_size,
@@ -322,11 +317,6 @@ def create_double_kernel_model(
     -------
     dai.node.NeuralNetwork
         The model node
-
-    Raises
-    ------
-    ValueError
-        If either kernel_size is invalid
 
     """
     _ = parse_kernel_size(

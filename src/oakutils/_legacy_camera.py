@@ -168,6 +168,11 @@ class LegacyCamera:
             This can be a MXID, IP address, or USB port name.
             Examples: "14442C108144F1D000", "192.168.1.44", "3.3.3"
 
+        Raises
+        ------
+        TypeError
+            If the camera is not an OAK-D device.
+
         """
         if enable_rgb is None:
             enable_rgb = True

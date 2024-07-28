@@ -468,6 +468,11 @@ def get_oakd_calibration(
     CalibrationData
         Object containing all the calibration data.
 
+    Raises
+    ------
+    RuntimeError
+        If the mono cameras cannot be found.
+
     """
     if is_primary_mono_left is None:
         is_primary_mono_left = True

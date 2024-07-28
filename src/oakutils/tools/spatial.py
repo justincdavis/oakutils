@@ -107,7 +107,27 @@ class HostSpatialsCalc:
         roi: tuple[int, int] | tuple[int, int, int, int],
         frame: np.ndarray,
     ) -> tuple[int, int, int, int]:
-        """Use to check if the input is valid, and constrains to the frame size."""
+        """
+        Use to check if the input is valid, and constrains to the frame size.
+
+        Parameters
+        ----------
+        roi : tuple of int
+            The ROI to check.
+        frame : np.ndarray
+            The frame to check the ROI against.
+
+        Returns
+        -------
+        tuple of int
+            The ROI.
+
+        Raises
+        ------
+        ValueError
+            If the input is invalid.
+
+        """
         xywh_size = 4
         if len(roi) == xywh_size:  # xywh
             return roi  # type: ignore[return-value]

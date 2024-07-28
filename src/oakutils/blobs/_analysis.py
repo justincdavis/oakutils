@@ -62,11 +62,6 @@ def get_input_layer_data(blob_path: Path | str) -> list[LayerData]:
     list[LayerData]
         A list of LayerData objects.
 
-    Raises
-    ------
-    FileNotFoundError
-        If the blob does not exist.
-
     """
     blob = get_blob(blob_path)
     return [
@@ -89,11 +84,6 @@ def get_output_layer_data(blob_path: Path | str) -> list[LayerData]:
     list[LayerData]
         A list of LayerData objects.
 
-    Raises
-    ------
-    FileNotFoundError
-        If the blob does not exist.
-
     """
     blob = get_blob(blob_path)
     return [
@@ -115,11 +105,6 @@ def get_layer_data(blob_path: Path | str) -> tuple[list[LayerData], list[LayerDa
     -------
     tuple[list[LayerData], list[LayerData]]
         A tuple of lists of LayerData objects.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the blob does not exist.
 
     """
     return get_input_layer_data(blob_path), get_output_layer_data(blob_path)

@@ -64,11 +64,6 @@ def create_laplacian(
     dai.node.NeuralNetwork
         The laplacian node
 
-    Raises
-    ------
-    ValueError
-        If the kernel_size is invalid
-
     """
     if use_blur is None:
         use_blur = False

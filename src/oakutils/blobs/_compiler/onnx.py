@@ -71,11 +71,6 @@ def compile_onnx(
     simplify_model : bool, optional
         Whether or not to simplify the model before compiling, by default True
 
-    Raises
-    ------
-    AssertionError
-        If the simplified model could not be validated
-
     """
     if simplify_model is None:
         simplify_model = True

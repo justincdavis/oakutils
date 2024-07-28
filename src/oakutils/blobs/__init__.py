@@ -16,8 +16,17 @@ definitions
 models
     Contains the pre-compiled models.
 
+Classes
+-------
+BenchmarkData
+    Dataclass for storing benchmark data.
+Metric
+    Dataclass for storing metrics.
+
 Functions
 ---------
+bencmark_blob
+    Benchmark a blob.
 compile_model
     Compiles a model.
 compile_onnx
@@ -46,10 +55,14 @@ from ._analysis import (
     get_layer_data,
     get_output_layer_data,
 )
+from ._benchmark import BenchmarkData, Metric, benchmark_blob
 
 _log = logging.getLogger(__name__)
 
 __all__ = [
+    "BenchmarkData",
+    "Metric",
+    "benchmark_blob",
     "get_blob",
     "get_input_layer_data",
     "get_layer_data",
