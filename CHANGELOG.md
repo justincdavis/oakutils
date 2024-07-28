@@ -1,3 +1,10 @@
+## 1.5.4 (07-28-2024)
+
+### Improved
+
+- Explicit call to VPU.stop in blobs.benchmark_blob.
+- Enabled with statement usage with VPU to prevent missing stop calls.
+
 ## 1.5.3 (07-27-2024)
 
 ### Added

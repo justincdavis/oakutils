@@ -135,6 +135,9 @@ def benchmark_blob(
         end = time.perf_counter()
         timings.append(end - start)
 
+    # close vpu
+    vpu.stop()
+
     # calculate the metrics
     latency_mean = float(np.mean(timings))
     latency_std = float(np.std(timings))

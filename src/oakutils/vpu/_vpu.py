@@ -29,6 +29,8 @@ from oakutils.nodes import (
 from oakutils.nodes.buffer import MultiBuffer
 
 if TYPE_CHECKING:
+    from types import TracebackType
+    
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -77,6 +79,17 @@ class VPU:
 
     def __del__(self: Self) -> None:
         """Use to stop the VPU."""
+        self.stop()
+
+    def __enter__(self: Self) -> Self:
+        return self
+    
+    def __exit__(
+        self: Self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         self.stop()
 
     def __call__(
