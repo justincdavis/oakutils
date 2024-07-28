@@ -25,7 +25,7 @@ import oakutils
 project = "oakutils"
 copyright = "2023, Justin Davis"
 author = "Justin Davis"
-version = "1.5.2"
+version = "1.5.3"
 
 assert version == oakutils.__version__  # Make sure version is consistent
 
