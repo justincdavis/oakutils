@@ -1,3 +1,12 @@
+## 1.5.3 (07-27-2024)
+
+### Added
+
+- blobs.benchmark_blob
+    - Measure the latency of a compiled blob.
+- nodes.get_yolo_data
+    - Create a YolomodelData object from a json file.
+
 ## 1.5.2 (07-09-2024)
 
 ### Added 
