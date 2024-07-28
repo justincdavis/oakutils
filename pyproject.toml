@@ -78,7 +78,7 @@ ci = [
     "black>=24.0",
     "isort>=5.10",
     "ruff>=0.2.1",
-    "mypy>=1.8.0",
+    "mypy>=1.8.0,<1.11.0",
     "types-setuptools>=57.0.0",
     "types-requests>=2.25.0",
 ]
