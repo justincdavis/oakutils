@@ -29,8 +29,9 @@ from oakutils.nodes import (
 from oakutils.nodes.buffer import MultiBuffer
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import TracebackType
-    
+
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -83,7 +84,7 @@ class VPU:
 
     def __enter__(self: Self) -> Self:
         return self
-    
+
     def __exit__(
         self: Self,
         exc_type: type[BaseException] | None,
@@ -177,21 +178,21 @@ class VPU:
 
     def reconfigure_multi(
         self: Self,
-        blob_paths: list[str | Path],
-        input_names: list[list[str] | None] | None = None,
-        modeldata: list[YolomodelData | MobilenetData | None] | None = None,
+        blob_paths: Sequence[str | Path],
+        input_names: Sequence[list[str] | None] | None = None,
+        modeldata: Sequence[YolomodelData | MobilenetData | None] | None = None,
     ) -> None:
         """
         Reconfigure the VPU with multiple blob files.
 
         Parameters
         ----------
-        blob_paths : list[str | Path]
+        blob_paths : Sequence[str | Path]
             The paths to the blob files.
-        input_names : list[list[str] | None]
+        input_names : Sequence[list[str] | None]
             The names of the input layers. Defaults to None.
             Should be filled in if a model has multiple inputs.
-        modeldata : list[YolomodelData | MobilenetData | None]
+        modeldata : Sequence[YolomodelData | MobilenetData | None]
             The model data. Defaults to None.
             Should be filled in if the model is a YOLO or Mobilenet model.
             If None, then a generic neural network will be created.
@@ -206,21 +207,21 @@ class VPU:
 
     def _reconfigure(
         self: Self,
-        blob_paths: list[str | Path],
-        input_names: list[list[str] | None] | None = None,
-        modeldata: list[YolomodelData | MobilenetData | None] | None = None,
+        blob_paths: Sequence[str | Path],
+        input_names: Sequence[list[str] | None] | None = None,
+        modeldata: Sequence[YolomodelData | MobilenetData | None] | None = None,
     ) -> None:
         """
         Handle reconfiguration of the VPU.
 
         Parameters
         ----------
-        blob_paths : list[str | Path]
+        blob_paths : Sequence[str | Path]
             The paths to the blob files.
-        input_names : list[list[str] | None]
+        input_names : Sequence[list[str] | None]
             The names of the input layers. Defaults to None.
             Should be filled in if a model has multiple inputs.
-        modeldata : list[YolomodelData | MobilenetData | None]
+        modeldata : Sequence[YolomodelData | MobilenetData | None]
             The model data. Defaults to None.
 
         Raises
@@ -259,7 +260,7 @@ class VPU:
                 raise ValueError(err_msg)
         else:
             input_names = [None] * len(self._blob_paths)
-        self._inputnames = input_names
+        self._inputnames = list(input_names)
 
         # validate the modeldata
         if modeldata is not None:

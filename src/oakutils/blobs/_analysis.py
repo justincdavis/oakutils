@@ -48,13 +48,13 @@ def get_blob(blob_path: Path | str) -> dai.OpenVINO.Blob:
     return dai.OpenVINO.Blob(blob_path)
 
 
-def get_input_layer_data(blob_path: Path | str) -> list[LayerData]:
+def get_input_layer_data(blob: Path | str | dai.OpenVINO.Blob) -> list[LayerData]:
     """
     Get the input layer data for a blob.
 
     Parameters
     ----------
-    blob_path : Path | str
+    blob : Path | str | dai.OpenVINO.Blob
         The path to the blob.
 
     Returns
@@ -63,20 +63,21 @@ def get_input_layer_data(blob_path: Path | str) -> list[LayerData]:
         A list of LayerData objects.
 
     """
-    blob = get_blob(blob_path)
+    if not isinstance(blob, dai.OpenVINO.Blob):
+        blob = get_blob(blob)
     return [
         LayerData(name, vec, vec.dataType, vec.dims, vec.order)
         for name, vec in blob.networkInputs.items()
     ]
 
 
-def get_output_layer_data(blob_path: Path | str) -> list[LayerData]:
+def get_output_layer_data(blob: Path | str | dai.OpenVINO.Blob) -> list[LayerData]:
     """
     Get the output layer data for a blob.
 
     Parameters
     ----------
-    blob_path : Path | str
+    blob : Path | str | dai.OpenVINO.Blob
         The path to the blob.
 
     Returns
@@ -85,20 +86,23 @@ def get_output_layer_data(blob_path: Path | str) -> list[LayerData]:
         A list of LayerData objects.
 
     """
-    blob = get_blob(blob_path)
+    if not isinstance(blob, dai.OpenVINO.Blob):
+        blob = get_blob(blob)
     return [
         LayerData(name, vec, vec.dataType, vec.dims, vec.order)
         for name, vec in blob.networkOutputs.items()
     ]
 
 
-def get_layer_data(blob_path: Path | str) -> tuple[list[LayerData], list[LayerData]]:
+def get_layer_data(
+    blob: Path | str | dai.OpenVINO.Blob,
+) -> tuple[list[LayerData], list[LayerData]]:
     """
     Get the input and output layer data for a blob.
 
     Parameters
     ----------
-    blob_path : Path | str
+    blob : Path | str | dai.OpenVINO.Blob
         The path to the blob.
 
     Returns
@@ -107,4 +111,4 @@ def get_layer_data(blob_path: Path | str) -> tuple[list[LayerData], list[LayerDa
         A tuple of lists of LayerData objects.
 
     """
-    return get_input_layer_data(blob_path), get_output_layer_data(blob_path)
+    return get_input_layer_data(blob), get_output_layer_data(blob)
