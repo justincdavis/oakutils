@@ -113,11 +113,18 @@ class BlobEvaluater:
 
     def run(
         self: Self,
+        data: list[np.ndarray | list[np.ndarray]] | None = None,
     ) -> list[
         dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
     ]:
         """
         Run the models and get their results.
+
+        Parameters
+        ----------
+        data : list[np.ndarray, list[np.ndarray]] | None, optional
+            The data to run through the models, by default None
+            If None, then random data is used
 
         Returns
         -------
@@ -127,14 +134,14 @@ class BlobEvaluater:
         """
         results = []
         rng = np.random.default_rng()
-        random_input = [
+        eval_input = data or [
             rng.random(shape).astype(np.float32) for shape in self._input_shape
         ]
         for idx, group in enumerate(self._allocations):
             group_blobs = [blob for _, blob, _, _ in group]
             with VPU() as vpu:
                 vpu.reconfigure_multi(group_blobs)
-                batch_result = vpu.run(random_input, safe=True)
+                batch_result = vpu.run(eval_input, safe=True)
                 _log.debug(f"Batch {idx + 1} / {len(self._allocations)} completed.")
                 results.append(batch_result)
         self._results = results

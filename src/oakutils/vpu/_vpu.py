@@ -238,6 +238,8 @@ class VPU:
             If a mobilenet model does not have a single input.
         TypeError
             If modeldata is not YoloModelData or MobilenetData.
+        RuntimeError
+            If the VPU thread could not be launched successfully.
 
         """
         # reset the VPU
@@ -345,8 +347,17 @@ class VPU:
         self._thread.start()
 
         # wait for thread to start
-        with self._start_condition:
-            self._start_condition.wait()
+        success = False
+        while self._thread.is_alive():
+            with self._start_condition:
+                success = self._start_condition.wait(timeout=0.5)
+                if success:
+                    break
+        if not success:
+            err_msg = (
+                "Could not open the VPU thread (most likely the Device was not found)."
+            )
+            raise RuntimeError(err_msg)
 
     def _run_thread(
         self: Self,
