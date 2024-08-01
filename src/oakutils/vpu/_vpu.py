@@ -384,6 +384,9 @@ class VPU:
         with device_object as device:
             # pre-fetch queues and allocate buffers
             buffer: MultiBuffer = MultiBuffer(device, self._xin_names, self._xout_names)
+            _log.debug(f"VPU-Thread: Created MultiBuffer with {len(self._xin_names)} inputs, {len(self._xout_names)} outputs.")
+            _log.debug(f"VPU-Thread: Input names: {self._xin_names}")
+            _log.debug(f"VPU-Thread: Output names: {self._xout_names}")
 
             # notify the main thread that VPU is ready
             # this will allow the reconfigure call to return
@@ -404,10 +407,13 @@ class VPU:
                     continue
 
                 # push data to networks
+                _log.debug(f"VPU-Thread: Recevied {len(all_data)} data elements.")
                 buffer.send(all_data)
 
                 # get the results
+                _log.debug("VPU-Thread: Waiting on results from device.")
                 self._result_queue.put(buffer.receive())
+                _log.debug("VPU-Thread: Results forwarded.")
 
     def run(
         self: Self,
@@ -458,7 +464,7 @@ class VPU:
         if not self._thread.is_alive():
             err_msg = "VPU thread is not alive."
             raise RuntimeError(err_msg)
-        _log.debug("VPU run called.")
+        _log.debug(f"VPU run called with data type: {type(data)}")
         if not self._multimode:
             result = self._run_single(data, safe=safe)  # type: ignore[arg-type, assignment]
         else:
@@ -471,6 +477,7 @@ class VPU:
         *,
         safe: bool | None = None,
     ) -> dai.ADatatype | list[dai.ADatatype]:
+        _log.debug(f"Running single network with data type: {type(data)}")
         if safe is None:
             safe = True
         if safe:
@@ -497,6 +504,7 @@ class VPU:
         *,
         safe: bool | None = None,
     ) -> list[dai.ADatatype | list[dai.ADatatype]]:
+        _log.debug(f"Running multiple networks with data type: {type(data)}")
         if safe is None:
             safe = True
         if safe:

@@ -72,7 +72,7 @@ class BlobEvaluater:
             err_msg += f" Found {len(input_shapes)} unique input shapes."
             err_msg += f" Input shapes: {input_shapes}"
             raise ValueError(err_msg)
-        self._input_shape: tuple[tuple[int, ...], ...] = input_shapes.pop()
+        self._input_shape: tuple[int, ...] = input_shapes.pop()[0]
         _log.debug(f"Input shape: {self._input_shape}")
 
         # setup the allocations (groups with shaves <= 12)
@@ -134,15 +134,20 @@ class BlobEvaluater:
         """
         results = []
         rng = np.random.default_rng()
-        eval_input = data or [
-            rng.random(shape).astype(np.float32) for shape in self._input_shape
-        ]
         for idx, group in enumerate(self._allocations):
+            if data is not None:
+                eval_input = data.copy()
+            else:
+                eval_input = [
+                    rng.random(self._input_shape).astype(np.float32) for _ in range(len(self._blobs))
+                ]
             group_blobs = [blob for _, blob, _, _ in group]
+            _log.debug(f"BlobEvaluator: Running group {idx + 1} / {len(self._allocations)}")
             with VPU() as vpu:
                 vpu.reconfigure_multi(group_blobs)
+                _log.debug(f"BlobEvaluator: VPU reconfigured with {len(group_blobs)} blobs.")
                 batch_result = vpu.run(eval_input, safe=True)
-                _log.debug(f"Batch {idx + 1} / {len(self._allocations)} completed.")
+                _log.debug(f"BlobEvaluator: Batch {idx + 1} / {len(self._allocations)} completed.")
                 results.append(batch_result)
         self._results = results
         return results

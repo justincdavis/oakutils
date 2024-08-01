@@ -15,7 +15,7 @@ from oakutils.blobs.models.shave6 import GAUSSIAN_3X3 as gauss6
 from oakutils.blobs.testing import BlobEvaluater
 
 
-set_log_level("DEBUG")
+set_log_level("ERROR")
 
 blob_eval = BlobEvaluater([gauss1, gauss2, gauss3, gauss4, gauss5, gauss6])
 

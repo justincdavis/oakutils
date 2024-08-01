@@ -12,10 +12,13 @@ create_xout
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import depthai as dai
+
+_log = logging.getLogger(__name__)
 
 
 def create_xout(
@@ -67,5 +70,7 @@ def create_xout(
         xout.input.setBlocking(input_blocking)
     if input_wait_for_message is not None:
         xout.input.setWaitForMessage(input_wait_for_message)
+
+    _log.debug(f"Created XLinkOut node with stream name: {stream_name}")
 
     return xout

@@ -61,9 +61,8 @@ def create_neural_network(
         The input link to connect to the image manip node or,
         if there are multiple input links, an iterable of input links.
         Example: cam_rgb.preview or (cam_rgb.preview, stereo.depth)
-    blob_path : str
+    blob_path : Path
         The path to the blob file to use for the neural network.
-        Will be converted to a pathlib.Path.
     input_names : Optional[Union[str, list[str]]], optional
         The names of the input links, by default None
         Must be the same length as input_link if a list
@@ -145,6 +144,7 @@ def create_neural_network(
     # connect the input link to the neural network node
     if not isinstance(input_link, list):
         # handle a single input to the network
+        _log.debug(f"Linking {input_link.name} to input of neural network")
         input_link.link(nn.input)
     else:
         if input_names is None or reuse_messages is None:
@@ -177,6 +177,7 @@ def create_neural_network(
                 with contextlib.suppress(IndexError):
                     nn.inputs[name].setQueueSize(input_sizes[idx])
 
+    _log.debug(f"Neural network created with blob: {blob_path}")
     return nn
 
 
