@@ -30,7 +30,7 @@ from oakutils.nodes.buffer import MultiBuffer
 
 if TYPE_CHECKING:
     from types import TracebackType
-    
+
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class VPU:
 
     def __enter__(self: Self) -> Self:
         return self
-    
+
     def __exit__(
         self: Self,
         exc_type: type[BaseException] | None,

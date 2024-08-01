@@ -20,6 +20,8 @@ neural_network
     Module for creating neural network nodes.
 script
     Module for creating script nodes.
+scripts
+    Module for pre-created scripts.
 stereo_depth
     Module for creating stereo depth nodes.
 xin
@@ -66,6 +68,8 @@ create_yolo_detection_network
     Creates a yolo detection network node.
 create_mobilenet_detection_network
     Creates a mobilenet detection network node.
+get_available_imports
+    Get the available imports for the script node.
 get_nn_data
     Gets generic data from a neural network node.
 get_nn_frame
@@ -80,6 +84,8 @@ get_yolo_data
     Get a YolomodelData object from a json file produced during compilation.
 frame_norm
     Adjusts a bounding box returned from an ImgDetection datatype to the frame size.
+verify_script
+    Verify the imports and syntax of a script.
 """
 
 from __future__ import annotations
@@ -95,6 +101,7 @@ from . import (
     mono_camera,
     neural_network,
     script,
+    scripts,
     stereo_depth,
     xin,
     xout,
@@ -115,7 +122,7 @@ from .neural_network import (
     get_nn_frame,
     get_nn_gray_frame,
 )
-from .script import create_script
+from .script import create_script, get_available_imports, verify_script
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
 from .xin import create_xin
 from .xout import create_xout
@@ -144,6 +151,7 @@ __all__ = [
     "create_xout",
     "create_yolo_detection_network",
     "frame_norm",
+    "get_available_imports",
     "get_nn_bgr_frame",
     "get_nn_data",
     "get_nn_frame",
@@ -156,7 +164,9 @@ __all__ = [
     "mono_camera",
     "neural_network",
     "script",
+    "scripts",
     "stereo_depth",
+    "verify_script",
     "xin",
     "xout",
 ]
