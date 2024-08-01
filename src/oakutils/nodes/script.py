@@ -19,12 +19,18 @@ from pathlib import Path
 import depthai as dai
 
 
+def verify_script(
+    script: str | Path,
+) -> bool:
+    """
+    """
+
 def create_script(
     pipeline: dai.Pipeline,
     script: str | Path,
     name: str | None = None,
     processor: dai.ProcessorType = dai.ProcessorType.LEON_CSS,
-) -> None:
+) -> dai.node.Script:
     """
     Use to create a script node.
 
@@ -45,6 +51,11 @@ def create_script(
     processor : dai.ProcessorType, optional
         The processor type to run the script on, by default dai.ProcessorType.LEON_CSS
         Should only be changed if you know what you are doing.
+
+    Returns
+    -------
+    dai.node.Script
+        The script node
 
     """
     name = name if name else f"script_{time.time()}"
