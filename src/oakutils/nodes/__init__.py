@@ -18,6 +18,8 @@ mono_camera
     Module for creating mono camera nodes.
 neural_network
     Module for creating neural network nodes.
+script
+    Module for creating script nodes.
 stereo_depth
     Module for creating stereo depth nodes.
 xin
@@ -50,6 +52,8 @@ create_left_right_cameras
     Wrapper function for creating the left and right mono cameras.
 create_neural_network
     Creates a neural network node.
+create_script
+    Creates a script node.
 create_stereo_depth
     Creates a stereo depth node.
 create_stereo_depth_from_mono_cameras
@@ -90,6 +94,7 @@ from . import (
     models,
     mono_camera,
     neural_network,
+    script,
     stereo_depth,
     xin,
     xout,
@@ -110,6 +115,7 @@ from .neural_network import (
     get_nn_frame,
     get_nn_gray_frame,
 )
+from .script import create_script
 from .stereo_depth import create_stereo_depth, create_stereo_depth_from_mono_cameras
 from .xin import create_xin
 from .xout import create_xout
@@ -131,6 +137,7 @@ __all__ = [
     "create_mobilenet_detection_network",
     "create_mono_camera",
     "create_neural_network",
+    "create_script",
     "create_stereo_depth",
     "create_stereo_depth_from_mono_cameras",
     "create_xin",
@@ -148,6 +155,7 @@ __all__ = [
     "models",
     "mono_camera",
     "neural_network",
+    "script",
     "stereo_depth",
     "xin",
     "xout",
