@@ -27,6 +27,8 @@ shave5 : module
     Contains all the models compiled for 5 shaves
 shave6 : module
     Contains all the models compiled for 6 shaves
+bulk : module
+    Contains a tuple for each model containing paths for all shaves
 
 """
 
@@ -46,6 +48,7 @@ _submodules = [
     "shave4",
     "shave5",
     "shave6",
+    "bulk",
 ]
 
 _loaded_modules: dict[str, ModuleType | None] = {
@@ -55,6 +58,7 @@ _loaded_modules: dict[str, ModuleType | None] = {
     "shave4": None,
     "shave5": None,
     "shave6": None,
+    "bulk": None,
 }
 
 

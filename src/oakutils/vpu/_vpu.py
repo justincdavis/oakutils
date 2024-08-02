@@ -384,7 +384,9 @@ class VPU:
         with device_object as device:
             # pre-fetch queues and allocate buffers
             buffer: MultiBuffer = MultiBuffer(device, self._xin_names, self._xout_names)
-            _log.debug(f"VPU-Thread: Created MultiBuffer with {len(self._xin_names)} inputs, {len(self._xout_names)} outputs.")
+            _log.debug(
+                f"VPU-Thread: Created MultiBuffer with {len(self._xin_names)} inputs, {len(self._xout_names)} outputs.",
+            )
             _log.debug(f"VPU-Thread: Input names: {self._xin_names}")
             _log.debug(f"VPU-Thread: Output names: {self._xout_names}")
 

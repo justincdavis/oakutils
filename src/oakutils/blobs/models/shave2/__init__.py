@@ -14,412 +14,412 @@ This module is auto-generated
 
 Attributes:
 ----------
-Gftt : str
-    nn.Module wrapper for gftt operation.
-Gfttblurgray_11x11 : str
-    nn.Module wrapper for gfttblurgray_11x11 operation.
-Gfttblurgray_13x13 : str
-    nn.Module wrapper for gfttblurgray_13x13 operation.
-Gfttblurgray_15x15 : str
-    nn.Module wrapper for gfttblurgray_15x15 operation.
-Gfttblurgray_3x3 : str
-    nn.Module wrapper for gfttblurgray_3x3 operation.
-Gfttblurgray_5x5 : str
-    nn.Module wrapper for gfttblurgray_5x5 operation.
-Gfttblurgray_7x7 : str
-    nn.Module wrapper for gfttblurgray_7x7 operation.
-Gfttblurgray_9x9 : str
-    nn.Module wrapper for gfttblurgray_9x9 operation.
-Gfttblur_11x11 : str
-    nn.Module wrapper for gfttblur_11x11 operation.
-Gfttblur_13x13 : str
-    nn.Module wrapper for gfttblur_13x13 operation.
-Gfttblur_15x15 : str
-    nn.Module wrapper for gfttblur_15x15 operation.
-Gfttblur_3x3 : str
-    nn.Module wrapper for gfttblur_3x3 operation.
-Gfttblur_5x5 : str
-    nn.Module wrapper for gfttblur_5x5 operation.
-Gfttblur_7x7 : str
-    nn.Module wrapper for gfttblur_7x7 operation.
-Gfttblur_9x9 : str
-    nn.Module wrapper for gfttblur_9x9 operation.
-Gfttgray : str
-    nn.Module wrapper for gfttgray operation.
-Gaussiangray_11x11 : str
-    nn.Module wrapper for gaussiangray_11x11 operation.
-Gaussiangray_13x13 : str
-    nn.Module wrapper for gaussiangray_13x13 operation.
-Gaussiangray_15x15 : str
-    nn.Module wrapper for gaussiangray_15x15 operation.
-Gaussiangray_3x3 : str
-    nn.Module wrapper for gaussiangray_3x3 operation.
-Gaussiangray_5x5 : str
-    nn.Module wrapper for gaussiangray_5x5 operation.
-Gaussiangray_7x7 : str
-    nn.Module wrapper for gaussiangray_7x7 operation.
-Gaussiangray_9x9 : str
-    nn.Module wrapper for gaussiangray_9x9 operation.
-Gaussian_11x11 : str
-    nn.Module wrapper for gaussian_11x11 operation.
-Gaussian_13x13 : str
-    nn.Module wrapper for gaussian_13x13 operation.
-Gaussian_15x15 : str
-    nn.Module wrapper for gaussian_15x15 operation.
-Gaussian_3x3 : str
-    nn.Module wrapper for gaussian_3x3 operation.
-Gaussian_5x5 : str
-    nn.Module wrapper for gaussian_5x5 operation.
-Gaussian_7x7 : str
-    nn.Module wrapper for gaussian_7x7 operation.
-Gaussian_9x9 : str
-    nn.Module wrapper for gaussian_9x9 operation.
-Harris : str
-    nn.Module wrapper for harris operation.
-Harrisblurgray_11x11 : str
-    nn.Module wrapper for harrisblurgray_11x11 operation.
-Harrisblurgray_13x13 : str
-    nn.Module wrapper for harrisblurgray_13x13 operation.
-Harrisblurgray_15x15 : str
-    nn.Module wrapper for harrisblurgray_15x15 operation.
-Harrisblurgray_3x3 : str
-    nn.Module wrapper for harrisblurgray_3x3 operation.
-Harrisblurgray_5x5 : str
-    nn.Module wrapper for harrisblurgray_5x5 operation.
-Harrisblurgray_7x7 : str
-    nn.Module wrapper for harrisblurgray_7x7 operation.
-Harrisblurgray_9x9 : str
-    nn.Module wrapper for harrisblurgray_9x9 operation.
-Harrisblur_11x11 : str
-    nn.Module wrapper for harrisblur_11x11 operation.
-Harrisblur_13x13 : str
-    nn.Module wrapper for harrisblur_13x13 operation.
-Harrisblur_15x15 : str
-    nn.Module wrapper for harrisblur_15x15 operation.
-Harrisblur_3x3 : str
-    nn.Module wrapper for harrisblur_3x3 operation.
-Harrisblur_5x5 : str
-    nn.Module wrapper for harrisblur_5x5 operation.
-Harrisblur_7x7 : str
-    nn.Module wrapper for harrisblur_7x7 operation.
-Harrisblur_9x9 : str
-    nn.Module wrapper for harrisblur_9x9 operation.
-Harrisgray : str
-    nn.Module wrapper for harrisgray operation.
-Hessian : str
-    nn.Module wrapper for hessian operation.
-Hessianblurgray_11x11 : str
-    nn.Module wrapper for hessianblurgray_11x11 operation.
-Hessianblurgray_13x13 : str
-    nn.Module wrapper for hessianblurgray_13x13 operation.
-Hessianblurgray_15x15 : str
-    nn.Module wrapper for hessianblurgray_15x15 operation.
-Hessianblurgray_3x3 : str
-    nn.Module wrapper for hessianblurgray_3x3 operation.
-Hessianblurgray_5x5 : str
-    nn.Module wrapper for hessianblurgray_5x5 operation.
-Hessianblurgray_7x7 : str
-    nn.Module wrapper for hessianblurgray_7x7 operation.
-Hessianblurgray_9x9 : str
-    nn.Module wrapper for hessianblurgray_9x9 operation.
-Hessianblur_11x11 : str
-    nn.Module wrapper for hessianblur_11x11 operation.
-Hessianblur_13x13 : str
-    nn.Module wrapper for hessianblur_13x13 operation.
-Hessianblur_15x15 : str
-    nn.Module wrapper for hessianblur_15x15 operation.
-Hessianblur_3x3 : str
-    nn.Module wrapper for hessianblur_3x3 operation.
-Hessianblur_5x5 : str
-    nn.Module wrapper for hessianblur_5x5 operation.
-Hessianblur_7x7 : str
-    nn.Module wrapper for hessianblur_7x7 operation.
-Hessianblur_9x9 : str
-    nn.Module wrapper for hessianblur_9x9 operation.
-Hessiangray : str
-    nn.Module wrapper for hessiangray operation.
-Laplacianblurgray_11x11_11x11 : str
-    nn.Module wrapper for laplacianblurgray_11x11_11x11 operation.
-Laplacianblurgray_11x11_13x13 : str
-    nn.Module wrapper for laplacianblurgray_11x11_13x13 operation.
-Laplacianblurgray_11x11_15x15 : str
-    nn.Module wrapper for laplacianblurgray_11x11_15x15 operation.
-Laplacianblurgray_11x11_3x3 : str
-    nn.Module wrapper for laplacianblurgray_11x11_3x3 operation.
-Laplacianblurgray_11x11_5x5 : str
-    nn.Module wrapper for laplacianblurgray_11x11_5x5 operation.
-Laplacianblurgray_11x11_7x7 : str
-    nn.Module wrapper for laplacianblurgray_11x11_7x7 operation.
-Laplacianblurgray_11x11_9x9 : str
-    nn.Module wrapper for laplacianblurgray_11x11_9x9 operation.
-Laplacianblurgray_13x13_11x11 : str
-    nn.Module wrapper for laplacianblurgray_13x13_11x11 operation.
-Laplacianblurgray_13x13_13x13 : str
-    nn.Module wrapper for laplacianblurgray_13x13_13x13 operation.
-Laplacianblurgray_13x13_15x15 : str
-    nn.Module wrapper for laplacianblurgray_13x13_15x15 operation.
-Laplacianblurgray_13x13_3x3 : str
-    nn.Module wrapper for laplacianblurgray_13x13_3x3 operation.
-Laplacianblurgray_13x13_5x5 : str
-    nn.Module wrapper for laplacianblurgray_13x13_5x5 operation.
-Laplacianblurgray_13x13_7x7 : str
-    nn.Module wrapper for laplacianblurgray_13x13_7x7 operation.
-Laplacianblurgray_13x13_9x9 : str
-    nn.Module wrapper for laplacianblurgray_13x13_9x9 operation.
-Laplacianblurgray_15x15_11x11 : str
-    nn.Module wrapper for laplacianblurgray_15x15_11x11 operation.
-Laplacianblurgray_15x15_13x13 : str
-    nn.Module wrapper for laplacianblurgray_15x15_13x13 operation.
-Laplacianblurgray_15x15_15x15 : str
-    nn.Module wrapper for laplacianblurgray_15x15_15x15 operation.
-Laplacianblurgray_15x15_3x3 : str
-    nn.Module wrapper for laplacianblurgray_15x15_3x3 operation.
-Laplacianblurgray_15x15_5x5 : str
-    nn.Module wrapper for laplacianblurgray_15x15_5x5 operation.
-Laplacianblurgray_15x15_7x7 : str
-    nn.Module wrapper for laplacianblurgray_15x15_7x7 operation.
-Laplacianblurgray_15x15_9x9 : str
-    nn.Module wrapper for laplacianblurgray_15x15_9x9 operation.
-Laplacianblurgray_3x3_11x11 : str
-    nn.Module wrapper for laplacianblurgray_3x3_11x11 operation.
-Laplacianblurgray_3x3_13x13 : str
-    nn.Module wrapper for laplacianblurgray_3x3_13x13 operation.
-Laplacianblurgray_3x3_15x15 : str
-    nn.Module wrapper for laplacianblurgray_3x3_15x15 operation.
-Laplacianblurgray_3x3_3x3 : str
-    nn.Module wrapper for laplacianblurgray_3x3_3x3 operation.
-Laplacianblurgray_3x3_5x5 : str
-    nn.Module wrapper for laplacianblurgray_3x3_5x5 operation.
-Laplacianblurgray_3x3_7x7 : str
-    nn.Module wrapper for laplacianblurgray_3x3_7x7 operation.
-Laplacianblurgray_3x3_9x9 : str
-    nn.Module wrapper for laplacianblurgray_3x3_9x9 operation.
-Laplacianblurgray_5x5_11x11 : str
-    nn.Module wrapper for laplacianblurgray_5x5_11x11 operation.
-Laplacianblurgray_5x5_13x13 : str
-    nn.Module wrapper for laplacianblurgray_5x5_13x13 operation.
-Laplacianblurgray_5x5_15x15 : str
-    nn.Module wrapper for laplacianblurgray_5x5_15x15 operation.
-Laplacianblurgray_5x5_3x3 : str
-    nn.Module wrapper for laplacianblurgray_5x5_3x3 operation.
-Laplacianblurgray_5x5_5x5 : str
-    nn.Module wrapper for laplacianblurgray_5x5_5x5 operation.
-Laplacianblurgray_5x5_7x7 : str
-    nn.Module wrapper for laplacianblurgray_5x5_7x7 operation.
-Laplacianblurgray_5x5_9x9 : str
-    nn.Module wrapper for laplacianblurgray_5x5_9x9 operation.
-Laplacianblurgray_7x7_11x11 : str
-    nn.Module wrapper for laplacianblurgray_7x7_11x11 operation.
-Laplacianblurgray_7x7_13x13 : str
-    nn.Module wrapper for laplacianblurgray_7x7_13x13 operation.
-Laplacianblurgray_7x7_15x15 : str
-    nn.Module wrapper for laplacianblurgray_7x7_15x15 operation.
-Laplacianblurgray_7x7_3x3 : str
-    nn.Module wrapper for laplacianblurgray_7x7_3x3 operation.
-Laplacianblurgray_7x7_5x5 : str
-    nn.Module wrapper for laplacianblurgray_7x7_5x5 operation.
-Laplacianblurgray_7x7_7x7 : str
-    nn.Module wrapper for laplacianblurgray_7x7_7x7 operation.
-Laplacianblurgray_7x7_9x9 : str
-    nn.Module wrapper for laplacianblurgray_7x7_9x9 operation.
-Laplacianblurgray_9x9_11x11 : str
-    nn.Module wrapper for laplacianblurgray_9x9_11x11 operation.
-Laplacianblurgray_9x9_13x13 : str
-    nn.Module wrapper for laplacianblurgray_9x9_13x13 operation.
-Laplacianblurgray_9x9_15x15 : str
-    nn.Module wrapper for laplacianblurgray_9x9_15x15 operation.
-Laplacianblurgray_9x9_3x3 : str
-    nn.Module wrapper for laplacianblurgray_9x9_3x3 operation.
-Laplacianblurgray_9x9_5x5 : str
-    nn.Module wrapper for laplacianblurgray_9x9_5x5 operation.
-Laplacianblurgray_9x9_7x7 : str
-    nn.Module wrapper for laplacianblurgray_9x9_7x7 operation.
-Laplacianblurgray_9x9_9x9 : str
-    nn.Module wrapper for laplacianblurgray_9x9_9x9 operation.
-Laplacianblur_11x11_11x11 : str
-    nn.Module wrapper for laplacianblur_11x11_11x11 operation.
-Laplacianblur_11x11_13x13 : str
-    nn.Module wrapper for laplacianblur_11x11_13x13 operation.
-Laplacianblur_11x11_15x15 : str
-    nn.Module wrapper for laplacianblur_11x11_15x15 operation.
-Laplacianblur_11x11_3x3 : str
-    nn.Module wrapper for laplacianblur_11x11_3x3 operation.
-Laplacianblur_11x11_5x5 : str
-    nn.Module wrapper for laplacianblur_11x11_5x5 operation.
-Laplacianblur_11x11_7x7 : str
-    nn.Module wrapper for laplacianblur_11x11_7x7 operation.
-Laplacianblur_11x11_9x9 : str
-    nn.Module wrapper for laplacianblur_11x11_9x9 operation.
-Laplacianblur_13x13_11x11 : str
-    nn.Module wrapper for laplacianblur_13x13_11x11 operation.
-Laplacianblur_13x13_13x13 : str
-    nn.Module wrapper for laplacianblur_13x13_13x13 operation.
-Laplacianblur_13x13_15x15 : str
-    nn.Module wrapper for laplacianblur_13x13_15x15 operation.
-Laplacianblur_13x13_3x3 : str
-    nn.Module wrapper for laplacianblur_13x13_3x3 operation.
-Laplacianblur_13x13_5x5 : str
-    nn.Module wrapper for laplacianblur_13x13_5x5 operation.
-Laplacianblur_13x13_7x7 : str
-    nn.Module wrapper for laplacianblur_13x13_7x7 operation.
-Laplacianblur_13x13_9x9 : str
-    nn.Module wrapper for laplacianblur_13x13_9x9 operation.
-Laplacianblur_15x15_11x11 : str
-    nn.Module wrapper for laplacianblur_15x15_11x11 operation.
-Laplacianblur_15x15_13x13 : str
-    nn.Module wrapper for laplacianblur_15x15_13x13 operation.
-Laplacianblur_15x15_15x15 : str
-    nn.Module wrapper for laplacianblur_15x15_15x15 operation.
-Laplacianblur_15x15_3x3 : str
-    nn.Module wrapper for laplacianblur_15x15_3x3 operation.
-Laplacianblur_15x15_5x5 : str
-    nn.Module wrapper for laplacianblur_15x15_5x5 operation.
-Laplacianblur_15x15_7x7 : str
-    nn.Module wrapper for laplacianblur_15x15_7x7 operation.
-Laplacianblur_15x15_9x9 : str
-    nn.Module wrapper for laplacianblur_15x15_9x9 operation.
-Laplacianblur_3x3_11x11 : str
-    nn.Module wrapper for laplacianblur_3x3_11x11 operation.
-Laplacianblur_3x3_13x13 : str
-    nn.Module wrapper for laplacianblur_3x3_13x13 operation.
-Laplacianblur_3x3_15x15 : str
-    nn.Module wrapper for laplacianblur_3x3_15x15 operation.
-Laplacianblur_3x3_3x3 : str
-    nn.Module wrapper for laplacianblur_3x3_3x3 operation.
-Laplacianblur_3x3_5x5 : str
-    nn.Module wrapper for laplacianblur_3x3_5x5 operation.
-Laplacianblur_3x3_7x7 : str
-    nn.Module wrapper for laplacianblur_3x3_7x7 operation.
-Laplacianblur_3x3_9x9 : str
-    nn.Module wrapper for laplacianblur_3x3_9x9 operation.
-Laplacianblur_5x5_11x11 : str
-    nn.Module wrapper for laplacianblur_5x5_11x11 operation.
-Laplacianblur_5x5_13x13 : str
-    nn.Module wrapper for laplacianblur_5x5_13x13 operation.
-Laplacianblur_5x5_15x15 : str
-    nn.Module wrapper for laplacianblur_5x5_15x15 operation.
-Laplacianblur_5x5_3x3 : str
-    nn.Module wrapper for laplacianblur_5x5_3x3 operation.
-Laplacianblur_5x5_5x5 : str
-    nn.Module wrapper for laplacianblur_5x5_5x5 operation.
-Laplacianblur_5x5_7x7 : str
-    nn.Module wrapper for laplacianblur_5x5_7x7 operation.
-Laplacianblur_5x5_9x9 : str
-    nn.Module wrapper for laplacianblur_5x5_9x9 operation.
-Laplacianblur_7x7_11x11 : str
-    nn.Module wrapper for laplacianblur_7x7_11x11 operation.
-Laplacianblur_7x7_13x13 : str
-    nn.Module wrapper for laplacianblur_7x7_13x13 operation.
-Laplacianblur_7x7_15x15 : str
-    nn.Module wrapper for laplacianblur_7x7_15x15 operation.
-Laplacianblur_7x7_3x3 : str
-    nn.Module wrapper for laplacianblur_7x7_3x3 operation.
-Laplacianblur_7x7_5x5 : str
-    nn.Module wrapper for laplacianblur_7x7_5x5 operation.
-Laplacianblur_7x7_7x7 : str
-    nn.Module wrapper for laplacianblur_7x7_7x7 operation.
-Laplacianblur_7x7_9x9 : str
-    nn.Module wrapper for laplacianblur_7x7_9x9 operation.
-Laplacianblur_9x9_11x11 : str
-    nn.Module wrapper for laplacianblur_9x9_11x11 operation.
-Laplacianblur_9x9_13x13 : str
-    nn.Module wrapper for laplacianblur_9x9_13x13 operation.
-Laplacianblur_9x9_15x15 : str
-    nn.Module wrapper for laplacianblur_9x9_15x15 operation.
-Laplacianblur_9x9_3x3 : str
-    nn.Module wrapper for laplacianblur_9x9_3x3 operation.
-Laplacianblur_9x9_5x5 : str
-    nn.Module wrapper for laplacianblur_9x9_5x5 operation.
-Laplacianblur_9x9_7x7 : str
-    nn.Module wrapper for laplacianblur_9x9_7x7 operation.
-Laplacianblur_9x9_9x9 : str
-    nn.Module wrapper for laplacianblur_9x9_9x9 operation.
-Laplaciangray_11x11 : str
-    nn.Module wrapper for laplaciangray_11x11 operation.
-Laplaciangray_13x13 : str
-    nn.Module wrapper for laplaciangray_13x13 operation.
-Laplaciangray_15x15 : str
-    nn.Module wrapper for laplaciangray_15x15 operation.
-Laplaciangray_3x3 : str
-    nn.Module wrapper for laplaciangray_3x3 operation.
-Laplaciangray_5x5 : str
-    nn.Module wrapper for laplaciangray_5x5 operation.
-Laplaciangray_7x7 : str
-    nn.Module wrapper for laplaciangray_7x7 operation.
-Laplaciangray_9x9 : str
-    nn.Module wrapper for laplaciangray_9x9 operation.
-Laplacian_11x11 : str
-    nn.Module wrapper for laplacian_11x11 operation.
-Laplacian_13x13 : str
-    nn.Module wrapper for laplacian_13x13 operation.
-Laplacian_15x15 : str
-    nn.Module wrapper for laplacian_15x15 operation.
-Laplacian_3x3 : str
-    nn.Module wrapper for laplacian_3x3 operation.
-Laplacian_5x5 : str
-    nn.Module wrapper for laplacian_5x5 operation.
-Laplacian_7x7 : str
-    nn.Module wrapper for laplacian_7x7 operation.
-Laplacian_9x9 : str
-    nn.Module wrapper for laplacian_9x9 operation.
-Laserscan_10 : str
-    nn.Module wrapper for laserscan_10 operation.
-Laserscan_10_1 : str
-    nn.Module wrapper for laserscan_10_1 operation.
-Laserscan_10_3 : str
-    nn.Module wrapper for laserscan_10_3 operation.
-Laserscan_10_5 : str
-    nn.Module wrapper for laserscan_10_5 operation.
-Laserscan_20 : str
-    nn.Module wrapper for laserscan_20 operation.
-Laserscan_20_1 : str
-    nn.Module wrapper for laserscan_20_1 operation.
-Laserscan_20_3 : str
-    nn.Module wrapper for laserscan_20_3 operation.
-Laserscan_20_5 : str
-    nn.Module wrapper for laserscan_20_5 operation.
-Laserscan_5 : str
-    nn.Module wrapper for laserscan_5 operation.
-Laserscan_5_1 : str
-    nn.Module wrapper for laserscan_5_1 operation.
-Laserscan_5_3 : str
-    nn.Module wrapper for laserscan_5_3 operation.
-Laserscan_5_5 : str
-    nn.Module wrapper for laserscan_5_5 operation.
-Pointcloud : str
-    nn.Module wrapper for pointcloud operation.
-Sobel : str
-    nn.Module wrapper for sobel operation.
-Sobelblurgray_11x11 : str
-    nn.Module wrapper for sobelblurgray_11x11 operation.
-Sobelblurgray_13x13 : str
-    nn.Module wrapper for sobelblurgray_13x13 operation.
-Sobelblurgray_15x15 : str
-    nn.Module wrapper for sobelblurgray_15x15 operation.
-Sobelblurgray_3x3 : str
-    nn.Module wrapper for sobelblurgray_3x3 operation.
-Sobelblurgray_5x5 : str
-    nn.Module wrapper for sobelblurgray_5x5 operation.
-Sobelblurgray_7x7 : str
-    nn.Module wrapper for sobelblurgray_7x7 operation.
-Sobelblurgray_9x9 : str
-    nn.Module wrapper for sobelblurgray_9x9 operation.
-Sobelblur_11x11 : str
-    nn.Module wrapper for sobelblur_11x11 operation.
-Sobelblur_13x13 : str
-    nn.Module wrapper for sobelblur_13x13 operation.
-Sobelblur_15x15 : str
-    nn.Module wrapper for sobelblur_15x15 operation.
-Sobelblur_3x3 : str
-    nn.Module wrapper for sobelblur_3x3 operation.
-Sobelblur_5x5 : str
-    nn.Module wrapper for sobelblur_5x5 operation.
-Sobelblur_7x7 : str
-    nn.Module wrapper for sobelblur_7x7 operation.
-Sobelblur_9x9 : str
-    nn.Module wrapper for sobelblur_9x9 operation.
-Sobelgray : str
-    nn.Module wrapper for sobelgray operation.
+Gftt : Path
+    Path to compiled blob for gftt operation.
+Gfttblurgray_11x11 : Path
+    Path to compiled blob for gfttblurgray_11x11 operation.
+Gfttblurgray_13x13 : Path
+    Path to compiled blob for gfttblurgray_13x13 operation.
+Gfttblurgray_15x15 : Path
+    Path to compiled blob for gfttblurgray_15x15 operation.
+Gfttblurgray_3x3 : Path
+    Path to compiled blob for gfttblurgray_3x3 operation.
+Gfttblurgray_5x5 : Path
+    Path to compiled blob for gfttblurgray_5x5 operation.
+Gfttblurgray_7x7 : Path
+    Path to compiled blob for gfttblurgray_7x7 operation.
+Gfttblurgray_9x9 : Path
+    Path to compiled blob for gfttblurgray_9x9 operation.
+Gfttblur_11x11 : Path
+    Path to compiled blob for gfttblur_11x11 operation.
+Gfttblur_13x13 : Path
+    Path to compiled blob for gfttblur_13x13 operation.
+Gfttblur_15x15 : Path
+    Path to compiled blob for gfttblur_15x15 operation.
+Gfttblur_3x3 : Path
+    Path to compiled blob for gfttblur_3x3 operation.
+Gfttblur_5x5 : Path
+    Path to compiled blob for gfttblur_5x5 operation.
+Gfttblur_7x7 : Path
+    Path to compiled blob for gfttblur_7x7 operation.
+Gfttblur_9x9 : Path
+    Path to compiled blob for gfttblur_9x9 operation.
+Gfttgray : Path
+    Path to compiled blob for gfttgray operation.
+Gaussiangray_11x11 : Path
+    Path to compiled blob for gaussiangray_11x11 operation.
+Gaussiangray_13x13 : Path
+    Path to compiled blob for gaussiangray_13x13 operation.
+Gaussiangray_15x15 : Path
+    Path to compiled blob for gaussiangray_15x15 operation.
+Gaussiangray_3x3 : Path
+    Path to compiled blob for gaussiangray_3x3 operation.
+Gaussiangray_5x5 : Path
+    Path to compiled blob for gaussiangray_5x5 operation.
+Gaussiangray_7x7 : Path
+    Path to compiled blob for gaussiangray_7x7 operation.
+Gaussiangray_9x9 : Path
+    Path to compiled blob for gaussiangray_9x9 operation.
+Gaussian_11x11 : Path
+    Path to compiled blob for gaussian_11x11 operation.
+Gaussian_13x13 : Path
+    Path to compiled blob for gaussian_13x13 operation.
+Gaussian_15x15 : Path
+    Path to compiled blob for gaussian_15x15 operation.
+Gaussian_3x3 : Path
+    Path to compiled blob for gaussian_3x3 operation.
+Gaussian_5x5 : Path
+    Path to compiled blob for gaussian_5x5 operation.
+Gaussian_7x7 : Path
+    Path to compiled blob for gaussian_7x7 operation.
+Gaussian_9x9 : Path
+    Path to compiled blob for gaussian_9x9 operation.
+Harris : Path
+    Path to compiled blob for harris operation.
+Harrisblurgray_11x11 : Path
+    Path to compiled blob for harrisblurgray_11x11 operation.
+Harrisblurgray_13x13 : Path
+    Path to compiled blob for harrisblurgray_13x13 operation.
+Harrisblurgray_15x15 : Path
+    Path to compiled blob for harrisblurgray_15x15 operation.
+Harrisblurgray_3x3 : Path
+    Path to compiled blob for harrisblurgray_3x3 operation.
+Harrisblurgray_5x5 : Path
+    Path to compiled blob for harrisblurgray_5x5 operation.
+Harrisblurgray_7x7 : Path
+    Path to compiled blob for harrisblurgray_7x7 operation.
+Harrisblurgray_9x9 : Path
+    Path to compiled blob for harrisblurgray_9x9 operation.
+Harrisblur_11x11 : Path
+    Path to compiled blob for harrisblur_11x11 operation.
+Harrisblur_13x13 : Path
+    Path to compiled blob for harrisblur_13x13 operation.
+Harrisblur_15x15 : Path
+    Path to compiled blob for harrisblur_15x15 operation.
+Harrisblur_3x3 : Path
+    Path to compiled blob for harrisblur_3x3 operation.
+Harrisblur_5x5 : Path
+    Path to compiled blob for harrisblur_5x5 operation.
+Harrisblur_7x7 : Path
+    Path to compiled blob for harrisblur_7x7 operation.
+Harrisblur_9x9 : Path
+    Path to compiled blob for harrisblur_9x9 operation.
+Harrisgray : Path
+    Path to compiled blob for harrisgray operation.
+Hessian : Path
+    Path to compiled blob for hessian operation.
+Hessianblurgray_11x11 : Path
+    Path to compiled blob for hessianblurgray_11x11 operation.
+Hessianblurgray_13x13 : Path
+    Path to compiled blob for hessianblurgray_13x13 operation.
+Hessianblurgray_15x15 : Path
+    Path to compiled blob for hessianblurgray_15x15 operation.
+Hessianblurgray_3x3 : Path
+    Path to compiled blob for hessianblurgray_3x3 operation.
+Hessianblurgray_5x5 : Path
+    Path to compiled blob for hessianblurgray_5x5 operation.
+Hessianblurgray_7x7 : Path
+    Path to compiled blob for hessianblurgray_7x7 operation.
+Hessianblurgray_9x9 : Path
+    Path to compiled blob for hessianblurgray_9x9 operation.
+Hessianblur_11x11 : Path
+    Path to compiled blob for hessianblur_11x11 operation.
+Hessianblur_13x13 : Path
+    Path to compiled blob for hessianblur_13x13 operation.
+Hessianblur_15x15 : Path
+    Path to compiled blob for hessianblur_15x15 operation.
+Hessianblur_3x3 : Path
+    Path to compiled blob for hessianblur_3x3 operation.
+Hessianblur_5x5 : Path
+    Path to compiled blob for hessianblur_5x5 operation.
+Hessianblur_7x7 : Path
+    Path to compiled blob for hessianblur_7x7 operation.
+Hessianblur_9x9 : Path
+    Path to compiled blob for hessianblur_9x9 operation.
+Hessiangray : Path
+    Path to compiled blob for hessiangray operation.
+Laplacianblurgray_11x11_11x11 : Path
+    Path to compiled blob for laplacianblurgray_11x11_11x11 operation.
+Laplacianblurgray_11x11_13x13 : Path
+    Path to compiled blob for laplacianblurgray_11x11_13x13 operation.
+Laplacianblurgray_11x11_15x15 : Path
+    Path to compiled blob for laplacianblurgray_11x11_15x15 operation.
+Laplacianblurgray_11x11_3x3 : Path
+    Path to compiled blob for laplacianblurgray_11x11_3x3 operation.
+Laplacianblurgray_11x11_5x5 : Path
+    Path to compiled blob for laplacianblurgray_11x11_5x5 operation.
+Laplacianblurgray_11x11_7x7 : Path
+    Path to compiled blob for laplacianblurgray_11x11_7x7 operation.
+Laplacianblurgray_11x11_9x9 : Path
+    Path to compiled blob for laplacianblurgray_11x11_9x9 operation.
+Laplacianblurgray_13x13_11x11 : Path
+    Path to compiled blob for laplacianblurgray_13x13_11x11 operation.
+Laplacianblurgray_13x13_13x13 : Path
+    Path to compiled blob for laplacianblurgray_13x13_13x13 operation.
+Laplacianblurgray_13x13_15x15 : Path
+    Path to compiled blob for laplacianblurgray_13x13_15x15 operation.
+Laplacianblurgray_13x13_3x3 : Path
+    Path to compiled blob for laplacianblurgray_13x13_3x3 operation.
+Laplacianblurgray_13x13_5x5 : Path
+    Path to compiled blob for laplacianblurgray_13x13_5x5 operation.
+Laplacianblurgray_13x13_7x7 : Path
+    Path to compiled blob for laplacianblurgray_13x13_7x7 operation.
+Laplacianblurgray_13x13_9x9 : Path
+    Path to compiled blob for laplacianblurgray_13x13_9x9 operation.
+Laplacianblurgray_15x15_11x11 : Path
+    Path to compiled blob for laplacianblurgray_15x15_11x11 operation.
+Laplacianblurgray_15x15_13x13 : Path
+    Path to compiled blob for laplacianblurgray_15x15_13x13 operation.
+Laplacianblurgray_15x15_15x15 : Path
+    Path to compiled blob for laplacianblurgray_15x15_15x15 operation.
+Laplacianblurgray_15x15_3x3 : Path
+    Path to compiled blob for laplacianblurgray_15x15_3x3 operation.
+Laplacianblurgray_15x15_5x5 : Path
+    Path to compiled blob for laplacianblurgray_15x15_5x5 operation.
+Laplacianblurgray_15x15_7x7 : Path
+    Path to compiled blob for laplacianblurgray_15x15_7x7 operation.
+Laplacianblurgray_15x15_9x9 : Path
+    Path to compiled blob for laplacianblurgray_15x15_9x9 operation.
+Laplacianblurgray_3x3_11x11 : Path
+    Path to compiled blob for laplacianblurgray_3x3_11x11 operation.
+Laplacianblurgray_3x3_13x13 : Path
+    Path to compiled blob for laplacianblurgray_3x3_13x13 operation.
+Laplacianblurgray_3x3_15x15 : Path
+    Path to compiled blob for laplacianblurgray_3x3_15x15 operation.
+Laplacianblurgray_3x3_3x3 : Path
+    Path to compiled blob for laplacianblurgray_3x3_3x3 operation.
+Laplacianblurgray_3x3_5x5 : Path
+    Path to compiled blob for laplacianblurgray_3x3_5x5 operation.
+Laplacianblurgray_3x3_7x7 : Path
+    Path to compiled blob for laplacianblurgray_3x3_7x7 operation.
+Laplacianblurgray_3x3_9x9 : Path
+    Path to compiled blob for laplacianblurgray_3x3_9x9 operation.
+Laplacianblurgray_5x5_11x11 : Path
+    Path to compiled blob for laplacianblurgray_5x5_11x11 operation.
+Laplacianblurgray_5x5_13x13 : Path
+    Path to compiled blob for laplacianblurgray_5x5_13x13 operation.
+Laplacianblurgray_5x5_15x15 : Path
+    Path to compiled blob for laplacianblurgray_5x5_15x15 operation.
+Laplacianblurgray_5x5_3x3 : Path
+    Path to compiled blob for laplacianblurgray_5x5_3x3 operation.
+Laplacianblurgray_5x5_5x5 : Path
+    Path to compiled blob for laplacianblurgray_5x5_5x5 operation.
+Laplacianblurgray_5x5_7x7 : Path
+    Path to compiled blob for laplacianblurgray_5x5_7x7 operation.
+Laplacianblurgray_5x5_9x9 : Path
+    Path to compiled blob for laplacianblurgray_5x5_9x9 operation.
+Laplacianblurgray_7x7_11x11 : Path
+    Path to compiled blob for laplacianblurgray_7x7_11x11 operation.
+Laplacianblurgray_7x7_13x13 : Path
+    Path to compiled blob for laplacianblurgray_7x7_13x13 operation.
+Laplacianblurgray_7x7_15x15 : Path
+    Path to compiled blob for laplacianblurgray_7x7_15x15 operation.
+Laplacianblurgray_7x7_3x3 : Path
+    Path to compiled blob for laplacianblurgray_7x7_3x3 operation.
+Laplacianblurgray_7x7_5x5 : Path
+    Path to compiled blob for laplacianblurgray_7x7_5x5 operation.
+Laplacianblurgray_7x7_7x7 : Path
+    Path to compiled blob for laplacianblurgray_7x7_7x7 operation.
+Laplacianblurgray_7x7_9x9 : Path
+    Path to compiled blob for laplacianblurgray_7x7_9x9 operation.
+Laplacianblurgray_9x9_11x11 : Path
+    Path to compiled blob for laplacianblurgray_9x9_11x11 operation.
+Laplacianblurgray_9x9_13x13 : Path
+    Path to compiled blob for laplacianblurgray_9x9_13x13 operation.
+Laplacianblurgray_9x9_15x15 : Path
+    Path to compiled blob for laplacianblurgray_9x9_15x15 operation.
+Laplacianblurgray_9x9_3x3 : Path
+    Path to compiled blob for laplacianblurgray_9x9_3x3 operation.
+Laplacianblurgray_9x9_5x5 : Path
+    Path to compiled blob for laplacianblurgray_9x9_5x5 operation.
+Laplacianblurgray_9x9_7x7 : Path
+    Path to compiled blob for laplacianblurgray_9x9_7x7 operation.
+Laplacianblurgray_9x9_9x9 : Path
+    Path to compiled blob for laplacianblurgray_9x9_9x9 operation.
+Laplacianblur_11x11_11x11 : Path
+    Path to compiled blob for laplacianblur_11x11_11x11 operation.
+Laplacianblur_11x11_13x13 : Path
+    Path to compiled blob for laplacianblur_11x11_13x13 operation.
+Laplacianblur_11x11_15x15 : Path
+    Path to compiled blob for laplacianblur_11x11_15x15 operation.
+Laplacianblur_11x11_3x3 : Path
+    Path to compiled blob for laplacianblur_11x11_3x3 operation.
+Laplacianblur_11x11_5x5 : Path
+    Path to compiled blob for laplacianblur_11x11_5x5 operation.
+Laplacianblur_11x11_7x7 : Path
+    Path to compiled blob for laplacianblur_11x11_7x7 operation.
+Laplacianblur_11x11_9x9 : Path
+    Path to compiled blob for laplacianblur_11x11_9x9 operation.
+Laplacianblur_13x13_11x11 : Path
+    Path to compiled blob for laplacianblur_13x13_11x11 operation.
+Laplacianblur_13x13_13x13 : Path
+    Path to compiled blob for laplacianblur_13x13_13x13 operation.
+Laplacianblur_13x13_15x15 : Path
+    Path to compiled blob for laplacianblur_13x13_15x15 operation.
+Laplacianblur_13x13_3x3 : Path
+    Path to compiled blob for laplacianblur_13x13_3x3 operation.
+Laplacianblur_13x13_5x5 : Path
+    Path to compiled blob for laplacianblur_13x13_5x5 operation.
+Laplacianblur_13x13_7x7 : Path
+    Path to compiled blob for laplacianblur_13x13_7x7 operation.
+Laplacianblur_13x13_9x9 : Path
+    Path to compiled blob for laplacianblur_13x13_9x9 operation.
+Laplacianblur_15x15_11x11 : Path
+    Path to compiled blob for laplacianblur_15x15_11x11 operation.
+Laplacianblur_15x15_13x13 : Path
+    Path to compiled blob for laplacianblur_15x15_13x13 operation.
+Laplacianblur_15x15_15x15 : Path
+    Path to compiled blob for laplacianblur_15x15_15x15 operation.
+Laplacianblur_15x15_3x3 : Path
+    Path to compiled blob for laplacianblur_15x15_3x3 operation.
+Laplacianblur_15x15_5x5 : Path
+    Path to compiled blob for laplacianblur_15x15_5x5 operation.
+Laplacianblur_15x15_7x7 : Path
+    Path to compiled blob for laplacianblur_15x15_7x7 operation.
+Laplacianblur_15x15_9x9 : Path
+    Path to compiled blob for laplacianblur_15x15_9x9 operation.
+Laplacianblur_3x3_11x11 : Path
+    Path to compiled blob for laplacianblur_3x3_11x11 operation.
+Laplacianblur_3x3_13x13 : Path
+    Path to compiled blob for laplacianblur_3x3_13x13 operation.
+Laplacianblur_3x3_15x15 : Path
+    Path to compiled blob for laplacianblur_3x3_15x15 operation.
+Laplacianblur_3x3_3x3 : Path
+    Path to compiled blob for laplacianblur_3x3_3x3 operation.
+Laplacianblur_3x3_5x5 : Path
+    Path to compiled blob for laplacianblur_3x3_5x5 operation.
+Laplacianblur_3x3_7x7 : Path
+    Path to compiled blob for laplacianblur_3x3_7x7 operation.
+Laplacianblur_3x3_9x9 : Path
+    Path to compiled blob for laplacianblur_3x3_9x9 operation.
+Laplacianblur_5x5_11x11 : Path
+    Path to compiled blob for laplacianblur_5x5_11x11 operation.
+Laplacianblur_5x5_13x13 : Path
+    Path to compiled blob for laplacianblur_5x5_13x13 operation.
+Laplacianblur_5x5_15x15 : Path
+    Path to compiled blob for laplacianblur_5x5_15x15 operation.
+Laplacianblur_5x5_3x3 : Path
+    Path to compiled blob for laplacianblur_5x5_3x3 operation.
+Laplacianblur_5x5_5x5 : Path
+    Path to compiled blob for laplacianblur_5x5_5x5 operation.
+Laplacianblur_5x5_7x7 : Path
+    Path to compiled blob for laplacianblur_5x5_7x7 operation.
+Laplacianblur_5x5_9x9 : Path
+    Path to compiled blob for laplacianblur_5x5_9x9 operation.
+Laplacianblur_7x7_11x11 : Path
+    Path to compiled blob for laplacianblur_7x7_11x11 operation.
+Laplacianblur_7x7_13x13 : Path
+    Path to compiled blob for laplacianblur_7x7_13x13 operation.
+Laplacianblur_7x7_15x15 : Path
+    Path to compiled blob for laplacianblur_7x7_15x15 operation.
+Laplacianblur_7x7_3x3 : Path
+    Path to compiled blob for laplacianblur_7x7_3x3 operation.
+Laplacianblur_7x7_5x5 : Path
+    Path to compiled blob for laplacianblur_7x7_5x5 operation.
+Laplacianblur_7x7_7x7 : Path
+    Path to compiled blob for laplacianblur_7x7_7x7 operation.
+Laplacianblur_7x7_9x9 : Path
+    Path to compiled blob for laplacianblur_7x7_9x9 operation.
+Laplacianblur_9x9_11x11 : Path
+    Path to compiled blob for laplacianblur_9x9_11x11 operation.
+Laplacianblur_9x9_13x13 : Path
+    Path to compiled blob for laplacianblur_9x9_13x13 operation.
+Laplacianblur_9x9_15x15 : Path
+    Path to compiled blob for laplacianblur_9x9_15x15 operation.
+Laplacianblur_9x9_3x3 : Path
+    Path to compiled blob for laplacianblur_9x9_3x3 operation.
+Laplacianblur_9x9_5x5 : Path
+    Path to compiled blob for laplacianblur_9x9_5x5 operation.
+Laplacianblur_9x9_7x7 : Path
+    Path to compiled blob for laplacianblur_9x9_7x7 operation.
+Laplacianblur_9x9_9x9 : Path
+    Path to compiled blob for laplacianblur_9x9_9x9 operation.
+Laplaciangray_11x11 : Path
+    Path to compiled blob for laplaciangray_11x11 operation.
+Laplaciangray_13x13 : Path
+    Path to compiled blob for laplaciangray_13x13 operation.
+Laplaciangray_15x15 : Path
+    Path to compiled blob for laplaciangray_15x15 operation.
+Laplaciangray_3x3 : Path
+    Path to compiled blob for laplaciangray_3x3 operation.
+Laplaciangray_5x5 : Path
+    Path to compiled blob for laplaciangray_5x5 operation.
+Laplaciangray_7x7 : Path
+    Path to compiled blob for laplaciangray_7x7 operation.
+Laplaciangray_9x9 : Path
+    Path to compiled blob for laplaciangray_9x9 operation.
+Laplacian_11x11 : Path
+    Path to compiled blob for laplacian_11x11 operation.
+Laplacian_13x13 : Path
+    Path to compiled blob for laplacian_13x13 operation.
+Laplacian_15x15 : Path
+    Path to compiled blob for laplacian_15x15 operation.
+Laplacian_3x3 : Path
+    Path to compiled blob for laplacian_3x3 operation.
+Laplacian_5x5 : Path
+    Path to compiled blob for laplacian_5x5 operation.
+Laplacian_7x7 : Path
+    Path to compiled blob for laplacian_7x7 operation.
+Laplacian_9x9 : Path
+    Path to compiled blob for laplacian_9x9 operation.
+Laserscan_10 : Path
+    Path to compiled blob for laserscan_10 operation.
+Laserscan_10_1 : Path
+    Path to compiled blob for laserscan_10_1 operation.
+Laserscan_10_3 : Path
+    Path to compiled blob for laserscan_10_3 operation.
+Laserscan_10_5 : Path
+    Path to compiled blob for laserscan_10_5 operation.
+Laserscan_20 : Path
+    Path to compiled blob for laserscan_20 operation.
+Laserscan_20_1 : Path
+    Path to compiled blob for laserscan_20_1 operation.
+Laserscan_20_3 : Path
+    Path to compiled blob for laserscan_20_3 operation.
+Laserscan_20_5 : Path
+    Path to compiled blob for laserscan_20_5 operation.
+Laserscan_5 : Path
+    Path to compiled blob for laserscan_5 operation.
+Laserscan_5_1 : Path
+    Path to compiled blob for laserscan_5_1 operation.
+Laserscan_5_3 : Path
+    Path to compiled blob for laserscan_5_3 operation.
+Laserscan_5_5 : Path
+    Path to compiled blob for laserscan_5_5 operation.
+Pointcloud : Path
+    Path to compiled blob for pointcloud operation.
+Sobel : Path
+    Path to compiled blob for sobel operation.
+Sobelblurgray_11x11 : Path
+    Path to compiled blob for sobelblurgray_11x11 operation.
+Sobelblurgray_13x13 : Path
+    Path to compiled blob for sobelblurgray_13x13 operation.
+Sobelblurgray_15x15 : Path
+    Path to compiled blob for sobelblurgray_15x15 operation.
+Sobelblurgray_3x3 : Path
+    Path to compiled blob for sobelblurgray_3x3 operation.
+Sobelblurgray_5x5 : Path
+    Path to compiled blob for sobelblurgray_5x5 operation.
+Sobelblurgray_7x7 : Path
+    Path to compiled blob for sobelblurgray_7x7 operation.
+Sobelblurgray_9x9 : Path
+    Path to compiled blob for sobelblurgray_9x9 operation.
+Sobelblur_11x11 : Path
+    Path to compiled blob for sobelblur_11x11 operation.
+Sobelblur_13x13 : Path
+    Path to compiled blob for sobelblur_13x13 operation.
+Sobelblur_15x15 : Path
+    Path to compiled blob for sobelblur_15x15 operation.
+Sobelblur_3x3 : Path
+    Path to compiled blob for sobelblur_3x3 operation.
+Sobelblur_5x5 : Path
+    Path to compiled blob for sobelblur_5x5 operation.
+Sobelblur_7x7 : Path
+    Path to compiled blob for sobelblur_7x7 operation.
+Sobelblur_9x9 : Path
+    Path to compiled blob for sobelblur_9x9 operation.
+Sobelgray : Path
+    Path to compiled blob for sobelgray operation.
 
 """
 

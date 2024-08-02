@@ -139,15 +139,22 @@ class BlobEvaluater:
                 eval_input = data.copy()
             else:
                 eval_input = [
-                    rng.random(self._input_shape).astype(np.float32) for _ in range(len(self._blobs))
+                    rng.random(self._input_shape).astype(np.float32)
+                    for _ in range(len(self._blobs))
                 ]
             group_blobs = [blob for _, blob, _, _ in group]
-            _log.debug(f"BlobEvaluator: Running group {idx + 1} / {len(self._allocations)}")
+            _log.debug(
+                f"BlobEvaluator: Running group {idx + 1} / {len(self._allocations)}",
+            )
             with VPU() as vpu:
                 vpu.reconfigure_multi(group_blobs)
-                _log.debug(f"BlobEvaluator: VPU reconfigured with {len(group_blobs)} blobs.")
+                _log.debug(
+                    f"BlobEvaluator: VPU reconfigured with {len(group_blobs)} blobs.",
+                )
                 batch_result = vpu.run(eval_input, safe=True)
-                _log.debug(f"BlobEvaluator: Batch {idx + 1} / {len(self._allocations)} completed.")
+                _log.debug(
+                    f"BlobEvaluator: Batch {idx + 1} / {len(self._allocations)} completed.",
+                )
                 results.append(batch_result)
         self._results = results
         return results
