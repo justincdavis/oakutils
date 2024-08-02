@@ -23,7 +23,10 @@ _log = logging.getLogger(__name__)
 class BlobEvaluater:
     """Evaluate blobs and their results."""
 
-    def __init__(self: Self, blob_paths: list[Path | str]) -> None:
+    def __init__(
+            self: Self,
+            blob_paths: list[Path | str],
+        ) -> None:
         """
         Initialize the BlobEvaluater.
 
@@ -110,6 +113,25 @@ class BlobEvaluater:
 
         # allocate a spot for the results
         self._results: list | None = None
+
+    @property
+    def results(self: Self) -> list[
+        dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
+    ]:
+        """
+        Get the last result of the execution batches.
+
+        Returns an empty list of no results have been generated yet.
+
+        Returns
+        -------
+        list[dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
+            The results of each blob.
+
+        """
+        if self._results is None:
+            return []
+        return self._results
 
     def run(
         self: Self,
