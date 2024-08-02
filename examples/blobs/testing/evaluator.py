@@ -5,19 +5,24 @@
 
 from __future__ import annotations
 
-from oakutils import set_log_level
+import numpy as np
 from oakutils.blobs.models.bulk import GAUSSIAN_3X3
-# from oakutils.blobs.models.shave1 import GAUSSIAN_3X3 as gauss1
-# from oakutils.blobs.models.shave2 import GAUSSIAN_3X3 as gauss2
-# from oakutils.blobs.models.shave3 import GAUSSIAN_3X3 as gauss3
-# from oakutils.blobs.models.shave4 import GAUSSIAN_3X3 as gauss4
-# from oakutils.blobs.models.shave5 import GAUSSIAN_3X3 as gauss5
-# from oakutils.blobs.models.shave6 import GAUSSIAN_3X3 as gauss6
 from oakutils.blobs.testing import BlobEvaluater
+from oakutils.nodes import get_nn_bgr_frame
 
-
-set_log_level("ERROR")
 
 blob_eval = BlobEvaluater([*GAUSSIAN_3X3])
 
 results = blob_eval.run()
+for result in results:
+    print(result)
+
+results = [
+    get_nn_bgr_frame(r) for r in results
+]
+
+for idx in range(len(results)):
+    if not np.allclose(results[0], results[idx]):
+        raise ValueError("Results do not match.")
+else:
+    print("Results match.")

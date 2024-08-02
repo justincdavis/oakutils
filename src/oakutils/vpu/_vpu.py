@@ -63,6 +63,7 @@ class VPU:
         self._data_queue: Queue[list[np.ndarray | list[np.ndarray]]] = Queue()
         self._result_queue: Queue[list[dai.ADatatype | list[dai.ADatatype]]] = Queue()
         self._stopped = False
+        self._crash_msg = ""
 
         # attributes for multi model execution
         self._blob_paths: list[str] = []
@@ -377,6 +378,7 @@ class VPU:
         """
         # check pipeline, should always be set
         if self._pipeline is None:
+            self._stopped = True
             err_msg = "Pipeline not set."
             raise RuntimeError(err_msg)
         # create the device
@@ -407,6 +409,19 @@ class VPU:
                     )
                 except Empty:
                     continue
+
+                # check length of data and issue warning if more data is sent
+                if len(all_data) > len(self._blob_paths):
+                    warn_msg = f"VPU-Thread: More data sent than blobs: {len(all_data)} > {len(self._blob_paths)}"
+                    warn_msg += " Extra data is ignored."
+                    _log.warning(warn_msg)
+                if len(all_data) < len(self._blob_paths):
+                    self._stopped = True
+                    err_msg = f"Less data sent than blobs: {len(all_data)} < {len(self._blob_paths)}"
+                    _log.error(f"VPU-Thread: {err_msg}")
+                    self._crash_msg = err_msg
+                    err_msg = "VPU has stopped, " + err_msg
+                    raise RuntimeError(err_msg)
 
                 # push data to networks
                 _log.debug(f"VPU-Thread: Recevied {len(all_data)} data elements.")
@@ -498,7 +513,14 @@ class VPU:
             # just send it
             self._data_queue.put([data])
         _log.debug("Waiting on VPU result.")
-        return self._result_queue.get()[0]
+        while not self._stopped:
+            try:
+                return self._result_queue.get(timeout=0.1)[0]
+            except Empty:
+                continue
+        else:
+            err_msg = "VPU thread stopped " + self._crash_msg
+            raise RuntimeError(err_msg)
 
     def _run_multi(
         self: Self,
@@ -517,4 +539,11 @@ class VPU:
         else:
             self._data_queue.put(data)
         _log.debug("Waiting on VPU result.")
-        return self._result_queue.get()
+        while not self._stopped:
+            try:
+                return self._result_queue.get(timeout=0.1)
+            except Empty:
+                continue
+        else:
+            err_msg = "VPU thread stopped " + self._crash_msg
+            raise RuntimeError(err_msg)
