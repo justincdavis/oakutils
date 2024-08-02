@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import logging
 import operator
+import itertools
+import functools
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -12,6 +14,7 @@ import numpy as np
 
 from oakutils.blobs._analysis import LayerData, get_blob, get_layer_data
 from oakutils.vpu import VPU
+from oakutils.nodes import get_nn_frame, get_nn_data
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -24,9 +27,9 @@ class BlobEvaluater:
     """Evaluate blobs and their results."""
 
     def __init__(
-            self: Self,
-            blob_paths: list[Path | str],
-        ) -> None:
+        self: Self,
+        blob_paths: list[Path | str],
+    ) -> None:
         """
         Initialize the BlobEvaluater.
 
@@ -127,9 +130,12 @@ class BlobEvaluater:
 
         # allocate a spot for the results
         self._results: list | None = None
+        self._data: np.ndarray | list[np.ndarray] | None = None
 
     @property
-    def results(self: Self) -> list[
+    def results(
+        self: Self,
+    ) -> list[
         dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
     ]:
         """
@@ -147,9 +153,27 @@ class BlobEvaluater:
             return []
         return self._results
 
+    @property
+    def data(self: Self) -> np.ndarray | list[np.ndarray]:
+        """
+        Get the last data used to generate the results.
+
+        Returns an empty list if no data has been used yet.
+
+        Returns
+        -------
+        np.ndarray, list[np.ndarray]
+            The data used to generate the results.
+
+        """
+        if self._data is None:
+            return []
+        return self._data
+
     def run(
         self: Self,
         data: np.ndarray | list[np.ndarray] | None = None,
+        data_scale: float = 255.0,
     ) -> list[
         dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]
     ]:
@@ -161,7 +185,11 @@ class BlobEvaluater:
         data : np.ndarray, list[np.ndarray] | None, optional
             The data to run through the models, by default None
             If None, then random data is used
-
+        data_scale : float, optional
+            The range (or maximum value) of the data, by default 255.0
+            Represents a scaling factor for the random data which is intially
+            generated as a [0, 1) range.
+            
         Returns
         -------
         list[dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]]
@@ -171,7 +199,8 @@ class BlobEvaluater:
         results = []
         rng = np.random.default_rng()
         if data is None:
-            data = rng.random(self._input_shape).astype(np.float32) * 255.0
+            data = rng.random(self._input_shape).astype(np.float16) * data_scale
+        self._data = data
         for idx, group in enumerate(self._allocations):
             group_blobs = [blob for _, blob, _, _ in group]
             eval_input = [data.copy() for _ in range(len(group))]
@@ -190,3 +219,81 @@ class BlobEvaluater:
                 results.extend(batch_result)
         self._results = results
         return results
+
+    def allclose(
+        self: Self,
+        data: list[np.ndarray | list[np.ndarray]] | None = None,
+        rdiff: float = 1e-4,
+        adiff: float = 1e-4,
+        *,
+        image_output: bool | None = None,
+        u8_input: bool | None = None,
+    ) -> tuple[bool, list[tuple[int, int]]]:
+        """
+        Check if the results are all close to each other.
+
+        Internally, this uses np.allclose.
+
+        Parameters
+        ----------
+        data : list[np.ndarray | list[np.ndarray]] | None, optional
+            The data to compare, by default None
+            If None, then the last results are used
+        rdiff : float, optional
+            The relative tolerance, by default 1e-4
+        adiff : float, optional
+            The absolute tolerance, by default 1e-4
+        image_output : bool, optional
+            Whether the output is an image, by default None
+            If None, will assume image outputs with shape
+            (H, W, C, B) and perform data conversion accordingly.
+            If output_shape does not have 4 dimensions, then
+            will assume generic data reshape will work.
+        u8_input : bool, optional
+            Whether the input is uint8, by default None
+            If None, will assume the input is float16
+
+        Returns
+        -------
+        tuple[bool, list[tuple[int, int]]]
+            The first element is True if all results are close, False otherwise.
+            The second element is a list of pairs of indices that are not close.
+
+        Raises
+        ------
+        ValueError
+            If no data is provided and no results are available
+
+        """
+        if image_output is None:
+            image_output = len(self._output_shape) == 4
+
+        if data is None:
+            if self._results is None:
+                err_msg = "No data provided and no results available."
+                raise ValueError(err_msg)
+            data = self._results
+
+        # output shape is (W, H, C, B) for images
+        # for other data types, will be different
+        if image_output:
+            channels = self._output_shape[2]
+            frame_size = self._output_shape[0:2]
+            convert_func = functools.partial(get_nn_frame, channels=channels, frame_size=frame_size, normalization=255.0)
+        else:
+            convert_func = functools.partial(get_nn_data, use_first_layer=u8_input)
+        converted_data = [convert_func(d) for d in data]
+        compare_data = []
+        for (idx1, idx2) in itertools.combinations(range(len(converted_data)), 2):
+            compare_data.append(
+                (
+                    (idx1, converted_data[idx1]),
+                    (idx2, converted_data[idx2]),
+                )
+            )
+
+        non_matches = []
+        for (idx1, d1), (idx2, d2) in compare_data:
+            if not np.allclose(d1, d2, rtol=rdiff, atol=adiff):
+                non_matches.append((idx1, idx2))
+        return len(non_matches) == 0, non_matches

@@ -5,24 +5,24 @@
 
 from __future__ import annotations
 
-import numpy as np
-from oakutils.blobs.models.bulk import GAUSSIAN_3X3
+from pathlib import Path
+
+import cv2
 from oakutils.blobs.testing import BlobEvaluater
-from oakutils.nodes import get_nn_bgr_frame
+from oakutils.blobs import compile_model
+from oakutils.blobs.definitions import Gaussian
 
 
-blob_eval = BlobEvaluater([*GAUSSIAN_3X3])
-
-results = blob_eval.run()
-for result in results:
-    print(result)
-
-results = [
-    get_nn_bgr_frame(r) for r in results
+blob_paths = [
+    compile_model(Gaussian, {}, s) for s in range(1, 7)
 ]
+blob_eval = BlobEvaluater(blob_paths)
 
-for idx in range(len(results)):
-    if not np.allclose(results[0], results[idx]):
-        raise ValueError("Results do not match.")
-else:
-    print("Results match.")
+image = cv2.imread(str(Path("data/test.png").resolve()))
+
+for data in [image, None]:
+    results = blob_eval.run(data)
+    for result in results:
+        print(result)
+
+    print(blob_eval.allclose())
