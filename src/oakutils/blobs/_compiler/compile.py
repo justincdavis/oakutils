@@ -26,6 +26,35 @@ from .utils import dict_to_str, remove_suffix
 _log = logging.getLogger(__name__)
 
 
+def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
+    """
+    Gets the formed name of the model based on model class, args, and shaves.
+    
+    Parameters
+    ----------
+    model : AbstractModel
+        The model class to compile
+    model_args : Dict
+        The arguments used to create the model
+    shaves : int
+        The number of shaves to use for the blob
+
+    Returns
+    -------
+    str
+        The name of the model
+    
+    """
+    arg_str = dict_to_str(model_args)
+    try:
+        model_name = model.__name__
+    except AttributeError:
+        model_name = model.__class__.__name__
+    model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
+    model_name_shaves = f"{model_name}_shaves{shaves}"
+    return model_name_shaves
+
+
 def _compile(
     model_type: AbstractModel,
     model_args: dict,
@@ -101,15 +130,9 @@ def _compile(
     input_data = model_type.input_names()
     input_names = [x[0] for x in input_data]
     output_names = model_type.output_names()
-    arg_str = dict_to_str(model_args)
-
-    # resolve the paths ahead of time for caching
-    try:
-        model_name = model.__name__
-    except AttributeError:
-        model_name = model.__class__.__name__
-    model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
-    model_name_shaves = f"{model_name}_shaves{shaves}"
+    
+    # get model name
+    model_name_shaves = get_model_name(model_type, model_args, shaves)
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()

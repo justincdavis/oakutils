@@ -35,12 +35,16 @@ clear_cache
     Clears the cache of compiled blobs.
 get_blob
     Load a blob from a path.
+get_cache_dir
+    Get the cache directory path.
 get_input_layer_data
     Get the input layer data for a blob.
 get_output_layer_data
     Get the output layer data for a blob.
 get_layer_data
     Get the input and output layer data for a blob.
+get_model_name
+    Get the name of a compiled model file.
 
 """
 
@@ -74,13 +78,15 @@ _log.debug("Loaded blobs.models")
 
 try:
     from . import definitions
-    from ._compiler import clear_cache, compile_model, compile_onnx
+    from ._compiler import clear_cache, compile_model, compile_onnx, get_model_name, get_cache_dir
 
     __all__ += [
         "clear_cache",
         "compile_model",
         "compile_onnx",
         "definitions",
+        "get_cache_dir",
+        "get_model_name",
     ]
 
     _log.debug("Loaded blobs.definitions")

@@ -15,6 +15,7 @@ from pathlib import Path
 
 import oakutils
 from oakutils.blobs import compile_model as internal_compile_model
+from oakutils.blobs import get_model_name
 from oakutils.blobs.definitions import AbstractModel, ModelType
 from oakutils.blobs.definitions import (
     Gaussian,
@@ -143,26 +144,26 @@ def compile_model(model_type: AbstractModel, shave: int):
     else:
         raise RuntimeError("Unknown model type")
 
-    # stolen from compiler code in oakutils internal
-    def get_model_name(model_type, model_args):
-        from oakutils.blobs._compiler.utils import dict_to_str
+    # # stolen from compiler code in oakutils internal
+    # def get_model_name(model_type, model_args):
+    #     from oakutils.blobs._compiler.utils import dict_to_str
 
-        arg_str = dict_to_str(model_args)
+    #     arg_str = dict_to_str(model_args)
 
-        # for 3.8 compatibility
-        def remove_suffix(input_string: str, suffix: str):
-            if suffix and input_string.endswith(suffix):
-                return input_string[: -len(suffix)]
-            return input_string
+    #     # for 3.8 compatibility
+    #     def remove_suffix(input_string: str, suffix: str):
+    #         if suffix and input_string.endswith(suffix):
+    #             return input_string[: -len(suffix)]
+    #         return input_string
 
-        # resolve the paths ahead of time for caching
-        try:
-            model_name = model_type.__name__
-        except AttributeError:
-            model_name = model_type.__class__.__name__
+    #     # resolve the paths ahead of time for caching
+    #     try:
+    #         model_name = model_type.__name__
+    #     except AttributeError:
+    #         model_name = model_type.__class__.__name__
 
-        model_name_arg = remove_suffix(f"{model_name}_{arg_str}", "_")
-        return f"{model_name_arg}_shaves{shave}"
+    #     model_name_arg = remove_suffix(f"{model_name}_{arg_str}", "_")
+    #     return f"{model_name_arg}_shaves{shave}"
 
     shave_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
     # create the shave folder if it doesn't exist
@@ -171,7 +172,7 @@ def compile_model(model_type: AbstractModel, shave: int):
 
     missing_model_args = []
     for model_arg in model_args:
-        model_name_arg = get_model_name(model_type, model_arg)
+        model_name_arg = get_model_name(model_type, model_arg, shave)
         model_paths = [
             os.path.join(shave_folder, f)
             for f in os.listdir(shave_folder)
