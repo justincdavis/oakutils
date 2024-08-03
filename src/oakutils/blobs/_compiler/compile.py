@@ -37,7 +37,7 @@ def _compile(
     mean_value: float | None = None,
     scale_value: float | None = None,
     creation_func: Callable = torch.ones,
-    onnx_opset: int = 12,
+    onnx_opset: int = 11,
     openvino_version: str | None = None,
     *,
     cache: bool | None = None,
@@ -72,7 +72,7 @@ def _compile(
         The function to use to create the dummy input, by default torch.ones
         Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
-        The opset to use for the onnx export, by default 12
+        The opset to use for the onnx export, by default 11
     openvino_version : str, optional
         The version of OpenVINO to use for the blob, by default None
         If None, then the version is set based on the input type
@@ -109,6 +109,7 @@ def _compile(
     except AttributeError:
         model_name = model.__class__.__name__
     model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
+    model_name_shaves = f"{model_name}_shaves{shaves}"
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()
@@ -125,10 +126,10 @@ def _compile(
         Path.mkdir(blob_cache_dir, parents=True)
 
     # resolve the paths
-    onnx_path = Path(onnx_cache_dir) / f"{model_name}.onnx"
-    simplfiy_onnx_path = Path(simp_onnx_cache_dir) / f"{model_name}_simplified.onnx"
-    blob_dir = Path(blob_cache_dir) / model_name
-    final_blob_path = Path(cache_dir) / f"{model_name}.blob"
+    onnx_path = Path(onnx_cache_dir) / f"{model_name_shaves}.onnx"
+    simplfiy_onnx_path = Path(simp_onnx_cache_dir) / f"{model_name_shaves}_simplified.onnx"
+    blob_dir = Path(blob_cache_dir) / model_name_shaves
+    final_blob_path = Path(cache_dir) / f"{model_name_shaves}.blob"
 
     if verbose:
         _log.debug("Model Paths")
@@ -181,6 +182,8 @@ def _compile(
                 scale_value=scale_value,
                 version=openvino_version,
             )
+            if verbose:
+                _log.info(f.getvalue())
     except json.JSONDecodeError as err:
         base_str = "Error compiling blob as JSONDecodeError. "
         base_str += "Usually this is caused by a corrupted json file. "
@@ -226,7 +229,7 @@ def compile_model(
     scale_value: float | None = None,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
     creation_func: Callable = torch.ones,
-    onnx_opset: int = 12,
+    onnx_opset: int = 11,
     openvino_version: str | None = None,
     *,
     cache: bool | None = None,
@@ -274,7 +277,7 @@ def compile_model(
         The function to use to create the dummy input, by default torch.ones
         Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
-        The opset to use for the onnx export, by default 12
+        The opset to use for the onnx export, by default 11
     openvino_version : str, optional
         The version of OpenVINO to use for the blob, by default None
         If None, then the version is set based on the input type

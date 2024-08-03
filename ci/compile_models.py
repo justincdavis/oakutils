@@ -8,10 +8,12 @@ import getpass
 import itertools
 import os
 import shutil
-import multiprocessing as mp
+# import multiprocessing as mp
+import concurrent.futures
 from io import TextIOWrapper
 from pathlib import Path
 
+import oakutils
 from oakutils.blobs import compile_model as internal_compile_model
 from oakutils.blobs.definitions import AbstractModel, ModelType
 from oakutils.blobs.definitions import (
@@ -91,6 +93,7 @@ def _compile_model(model_type, model_arg, shave):
         model_arg,
         shaves=shave,
         cache=False,  # don't cache the model (or load from cache) since we compile for all shaves
+        verbose=True,
     )
     return model_path
 
@@ -159,7 +162,7 @@ def compile_model(model_type: AbstractModel, shave: int):
             model_name = model_type.__class__.__name__
 
         model_name_arg = remove_suffix(f"{model_name}_{arg_str}", "_")
-        return model_name_arg
+        return f"{model_name_arg}_shaves{shave}"
 
     shave_folder = os.path.join(MODEL_FOLDER, f"shave{shave}")
     # create the shave folder if it doesn't exist
@@ -182,40 +185,61 @@ def compile_model(model_type: AbstractModel, shave: int):
             )
     model_args = missing_model_args
 
-    try:
-        model_paths = []
-        with mp.Pool() as pool:
-            results = [
-                pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
-                for model_arg in model_args
-            ]
-            model_paths = [r.get() for r in results]
-    except RuntimeError as e:
-        # if a runtime error occurs, it could be because the blobconverter
-        # cache got corrupted, so delete the cache and try again
-        # 1: get cache directory and check if it exists
-        username = getpass.getuser()
-        linux_cache_dir = Path(f"/home/{username}/.cache/blobconverter")
-        windows_cache_dir = Path(f"C:/Users/{username}/.cache/blobconverter")
-        cache_dir = linux_cache_dir if os.name == "posix" else windows_cache_dir
-        if not cache_dir.exists():
-            raise e
-
-        # 2: delete the cache directory
-        delete_folder(str(cache_dir.resolve()))
-
-        # 3: process the compilations in serial
-        model_paths = []
-        for model_arg in model_args:
-            model_path = _compile_model(model_type, model_arg, shave)
-            model_paths.append(model_path)
-
-    # copy the models to the correct folders internally
-    for model_path in model_paths:
+    model_paths = []
+    for model_arg in model_args:
+        model_path = _compile_model(model_type, model_arg, shave)
+        model_paths.append(model_path)
+        
+        # copy the models to the correct folders internally
         shutil.copy(
             model_path, os.path.join(shave_folder, os.path.basename(model_path))
         )
+    # with mp.Pool() as pool:
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     futures = [
+    #         executor.submit(_compile_model, model_type, model_arg, shave)
+    #         for model_arg in model_args
+    #     ]
+    #     for future in futures:
+    #         try:
+    #             model_path = future.result()
+    #             model_paths.append(model_path)
+    #         except Exception as e:
+    #             print(f"Failed to compile model with error: {e}")
+    #             raise e
+    # try:
+    #     model_paths = []
+    #     # with mp.Pool() as pool:
+    #     with mp.pool.ThreadPool() as pool:
+    #         results = [
+    #             pool.apply_async(_compile_model, args=(model_type, model_arg, shave))
+    #             for model_arg in model_args
+    #         ]
+    #         model_paths = [r.get() for r in results]
+    # except RuntimeError as e:
+    #     # if a runtime error occurs, it could be because the blobconverter
+    #     # cache got corrupted, so delete the cache and try again
+    #     # 1: get cache directory and check if it exists
+    #     username = getpass.getuser()
+    #     linux_cache_dir = Path(f"/home/{username}/.cache/blobconverter")
+    #     windows_cache_dir = Path(f"C:/Users/{username}/.cache/blobconverter")
+    #     cache_dir = linux_cache_dir if os.name == "posix" else windows_cache_dir
+    #     if not cache_dir.exists():
+    #         raise e
 
+    #     # 2: delete the cache directory
+    #     delete_folder(str(cache_dir.resolve()))
+
+    #     # 3: process the compilations in serial
+    #     model_paths = []
+    #     for model_arg in model_args:
+    #         model_path = _compile_model(model_type, model_arg, shave)
+    #         model_paths.append(model_path)
+    # # copy the models to the correct folders internally
+    # for model_path in model_paths:
+    #     shutil.copy(
+    #         model_path, os.path.join(shave_folder, os.path.basename(model_path))
+    #     )
 
 def compiles_models():
     models = [
@@ -573,6 +597,7 @@ def main():
 
 
 if __name__ == "__main__":
+    oakutils.set_log_level("INFO")
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--cache",

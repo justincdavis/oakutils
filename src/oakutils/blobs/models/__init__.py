@@ -9,11 +9,11 @@
 """
 Module for compiled models.
 
-Note:
-----
+Note
+-----
 This module is auto-generated
 
-Attributes:
+Attributes
 ----------
 shave1 : module
     Contains all the models compiled for 1 shaves
@@ -31,7 +31,6 @@ bulk : module
     Contains a tuple for each model containing paths for all shaves
 
 """
-
 from __future__ import annotations
 
 import importlib
@@ -42,13 +41,13 @@ if TYPE_CHECKING:
     from types import ModuleType
 
 _submodules = [
-    "shave1",
-    "shave2",
-    "shave3",
-    "shave4",
-    "shave5",
-    "shave6",
-    "bulk",
+    'shave1',
+    'shave2',
+    'shave3',
+    'shave4',
+    'shave5',
+    'shave6',
+    'bulk',
 ]
 
 _loaded_modules: dict[str, ModuleType | None] = {
@@ -60,7 +59,6 @@ _loaded_modules: dict[str, ModuleType | None] = {
     "shave6": None,
     "bulk": None,
 }
-
 
 def __getattr__(name: str) -> ModuleType:
     if name in _submodules:
@@ -74,17 +72,16 @@ def __getattr__(name: str) -> ModuleType:
     err_msg = f"module {__name__} has no attribute {name}"
     raise AttributeError(err_msg)
 
-
 def __dir__() -> list[str]:
     module_attrs = list(object.__dir__(sys.modules[__name__]))
     return list(set(module_attrs + _submodules))
 
 
 __all__ = [
-    "shave1",
-    "shave2",
-    "shave3",
-    "shave4",
-    "shave5",
-    "shave6",
+    'shave1',
+    'shave2',
+    'shave3',
+    'shave4',
+    'shave5',
+    'shave6',
 ]
