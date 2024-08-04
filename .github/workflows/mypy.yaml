@@ -15,12 +15,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install torch==1.10.2+cpu torchvision==0.11.3+cpu torchaudio==0.10.2+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+          pip install .[ci]
           pip install .[compiler]
+          pip install torch==1.10.2+cpu torchvision==0.11.3+cpu torchaudio==0.10.2+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
           pip install .[open3d]
-          pip install mypy<1.11.0
-          pip install types-setuptools
-          pip install types-requests
 
       - name: Run MyPy check
         run: 
