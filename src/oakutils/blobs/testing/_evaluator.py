@@ -196,7 +196,11 @@ class BlobEvaluater:
             The results of each blob.
 
         """
-        results = []
+        results: list[
+            dai.ADatatype
+            | list[dai.ADatatype]
+            | list[dai.ADatatype | list[dai.ADatatype]]
+        ] = []
         rng = np.random.default_rng()
         if data is None:
             data = rng.random(self._input_shape).astype(np.float16) * data_scale
@@ -213,6 +217,8 @@ class BlobEvaluater:
                     f"BlobEvaluator: VPU reconfigured with {len(group_blobs)} blobs.",
                 )
                 batch_result = vpu.run(eval_input, safe=True)
+                if not isinstance(batch_result, list):
+                    batch_result = [batch_result]
                 _log.debug(
                     f"BlobEvaluator: Batch {idx + 1} / {len(self._allocations)} completed.",
                 )
