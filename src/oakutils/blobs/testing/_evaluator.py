@@ -287,7 +287,7 @@ class BlobEvaluater:
         # for other data types, will be different
         if image_output:
             channels = self._output_shape[2]
-            frame_size: tuple[int, int] = self._output_shape[0:2]
+            frame_size: tuple[int, int] = self._output_shape[0:2]  # type: ignore[assignment]
             convert_func = functools.partial(
                 get_nn_frame,
                 channels=channels,

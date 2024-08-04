@@ -21,7 +21,7 @@ import torch
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-    from .utils.types import InputType, ModelType
+    from .utils import InputType, ModelType
 
 
 class AbstractModel(ABC, torch.nn.Module):

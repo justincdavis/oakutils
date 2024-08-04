@@ -121,7 +121,7 @@ def benchmark_blob(
     rng = np.random.Generator(np.random.PCG64())
     if warmup:
         for _ in range(warmup_iterations):
-            rand_input = [
+            rand_input: list[np.ndarray] = [
                 rng.random(shape).astype(np.float32) for shape in input_shapes
             ]
             vpu.run(rand_input)

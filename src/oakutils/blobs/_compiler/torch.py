@@ -146,7 +146,7 @@ def _export_module_to_onnx(
         _log.debug(f"   Opset version: {onnx_opset}")
 
     _log.debug("Calling torch.onnx.export")
-    torch.onnx.export(
+    torch.onnx.export(  # type: ignore[no-untyped-call]
         model_instance,
         tuple(dummy_input),
         onnx_path,
