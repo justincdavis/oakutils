@@ -49,20 +49,20 @@ def get_oak1_calibration_basic(
 
         k_rgb = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.RGB,
+                dai.CameraBoardSocket.CAM_A,
                 rgb_size[0],
                 rgb_size[1],
             ),
         )
         d_rgb = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB),
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.CAM_A),
         )
         fx_rgb = k_rgb[0][0]
         fy_rgb = k_rgb[1][1]
         cx_rgb = k_rgb[0][2]
         cy_rgb = k_rgb[1][2]
 
-        rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
+        rgb_fov = calib_data.getFov(dai.CameraBoardSocket.CAM_A)
         rgb_fov_rad = np.deg2rad(rgb_fov)
 
         return ColorCalibrationData(

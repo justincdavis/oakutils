@@ -30,7 +30,7 @@ def create_color_camera(
     chroma_denoise: int = 1,
     isp_target_size: tuple[int, int] | None = None,
     isp_scale: tuple[int, int] | None = None,
-    isp_3a_fps: int | None = 15,
+    isp_3a_fps: int | None = None,
     input_queue_size: int | None = None,
     *,
     set_interleaved: bool | None = None,
@@ -84,7 +84,7 @@ def create_color_camera(
         not just the natively supported resolutions.
         Works together with the isp_target_size parameter
     isp_3a_fps: Optional[int], optional
-        The fps of how often the 3a algorithms will run, by default 15
+        The fps of how often the 3a algorithms will run, by default None
         Reducing this can help with performance onboard the device.
         A common value to reduce CPU usage on device is 15.
         Reference: https://docs.luxonis.com/projects/api/en/latest/tutorials/debugging/#resource-debugging
