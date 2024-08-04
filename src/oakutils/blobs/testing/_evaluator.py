@@ -269,6 +269,8 @@ class BlobEvaluater:
         ------
         ValueError
             If no data is provided and no results are available
+        RuntimeError
+            If automatic data conversion fails
 
         """
         if image_output is None:
@@ -285,7 +287,7 @@ class BlobEvaluater:
         # for other data types, will be different
         if image_output:
             channels = self._output_shape[2]
-            frame_size = self._output_shape[0:2]
+            frame_size: tuple[int, int] = self._output_shape[0:2]
             convert_func = functools.partial(
                 get_nn_frame,
                 channels=channels,
@@ -294,7 +296,17 @@ class BlobEvaluater:
             )
         else:
             convert_func = functools.partial(get_nn_data, use_first_layer=u8_input)
-        converted_data = [convert_func(d) for d in data]
+        try:
+            # allow a try-except here since the conversion may fail
+            # specifically if the models have multiple inputs/outputs
+            converted_data = [convert_func(d) for d in data]  # type: ignore[arg-type]
+        except (AttributeError, ValueError) as err:
+            err_msg = f"Automatic data conversion failed for data: {data}"
+            err_msg += (
+                " The issue may be caused by models with multiple inputs/outputs."
+            )
+            err_msg += " Please report this issue and attempt manual conversion."
+            raise RuntimeError(err_msg) from err
         compare_data = []
         for idx1, idx2 in itertools.combinations(range(len(converted_data)), 2):
             compare_data.append(

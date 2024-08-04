@@ -12,8 +12,8 @@ import shutil
 from pathlib import Path
 from typing import Callable
 
+import requests.exceptions as rexcepts
 import torch
-from requests.exceptions import ConnectionError, HTTPError
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 
@@ -219,7 +219,7 @@ def _compile(
         )
         err_msg = base_str
         raise RuntimeError(err_msg) from err
-    except HTTPError as err:
+    except rexcepts.HTTPError as err:
         err_dict: dict[str, str] = {}
         for line in f.getvalue().split("\n"):
             if ": " not in line:
@@ -233,7 +233,7 @@ def _compile(
             f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
         )
         raise RuntimeError(err_msg) from err
-    except ConnectionError as err:
+    except rexcepts.ConnectionError as err:
         msg_str = "Error compiling blob. "
         msg_str += "Could not connect to the blobconverter server. "
         msg_str += "Check your internet connection and try again."

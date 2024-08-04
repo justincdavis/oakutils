@@ -47,17 +47,41 @@ class PointCloud(AbstractModel):
 
     @classmethod
     def model_type(cls: type[PointCloud]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.NONE
 
     @classmethod
     def input_names(cls: type[PointCloud]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("xyz", InputType.XYZ), ("depth", InputType.U8)]
 
     @classmethod
     def output_names(cls: type[PointCloud]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, xyz: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:
@@ -70,6 +94,11 @@ class PointCloud(AbstractModel):
             Pre-provided xyz tensor, only one should ever be provided and then reused.
         depth : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         # depth_fp16: torch.Tensor = convert_to_fp16(depth)
