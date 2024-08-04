@@ -189,4 +189,5 @@ def _parse_candidate_path(path: str, model_type: str) -> tuple[str, list[str]] |
     data = [d.split("X")[0] for d in data]  # split NxN attributes into N
     if "x" in data[0]:  # need to split on x or X
         data = [d.split("x")[0] for d in data]
-    return name, data
+    # return excluding the shavesN final value
+    return name, data[:-1]

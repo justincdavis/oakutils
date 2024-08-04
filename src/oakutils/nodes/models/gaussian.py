@@ -58,7 +58,7 @@ def create_gaussian(
     if grayscale_out is None:
         grayscale_out = False
 
-    model_type = "laplacian"
+    model_type = "gaussian"
     if grayscale_out:
         model_type += "gray"
     return _create_single_kernel_model(
