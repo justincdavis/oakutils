@@ -52,38 +52,25 @@ def _create_dummy_input(
     if input_shape[2] not in [1, 3]:
         err_msg = "input_shape must have 1 or 3 channels"
         raise ValueError(err_msg)
-    
-    return creation_func(
-        (1, input_shape[2], input_shape[1], input_shape[0]),
-        dtype=torch.float32,  # type: ignore[call-arg]
-    )
 
-    # if input_type == InputType.U8:
-    #     # if we are using a single channel, should assume that it will be grayscale
-    #     # need to double the columns due to the way data
-    #     # is propagated through the pipeline
-    #     # return creation_func(
-    #     #     (1, input_shape[2], input_shape[1], input_shape[0] * 2),
-    #     #     dtype=torch.float32,  # type: ignore[call-arg]
-    #     # )
-    #     # FIXED IN DEPTHAI 2.22.0+, use regular input shape
-    #     return creation_func(
-    #         (1, input_shape[2], input_shape[1], input_shape[0]),
-    #         dtype=torch.float32,  # type: ignore[call-arg]
-    #     )
-    # if input_type == InputType.FP16:
-    #     return creation_func(
-    #         (1, input_shape[2], input_shape[1], input_shape[0]),
-    #         dtype=torch.float32,  # type: ignore[call-arg]
-    #     )
-    # if input_type == InputType.XYZ:
-    #     return creation_func(
-    #         (1, input_shape[1], input_shape[0], input_shape[2]),
-    #         dtype=torch.float32,  # type: ignore[call-arg]
-    #     )
+    if input_type == InputType.U8:
+        return creation_func(
+            (1, input_shape[2], input_shape[1], input_shape[0]),
+            dtype=torch.float32,  # type: ignore[call-arg]
+        )
+    if input_type == InputType.FP16:
+        return creation_func(
+            (1, input_shape[2], input_shape[1], input_shape[0]),
+            dtype=torch.float32,  # type: ignore[call-arg]
+        )
+    if input_type == InputType.XYZ:
+        return creation_func(
+            (1, input_shape[1], input_shape[0], input_shape[2]),
+            dtype=torch.float32,  # type: ignore[call-arg]
+        )
 
-    # err_msg = f"Unknown input type: {input_type}"
-    # raise ValueError(err_msg)
+    err_msg = f"Unknown input type: {input_type}"
+    raise ValueError(err_msg)
 
 
 def _create_multiple_dummy_input(

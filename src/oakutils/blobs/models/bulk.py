@@ -380,6 +380,8 @@ LASERSCAN_5_3_SHAVES6 : tuple[Path, ...]
     tuple of all wrappers for laserscan_5_3_shaves6 operation.
 LASERSCAN_5_5_SHAVES6 : tuple[Path, ...]
     tuple of all wrappers for laserscan_5_5_shaves6 operation.
+POINTCLOUD_SHAVES6 : tuple[Path, ...]
+    tuple of all wrappers for pointcloud_shaves6 operation.
 SOBELBLURGRAY_11X11_SHAVES6 : tuple[Path, ...]
     tuple of all wrappers for sobelblurgray_11x11_shaves6 operation.
 SOBELBLURGRAY_13X13_SHAVES6 : tuple[Path, ...]
@@ -2073,6 +2075,15 @@ LASERSCAN_5_5_SHAVES6: tuple[Path, ...] = (
     shave4.LASERSCAN_5_5_SHAVES6,
     shave5.LASERSCAN_5_5_SHAVES6,
     shave6.LASERSCAN_5_5_SHAVES6,
+)
+
+POINTCLOUD_SHAVES6: tuple[Path, ...] = (
+    shave1.POINTCLOUD_SHAVES6,
+    shave2.POINTCLOUD_SHAVES6,
+    shave3.POINTCLOUD_SHAVES6,
+    shave4.POINTCLOUD_SHAVES6,
+    shave5.POINTCLOUD_SHAVES6,
+    shave6.POINTCLOUD_SHAVES6,
 )
 
 SOBELBLURGRAY_11X11_SHAVES6: tuple[Path, ...] = (

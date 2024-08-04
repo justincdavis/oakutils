@@ -380,6 +380,8 @@ Laserscan_5_3_shaves6 : Path
     Path to compiled blob for laserscan_5_3_shaves6 operation.
 Laserscan_5_5_shaves6 : Path
     Path to compiled blob for laserscan_5_5_shaves6 operation.
+Pointcloud_shaves6 : Path
+    Path to compiled blob for pointcloud_shaves6 operation.
 Sobelblurgray_11x11_shaves6 : Path
     Path to compiled blob for sobelblurgray_11x11_shaves6 operation.
 Sobelblurgray_13x13_shaves6 : Path
@@ -615,6 +617,7 @@ LASERSCAN_20_5_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'Laserscan_20_5_shaves6
 LASERSCAN_5_1_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'Laserscan_5_1_shaves6.blob').resolve()
 LASERSCAN_5_3_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'Laserscan_5_3_shaves6.blob').resolve()
 LASERSCAN_5_5_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'Laserscan_5_5_shaves6.blob').resolve()
+POINTCLOUD_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'PointCloud_shaves6.blob').resolve()
 SOBELBLURGRAY_11X11_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'SobelBlurGray_11x11_shaves6.blob').resolve()
 SOBELBLURGRAY_13X13_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'SobelBlurGray_13x13_shaves6.blob').resolve()
 SOBELBLURGRAY_15X15_SHAVES6: Path = Path(Path(_BLOB_FOLDER) / 'SobelBlurGray_15x15_shaves6.blob').resolve()
@@ -816,6 +819,7 @@ __all__ = [
     'LASERSCAN_5_1_SHAVES6',
     'LASERSCAN_5_3_SHAVES6',
     'LASERSCAN_5_5_SHAVES6',
+    'POINTCLOUD_SHAVES6',
     'SOBELBLURGRAY_11X11_SHAVES6',
     'SOBELBLURGRAY_13X13_SHAVES6',
     'SOBELBLURGRAY_15X15_SHAVES6',
