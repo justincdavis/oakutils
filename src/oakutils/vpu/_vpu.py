@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 import logging
 from pathlib import Path
 from queue import Empty, Queue
@@ -514,13 +515,14 @@ class VPU:
             self._data_queue.put([data])
         _log.debug("Waiting on VPU result.")
         while not self._stopped:
-            try:
+            # try:
+            #     return self._result_queue.get(timeout=0.1)[0]
+            # except Empty:
+            #     continue
+            with contextlib.suppress(Empty):
                 return self._result_queue.get(timeout=0.1)[0]
-            except Empty:
-                continue
-        else:
-            err_msg = "VPU thread stopped " + self._crash_msg
-            raise RuntimeError(err_msg)
+        err_msg = "VPU thread stopped " + self._crash_msg
+        raise RuntimeError(err_msg)
 
     def _run_multi(
         self: Self,
@@ -540,10 +542,11 @@ class VPU:
             self._data_queue.put(data)
         _log.debug("Waiting on VPU result.")
         while not self._stopped:
-            try:
+            # try:
+            #     return self._result_queue.get(timeout=0.1)
+            # except Empty:
+            #     continue
+            with contextlib.suppress(Empty):
                 return self._result_queue.get(timeout=0.1)
-            except Empty:
-                continue
-        else:
-            err_msg = "VPU thread stopped " + self._crash_msg
-            raise RuntimeError(err_msg)
+        err_msg = "VPU thread stopped " + self._crash_msg
+        raise RuntimeError(err_msg)

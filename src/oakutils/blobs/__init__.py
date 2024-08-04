@@ -78,7 +78,13 @@ _log.debug("Loaded blobs.models")
 
 try:
     from . import definitions
-    from ._compiler import clear_cache, compile_model, compile_onnx, get_model_name, get_cache_dir
+    from ._compiler import (
+        clear_cache,
+        compile_model,
+        compile_onnx,
+        get_cache_dir,
+        get_model_name,
+    )
 
     __all__ += [
         "clear_cache",

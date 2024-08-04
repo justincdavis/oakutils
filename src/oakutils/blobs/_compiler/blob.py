@@ -27,7 +27,7 @@ def compile_blob(
 ) -> None:
     """
     Compiles an ONNX model into a blob using the provided arguments.
-    
+
     Parameters
     ----------
     model_type : AbstractModel
@@ -56,9 +56,13 @@ def compile_blob(
 
     optimizer_params = []
     if mean_value:
-        optimizer_params.append(f"--mean_values=[{mean_value},{mean_value},{mean_value}]")
+        optimizer_params.append(
+            f"--mean_values=[{mean_value},{mean_value},{mean_value}]",
+        )
     if scale_value:
-        optimizer_params.append(f"--scale_values=[{scale_value},{scale_value},{scale_value}]")
+        optimizer_params.append(
+            f"--scale_values=[{scale_value},{scale_value},{scale_value}]",
+        )
 
     if "U8" in iop:
         if version is None:

@@ -384,7 +384,7 @@ def compiles_models():
                     continue
                 if model_name == "__pycache__":
                     continue
-                var_name = model_name.upper().split(".")[0]
+                var_name = model_name.upper().split(".")[0][:-8]
                 # # drop the first character since it is an underscore
                 # var_name = var_name[1:]
                 var_names.append(var_name)
@@ -562,9 +562,9 @@ def verify_blobs():
 
 
 def build_from_cache():
-    from oakutils.blobs._compiler.paths import get_cache_dir_path
+    from oakutils.blobs import get_cache_dir
 
-    cache_dir = get_cache_dir_path()
+    cache_dir = get_cache_dir()
     cache_dir = os.path.join(cache_dir, "blobs")
     for modeltype in os.listdir(cache_dir):
         modeltype_dir = os.path.join(cache_dir, modeltype)

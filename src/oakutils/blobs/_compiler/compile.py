@@ -28,8 +28,8 @@ _log = logging.getLogger(__name__)
 
 def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
     """
-    Gets the formed name of the model based on model class, args, and shaves.
-    
+    Get the formed name of the model based on model class, args, and shaves.
+
     Parameters
     ----------
     model : AbstractModel
@@ -43,7 +43,7 @@ def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
     -------
     str
         The name of the model
-    
+
     """
     arg_str = dict_to_str(model_args)
     try:
@@ -51,8 +51,7 @@ def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
     except AttributeError:
         model_name = model.__class__.__name__
     model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
-    model_name_shaves = f"{model_name}_shaves{shaves}"
-    return model_name_shaves
+    return f"{model_name}_shaves{shaves}"
 
 
 def _compile(
@@ -130,7 +129,7 @@ def _compile(
     input_data = model_type.input_names()
     input_names = [x[0] for x in input_data]
     output_names = model_type.output_names()
-    
+
     # get model name
     model_name_shaves = get_model_name(model_type, model_args, shaves)
 
@@ -150,7 +149,9 @@ def _compile(
 
     # resolve the paths
     onnx_path = Path(onnx_cache_dir) / f"{model_name_shaves}.onnx"
-    simplfiy_onnx_path = Path(simp_onnx_cache_dir) / f"{model_name_shaves}_simplified.onnx"
+    simplfiy_onnx_path = (
+        Path(simp_onnx_cache_dir) / f"{model_name_shaves}_simplified.onnx"
+    )
     blob_dir = Path(blob_cache_dir) / model_name_shaves
     final_blob_path = Path(cache_dir) / f"{model_name_shaves}.blob"
 

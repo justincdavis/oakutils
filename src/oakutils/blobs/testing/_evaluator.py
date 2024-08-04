@@ -3,18 +3,18 @@
 # MIT License
 from __future__ import annotations
 
+import functools
+import itertools
 import logging
 import operator
-import itertools
-import functools
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
 
 from oakutils.blobs._analysis import LayerData, get_blob, get_layer_data
+from oakutils.nodes import get_nn_data, get_nn_frame
 from oakutils.vpu import VPU
-from oakutils.nodes import get_nn_frame, get_nn_data
 
 if TYPE_CHECKING:
     import depthai as dai
@@ -189,7 +189,7 @@ class BlobEvaluater:
             The range (or maximum value) of the data, by default 255.0
             Represents a scaling factor for the random data which is intially
             generated as a [0, 1) range.
-            
+
         Returns
         -------
         list[dai.ADatatype | list[dai.ADatatype] | list[dai.ADatatype | list[dai.ADatatype]]]
@@ -266,7 +266,8 @@ class BlobEvaluater:
 
         """
         if image_output is None:
-            image_output = len(self._output_shape) == 4
+            image_dims = 4
+            image_output = len(self._output_shape) == image_dims
 
         if data is None:
             if self._results is None:
@@ -279,17 +280,22 @@ class BlobEvaluater:
         if image_output:
             channels = self._output_shape[2]
             frame_size = self._output_shape[0:2]
-            convert_func = functools.partial(get_nn_frame, channels=channels, frame_size=frame_size, normalization=255.0)
+            convert_func = functools.partial(
+                get_nn_frame,
+                channels=channels,
+                frame_size=frame_size,
+                normalization=255.0,
+            )
         else:
             convert_func = functools.partial(get_nn_data, use_first_layer=u8_input)
         converted_data = [convert_func(d) for d in data]
         compare_data = []
-        for (idx1, idx2) in itertools.combinations(range(len(converted_data)), 2):
+        for idx1, idx2 in itertools.combinations(range(len(converted_data)), 2):
             compare_data.append(
                 (
                     (idx1, converted_data[idx1]),
                     (idx2, converted_data[idx2]),
-                )
+                ),
             )
 
         non_matches = []

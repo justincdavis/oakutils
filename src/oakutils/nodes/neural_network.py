@@ -288,7 +288,7 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    _log.debug(f"New frame decoded from NNData")
+    _log.debug("New frame decoded from NNData")
     _log.debug(f"   Shape: {frame.shape}")
     _log.debug(f"   Min: {np.min(frame)}")
     _log.debug(f"   Max: {np.max(frame)}")

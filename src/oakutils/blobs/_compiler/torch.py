@@ -43,7 +43,7 @@ def _create_dummy_input(
         If the input_shape is not in the correct form
 
     """
-    _log.debug(f"Creating dummy input")
+    _log.debug("Creating dummy input")
 
     whc = 3
     if len(input_shape) != whc:
@@ -95,7 +95,7 @@ def _create_multiple_dummy_input(
         The dummy input tensors
 
     """
-    _log.debug(f"Creating multiple dummy inputs")
+    _log.debug("Creating multiple dummy inputs")
     return [
         _create_dummy_input(input_shape, input_type, creation_func)
         for input_shape, input_type in input_shapes
@@ -145,7 +145,7 @@ def _export_module_to_onnx(
             _log.debug(f"       Dummy input {idx} shape: {dummy_input_tensor.shape}")
         _log.debug(f"   Opset version: {onnx_opset}")
 
-    _log.debug(f"Calling torch.onnx.export")
+    _log.debug("Calling torch.onnx.export")
     torch.onnx.export(
         model_instance,
         tuple(dummy_input),
@@ -157,7 +157,7 @@ def _export_module_to_onnx(
         output_names=output_names,
         operator_export_type=torch.onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK,
     )
-    _log.debug(f"Returned from torch.onnx.export")
+    _log.debug("Returned from torch.onnx.export")
 
 
 def export(
@@ -214,7 +214,7 @@ def export(
         dummy_input = _create_multiple_dummy_input(dummy_input_shapes, creation_func)
 
     if verbose:
-        _log.debug(f"   Dummy inputs created successfully")
+        _log.debug("   Dummy inputs created successfully")
 
     _export_module_to_onnx(
         model_instance=model_instance,
