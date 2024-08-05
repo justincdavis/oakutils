@@ -47,9 +47,9 @@ def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
     """
     arg_str = dict_to_str(model_args)
     try:
-        model_name = model.__name__
+        model_name = str(model.__name__)
     except AttributeError:
-        model_name = model.__class__.__name__
+        model_name = str(model.__class__.__name__)
     model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
     return f"{model_name}_shaves{shaves}"
 
