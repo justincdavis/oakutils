@@ -243,7 +243,10 @@ def get_nn_frame(
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
     normalization: float | Callable[[np.ndarray], np.ndarray] | None = None,
+    rescale_offset: float = 0.5,
+    rescale_multiplier: float = 255.0,
     *,
+    rescale: bool | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -268,9 +271,23 @@ def get_nn_frame(
         set to the return value.
         If resize_factor is less than 1.0, then normalization is applied
         after resizing.
+    rescale_offset : float, optional
+        The offset to apply to the frame once it has been received,
+        but before other operations are applied such as resizing or normalization.
+        By default this value is 0.5 to convert from [-0.5, 0.5] to [0, 1].
+    rescale_multiplier : float, optional
+        The multiplier to apply to the frame once it has been received,
+        but before other operations are applied such as resizing or normalization.
+        By default this value is 255.0 to convert from [0.0, 1.0] to [0, 255].
     swap_rb : Optional[bool], optional
         Whether to swap the red and blue channels, by default None
         If None, then False is used
+    rescale : Optional[bool], optional
+        Whether or not to perform rescaling to convert from one data
+        range to another. By default None, so not rescaling occurs.
+        When a rescale is performed, the offset is added then the
+        multiplier is applied. The default values for offset and multiplier
+        convert from [-0.5, 0.5] to [0, 255].
 
     Returns
     -------
@@ -292,10 +309,10 @@ def get_nn_frame(
     _log.debug(f"   Shape: {frame.shape}")
     _log.debug(f"   Min: {np.min(frame)}")
     _log.debug(f"   Max: {np.max(frame)}")
-    if float(np.min(frame)) < 0.0 and float(np.max(frame)) < 1.0:
-        _log.debug("   Scaling frame")
-        frame += 0.5
-        frame *= 255.0
+    if rescale:
+        _log.debug("   Rescaling frame")
+        frame += rescale_offset
+        frame *= rescale_multiplier
         _log.debug(f"   New shape: {frame.shape}")
         _log.debug(f"   New min: {np.min(frame)}")
         _log.debug(f"   New max: {np.max(frame)}")

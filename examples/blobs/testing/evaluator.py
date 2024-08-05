@@ -9,13 +9,10 @@ from pathlib import Path
 
 import cv2
 from oakutils.blobs.testing import BlobEvaluater
-from oakutils.blobs import compile_model
-from oakutils.blobs.definitions import Gaussian
+from oakutils.blobs.models.bulk import GAUSSIAN_15X15
 
 
-blob_paths = [
-    compile_model(Gaussian, {}, s) for s in range(1, 7)
-]
+blob_paths = [*GAUSSIAN_15X15]
 blob_eval = BlobEvaluater(blob_paths)
 
 image = cv2.imread(str(Path("data/test.png").resolve()))
