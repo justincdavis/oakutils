@@ -22,7 +22,7 @@ cam = create_color_camera(
 gftt = create_gftt(
     pipeline,
     input_link=cam.preview,
-    shaves=1,
+    shaves=6,
 )
 xout_gftt = create_xout(pipeline, gftt.out, "gftt")
 
@@ -31,7 +31,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         data = queue.get()
-        frame = get_nn_bgr_frame(data, normalization=255.0)
+        frame = get_nn_bgr_frame(data)
 
         cv2.imshow("gftt frame", frame)
         if cv2.waitKey(1) == ord("q"):
