@@ -13,10 +13,10 @@ from oakutils.nodes.models import create_gaussian
 pipeline = dai.Pipeline()
 
 # create the color camera node
-cam = create_color_camera(pipeline, preview_size=(640, 480))
+cam = create_color_camera(pipeline)
 
 # create neural network node
-lp = create_gaussian(pipeline, cam.preview, kernel_size=5)
+lp = create_gaussian(pipeline, cam.preview, kernel_size=15)
 xout_lp = create_xout(pipeline, lp.out, "gaussian")
 
 with dai.Device(pipeline) as device:
@@ -24,7 +24,7 @@ with dai.Device(pipeline) as device:
 
     while True:
         l_data = l_queue.get()
-        l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
+        l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480))
 
         cv2.imshow("gaussian frame", l_frame)
         if cv2.waitKey(1) == ord("q"):

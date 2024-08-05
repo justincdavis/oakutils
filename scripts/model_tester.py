@@ -11,6 +11,7 @@ The FP16 will operate on the color camera image by default and the U8 will
 operate on the depth data by default. You can change this by altering the pipeline
 construction and create_neural_network calls.
 """
+
 from __future__ import annotations
 
 import time
