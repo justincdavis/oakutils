@@ -277,36 +277,39 @@ class BlobEvaluater:
             image_dims = 4
             image_output = len(self._output_shape) == image_dims
 
+        # if data is None, use results and auto-convert
         if data is None:
             if self._results is None:
                 err_msg = "No data provided and no results available."
                 raise ValueError(err_msg)
             data = self._results
-
-        # output shape is (W, H, C, B) for images
-        # for other data types, will be different
-        if image_output:
-            channels = self._output_shape[2]
-            frame_size: tuple[int, int] = self._output_shape[0:2]  # type: ignore[assignment]
-            convert_func = functools.partial(
-                get_nn_frame,
-                channels=channels,
-                frame_size=frame_size,
-                normalization=255.0,
-            )
+            # output shape is (W, H, C, B) for images
+            # for other data types, will be different
+            if image_output:
+                channels = self._output_shape[2]
+                frame_size: tuple[int, int] = self._output_shape[0:2]  # type: ignore[assignment]
+                convert_func = functools.partial(
+                    get_nn_frame,
+                    channels=channels,
+                    frame_size=frame_size,
+                )
+            else:
+                convert_func = functools.partial(get_nn_data, use_first_layer=u8_input)
+            try:
+                # allow a try-except here since the conversion may fail
+                # specifically if the models have multiple inputs/outputs
+                converted_data = [convert_func(d) for d in data]  # type: ignore[arg-type]
+            except (AttributeError, ValueError) as err:
+                err_msg = f"Automatic data conversion failed for data: {data}"
+                err_msg += (
+                    " The issue may be caused by models with multiple inputs/outputs."
+                )
+                err_msg += " Please report this issue and attempt manual conversion."
+                raise RuntimeError(err_msg) from err
+        # if data has been provided, simply use that
         else:
-            convert_func = functools.partial(get_nn_data, use_first_layer=u8_input)
-        try:
-            # allow a try-except here since the conversion may fail
-            # specifically if the models have multiple inputs/outputs
-            converted_data = [convert_func(d) for d in data]  # type: ignore[arg-type]
-        except (AttributeError, ValueError) as err:
-            err_msg = f"Automatic data conversion failed for data: {data}"
-            err_msg += (
-                " The issue may be caused by models with multiple inputs/outputs."
-            )
-            err_msg += " Please report this issue and attempt manual conversion."
-            raise RuntimeError(err_msg) from err
+            converted_data = data
+
         compare_data = []
         for idx1, idx2 in itertools.combinations(range(len(converted_data)), 2):
             compare_data.append(

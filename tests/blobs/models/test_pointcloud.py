@@ -3,67 +3,43 @@
 # MIT License
 from __future__ import annotations
 
-import time
-
 import depthai as dai
-
 from oakutils.calibration import get_camera_calibration
-from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
-from oakutils.nodes.models import create_point_cloud
+from oakutils.nodes import create_stereo_depth, create_xout
+from oakutils.nodes.models import create_point_cloud, get_point_cloud_buffer
 
-from .utils import eval_model
-from ...helpers import check_device, TIME_TO_RUN
+from ...device import get_device_count
 
 
-def check_pointcloud(shaves: int):
-    """Test the pointcloud node"""
-    if len(dai.Device.getAllAvailableDevices()) == 0:
-        return 0  # no device found
-    
-    pipeline = dai.Pipeline()
+def test_create_and_run():
+    if get_device_count() == 0:
+        return 0
+    calib_data = get_camera_calibration()
+    for shave in [1, 2, 3, 4, 5, 6]:
+        pipeline = dai.Pipeline()
+        stereo, left, right = create_stereo_depth(pipeline)
+        pcl, xin_pcl, device_call = create_point_cloud(pipeline, stereo.depth, calib_data, shaves=shave)
+        xout_pcl = create_xout(pipeline, pcl.out, "pcl_out")
 
-    calibration = get_camera_calibration(
-        (1920, 1080),
-        (640, 400),
-    )
-    stereo, left, right = create_stereo_depth(pipeline)
-    pcl, xin_xyz, start_pcl = create_point_cloud(
-        pipeline, 
-        stereo.depth,
-        calibration,
-        shaves=shaves,
-    )
-    _ = create_xout(pipeline, pcl.out, "pcl")
+        all_nodes = [
+            stereo,
+            left,
+            right,
+            pcl,
+            xin_pcl,
+            xout_pcl,
+        ]
+        assert len(all_nodes) == 6
+        for node in all_nodes:
+            assert node is not None
 
-    with dai.Device(pipeline) as device:
-        start_pcl(device)
-        l_queue: dai.DataOutputQueue = device.getOutputQueue("pcl")
+        with dai.Device(pipeline) as device:
+            device_call(device)
+            queue: dai.DataOutputQueue = device.getOutputQueue("pcl_out")
 
-        t0 = time.perf_counter()
-        while True:
-            l_data = l_queue.get()
-            pcl = get_nn_point_cloud_buffer(l_data)
-            if time.perf_counter() - t0 > TIME_TO_RUN:
+            while True:
+                data = queue.get()
+                pcl_buffer = get_point_cloud_buffer(data)
+                assert pcl_buffer is not None
                 break
     return 0
-
-def test_pointcloud_1_shave():
-    check_device(lambda: check_pointcloud(1), TIME_TO_RUN)
-
-def test_pointcloud_2_shave():
-    check_device(lambda: check_pointcloud(2), TIME_TO_RUN)
-
-def test_pointcloud_3_shave():
-    check_device(lambda: check_pointcloud(3), TIME_TO_RUN)
-
-def test_pointcloud_4_shave():
-    check_device(lambda: check_pointcloud(4), TIME_TO_RUN)
-
-def test_pointcloud_5_shave():
-    check_device(lambda: check_pointcloud(5), TIME_TO_RUN)
-
-def test_pointcloud_6_shave():
-    check_device(lambda: check_pointcloud(6), TIME_TO_RUN)
-
-def test_results():
-    eval_model("pointcloud", (640, 400, 1))

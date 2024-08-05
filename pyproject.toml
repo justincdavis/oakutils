@@ -81,6 +81,7 @@ ci = [
 ]
 test = [
     "pytest>=6.2.0",
+    "stdlib_list>=0.10.0",
 ]
 docs = [
     "sphinx==6.2.1",

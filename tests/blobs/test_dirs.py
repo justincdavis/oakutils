@@ -5,12 +5,14 @@ from __future__ import annotations
 
 import os
 
+from stdlib_list import stdlib_list
 import oakutils.blobs.models as models
 
 
 def test_model_paths_valid():
     """Test that the models are installed correctly"""
     assert os.path.exists(models.__file__)
+    stdlib = stdlib_list()
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
     print(f"Found {len(shave_modules)} shave modules -> {shave_modules}")
     for shave_module in shave_modules:
@@ -21,6 +23,8 @@ def test_model_paths_valid():
             # print(f"   Checking {model}")
             # print(f"       type(model) = {type(model)})")
             if model[0] == "_":
+                continue
+            if model in stdlib:
                 continue
             if model == "os":
                 continue
