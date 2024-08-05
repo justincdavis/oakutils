@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import blobconverter  # type: ignore[import]
 
-from oakutils.blobs.definitions.utils.types import input_type_to_str
+from oakutils.blobs.definitions.utils import input_type_to_str
 
 if TYPE_CHECKING:
     from oakutils.blobs.definitions import AbstractModel
