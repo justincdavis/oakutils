@@ -26,7 +26,9 @@ def test_create() -> None:
                             grayscale_out=use_gs,
                             use_blur=use_blur,
                         )
-                        assert create_model(modelfunc) == 0, f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
+                        assert (
+                            create_model(modelfunc) == 0
+                        ), f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
 
 
 def test_run() -> None:
@@ -48,7 +50,9 @@ def test_run() -> None:
                             get_nn_frame,
                             channels=channels,
                         )
-                        assert run_model(modelfunc, decodefunc) == 0, f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
+                        assert (
+                            run_model(modelfunc, decodefunc) == 0
+                        ), f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
 
 
 def test_equivalence() -> None:

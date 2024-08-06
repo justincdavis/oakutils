@@ -18,7 +18,9 @@ def test_create_and_run() -> None:
     for shave in [1, 2, 3, 4, 5, 6]:
         pipeline = dai.Pipeline()
         stereo, left, right = create_stereo_depth(pipeline)
-        pcl, xin_pcl, device_call = create_point_cloud(pipeline, stereo.depth, calib_data, shaves=shave)
+        pcl, xin_pcl, device_call = create_point_cloud(
+            pipeline, stereo.depth, calib_data, shaves=shave
+        )
         xout_pcl = create_xout(pipeline, pcl.out, "pcl_out")
 
         all_nodes = [

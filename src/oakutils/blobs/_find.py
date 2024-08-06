@@ -45,7 +45,8 @@ def get_model_path(
     if len(candidates) == 0:
         err_msg = f"No model blob paths could be formed from the attributes {model_attributes} and shaves {shaves}."
         raise ValueError(err_msg)
-    blobpath = Path(candidates[0])
+    _, _, path = candidates[0]
+    blobpath = Path(path)
     if not blobpath.exists():
         err_msg = f"The model blob path {blobpath} does not exists."
         raise FileNotFoundError(err_msg)

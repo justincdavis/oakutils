@@ -68,8 +68,11 @@ def test_model_shave_dirs_equal() -> None:
                     continue
                 for file in module_contents1:
                     if file not in module_contents2:
-                        print(f"File {file} from shave {idx1+1} not in other module shave {idx2+1}")
+                        print(
+                            f"File {file} from shave {idx1+1} not in other module shave {idx2+1}"
+                        )
         raise err
+
 
 def test_model_shave_dirs_equivalent() -> None:
     """Tests all the shave modules have the same models"""

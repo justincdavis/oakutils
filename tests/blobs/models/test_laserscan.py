@@ -21,7 +21,9 @@ def test_create() -> None:
                     scans=scan,
                     shaves=shave,
                 )
-                assert create_model(modelfunc) == 0, f"Failed for {width}, {scan}, {shave}"
+                assert (
+                    create_model(modelfunc) == 0
+                ), f"Failed for {width}, {scan}, {shave}"
 
 
 def test_run() -> None:
@@ -35,7 +37,9 @@ def test_run() -> None:
                     shaves=shave,
                 )
                 decodefunc = get_laserscan
-                assert run_model(modelfunc, decodefunc) == 0, f"Failed for {width}, {scan}, {shave}"
+                assert (
+                    run_model(modelfunc, decodefunc) == 0
+                ), f"Failed for {width}, {scan}, {shave}"
 
 
 def test_equivalence() -> None:

@@ -3,17 +3,26 @@
 # MIT License
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
 from functools import partial
 from pathlib import Path
 
 from stdlib_list import stdlib_list
 from oakutils.nodes import get_nn_frame
+from oakutils.blobs import get_model_path
 from oakutils.blobs.models import bulk
 from oakutils.blobs.testing import BlobEvaluater
 
-from .load import create_model, run_model
-from ...device import get_device_count
+try:
+    from ...device import get_device_count
+    from .load import create_model, run_model
+except ImportError:
+    devicefile = Path(__file__).parent.parent.parent / "device.py"
+    sys.path.append(str(devicefile.parent))
+    from device import get_device_count
+
+    from load import create_model, run_model
 
 
 def create_model_ghhs(createmodelfunc: Callable) -> None:
@@ -28,14 +37,17 @@ def create_model_ghhs(createmodelfunc: Callable) -> None:
                         use_blur=use_blur,
                         grayscale_out=use_gs,
                     )
-                    assert create_model(modelfunc) == 0, f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
+                    assert (
+                        create_model(modelfunc) == 0
+                    ), f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
 
 
-def run_model_ghhs(createmodelfunc: Callable) -> None:
+def run_model_ghhs(createmodelfunc: Callable, modelname: str) -> None:
     for use_blur in [True, False]:
         for ks in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
                 for use_gs in [True, False]:
+                    # check if the model
                     modelfunc = partial(
                         createmodelfunc,
                         blur_kernel_size=ks,
@@ -48,7 +60,9 @@ def run_model_ghhs(createmodelfunc: Callable) -> None:
                         get_nn_frame,
                         channels=channels,
                     )
-                    assert run_model(modelfunc, decodefunc) == 0, f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
+                    assert (
+                        run_model(modelfunc, decodefunc) == 0
+                    ), f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
 
 
 def get_models(model_type: str) -> list[tuple[Path, ...]]:

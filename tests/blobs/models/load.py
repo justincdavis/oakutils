@@ -3,12 +3,19 @@
 # MIT License
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
+from pathlib import Path
 
 import depthai as dai
 from oakutils.nodes import create_color_camera, create_xout
 
-from ...device import get_device_count
+try:
+    from ...device import get_device_count
+except ImportError:
+    devicefile = Path(__file__).parent.parent.parent / "device.py"
+    sys.path.append(str(devicefile.parent))
+    from device import get_device_count
 
 
 def create_model(modelfunc: Callable) -> int:
@@ -45,7 +52,7 @@ def run_model(modelfunc: Callable, decodefunc: Callable) -> int:
 
     if get_device_count() == 0:
         return 0
-    
+
     with dai.Device(pipeline) as device:
         queue: dai.DataOutputQueue = device.getOutputQueue("model_out")
 
