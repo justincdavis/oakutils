@@ -431,6 +431,8 @@ def compiles_models():
         for var_name in outer_variable_names:
             f.write(f"{var_name} : tuple[Path, ...]\n")
             f.write(f"    tuple of all wrappers for {var_name.lower()} operation.\n")
+        f.write("ALL_MODELS : list[tuple[Path, ...]]\n")
+        f.write("    list of all wrappers for each operation.\n")
         f.write('"""\n')
         f.write("from __future__ import annotations\n\n")
 
@@ -450,6 +452,13 @@ def compiles_models():
             for shave in shaves:
                 f.write(f"    shave{shave}.{var_name},\n")
             f.write(")\n\n")
+
+        # create an ALL_MODELS attribute which is a list
+        # of all the tuples
+        f.write("ALL_MODELS: list[tuple[Path, ...]] = [\n")
+        for var_name in outer_variable_names:
+            f.write(f"    {var_name},\n")
+        f.write("]\n")
 
     # STEP 3
     # WRITE THE __init__.py FILE
