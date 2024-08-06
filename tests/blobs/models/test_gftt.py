@@ -5,12 +5,16 @@ from __future__ import annotations
 
 from oakutils.nodes.models import create_gftt
 
-from .basic import create_model_ghhs, run_model_ghhs
+from .basic import create_model_ghhs, run_model_ghhs, check_model_equivalence
 
 
-def test_create() -> int:
-    return create_model_ghhs(create_gftt)
+def test_create() -> None:
+    create_model_ghhs(create_gftt)
 
 
-def test_run():
-    return run_model_ghhs(create_gftt)
+def test_run() -> None:
+    run_model_ghhs(create_gftt)
+
+
+def test_equivalence() -> None:
+    check_model_equivalence("gftt")

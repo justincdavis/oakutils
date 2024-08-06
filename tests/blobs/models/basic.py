@@ -5,13 +5,18 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from functools import partial
+from pathlib import Path
 
+from stdlib_list import stdlib_list
 from oakutils.nodes import get_nn_frame
+from oakutils.blobs.models import bulk
+from oakutils.blobs.testing import BlobEvaluater
 
 from .load import create_model, run_model
+from ...device import get_device_count
 
 
-def create_model_ghhs(createmodelfunc: Callable):
+def create_model_ghhs(createmodelfunc: Callable) -> None:
     for use_blur in [True, False]:
         for ks in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
@@ -24,10 +29,9 @@ def create_model_ghhs(createmodelfunc: Callable):
                         grayscale_out=use_gs,
                     )
                     assert create_model(modelfunc) == 0, f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
-    return 0
 
 
-def run_model_ghhs(createmodelfunc: Callable):
+def run_model_ghhs(createmodelfunc: Callable) -> None:
     for use_blur in [True, False]:
         for ks in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
@@ -45,4 +49,32 @@ def run_model_ghhs(createmodelfunc: Callable):
                         channels=channels,
                     )
                     assert run_model(modelfunc, decodefunc) == 0, f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
-    return 0
+
+
+def get_models(model_type: str) -> list[tuple[Path, ...]]:
+    stdlib = stdlib_list()
+    models = []
+    for mp in dir(bulk):
+        mt = model_type.upper()
+        if mp[0] == "_":
+            continue
+        if mp in stdlib:
+            continue
+        if mt not in mp:
+            continue
+        model_paths = getattr(bulk, mp)
+        if not isinstance(model_paths, tuple):
+            continue
+        # if we found a tuple of paths, add it to the list
+        models.append(model_paths)
+    return models
+
+
+def check_model_equivalence(model_type: str) -> None:
+    models = get_models(model_type)
+    for model_paths in models:
+        if get_device_count() == 0:
+            return
+        evaluator = BlobEvaluater([*model_paths])
+        evaluator.run()
+        assert evaluator.allclose()[0], f"Failed allclose check for {model_paths}"

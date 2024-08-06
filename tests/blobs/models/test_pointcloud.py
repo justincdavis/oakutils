@@ -11,9 +11,9 @@ from oakutils.nodes.models import create_point_cloud, get_point_cloud_buffer
 from ...device import get_device_count
 
 
-def test_create_and_run():
+def test_create_and_run() -> None:
     if get_device_count() == 0:
-        return 0
+        return
     calib_data = get_camera_calibration()
     for shave in [1, 2, 3, 4, 5, 6]:
         pipeline = dai.Pipeline()
@@ -42,4 +42,3 @@ def test_create_and_run():
                 pcl_buffer = get_point_cloud_buffer(data)
                 assert pcl_buffer is not None
                 break
-    return 0

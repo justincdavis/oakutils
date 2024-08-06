@@ -9,7 +9,7 @@ from stdlib_list import stdlib_list
 import oakutils.blobs.models as models
 
 
-def test_model_paths_valid():
+def test_model_paths_valid() -> None:
     """Test that the models are installed correctly"""
     assert os.path.exists(models.__file__)
     stdlib = stdlib_list()
@@ -44,7 +44,7 @@ def test_model_paths_valid():
             assert os.path.exists(model_path)
 
 
-def test_model_shave_dirs_equal():
+def test_model_shave_dirs_equal() -> None:
     """Tests all the shave modules have the same number of models"""
     assert os.path.exists(models.__file__)
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]
@@ -71,7 +71,7 @@ def test_model_shave_dirs_equal():
                         print(f"File {file} from shave {idx1+1} not in other module shave {idx2+1}")
         raise err
 
-def test_model_shave_dirs_equivalent():
+def test_model_shave_dirs_equivalent() -> None:
     """Tests all the shave modules have the same models"""
     assert os.path.exists(models.__file__)
     shave_modules = [getattr(models, m) for m in dir(models) if "shave" in m]

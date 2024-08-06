@@ -8,10 +8,11 @@ from functools import partial
 from oakutils.nodes import get_nn_frame
 from oakutils.nodes.models import create_laplacian
 
+from .basic import check_model_equivalence
 from .load import create_model, run_model
 
 
-def test_create():
+def test_create() -> None:
     for ks1 in [3, 5, 7, 9, 11, 13, 15]:
         for ks2 in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
@@ -26,10 +27,9 @@ def test_create():
                             use_blur=use_blur,
                         )
                         assert create_model(modelfunc) == 0, f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
-    return 0
 
 
-def test_run():
+def test_run() -> None:
     for ks1 in [3, 5, 7, 9, 11, 13, 15]:
         for ks2 in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
@@ -49,4 +49,7 @@ def test_run():
                             channels=channels,
                         )
                         assert run_model(modelfunc, decodefunc) == 0, f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
-    return 0
+
+
+def test_equivalence() -> None:
+    check_model_equivalence("laplacian")

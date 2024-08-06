@@ -25,7 +25,6 @@ def create_model(modelfunc: Callable) -> int:
     assert len(all_nodes) == 3
     for node in all_nodes:
         assert node is not None
-
     return 0
 
 
@@ -55,5 +54,4 @@ def run_model(modelfunc: Callable, decodefunc: Callable) -> int:
             frame = decodefunc(data)
             assert frame is not None
             break
-
     return 0
