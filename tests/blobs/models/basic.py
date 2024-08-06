@@ -17,12 +17,13 @@ from oakutils.blobs.testing import BlobEvaluater
 try:
     from ...device import get_device_count
     from .load import create_model, run_model
+    from .hashs import get_bulk_tables, write_bulk_tables, hash_file, hash_bulk_entry, get_run_tables, write_model_tables
 except ImportError:
     devicefile = Path(__file__).parent.parent.parent / "device.py"
     sys.path.append(str(devicefile.parent))
     from device import get_device_count
-
     from load import create_model, run_model
+    from hashs import get_bulk_tables, write_bulk_tables, hash_file, hash_bulk_entry, get_run_tables, write_model_tables
 
 
 def create_model_ghhs(createmodelfunc: Callable) -> None:
@@ -43,10 +44,29 @@ def create_model_ghhs(createmodelfunc: Callable) -> None:
 
 
 def run_model_ghhs(createmodelfunc: Callable, modelname: str) -> None:
+    hash_table, run_table = get_run_tables()
     for use_blur in [True, False]:
         for ks in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
                 for use_gs in [True, False]:
+                    attributes = []
+                    if use_blur:
+                        modelname += "blur"
+                        attributes.append(str(ks))
+                    if use_gs:
+                        modelname += "gray"
+                    modelpath = get_model_path(modelname, attributes, shave)
+                    model_hash = hash_file(modelpath)
+                    modelkey = modelpath.stem
+                    # if the hash is the same and we have already gotten a successful run, continue
+                    if hash_table[modelkey] == model_hash and run_table[modelkey]:
+                        continue
+                    # if the hash is not the same update the hash and set the run to false
+                    existing_hash = hash_table[modelkey]
+                    if existing_hash != model_hash:
+                        hash_table[modelkey] = model_hash
+                        run_table[modelkey] = False
+
                     # check if the model
                     modelfunc = partial(
                         createmodelfunc,
@@ -60,9 +80,11 @@ def run_model_ghhs(createmodelfunc: Callable, modelname: str) -> None:
                         get_nn_frame,
                         channels=channels,
                     )
-                    assert (
-                        run_model(modelfunc, decodefunc) == 0
-                    ), f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
+                    retcode = run_model(modelfunc, decodefunc)
+                    tableval = retcode == 0
+                    run_table[modelkey] = tableval
+                    write_model_tables(hash_table, run_table)
+                    assert retcode == 0, f"Failed for {ks}, {shave}, {use_blur}, {use_gs}"
 
 
 def get_models(model_type: str) -> list[tuple[Path, ...]]:
@@ -86,9 +108,23 @@ def get_models(model_type: str) -> list[tuple[Path, ...]]:
 
 def check_model_equivalence(model_type: str) -> None:
     models = get_models(model_type)
+    hash_table, run_table = get_bulk_tables()
     for model_paths in models:
         if get_device_count() == 0:
             return
+        modelkey = model_paths[0].stem[:-8]
+        entryhash = hash_bulk_entry(model_paths)
+        # if hash is the same and run_key is True, we can skip
+        existinghash = hash_table[modelkey]
+        if existinghash == entryhash and run_table[modelkey]:
+            continue
+        if existinghash != entryhash:
+            hash_table[modelkey] = entryhash
+            run_table[modelkey] = False
+        # check if the model has already been run
         evaluator = BlobEvaluater([*model_paths])
         evaluator.run()
-        assert evaluator.allclose()[0], f"Failed allclose check for {model_paths}"
+        success = evaluator.allclose()[0]
+        run_table[modelkey] = success
+        write_bulk_tables(hash_table, run_table)
+        assert success, f"Failed allclose check for {model_paths}"

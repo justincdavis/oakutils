@@ -5,7 +5,10 @@ from __future__ import annotations
 
 from oakutils.nodes.models import create_harris
 
-from .basic import create_model_ghhs, run_model_ghhs, check_model_equivalence
+try:
+    from basic import create_model_ghhs, run_model_ghhs, check_model_equivalence
+except ModuleNotFoundError:
+    from .basic import create_model_ghhs, run_model_ghhs, check_model_equivalence
 
 
 def test_create() -> None:
@@ -13,8 +16,14 @@ def test_create() -> None:
 
 
 def test_run() -> None:
-    run_model_ghhs(create_harris)
+    run_model_ghhs(create_harris, "harris")
 
 
 def test_equivalence() -> None:
     check_model_equivalence("harris")
+
+
+if __name__ == "__main__":
+    test_create()
+    test_run()
+    test_equivalence()

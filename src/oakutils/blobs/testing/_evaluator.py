@@ -231,6 +231,7 @@ class BlobEvaluater:
         data: list[np.ndarray | list[np.ndarray]] | None = None,
         rdiff: float = 1e-4,
         adiff: float = 1e-4,
+        percentage: float = 99.0,
         *,
         image_output: bool | None = None,
         u8_input: bool | None = None,
@@ -249,6 +250,9 @@ class BlobEvaluater:
             The relative tolerance, by default 1e-4
         adiff : float, optional
             The absolute tolerance, by default 1e-4
+        percentage : float, optional
+            The percentage of data which should be close, by default 1.0
+            This will only be checked if the np.allclose call fails.
         image_output : bool, optional
             Whether the output is an image, by default None
             If None, will assume image outputs with shape
@@ -310,7 +314,7 @@ class BlobEvaluater:
         else:
             converted_data = data
 
-        compare_data = []
+        compare_data: list[tuple[tuple[int, np.ndarray], tuple[int, np.ndarray]]] = []
         for idx1, idx2 in itertools.combinations(range(len(converted_data)), 2):
             compare_data.append(
                 (
@@ -322,5 +326,12 @@ class BlobEvaluater:
         non_matches = []
         for (idx1, d1), (idx2, d2) in compare_data:
             if not np.allclose(d1, d2, rtol=rdiff, atol=adiff):
+                _log.debug(f"Data {idx1} and {idx2} are not close via np.allclose checking %.")
+                # assess if a percentage of the results are close
+                close_count = np.sum(np.isclose(d1, d2, rtol=rdiff, atol=adiff))
+                close_percentage = close_count / np.prod(d1.shape)
+                _log.debug(f"Data {idx1} and {idx2} are {close_percentage * 100:.3f}% close.")
+                if close_percentage > (percentage / 100.0):
+                    continue
                 non_matches.append((idx1, idx2))
         return len(non_matches) == 0, non_matches

@@ -40,14 +40,19 @@ def compare_entry(entry: Path) -> bool:
     return table[entry] == hash_file(entry)
 
 
+def hash_bulk_entry(entry: tuple[Path, ...]) -> str:
+    hashes = [hash_file(bp) for bp in sorted(entry)]
+    hashstr = "".join(hashes)
+    return hashlib.md5(hashstr.encode()).hexdigest()
+
+
 def create_bulk_hash_table() -> None:
     hash_table: dict[str, int] = {}
     for blob_tuple in ALL_MODELS:
         # get the stem file path without the suffix
         # then remove the _shavesN part at the end
         key = blob_tuple[0].stem[:-8]
-        hashes = [hash_file(bp) for bp in blob_tuple]
-        hash_table[key] = hash(tuple(hashes))
+        hash_table[key] = hash_bulk_entry(blob_tuple)
     with Path.open(BULK_HASH_TABLE_PATH, "wb") as file:
         pickle.dump(hash_table, file, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -59,7 +64,7 @@ def compare_bulk_entry(entry: tuple[Path, ...]) -> bool:
     return hash(tuple(hash_file(bp) for bp in entry)) == table[key]
 
 
-def get_run_tables() -> tuple[dict[str, str], dict[str, str]]:
+def get_run_tables() -> tuple[dict[str, str], dict[str, bool]]:
     with Path.open(HASH_TABLE_PATH, "rb") as file:
         hash_table = pickle.load(file)
     with Path.open(MODEL_RUN_TABLE_PATH, "rb") as file:
@@ -67,8 +72,23 @@ def get_run_tables() -> tuple[dict[str, str], dict[str, str]]:
     return hash_table, model_run_table
 
 
-def write_model_tables(hash_table: dict[str, str], model_run_table: dict[str, str]) -> None:
+def write_model_tables(hash_table: dict[str, str], model_run_table: dict[str, bool]) -> None:
     with Path.open(HASH_TABLE_PATH, "wb") as file:
         pickle.dump(hash_table, file, protocol=pickle.HIGHEST_PROTOCOL)
     with Path.open(MODEL_RUN_TABLE_PATH, "wb") as file:
         pickle.dump(model_run_table, file, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def get_bulk_tables() -> tuple[dict[str, int], dict[str, bool]]:
+    with Path.open(BULK_HASH_TABLE_PATH, "rb") as file:
+        hash_table = pickle.load(file)
+    with Path.open(BULK_RUN_TABLE_PATH, "rb") as file:
+        run_table = pickle.load(file)
+    return hash_table, run_table
+
+
+def write_bulk_tables(hash_table: dict[str, int], run_table: dict[str, bool]) -> None:
+    with Path.open(BULK_HASH_TABLE_PATH, "wb") as file:
+        pickle.dump(hash_table, file, protocol=pickle.HIGHEST_PROTOCOL)
+    with Path.open(BULK_RUN_TABLE_PATH, "wb") as file:
+        pickle.dump(run_table, file, protocol=pickle.HIGHEST_PROTOCOL)
