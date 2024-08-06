@@ -45,6 +45,8 @@ get_layer_data
     Get the input and output layer data for a blob.
 get_model_name
     Get the name of a compiled model file.
+get_model_path
+    Get the path to the model blob.
 
 """
 
@@ -60,6 +62,7 @@ from ._analysis import (
     get_output_layer_data,
 )
 from ._benchmark import BenchmarkData, Metric, benchmark_blob
+from ._find import get_model_path
 
 _log = logging.getLogger(__name__)
 
@@ -71,6 +74,7 @@ __all__ = [
     "get_input_layer_data",
     "get_layer_data",
     "get_output_layer_data",
+    "get_model_path",
     "models",
 ]
 
