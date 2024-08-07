@@ -38,7 +38,7 @@ from typing_extensions import Self
 
 def main() -> None:
     """Test the custom operations."""
-    set_log_level("DEBUG")
+    set_log_level("WARNING")
     parser = argparse.ArgumentParser("Visualize the output of custom models.")
     parser.add_argument(
         "--model",
@@ -48,8 +48,39 @@ def main() -> None:
             "gaussian",
             "laplacian",
             "sobel",
+            "gftt",
+            "harris",
+            "hessian",
         ],
         help="The model you want to visualize output for.",
+    )
+    parser.add_argument(
+        "--kernel_size",
+        type=int,
+        default=7,
+        help="The kernel size to use for the model. Laplacian and gaussian use this.",
+    )
+    parser.add_argument(
+        "--shaves",
+        type=int,
+        default=6,
+        help="The number of shaves to use for the model.",
+    )
+    parser.add_argument(
+        "--blur",
+        action="store_true",
+        help="Use a blur operation in the pipeline.",
+    )
+    parser.add_argument(
+        "--blur_kernel_size",
+        type=int,
+        default=3,
+        help="The kernel size to use for the blur operation (on models which utilize this).",
+    )
+    parser.add_argument(
+        "--grayscale",
+        action="store_true",
+        help="Output a grayscale image.",
     )
     args = parser.parse_args()
 
@@ -59,11 +90,17 @@ def main() -> None:
 
     # create the custom operation according to the model type
     if args.model == "gaussian":
-        model = models.create_gaussian(pipeline, cam.preview, kernel_size=15)
+        model = models.create_gaussian(pipeline, cam.preview, kernel_size=args.kernel_size, grayscale_out=args.grayscale)
     elif args.model == "laplacian":
-        model = models.create_laplacian(pipeline, cam.preview)
+        model = models.create_laplacian(pipeline, cam.preview, kernel_size=args.kernel_size, blur_kernel_size=args.blur_kernel_size, use_blur=args.blur, grayscale_out=args.grayscale)
     elif args.model == "sobel":
-        model = models.create_sobel(pipeline, cam.preview)
+        model = models.create_sobel(pipeline, cam.preview, blur_kernel_size=args.blur_kernel_size, use_blur=args.blur, grayscale_out=args.grayscale)
+    elif args.model == "gftt":
+        model = models.create_gftt(pipeline, cam.preview, blur_kernel_size=args.blur_kernel_size, use_blur=args.blur, grayscale_out=args.grayscale)
+    elif args.model == "harris":
+        model = models.create_harris(pipeline, cam.preview, blur_kernel_size=args.blur_kernel_size, use_blur=args.blur, grayscale_out=args.grayscale)
+    elif args.model == "hessian":
+        model = models.create_hessian(pipeline, cam.preview, blur_kernel_size=args.blur_kernel_size, use_blur=args.blur, grayscale_out=args.grayscale)
     else:
         err_msg = f"Unknown model type: {args.model}"
         raise ValueError(err_msg)
@@ -80,6 +117,7 @@ def main() -> None:
     ]
     print(f"Created pipeline with {len(all_nodes)} nodes")
     fps_buffer = deque(maxlen=60)
+    channels = 1 if args.grayscale else 3
     with dai.Device(pipeline) as device:
         device.setLogLevel(dai.LogLevel.DEBUG)
         device.setLogOutputLevel(dai.LogLevel.DEBUG)
@@ -92,8 +130,10 @@ def main() -> None:
             fp16_passdata = pass_fp16_queue.get()
             fp16_frame = get_nn_frame(
                 fp16_data,
-                channels=3,
+                channels=channels,
             )
+            if channels == 1:
+                fp16_frame = cv2.cvtColor(fp16_frame, cv2.COLOR_GRAY2BGR)
             passimage_fp16: np.ndarray = fp16_passdata.getCvFrame()
             t1 = time.perf_counter()
             fps_buffer.append(1 / (t1 - t0))

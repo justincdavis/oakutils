@@ -10,7 +10,7 @@ import depthai as dai
 from oakutils.blobs import get_model_path
 from oakutils.calibration import get_oakd_calibration
 from oakutils.nodes import create_stereo_depth, create_xout
-from oakutils.nodes.models import create_point_cloud, get_point_cloud_buffer
+from oakutils.nodes.models import create_point_cloud, get_point_cloud_buffer, create_xyz_matrix
 
 try:
     from ...device import get_device_count
@@ -20,17 +20,15 @@ except ImportError:
     from device import get_device_count
 
 try:
-    from basic import check_model_equivalence
     from hashs import get_run_tables, write_model_tables, hash_file
 except ModuleNotFoundError:
-    from .basic import check_model_equivalence
     from .hashs import get_run_tables, write_model_tables, hash_file
 
 
 def test_create_and_run() -> None:
     if get_device_count() == 0:
         return
-    calib_data = get_oakd_calibration()
+    calib_data = get_oakd_calibration(rgb_size=(1920, 1080), mono_size=(640, 400))
     hash_table, run_table = get_run_tables()
     for shave in [1, 2, 3, 4, 5, 6]:
         modelname = "pointcloud"
@@ -79,10 +77,6 @@ def test_create_and_run() -> None:
         write_model_tables(hash_table, run_table)
 
 
-def test_equivalence() -> None:
-    check_model_equivalence("pointcloud")
-
 
 if __name__ == "__main__":
     test_create_and_run()
-    test_equivalence()

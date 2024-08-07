@@ -67,7 +67,7 @@ def test_run() -> None:
 
 
 def test_equivalence() -> None:
-    check_model_equivalence("laserscan")
+    check_model_equivalence("laserscan", image_output=False, u8_input=True)
 
 
 if __name__ == "__main__":

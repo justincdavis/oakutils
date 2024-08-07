@@ -3,6 +3,7 @@
 # MIT License
 from __future__ import annotations
 
+import copy
 import sys
 from collections.abc import Callable
 from functools import partial
@@ -49,13 +50,14 @@ def run_model_ghhs(createmodelfunc: Callable, modelname: str) -> None:
         for ks in [3, 5, 7, 9, 11, 13, 15]:
             for shave in [1, 2, 3, 4, 5, 6]:
                 for use_gs in [True, False]:
+                    mname = copy.copy(modelname)
                     attributes = []
                     if use_blur:
-                        modelname += "blur"
+                        mname += "blur"
                         attributes.append(str(ks))
                     if use_gs:
-                        modelname += "gray"
-                    modelpath = get_model_path(modelname, attributes, shave)
+                        mname += "gray"
+                    modelpath = get_model_path(mname, attributes, shave)
                     model_hash = hash_file(modelpath)
                     modelkey = modelpath.stem
                     # if the hash is the same and we have already gotten a successful run, continue
@@ -106,7 +108,7 @@ def get_models(model_type: str) -> list[tuple[Path, ...]]:
     return models
 
 
-def check_model_equivalence(model_type: str) -> None:
+def check_model_equivalence(model_type: str, *, image_output: bool | None = None, u8_input: bool | None = None) -> None:
     models = get_models(model_type)
     hash_table, run_table = get_bulk_tables()
     for model_paths in models:
@@ -124,7 +126,7 @@ def check_model_equivalence(model_type: str) -> None:
         # check if the model has already been run
         evaluator = BlobEvaluater([*model_paths])
         evaluator.run()
-        success = evaluator.allclose()[0]
+        success = evaluator.allclose(image_output=image_output, u8_input=u8_input)[0]
         run_table[modelkey] = success
         write_bulk_tables(hash_table, run_table)
         assert success, f"Failed allclose check for {model_paths}"
