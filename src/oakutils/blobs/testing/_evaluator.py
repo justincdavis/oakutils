@@ -312,7 +312,10 @@ class BlobEvaluater:
                 raise RuntimeError(err_msg) from err
         # if data has been provided, simply use that
         else:
-            converted_data = data
+            # ignore the type assignment here, since we are lowering from
+            # a list[np.ndarray | list[np.ndarray]] to a list[np.ndarray]
+            # which the subset is valid
+            converted_data = data  # type: ignore[assignment]
 
         compare_data: list[tuple[tuple[int, np.ndarray], tuple[int, np.ndarray]]] = []
         for idx1, idx2 in itertools.combinations(range(len(converted_data)), 2):
@@ -326,11 +329,15 @@ class BlobEvaluater:
         non_matches = []
         for (idx1, d1), (idx2, d2) in compare_data:
             if not np.allclose(d1, d2, rtol=rdiff, atol=adiff):
-                _log.debug(f"Data {idx1} and {idx2} are not close via np.allclose checking %.")
+                _log.debug(
+                    f"Data {idx1} and {idx2} are not close via np.allclose checking %.",
+                )
                 # assess if a percentage of the results are close
                 close_count = np.sum(np.isclose(d1, d2, rtol=rdiff, atol=adiff))
                 close_percentage = close_count / np.prod(d1.shape)
-                _log.debug(f"Data {idx1} and {idx2} are {close_percentage * 100:.3f}% close.")
+                _log.debug(
+                    f"Data {idx1} and {idx2} are {close_percentage * 100:.3f}% close.",
+                )
                 if close_percentage > (percentage / 100.0):
                     continue
                 non_matches.append((idx1, idx2))

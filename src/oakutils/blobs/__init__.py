@@ -73,8 +73,8 @@ __all__ = [
     "get_blob",
     "get_input_layer_data",
     "get_layer_data",
-    "get_output_layer_data",
     "get_model_path",
+    "get_output_layer_data",
     "models",
 ]
 
