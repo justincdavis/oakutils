@@ -97,6 +97,11 @@ class ArucoLocalizer:
         markers : Sequence[tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
             A sequence of markers detected sin the image
 
+        Returns
+        -------
+        np.ndarray
+            The transform from the world to camera
+
         """
         transforms = []
         for tag, transform, _, _, _ in markers:

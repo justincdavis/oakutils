@@ -48,17 +48,41 @@ class Sobel(AbstractModel):
 
     @classmethod
     def model_type(cls: type[Sobel]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.NONE
 
     @classmethod
     def input_names(cls: type[Sobel]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[Sobel]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -69,6 +93,11 @@ class Sobel(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.filters.sobel(image)
@@ -103,17 +132,41 @@ class SobelBlur(AbstractModel):
 
     @classmethod
     def model_type(cls: type[SobelBlur]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[SobelBlur]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[SobelBlur]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -124,6 +177,11 @@ class SobelBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.filters.sobel(
@@ -152,17 +210,41 @@ class SobelGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[SobelGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.NONE
 
     @classmethod
     def input_names(cls: type[SobelGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[SobelGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -173,6 +255,11 @@ class SobelGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         sobel = kornia.filters.sobel(image)
@@ -208,17 +295,41 @@ class SobelBlurGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[SobelBlurGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[SobelBlurGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[SobelBlurGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -229,6 +340,11 @@ class SobelBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         sobel = kornia.filters.sobel(

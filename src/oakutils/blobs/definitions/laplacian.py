@@ -56,17 +56,41 @@ class Laplacian(AbstractModel):
 
     @classmethod
     def model_type(cls: type[Laplacian]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[Laplacian]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[Laplacian]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -77,6 +101,11 @@ class Laplacian(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.filters.laplacian(image, self._kernel_size)
@@ -108,17 +137,41 @@ class LaplacianGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[LaplacianGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[LaplacianGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[LaplacianGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -129,6 +182,11 @@ class LaplacianGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         laplacian = kornia.filters.laplacian(image, self._kernel_size)
@@ -172,17 +230,41 @@ class LaplacianBlur(AbstractModel):
 
     @classmethod
     def model_type(cls: type[LaplacianBlur]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls: type[LaplacianBlur]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[LaplacianBlur]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -193,6 +275,11 @@ class LaplacianBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         gaussian = kornia.filters.gaussian_blur2d(
@@ -240,17 +327,41 @@ class LaplacianBlurGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[LaplacianBlurGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.DUAL_KERNEL
 
     @classmethod
     def input_names(cls: type[LaplacianBlurGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[LaplacianBlurGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -261,6 +372,11 @@ class LaplacianBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         gaussian = kornia.filters.gaussian_blur2d(

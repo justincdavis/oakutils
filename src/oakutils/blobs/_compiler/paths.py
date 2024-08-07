@@ -3,9 +3,10 @@
 # MIT License
 from __future__ import annotations
 
-import os
+# import os
 import site
-import sysconfig
+
+# import sysconfig
 from pathlib import Path
 
 
@@ -19,11 +20,12 @@ def get_site_packages_path() -> Path:
         The path to the site-packages folder.
 
     """
-    site_site_packages = site.getusersitepackages()
-    sysconfig_site_packages = sysconfig.get_paths()["purelib"]
-    site_packages = (
-        site_site_packages if os.name == "posix" else sysconfig_site_packages
-    )
+    site_packages = site.getusersitepackages()
+    # site_site_packages = site.getusersitepackages()
+    # sysconfig_site_packages = sysconfig.get_paths()["purelib"]
+    # site_packages = (
+    #     site_site_packages if os.name == "posix" else sysconfig_site_packages
+    # )
     return Path(site_packages).resolve()
 
 

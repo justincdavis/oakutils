@@ -12,10 +12,13 @@ create_xin
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import depthai as dai
+
+_log = logging.getLogger(__name__)
 
 
 def create_xin(
@@ -44,5 +47,7 @@ def create_xin(
     xin = pipeline.createXLinkIn()
     xin.setStreamName(stream_name)
     xin.setMaxDataSize(max_data_size)
+
+    _log.debug(f"Created XLinkIn node with stream name: {stream_name}")
 
     return xin

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import blobconverter  # type: ignore[import]
 
-from oakutils.blobs.definitions.utils.types import input_type_to_str
+from oakutils.blobs.definitions.utils import input_type_to_str
 
 if TYPE_CHECKING:
     from oakutils.blobs.definitions import AbstractModel
@@ -21,6 +21,8 @@ def compile_blob(
     onnx_path: str,
     output_path: str,
     shaves: int = 6,
+    mean_value: float | None = None,
+    scale_value: float | None = None,
     version: str | None = None,
 ) -> None:
     """
@@ -37,6 +39,10 @@ def compile_blob(
         The path to the compiled blob
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
+    mean_value : float, optional
+        The mean value to use for the blob, by default None
+    scale_value : float, optional
+        The scale value to use for the blob, by default None
     version : str, optional
         The version of the blob to compile, by default None
         If None, 2022.1 will be used for FP16 input and 2021.4 will be used for U8 input
@@ -47,6 +53,16 @@ def compile_blob(
         type_str = input_type_to_str(input_type)
         iop += f"{input_name}:{type_str},"
     iop = iop[:-1]
+
+    optimizer_params = []
+    if mean_value:
+        optimizer_params.append(
+            f"--mean_values=[{mean_value},{mean_value},{mean_value}]",
+        )
+    if scale_value:
+        optimizer_params.append(
+            f"--scale_values=[{scale_value},{scale_value},{scale_value}]",
+        )
 
     if "U8" in iop:
         if version is None:
@@ -61,7 +77,7 @@ def compile_blob(
             data_type="FP16",
             use_cache=False,
             shaves=shaves,
-            optimizer_params=[],
+            optimizer_params=optimizer_params,
             compile_params=[iop],
             version=version,  # change in version hack since U8 stuff is bad on 2022.1
         )
@@ -77,5 +93,6 @@ def compile_blob(
             data_type="FP16",
             use_cache=False,
             shaves=shaves,
+            optimizer_params=optimizer_params,
             version=version,  # be explicit about the version, due to above hack
         )

@@ -47,17 +47,41 @@ class Harris(AbstractModel):
 
     @classmethod
     def model_type(cls: type[Harris]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.NONE
 
     @classmethod
     def input_names(cls: type[Harris]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[Harris]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -68,6 +92,11 @@ class Harris(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.feature.harris_response(image)
@@ -102,17 +131,41 @@ class HarrisBlur(AbstractModel):
 
     @classmethod
     def model_type(cls: type[HarrisBlur]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[HarrisBlur]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[HarrisBlur]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -123,6 +176,11 @@ class HarrisBlur(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.feature.harris_response(
@@ -151,17 +209,41 @@ class HarrisGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[HarrisGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.NONE
 
     @classmethod
     def input_names(cls: type[HarrisGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[HarrisGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -172,6 +254,11 @@ class HarrisGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         harris = kornia.feature.harris_response(image)
@@ -207,17 +294,41 @@ class HarrisBlurGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[HarrisBlurGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[HarrisBlurGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[HarrisBlurGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -228,6 +339,11 @@ class HarrisBlurGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         harris = kornia.feature.harris_response(

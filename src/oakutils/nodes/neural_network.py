@@ -61,9 +61,8 @@ def create_neural_network(
         The input link to connect to the image manip node or,
         if there are multiple input links, an iterable of input links.
         Example: cam_rgb.preview or (cam_rgb.preview, stereo.depth)
-    blob_path : str
+    blob_path : Path
         The path to the blob file to use for the neural network.
-        Will be converted to a pathlib.Path.
     input_names : Optional[Union[str, list[str]]], optional
         The names of the input links, by default None
         Must be the same length as input_link if a list
@@ -145,6 +144,7 @@ def create_neural_network(
     # connect the input link to the neural network node
     if not isinstance(input_link, list):
         # handle a single input to the network
+        _log.debug(f"Linking {input_link.name} to input of neural network")
         input_link.link(nn.input)
     else:
         if input_names is None or reuse_messages is None:
@@ -177,6 +177,7 @@ def create_neural_network(
                 with contextlib.suppress(IndexError):
                     nn.inputs[name].setQueueSize(input_sizes[idx])
 
+    _log.debug(f"Neural network created with blob: {blob_path}")
     return nn
 
 
@@ -242,7 +243,10 @@ def get_nn_frame(
     frame_size: tuple[int, int] = (640, 480),
     resize_factor: float | None = None,
     normalization: float | Callable[[np.ndarray], np.ndarray] | None = None,
+    rescale_offset: float = 0.5,
+    rescale_multiplier: float = 255.0,
     *,
+    rescale: bool | None = None,
     swap_rb: bool | None = None,
 ) -> np.ndarray:
     """
@@ -267,9 +271,23 @@ def get_nn_frame(
         set to the return value.
         If resize_factor is less than 1.0, then normalization is applied
         after resizing.
+    rescale_offset : float, optional
+        The offset to apply to the frame once it has been received,
+        but before other operations are applied such as resizing or normalization.
+        By default this value is 0.5 to convert from [-0.5, 0.5] to [0, 1].
+    rescale_multiplier : float, optional
+        The multiplier to apply to the frame once it has been received,
+        but before other operations are applied such as resizing or normalization.
+        By default this value is 255.0 to convert from [0.0, 1.0] to [0, 255].
     swap_rb : Optional[bool], optional
         Whether to swap the red and blue channels, by default None
         If None, then False is used
+    rescale : Optional[bool], optional
+        Whether or not to perform rescaling to convert from one data
+        range to another. By default None, so not rescaling occurs.
+        When a rescale is performed, the offset is added then the
+        multiplier is applied. The default values for offset and multiplier
+        convert from [-0.5, 0.5] to [0, 255].
 
     Returns
     -------
@@ -287,8 +305,17 @@ def get_nn_frame(
         .reshape((channels, frame_size[1], frame_size[0]))
         .transpose(1, 2, 0)
     )
-    frame += 0.5
-    frame *= 255.0
+    _log.debug("New frame decoded from NNData")
+    _log.debug(f"   Shape: {frame.shape}")
+    _log.debug(f"   Min: {np.min(frame)}")
+    _log.debug(f"   Max: {np.max(frame)}")
+    if rescale:
+        _log.debug("   Rescaling frame")
+        frame += rescale_offset
+        frame *= rescale_multiplier
+        _log.debug(f"   New shape: {frame.shape}")
+        _log.debug(f"   New min: {np.min(frame)}")
+        _log.debug(f"   New max: {np.max(frame)}")
 
     if swap_rb:
         frame = frame[:, :, ::-1]

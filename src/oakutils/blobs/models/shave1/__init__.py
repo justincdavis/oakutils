@@ -14,412 +14,406 @@ This module is auto-generated
 
 Attributes:
 ----------
-Gftt : str
-    nn.Module wrapper for gftt operation.
-Gfttblurgray_11x11 : str
-    nn.Module wrapper for gfttblurgray_11x11 operation.
-Gfttblurgray_13x13 : str
-    nn.Module wrapper for gfttblurgray_13x13 operation.
-Gfttblurgray_15x15 : str
-    nn.Module wrapper for gfttblurgray_15x15 operation.
-Gfttblurgray_3x3 : str
-    nn.Module wrapper for gfttblurgray_3x3 operation.
-Gfttblurgray_5x5 : str
-    nn.Module wrapper for gfttblurgray_5x5 operation.
-Gfttblurgray_7x7 : str
-    nn.Module wrapper for gfttblurgray_7x7 operation.
-Gfttblurgray_9x9 : str
-    nn.Module wrapper for gfttblurgray_9x9 operation.
-Gfttblur_11x11 : str
-    nn.Module wrapper for gfttblur_11x11 operation.
-Gfttblur_13x13 : str
-    nn.Module wrapper for gfttblur_13x13 operation.
-Gfttblur_15x15 : str
-    nn.Module wrapper for gfttblur_15x15 operation.
-Gfttblur_3x3 : str
-    nn.Module wrapper for gfttblur_3x3 operation.
-Gfttblur_5x5 : str
-    nn.Module wrapper for gfttblur_5x5 operation.
-Gfttblur_7x7 : str
-    nn.Module wrapper for gfttblur_7x7 operation.
-Gfttblur_9x9 : str
-    nn.Module wrapper for gfttblur_9x9 operation.
-Gfttgray : str
-    nn.Module wrapper for gfttgray operation.
-Gaussiangray_11x11 : str
-    nn.Module wrapper for gaussiangray_11x11 operation.
-Gaussiangray_13x13 : str
-    nn.Module wrapper for gaussiangray_13x13 operation.
-Gaussiangray_15x15 : str
-    nn.Module wrapper for gaussiangray_15x15 operation.
-Gaussiangray_3x3 : str
-    nn.Module wrapper for gaussiangray_3x3 operation.
-Gaussiangray_5x5 : str
-    nn.Module wrapper for gaussiangray_5x5 operation.
-Gaussiangray_7x7 : str
-    nn.Module wrapper for gaussiangray_7x7 operation.
-Gaussiangray_9x9 : str
-    nn.Module wrapper for gaussiangray_9x9 operation.
-Gaussian_11x11 : str
-    nn.Module wrapper for gaussian_11x11 operation.
-Gaussian_13x13 : str
-    nn.Module wrapper for gaussian_13x13 operation.
-Gaussian_15x15 : str
-    nn.Module wrapper for gaussian_15x15 operation.
-Gaussian_3x3 : str
-    nn.Module wrapper for gaussian_3x3 operation.
-Gaussian_5x5 : str
-    nn.Module wrapper for gaussian_5x5 operation.
-Gaussian_7x7 : str
-    nn.Module wrapper for gaussian_7x7 operation.
-Gaussian_9x9 : str
-    nn.Module wrapper for gaussian_9x9 operation.
-Harris : str
-    nn.Module wrapper for harris operation.
-Harrisblurgray_11x11 : str
-    nn.Module wrapper for harrisblurgray_11x11 operation.
-Harrisblurgray_13x13 : str
-    nn.Module wrapper for harrisblurgray_13x13 operation.
-Harrisblurgray_15x15 : str
-    nn.Module wrapper for harrisblurgray_15x15 operation.
-Harrisblurgray_3x3 : str
-    nn.Module wrapper for harrisblurgray_3x3 operation.
-Harrisblurgray_5x5 : str
-    nn.Module wrapper for harrisblurgray_5x5 operation.
-Harrisblurgray_7x7 : str
-    nn.Module wrapper for harrisblurgray_7x7 operation.
-Harrisblurgray_9x9 : str
-    nn.Module wrapper for harrisblurgray_9x9 operation.
-Harrisblur_11x11 : str
-    nn.Module wrapper for harrisblur_11x11 operation.
-Harrisblur_13x13 : str
-    nn.Module wrapper for harrisblur_13x13 operation.
-Harrisblur_15x15 : str
-    nn.Module wrapper for harrisblur_15x15 operation.
-Harrisblur_3x3 : str
-    nn.Module wrapper for harrisblur_3x3 operation.
-Harrisblur_5x5 : str
-    nn.Module wrapper for harrisblur_5x5 operation.
-Harrisblur_7x7 : str
-    nn.Module wrapper for harrisblur_7x7 operation.
-Harrisblur_9x9 : str
-    nn.Module wrapper for harrisblur_9x9 operation.
-Harrisgray : str
-    nn.Module wrapper for harrisgray operation.
-Hessian : str
-    nn.Module wrapper for hessian operation.
-Hessianblurgray_11x11 : str
-    nn.Module wrapper for hessianblurgray_11x11 operation.
-Hessianblurgray_13x13 : str
-    nn.Module wrapper for hessianblurgray_13x13 operation.
-Hessianblurgray_15x15 : str
-    nn.Module wrapper for hessianblurgray_15x15 operation.
-Hessianblurgray_3x3 : str
-    nn.Module wrapper for hessianblurgray_3x3 operation.
-Hessianblurgray_5x5 : str
-    nn.Module wrapper for hessianblurgray_5x5 operation.
-Hessianblurgray_7x7 : str
-    nn.Module wrapper for hessianblurgray_7x7 operation.
-Hessianblurgray_9x9 : str
-    nn.Module wrapper for hessianblurgray_9x9 operation.
-Hessianblur_11x11 : str
-    nn.Module wrapper for hessianblur_11x11 operation.
-Hessianblur_13x13 : str
-    nn.Module wrapper for hessianblur_13x13 operation.
-Hessianblur_15x15 : str
-    nn.Module wrapper for hessianblur_15x15 operation.
-Hessianblur_3x3 : str
-    nn.Module wrapper for hessianblur_3x3 operation.
-Hessianblur_5x5 : str
-    nn.Module wrapper for hessianblur_5x5 operation.
-Hessianblur_7x7 : str
-    nn.Module wrapper for hessianblur_7x7 operation.
-Hessianblur_9x9 : str
-    nn.Module wrapper for hessianblur_9x9 operation.
-Hessiangray : str
-    nn.Module wrapper for hessiangray operation.
-Laplacianblurgray_11x11_11x11 : str
-    nn.Module wrapper for laplacianblurgray_11x11_11x11 operation.
-Laplacianblurgray_11x11_13x13 : str
-    nn.Module wrapper for laplacianblurgray_11x11_13x13 operation.
-Laplacianblurgray_11x11_15x15 : str
-    nn.Module wrapper for laplacianblurgray_11x11_15x15 operation.
-Laplacianblurgray_11x11_3x3 : str
-    nn.Module wrapper for laplacianblurgray_11x11_3x3 operation.
-Laplacianblurgray_11x11_5x5 : str
-    nn.Module wrapper for laplacianblurgray_11x11_5x5 operation.
-Laplacianblurgray_11x11_7x7 : str
-    nn.Module wrapper for laplacianblurgray_11x11_7x7 operation.
-Laplacianblurgray_11x11_9x9 : str
-    nn.Module wrapper for laplacianblurgray_11x11_9x9 operation.
-Laplacianblurgray_13x13_11x11 : str
-    nn.Module wrapper for laplacianblurgray_13x13_11x11 operation.
-Laplacianblurgray_13x13_13x13 : str
-    nn.Module wrapper for laplacianblurgray_13x13_13x13 operation.
-Laplacianblurgray_13x13_15x15 : str
-    nn.Module wrapper for laplacianblurgray_13x13_15x15 operation.
-Laplacianblurgray_13x13_3x3 : str
-    nn.Module wrapper for laplacianblurgray_13x13_3x3 operation.
-Laplacianblurgray_13x13_5x5 : str
-    nn.Module wrapper for laplacianblurgray_13x13_5x5 operation.
-Laplacianblurgray_13x13_7x7 : str
-    nn.Module wrapper for laplacianblurgray_13x13_7x7 operation.
-Laplacianblurgray_13x13_9x9 : str
-    nn.Module wrapper for laplacianblurgray_13x13_9x9 operation.
-Laplacianblurgray_15x15_11x11 : str
-    nn.Module wrapper for laplacianblurgray_15x15_11x11 operation.
-Laplacianblurgray_15x15_13x13 : str
-    nn.Module wrapper for laplacianblurgray_15x15_13x13 operation.
-Laplacianblurgray_15x15_15x15 : str
-    nn.Module wrapper for laplacianblurgray_15x15_15x15 operation.
-Laplacianblurgray_15x15_3x3 : str
-    nn.Module wrapper for laplacianblurgray_15x15_3x3 operation.
-Laplacianblurgray_15x15_5x5 : str
-    nn.Module wrapper for laplacianblurgray_15x15_5x5 operation.
-Laplacianblurgray_15x15_7x7 : str
-    nn.Module wrapper for laplacianblurgray_15x15_7x7 operation.
-Laplacianblurgray_15x15_9x9 : str
-    nn.Module wrapper for laplacianblurgray_15x15_9x9 operation.
-Laplacianblurgray_3x3_11x11 : str
-    nn.Module wrapper for laplacianblurgray_3x3_11x11 operation.
-Laplacianblurgray_3x3_13x13 : str
-    nn.Module wrapper for laplacianblurgray_3x3_13x13 operation.
-Laplacianblurgray_3x3_15x15 : str
-    nn.Module wrapper for laplacianblurgray_3x3_15x15 operation.
-Laplacianblurgray_3x3_3x3 : str
-    nn.Module wrapper for laplacianblurgray_3x3_3x3 operation.
-Laplacianblurgray_3x3_5x5 : str
-    nn.Module wrapper for laplacianblurgray_3x3_5x5 operation.
-Laplacianblurgray_3x3_7x7 : str
-    nn.Module wrapper for laplacianblurgray_3x3_7x7 operation.
-Laplacianblurgray_3x3_9x9 : str
-    nn.Module wrapper for laplacianblurgray_3x3_9x9 operation.
-Laplacianblurgray_5x5_11x11 : str
-    nn.Module wrapper for laplacianblurgray_5x5_11x11 operation.
-Laplacianblurgray_5x5_13x13 : str
-    nn.Module wrapper for laplacianblurgray_5x5_13x13 operation.
-Laplacianblurgray_5x5_15x15 : str
-    nn.Module wrapper for laplacianblurgray_5x5_15x15 operation.
-Laplacianblurgray_5x5_3x3 : str
-    nn.Module wrapper for laplacianblurgray_5x5_3x3 operation.
-Laplacianblurgray_5x5_5x5 : str
-    nn.Module wrapper for laplacianblurgray_5x5_5x5 operation.
-Laplacianblurgray_5x5_7x7 : str
-    nn.Module wrapper for laplacianblurgray_5x5_7x7 operation.
-Laplacianblurgray_5x5_9x9 : str
-    nn.Module wrapper for laplacianblurgray_5x5_9x9 operation.
-Laplacianblurgray_7x7_11x11 : str
-    nn.Module wrapper for laplacianblurgray_7x7_11x11 operation.
-Laplacianblurgray_7x7_13x13 : str
-    nn.Module wrapper for laplacianblurgray_7x7_13x13 operation.
-Laplacianblurgray_7x7_15x15 : str
-    nn.Module wrapper for laplacianblurgray_7x7_15x15 operation.
-Laplacianblurgray_7x7_3x3 : str
-    nn.Module wrapper for laplacianblurgray_7x7_3x3 operation.
-Laplacianblurgray_7x7_5x5 : str
-    nn.Module wrapper for laplacianblurgray_7x7_5x5 operation.
-Laplacianblurgray_7x7_7x7 : str
-    nn.Module wrapper for laplacianblurgray_7x7_7x7 operation.
-Laplacianblurgray_7x7_9x9 : str
-    nn.Module wrapper for laplacianblurgray_7x7_9x9 operation.
-Laplacianblurgray_9x9_11x11 : str
-    nn.Module wrapper for laplacianblurgray_9x9_11x11 operation.
-Laplacianblurgray_9x9_13x13 : str
-    nn.Module wrapper for laplacianblurgray_9x9_13x13 operation.
-Laplacianblurgray_9x9_15x15 : str
-    nn.Module wrapper for laplacianblurgray_9x9_15x15 operation.
-Laplacianblurgray_9x9_3x3 : str
-    nn.Module wrapper for laplacianblurgray_9x9_3x3 operation.
-Laplacianblurgray_9x9_5x5 : str
-    nn.Module wrapper for laplacianblurgray_9x9_5x5 operation.
-Laplacianblurgray_9x9_7x7 : str
-    nn.Module wrapper for laplacianblurgray_9x9_7x7 operation.
-Laplacianblurgray_9x9_9x9 : str
-    nn.Module wrapper for laplacianblurgray_9x9_9x9 operation.
-Laplacianblur_11x11_11x11 : str
-    nn.Module wrapper for laplacianblur_11x11_11x11 operation.
-Laplacianblur_11x11_13x13 : str
-    nn.Module wrapper for laplacianblur_11x11_13x13 operation.
-Laplacianblur_11x11_15x15 : str
-    nn.Module wrapper for laplacianblur_11x11_15x15 operation.
-Laplacianblur_11x11_3x3 : str
-    nn.Module wrapper for laplacianblur_11x11_3x3 operation.
-Laplacianblur_11x11_5x5 : str
-    nn.Module wrapper for laplacianblur_11x11_5x5 operation.
-Laplacianblur_11x11_7x7 : str
-    nn.Module wrapper for laplacianblur_11x11_7x7 operation.
-Laplacianblur_11x11_9x9 : str
-    nn.Module wrapper for laplacianblur_11x11_9x9 operation.
-Laplacianblur_13x13_11x11 : str
-    nn.Module wrapper for laplacianblur_13x13_11x11 operation.
-Laplacianblur_13x13_13x13 : str
-    nn.Module wrapper for laplacianblur_13x13_13x13 operation.
-Laplacianblur_13x13_15x15 : str
-    nn.Module wrapper for laplacianblur_13x13_15x15 operation.
-Laplacianblur_13x13_3x3 : str
-    nn.Module wrapper for laplacianblur_13x13_3x3 operation.
-Laplacianblur_13x13_5x5 : str
-    nn.Module wrapper for laplacianblur_13x13_5x5 operation.
-Laplacianblur_13x13_7x7 : str
-    nn.Module wrapper for laplacianblur_13x13_7x7 operation.
-Laplacianblur_13x13_9x9 : str
-    nn.Module wrapper for laplacianblur_13x13_9x9 operation.
-Laplacianblur_15x15_11x11 : str
-    nn.Module wrapper for laplacianblur_15x15_11x11 operation.
-Laplacianblur_15x15_13x13 : str
-    nn.Module wrapper for laplacianblur_15x15_13x13 operation.
-Laplacianblur_15x15_15x15 : str
-    nn.Module wrapper for laplacianblur_15x15_15x15 operation.
-Laplacianblur_15x15_3x3 : str
-    nn.Module wrapper for laplacianblur_15x15_3x3 operation.
-Laplacianblur_15x15_5x5 : str
-    nn.Module wrapper for laplacianblur_15x15_5x5 operation.
-Laplacianblur_15x15_7x7 : str
-    nn.Module wrapper for laplacianblur_15x15_7x7 operation.
-Laplacianblur_15x15_9x9 : str
-    nn.Module wrapper for laplacianblur_15x15_9x9 operation.
-Laplacianblur_3x3_11x11 : str
-    nn.Module wrapper for laplacianblur_3x3_11x11 operation.
-Laplacianblur_3x3_13x13 : str
-    nn.Module wrapper for laplacianblur_3x3_13x13 operation.
-Laplacianblur_3x3_15x15 : str
-    nn.Module wrapper for laplacianblur_3x3_15x15 operation.
-Laplacianblur_3x3_3x3 : str
-    nn.Module wrapper for laplacianblur_3x3_3x3 operation.
-Laplacianblur_3x3_5x5 : str
-    nn.Module wrapper for laplacianblur_3x3_5x5 operation.
-Laplacianblur_3x3_7x7 : str
-    nn.Module wrapper for laplacianblur_3x3_7x7 operation.
-Laplacianblur_3x3_9x9 : str
-    nn.Module wrapper for laplacianblur_3x3_9x9 operation.
-Laplacianblur_5x5_11x11 : str
-    nn.Module wrapper for laplacianblur_5x5_11x11 operation.
-Laplacianblur_5x5_13x13 : str
-    nn.Module wrapper for laplacianblur_5x5_13x13 operation.
-Laplacianblur_5x5_15x15 : str
-    nn.Module wrapper for laplacianblur_5x5_15x15 operation.
-Laplacianblur_5x5_3x3 : str
-    nn.Module wrapper for laplacianblur_5x5_3x3 operation.
-Laplacianblur_5x5_5x5 : str
-    nn.Module wrapper for laplacianblur_5x5_5x5 operation.
-Laplacianblur_5x5_7x7 : str
-    nn.Module wrapper for laplacianblur_5x5_7x7 operation.
-Laplacianblur_5x5_9x9 : str
-    nn.Module wrapper for laplacianblur_5x5_9x9 operation.
-Laplacianblur_7x7_11x11 : str
-    nn.Module wrapper for laplacianblur_7x7_11x11 operation.
-Laplacianblur_7x7_13x13 : str
-    nn.Module wrapper for laplacianblur_7x7_13x13 operation.
-Laplacianblur_7x7_15x15 : str
-    nn.Module wrapper for laplacianblur_7x7_15x15 operation.
-Laplacianblur_7x7_3x3 : str
-    nn.Module wrapper for laplacianblur_7x7_3x3 operation.
-Laplacianblur_7x7_5x5 : str
-    nn.Module wrapper for laplacianblur_7x7_5x5 operation.
-Laplacianblur_7x7_7x7 : str
-    nn.Module wrapper for laplacianblur_7x7_7x7 operation.
-Laplacianblur_7x7_9x9 : str
-    nn.Module wrapper for laplacianblur_7x7_9x9 operation.
-Laplacianblur_9x9_11x11 : str
-    nn.Module wrapper for laplacianblur_9x9_11x11 operation.
-Laplacianblur_9x9_13x13 : str
-    nn.Module wrapper for laplacianblur_9x9_13x13 operation.
-Laplacianblur_9x9_15x15 : str
-    nn.Module wrapper for laplacianblur_9x9_15x15 operation.
-Laplacianblur_9x9_3x3 : str
-    nn.Module wrapper for laplacianblur_9x9_3x3 operation.
-Laplacianblur_9x9_5x5 : str
-    nn.Module wrapper for laplacianblur_9x9_5x5 operation.
-Laplacianblur_9x9_7x7 : str
-    nn.Module wrapper for laplacianblur_9x9_7x7 operation.
-Laplacianblur_9x9_9x9 : str
-    nn.Module wrapper for laplacianblur_9x9_9x9 operation.
-Laplaciangray_11x11 : str
-    nn.Module wrapper for laplaciangray_11x11 operation.
-Laplaciangray_13x13 : str
-    nn.Module wrapper for laplaciangray_13x13 operation.
-Laplaciangray_15x15 : str
-    nn.Module wrapper for laplaciangray_15x15 operation.
-Laplaciangray_3x3 : str
-    nn.Module wrapper for laplaciangray_3x3 operation.
-Laplaciangray_5x5 : str
-    nn.Module wrapper for laplaciangray_5x5 operation.
-Laplaciangray_7x7 : str
-    nn.Module wrapper for laplaciangray_7x7 operation.
-Laplaciangray_9x9 : str
-    nn.Module wrapper for laplaciangray_9x9 operation.
-Laplacian_11x11 : str
-    nn.Module wrapper for laplacian_11x11 operation.
-Laplacian_13x13 : str
-    nn.Module wrapper for laplacian_13x13 operation.
-Laplacian_15x15 : str
-    nn.Module wrapper for laplacian_15x15 operation.
-Laplacian_3x3 : str
-    nn.Module wrapper for laplacian_3x3 operation.
-Laplacian_5x5 : str
-    nn.Module wrapper for laplacian_5x5 operation.
-Laplacian_7x7 : str
-    nn.Module wrapper for laplacian_7x7 operation.
-Laplacian_9x9 : str
-    nn.Module wrapper for laplacian_9x9 operation.
-Laserscan_10 : str
-    nn.Module wrapper for laserscan_10 operation.
-Laserscan_10_1 : str
-    nn.Module wrapper for laserscan_10_1 operation.
-Laserscan_10_3 : str
-    nn.Module wrapper for laserscan_10_3 operation.
-Laserscan_10_5 : str
-    nn.Module wrapper for laserscan_10_5 operation.
-Laserscan_20 : str
-    nn.Module wrapper for laserscan_20 operation.
-Laserscan_20_1 : str
-    nn.Module wrapper for laserscan_20_1 operation.
-Laserscan_20_3 : str
-    nn.Module wrapper for laserscan_20_3 operation.
-Laserscan_20_5 : str
-    nn.Module wrapper for laserscan_20_5 operation.
-Laserscan_5 : str
-    nn.Module wrapper for laserscan_5 operation.
-Laserscan_5_1 : str
-    nn.Module wrapper for laserscan_5_1 operation.
-Laserscan_5_3 : str
-    nn.Module wrapper for laserscan_5_3 operation.
-Laserscan_5_5 : str
-    nn.Module wrapper for laserscan_5_5 operation.
-Pointcloud : str
-    nn.Module wrapper for pointcloud operation.
-Sobel : str
-    nn.Module wrapper for sobel operation.
-Sobelblurgray_11x11 : str
-    nn.Module wrapper for sobelblurgray_11x11 operation.
-Sobelblurgray_13x13 : str
-    nn.Module wrapper for sobelblurgray_13x13 operation.
-Sobelblurgray_15x15 : str
-    nn.Module wrapper for sobelblurgray_15x15 operation.
-Sobelblurgray_3x3 : str
-    nn.Module wrapper for sobelblurgray_3x3 operation.
-Sobelblurgray_5x5 : str
-    nn.Module wrapper for sobelblurgray_5x5 operation.
-Sobelblurgray_7x7 : str
-    nn.Module wrapper for sobelblurgray_7x7 operation.
-Sobelblurgray_9x9 : str
-    nn.Module wrapper for sobelblurgray_9x9 operation.
-Sobelblur_11x11 : str
-    nn.Module wrapper for sobelblur_11x11 operation.
-Sobelblur_13x13 : str
-    nn.Module wrapper for sobelblur_13x13 operation.
-Sobelblur_15x15 : str
-    nn.Module wrapper for sobelblur_15x15 operation.
-Sobelblur_3x3 : str
-    nn.Module wrapper for sobelblur_3x3 operation.
-Sobelblur_5x5 : str
-    nn.Module wrapper for sobelblur_5x5 operation.
-Sobelblur_7x7 : str
-    nn.Module wrapper for sobelblur_7x7 operation.
-Sobelblur_9x9 : str
-    nn.Module wrapper for sobelblur_9x9 operation.
-Sobelgray : str
-    nn.Module wrapper for sobelgray operation.
+Gfttblurgray_11x11_shaves1 : Path
+    Path to compiled blob for gfttblurgray_11x11_shaves1 operation.
+Gfttblurgray_13x13_shaves1 : Path
+    Path to compiled blob for gfttblurgray_13x13_shaves1 operation.
+Gfttblurgray_15x15_shaves1 : Path
+    Path to compiled blob for gfttblurgray_15x15_shaves1 operation.
+Gfttblurgray_3x3_shaves1 : Path
+    Path to compiled blob for gfttblurgray_3x3_shaves1 operation.
+Gfttblurgray_5x5_shaves1 : Path
+    Path to compiled blob for gfttblurgray_5x5_shaves1 operation.
+Gfttblurgray_7x7_shaves1 : Path
+    Path to compiled blob for gfttblurgray_7x7_shaves1 operation.
+Gfttblurgray_9x9_shaves1 : Path
+    Path to compiled blob for gfttblurgray_9x9_shaves1 operation.
+Gfttblur_11x11_shaves1 : Path
+    Path to compiled blob for gfttblur_11x11_shaves1 operation.
+Gfttblur_13x13_shaves1 : Path
+    Path to compiled blob for gfttblur_13x13_shaves1 operation.
+Gfttblur_15x15_shaves1 : Path
+    Path to compiled blob for gfttblur_15x15_shaves1 operation.
+Gfttblur_3x3_shaves1 : Path
+    Path to compiled blob for gfttblur_3x3_shaves1 operation.
+Gfttblur_5x5_shaves1 : Path
+    Path to compiled blob for gfttblur_5x5_shaves1 operation.
+Gfttblur_7x7_shaves1 : Path
+    Path to compiled blob for gfttblur_7x7_shaves1 operation.
+Gfttblur_9x9_shaves1 : Path
+    Path to compiled blob for gfttblur_9x9_shaves1 operation.
+Gfttgray_shaves1 : Path
+    Path to compiled blob for gfttgray_shaves1 operation.
+Gftt_shaves1 : Path
+    Path to compiled blob for gftt_shaves1 operation.
+Gaussiangray_11x11_shaves1 : Path
+    Path to compiled blob for gaussiangray_11x11_shaves1 operation.
+Gaussiangray_13x13_shaves1 : Path
+    Path to compiled blob for gaussiangray_13x13_shaves1 operation.
+Gaussiangray_15x15_shaves1 : Path
+    Path to compiled blob for gaussiangray_15x15_shaves1 operation.
+Gaussiangray_3x3_shaves1 : Path
+    Path to compiled blob for gaussiangray_3x3_shaves1 operation.
+Gaussiangray_5x5_shaves1 : Path
+    Path to compiled blob for gaussiangray_5x5_shaves1 operation.
+Gaussiangray_7x7_shaves1 : Path
+    Path to compiled blob for gaussiangray_7x7_shaves1 operation.
+Gaussiangray_9x9_shaves1 : Path
+    Path to compiled blob for gaussiangray_9x9_shaves1 operation.
+Gaussian_11x11_shaves1 : Path
+    Path to compiled blob for gaussian_11x11_shaves1 operation.
+Gaussian_13x13_shaves1 : Path
+    Path to compiled blob for gaussian_13x13_shaves1 operation.
+Gaussian_15x15_shaves1 : Path
+    Path to compiled blob for gaussian_15x15_shaves1 operation.
+Gaussian_3x3_shaves1 : Path
+    Path to compiled blob for gaussian_3x3_shaves1 operation.
+Gaussian_5x5_shaves1 : Path
+    Path to compiled blob for gaussian_5x5_shaves1 operation.
+Gaussian_7x7_shaves1 : Path
+    Path to compiled blob for gaussian_7x7_shaves1 operation.
+Gaussian_9x9_shaves1 : Path
+    Path to compiled blob for gaussian_9x9_shaves1 operation.
+Harrisblurgray_11x11_shaves1 : Path
+    Path to compiled blob for harrisblurgray_11x11_shaves1 operation.
+Harrisblurgray_13x13_shaves1 : Path
+    Path to compiled blob for harrisblurgray_13x13_shaves1 operation.
+Harrisblurgray_15x15_shaves1 : Path
+    Path to compiled blob for harrisblurgray_15x15_shaves1 operation.
+Harrisblurgray_3x3_shaves1 : Path
+    Path to compiled blob for harrisblurgray_3x3_shaves1 operation.
+Harrisblurgray_5x5_shaves1 : Path
+    Path to compiled blob for harrisblurgray_5x5_shaves1 operation.
+Harrisblurgray_7x7_shaves1 : Path
+    Path to compiled blob for harrisblurgray_7x7_shaves1 operation.
+Harrisblurgray_9x9_shaves1 : Path
+    Path to compiled blob for harrisblurgray_9x9_shaves1 operation.
+Harrisblur_11x11_shaves1 : Path
+    Path to compiled blob for harrisblur_11x11_shaves1 operation.
+Harrisblur_13x13_shaves1 : Path
+    Path to compiled blob for harrisblur_13x13_shaves1 operation.
+Harrisblur_15x15_shaves1 : Path
+    Path to compiled blob for harrisblur_15x15_shaves1 operation.
+Harrisblur_3x3_shaves1 : Path
+    Path to compiled blob for harrisblur_3x3_shaves1 operation.
+Harrisblur_5x5_shaves1 : Path
+    Path to compiled blob for harrisblur_5x5_shaves1 operation.
+Harrisblur_7x7_shaves1 : Path
+    Path to compiled blob for harrisblur_7x7_shaves1 operation.
+Harrisblur_9x9_shaves1 : Path
+    Path to compiled blob for harrisblur_9x9_shaves1 operation.
+Harrisgray_shaves1 : Path
+    Path to compiled blob for harrisgray_shaves1 operation.
+Harris_shaves1 : Path
+    Path to compiled blob for harris_shaves1 operation.
+Hessianblurgray_11x11_shaves1 : Path
+    Path to compiled blob for hessianblurgray_11x11_shaves1 operation.
+Hessianblurgray_13x13_shaves1 : Path
+    Path to compiled blob for hessianblurgray_13x13_shaves1 operation.
+Hessianblurgray_15x15_shaves1 : Path
+    Path to compiled blob for hessianblurgray_15x15_shaves1 operation.
+Hessianblurgray_3x3_shaves1 : Path
+    Path to compiled blob for hessianblurgray_3x3_shaves1 operation.
+Hessianblurgray_5x5_shaves1 : Path
+    Path to compiled blob for hessianblurgray_5x5_shaves1 operation.
+Hessianblurgray_7x7_shaves1 : Path
+    Path to compiled blob for hessianblurgray_7x7_shaves1 operation.
+Hessianblurgray_9x9_shaves1 : Path
+    Path to compiled blob for hessianblurgray_9x9_shaves1 operation.
+Hessianblur_11x11_shaves1 : Path
+    Path to compiled blob for hessianblur_11x11_shaves1 operation.
+Hessianblur_13x13_shaves1 : Path
+    Path to compiled blob for hessianblur_13x13_shaves1 operation.
+Hessianblur_15x15_shaves1 : Path
+    Path to compiled blob for hessianblur_15x15_shaves1 operation.
+Hessianblur_3x3_shaves1 : Path
+    Path to compiled blob for hessianblur_3x3_shaves1 operation.
+Hessianblur_5x5_shaves1 : Path
+    Path to compiled blob for hessianblur_5x5_shaves1 operation.
+Hessianblur_7x7_shaves1 : Path
+    Path to compiled blob for hessianblur_7x7_shaves1 operation.
+Hessianblur_9x9_shaves1 : Path
+    Path to compiled blob for hessianblur_9x9_shaves1 operation.
+Hessiangray_shaves1 : Path
+    Path to compiled blob for hessiangray_shaves1 operation.
+Hessian_shaves1 : Path
+    Path to compiled blob for hessian_shaves1 operation.
+Laplacianblurgray_11x11_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_11x11_shaves1 operation.
+Laplacianblurgray_11x11_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_13x13_shaves1 operation.
+Laplacianblurgray_11x11_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_15x15_shaves1 operation.
+Laplacianblurgray_11x11_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_3x3_shaves1 operation.
+Laplacianblurgray_11x11_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_5x5_shaves1 operation.
+Laplacianblurgray_11x11_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_7x7_shaves1 operation.
+Laplacianblurgray_11x11_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_11x11_9x9_shaves1 operation.
+Laplacianblurgray_13x13_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_11x11_shaves1 operation.
+Laplacianblurgray_13x13_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_13x13_shaves1 operation.
+Laplacianblurgray_13x13_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_15x15_shaves1 operation.
+Laplacianblurgray_13x13_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_3x3_shaves1 operation.
+Laplacianblurgray_13x13_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_5x5_shaves1 operation.
+Laplacianblurgray_13x13_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_7x7_shaves1 operation.
+Laplacianblurgray_13x13_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_13x13_9x9_shaves1 operation.
+Laplacianblurgray_15x15_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_11x11_shaves1 operation.
+Laplacianblurgray_15x15_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_13x13_shaves1 operation.
+Laplacianblurgray_15x15_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_15x15_shaves1 operation.
+Laplacianblurgray_15x15_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_3x3_shaves1 operation.
+Laplacianblurgray_15x15_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_5x5_shaves1 operation.
+Laplacianblurgray_15x15_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_7x7_shaves1 operation.
+Laplacianblurgray_15x15_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_15x15_9x9_shaves1 operation.
+Laplacianblurgray_3x3_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_11x11_shaves1 operation.
+Laplacianblurgray_3x3_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_13x13_shaves1 operation.
+Laplacianblurgray_3x3_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_15x15_shaves1 operation.
+Laplacianblurgray_3x3_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_3x3_shaves1 operation.
+Laplacianblurgray_3x3_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_5x5_shaves1 operation.
+Laplacianblurgray_3x3_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_7x7_shaves1 operation.
+Laplacianblurgray_3x3_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_3x3_9x9_shaves1 operation.
+Laplacianblurgray_5x5_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_11x11_shaves1 operation.
+Laplacianblurgray_5x5_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_13x13_shaves1 operation.
+Laplacianblurgray_5x5_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_15x15_shaves1 operation.
+Laplacianblurgray_5x5_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_3x3_shaves1 operation.
+Laplacianblurgray_5x5_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_5x5_shaves1 operation.
+Laplacianblurgray_5x5_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_7x7_shaves1 operation.
+Laplacianblurgray_5x5_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_5x5_9x9_shaves1 operation.
+Laplacianblurgray_7x7_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_11x11_shaves1 operation.
+Laplacianblurgray_7x7_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_13x13_shaves1 operation.
+Laplacianblurgray_7x7_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_15x15_shaves1 operation.
+Laplacianblurgray_7x7_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_3x3_shaves1 operation.
+Laplacianblurgray_7x7_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_5x5_shaves1 operation.
+Laplacianblurgray_7x7_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_7x7_shaves1 operation.
+Laplacianblurgray_7x7_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_7x7_9x9_shaves1 operation.
+Laplacianblurgray_9x9_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_11x11_shaves1 operation.
+Laplacianblurgray_9x9_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_13x13_shaves1 operation.
+Laplacianblurgray_9x9_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_15x15_shaves1 operation.
+Laplacianblurgray_9x9_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_3x3_shaves1 operation.
+Laplacianblurgray_9x9_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_5x5_shaves1 operation.
+Laplacianblurgray_9x9_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_7x7_shaves1 operation.
+Laplacianblurgray_9x9_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblurgray_9x9_9x9_shaves1 operation.
+Laplacianblur_11x11_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_11x11_shaves1 operation.
+Laplacianblur_11x11_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_13x13_shaves1 operation.
+Laplacianblur_11x11_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_15x15_shaves1 operation.
+Laplacianblur_11x11_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_3x3_shaves1 operation.
+Laplacianblur_11x11_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_5x5_shaves1 operation.
+Laplacianblur_11x11_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_7x7_shaves1 operation.
+Laplacianblur_11x11_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_11x11_9x9_shaves1 operation.
+Laplacianblur_13x13_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_11x11_shaves1 operation.
+Laplacianblur_13x13_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_13x13_shaves1 operation.
+Laplacianblur_13x13_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_15x15_shaves1 operation.
+Laplacianblur_13x13_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_3x3_shaves1 operation.
+Laplacianblur_13x13_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_5x5_shaves1 operation.
+Laplacianblur_13x13_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_7x7_shaves1 operation.
+Laplacianblur_13x13_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_13x13_9x9_shaves1 operation.
+Laplacianblur_15x15_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_11x11_shaves1 operation.
+Laplacianblur_15x15_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_13x13_shaves1 operation.
+Laplacianblur_15x15_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_15x15_shaves1 operation.
+Laplacianblur_15x15_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_3x3_shaves1 operation.
+Laplacianblur_15x15_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_5x5_shaves1 operation.
+Laplacianblur_15x15_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_7x7_shaves1 operation.
+Laplacianblur_15x15_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_15x15_9x9_shaves1 operation.
+Laplacianblur_3x3_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_11x11_shaves1 operation.
+Laplacianblur_3x3_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_13x13_shaves1 operation.
+Laplacianblur_3x3_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_15x15_shaves1 operation.
+Laplacianblur_3x3_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_3x3_shaves1 operation.
+Laplacianblur_3x3_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_5x5_shaves1 operation.
+Laplacianblur_3x3_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_7x7_shaves1 operation.
+Laplacianblur_3x3_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_3x3_9x9_shaves1 operation.
+Laplacianblur_5x5_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_11x11_shaves1 operation.
+Laplacianblur_5x5_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_13x13_shaves1 operation.
+Laplacianblur_5x5_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_15x15_shaves1 operation.
+Laplacianblur_5x5_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_3x3_shaves1 operation.
+Laplacianblur_5x5_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_5x5_shaves1 operation.
+Laplacianblur_5x5_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_7x7_shaves1 operation.
+Laplacianblur_5x5_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_5x5_9x9_shaves1 operation.
+Laplacianblur_7x7_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_11x11_shaves1 operation.
+Laplacianblur_7x7_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_13x13_shaves1 operation.
+Laplacianblur_7x7_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_15x15_shaves1 operation.
+Laplacianblur_7x7_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_3x3_shaves1 operation.
+Laplacianblur_7x7_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_5x5_shaves1 operation.
+Laplacianblur_7x7_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_7x7_shaves1 operation.
+Laplacianblur_7x7_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_7x7_9x9_shaves1 operation.
+Laplacianblur_9x9_11x11_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_11x11_shaves1 operation.
+Laplacianblur_9x9_13x13_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_13x13_shaves1 operation.
+Laplacianblur_9x9_15x15_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_15x15_shaves1 operation.
+Laplacianblur_9x9_3x3_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_3x3_shaves1 operation.
+Laplacianblur_9x9_5x5_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_5x5_shaves1 operation.
+Laplacianblur_9x9_7x7_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_7x7_shaves1 operation.
+Laplacianblur_9x9_9x9_shaves1 : Path
+    Path to compiled blob for laplacianblur_9x9_9x9_shaves1 operation.
+Laplaciangray_11x11_shaves1 : Path
+    Path to compiled blob for laplaciangray_11x11_shaves1 operation.
+Laplaciangray_13x13_shaves1 : Path
+    Path to compiled blob for laplaciangray_13x13_shaves1 operation.
+Laplaciangray_15x15_shaves1 : Path
+    Path to compiled blob for laplaciangray_15x15_shaves1 operation.
+Laplaciangray_3x3_shaves1 : Path
+    Path to compiled blob for laplaciangray_3x3_shaves1 operation.
+Laplaciangray_5x5_shaves1 : Path
+    Path to compiled blob for laplaciangray_5x5_shaves1 operation.
+Laplaciangray_7x7_shaves1 : Path
+    Path to compiled blob for laplaciangray_7x7_shaves1 operation.
+Laplaciangray_9x9_shaves1 : Path
+    Path to compiled blob for laplaciangray_9x9_shaves1 operation.
+Laplacian_11x11_shaves1 : Path
+    Path to compiled blob for laplacian_11x11_shaves1 operation.
+Laplacian_13x13_shaves1 : Path
+    Path to compiled blob for laplacian_13x13_shaves1 operation.
+Laplacian_15x15_shaves1 : Path
+    Path to compiled blob for laplacian_15x15_shaves1 operation.
+Laplacian_3x3_shaves1 : Path
+    Path to compiled blob for laplacian_3x3_shaves1 operation.
+Laplacian_5x5_shaves1 : Path
+    Path to compiled blob for laplacian_5x5_shaves1 operation.
+Laplacian_7x7_shaves1 : Path
+    Path to compiled blob for laplacian_7x7_shaves1 operation.
+Laplacian_9x9_shaves1 : Path
+    Path to compiled blob for laplacian_9x9_shaves1 operation.
+Laserscan_10_1_shaves1 : Path
+    Path to compiled blob for laserscan_10_1_shaves1 operation.
+Laserscan_10_3_shaves1 : Path
+    Path to compiled blob for laserscan_10_3_shaves1 operation.
+Laserscan_10_5_shaves1 : Path
+    Path to compiled blob for laserscan_10_5_shaves1 operation.
+Laserscan_20_1_shaves1 : Path
+    Path to compiled blob for laserscan_20_1_shaves1 operation.
+Laserscan_20_3_shaves1 : Path
+    Path to compiled blob for laserscan_20_3_shaves1 operation.
+Laserscan_20_5_shaves1 : Path
+    Path to compiled blob for laserscan_20_5_shaves1 operation.
+Laserscan_5_1_shaves1 : Path
+    Path to compiled blob for laserscan_5_1_shaves1 operation.
+Laserscan_5_3_shaves1 : Path
+    Path to compiled blob for laserscan_5_3_shaves1 operation.
+Laserscan_5_5_shaves1 : Path
+    Path to compiled blob for laserscan_5_5_shaves1 operation.
+Pointcloud_shaves1 : Path
+    Path to compiled blob for pointcloud_shaves1 operation.
+Sobelblurgray_11x11_shaves1 : Path
+    Path to compiled blob for sobelblurgray_11x11_shaves1 operation.
+Sobelblurgray_13x13_shaves1 : Path
+    Path to compiled blob for sobelblurgray_13x13_shaves1 operation.
+Sobelblurgray_15x15_shaves1 : Path
+    Path to compiled blob for sobelblurgray_15x15_shaves1 operation.
+Sobelblurgray_3x3_shaves1 : Path
+    Path to compiled blob for sobelblurgray_3x3_shaves1 operation.
+Sobelblurgray_5x5_shaves1 : Path
+    Path to compiled blob for sobelblurgray_5x5_shaves1 operation.
+Sobelblurgray_7x7_shaves1 : Path
+    Path to compiled blob for sobelblurgray_7x7_shaves1 operation.
+Sobelblurgray_9x9_shaves1 : Path
+    Path to compiled blob for sobelblurgray_9x9_shaves1 operation.
+Sobelblur_11x11_shaves1 : Path
+    Path to compiled blob for sobelblur_11x11_shaves1 operation.
+Sobelblur_13x13_shaves1 : Path
+    Path to compiled blob for sobelblur_13x13_shaves1 operation.
+Sobelblur_15x15_shaves1 : Path
+    Path to compiled blob for sobelblur_15x15_shaves1 operation.
+Sobelblur_3x3_shaves1 : Path
+    Path to compiled blob for sobelblur_3x3_shaves1 operation.
+Sobelblur_5x5_shaves1 : Path
+    Path to compiled blob for sobelblur_5x5_shaves1 operation.
+Sobelblur_7x7_shaves1 : Path
+    Path to compiled blob for sobelblur_7x7_shaves1 operation.
+Sobelblur_9x9_shaves1 : Path
+    Path to compiled blob for sobelblur_9x9_shaves1 operation.
+Sobelgray_shaves1 : Path
+    Path to compiled blob for sobelgray_shaves1 operation.
+Sobel_shaves1 : Path
+    Path to compiled blob for sobel_shaves1 operation.
 
 """
 
@@ -443,457 +437,550 @@ if not _PACKAGE_LOCATION_PATH.is_dir():
     raise RuntimeError(err_msg)
 _BLOB_FOLDER: Path = Path(_PACKAGE_LOCATION) / _RELATIVE_BLOB_FOLDER
 
-GFTT: Path = Path(Path(_BLOB_FOLDER) / "GFTT.blob").resolve()
 GFTTBLURGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "GFTTBlurGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_11x11_shaves1.blob",
 ).resolve()
 GFTTBLURGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "GFTTBlurGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_13x13_shaves1.blob",
 ).resolve()
 GFTTBLURGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "GFTTBlurGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_15x15_shaves1.blob",
 ).resolve()
-GFTTBLURGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_3x3.blob").resolve()
-GFTTBLURGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_5x5.blob").resolve()
-GFTTBLURGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_7x7.blob").resolve()
-GFTTBLURGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlurGray_9x9.blob").resolve()
-GFTTBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_11x11.blob").resolve()
-GFTTBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_13x13.blob").resolve()
-GFTTBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_15x15.blob").resolve()
-GFTTBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_3x3.blob").resolve()
-GFTTBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_5x5.blob").resolve()
-GFTTBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_7x7.blob").resolve()
-GFTTBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_9x9.blob").resolve()
-GFTTGRAY: Path = Path(Path(_BLOB_FOLDER) / "GFTTGray.blob").resolve()
+GFTTBLURGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_3x3_shaves1.blob",
+).resolve()
+GFTTBLURGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_5x5_shaves1.blob",
+).resolve()
+GFTTBLURGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_7x7_shaves1.blob",
+).resolve()
+GFTTBLURGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlurGray_9x9_shaves1.blob",
+).resolve()
+GFTTBLUR_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlur_11x11_shaves1.blob",
+).resolve()
+GFTTBLUR_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlur_13x13_shaves1.blob",
+).resolve()
+GFTTBLUR_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "GFTTBlur_15x15_shaves1.blob",
+).resolve()
+GFTTBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_3x3_shaves1.blob").resolve()
+GFTTBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_5x5_shaves1.blob").resolve()
+GFTTBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_7x7_shaves1.blob").resolve()
+GFTTBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "GFTTBlur_9x9_shaves1.blob").resolve()
+GFTTGRAY: Path = Path(Path(_BLOB_FOLDER) / "GFTTGray_shaves1.blob").resolve()
+GFTT: Path = Path(Path(_BLOB_FOLDER) / "GFTT_shaves1.blob").resolve()
 GAUSSIANGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "GaussianGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "GaussianGray_11x11_shaves1.blob",
 ).resolve()
 GAUSSIANGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "GaussianGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "GaussianGray_13x13_shaves1.blob",
 ).resolve()
 GAUSSIANGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "GaussianGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "GaussianGray_15x15_shaves1.blob",
 ).resolve()
-GAUSSIANGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_3x3.blob").resolve()
-GAUSSIANGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_5x5.blob").resolve()
-GAUSSIANGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_7x7.blob").resolve()
-GAUSSIANGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "GaussianGray_9x9.blob").resolve()
-GAUSSIAN_11X11: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_11x11.blob").resolve()
-GAUSSIAN_13X13: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_13x13.blob").resolve()
-GAUSSIAN_15X15: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_15x15.blob").resolve()
-GAUSSIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_3x3.blob").resolve()
-GAUSSIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_5x5.blob").resolve()
-GAUSSIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_7x7.blob").resolve()
-GAUSSIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_9x9.blob").resolve()
-HARRIS: Path = Path(Path(_BLOB_FOLDER) / "Harris.blob").resolve()
+GAUSSIANGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_3x3_shaves1.blob",
+).resolve()
+GAUSSIANGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_5x5_shaves1.blob",
+).resolve()
+GAUSSIANGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_7x7_shaves1.blob",
+).resolve()
+GAUSSIANGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "GaussianGray_9x9_shaves1.blob",
+).resolve()
+GAUSSIAN_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "Gaussian_11x11_shaves1.blob",
+).resolve()
+GAUSSIAN_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "Gaussian_13x13_shaves1.blob",
+).resolve()
+GAUSSIAN_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "Gaussian_15x15_shaves1.blob",
+).resolve()
+GAUSSIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_3x3_shaves1.blob").resolve()
+GAUSSIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_5x5_shaves1.blob").resolve()
+GAUSSIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_7x7_shaves1.blob").resolve()
+GAUSSIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Gaussian_9x9_shaves1.blob").resolve()
 HARRISBLURGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_11x11_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_13x13_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_15x15_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_3x3.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_3x3_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_5x5.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_5x5_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_7x7.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_7x7_shaves1.blob",
 ).resolve()
 HARRISBLURGRAY_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "HarrisBlurGray_9x9.blob",
+    Path(_BLOB_FOLDER) / "HarrisBlurGray_9x9_shaves1.blob",
 ).resolve()
-HARRISBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_11x11.blob").resolve()
-HARRISBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_13x13.blob").resolve()
-HARRISBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_15x15.blob").resolve()
-HARRISBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_3x3.blob").resolve()
-HARRISBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_5x5.blob").resolve()
-HARRISBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_7x7.blob").resolve()
-HARRISBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "HarrisBlur_9x9.blob").resolve()
-HARRISGRAY: Path = Path(Path(_BLOB_FOLDER) / "HarrisGray.blob").resolve()
-HESSIAN: Path = Path(Path(_BLOB_FOLDER) / "Hessian.blob").resolve()
+HARRISBLUR_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_11x11_shaves1.blob",
+).resolve()
+HARRISBLUR_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_13x13_shaves1.blob",
+).resolve()
+HARRISBLUR_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_15x15_shaves1.blob",
+).resolve()
+HARRISBLUR_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_3x3_shaves1.blob",
+).resolve()
+HARRISBLUR_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_5x5_shaves1.blob",
+).resolve()
+HARRISBLUR_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_7x7_shaves1.blob",
+).resolve()
+HARRISBLUR_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "HarrisBlur_9x9_shaves1.blob",
+).resolve()
+HARRISGRAY: Path = Path(Path(_BLOB_FOLDER) / "HarrisGray_shaves1.blob").resolve()
+HARRIS: Path = Path(Path(_BLOB_FOLDER) / "Harris_shaves1.blob").resolve()
 HESSIANBLURGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_11x11_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_13x13_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_15x15_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_3x3.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_3x3_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_5x5.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_5x5_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_7x7.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_7x7_shaves1.blob",
 ).resolve()
 HESSIANBLURGRAY_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "HessianBlurGray_9x9.blob",
+    Path(_BLOB_FOLDER) / "HessianBlurGray_9x9_shaves1.blob",
 ).resolve()
-HESSIANBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_11x11.blob").resolve()
-HESSIANBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_13x13.blob").resolve()
-HESSIANBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_15x15.blob").resolve()
-HESSIANBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_3x3.blob").resolve()
-HESSIANBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_5x5.blob").resolve()
-HESSIANBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_7x7.blob").resolve()
-HESSIANBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "HessianBlur_9x9.blob").resolve()
-HESSIANGRAY: Path = Path(Path(_BLOB_FOLDER) / "HessianGray.blob").resolve()
+HESSIANBLUR_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_11x11_shaves1.blob",
+).resolve()
+HESSIANBLUR_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_13x13_shaves1.blob",
+).resolve()
+HESSIANBLUR_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_15x15_shaves1.blob",
+).resolve()
+HESSIANBLUR_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_3x3_shaves1.blob",
+).resolve()
+HESSIANBLUR_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_5x5_shaves1.blob",
+).resolve()
+HESSIANBLUR_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_7x7_shaves1.blob",
+).resolve()
+HESSIANBLUR_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "HessianBlur_9x9_shaves1.blob",
+).resolve()
+HESSIANGRAY: Path = Path(Path(_BLOB_FOLDER) / "HessianGray_shaves1.blob").resolve()
+HESSIAN: Path = Path(Path(_BLOB_FOLDER) / "Hessian_shaves1.blob").resolve()
 LAPLACIANBLURGRAY_11X11_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_11X11_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_11x11_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_13X13_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_13x13_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_15X15_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_15x15_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_3X3_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_3x3_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_5X5_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_5x5_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_7X7_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_7x7_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLURGRAY_9X9_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlurGray_9x9_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_11X11_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_11x11_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_13X13_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_13x13_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_15X15_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_15x15_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_3X3_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_3x3_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_5X5_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_5x5_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_7X7_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_7x7_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_15x15_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_3X3: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_3x3.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_3x3_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_5X5: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_5x5.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_5x5_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_7X7: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_7x7.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_7x7_shaves1.blob",
 ).resolve()
 LAPLACIANBLUR_9X9_9X9: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_9x9.blob",
+    Path(_BLOB_FOLDER) / "LaplacianBlur_9x9_9x9_shaves1.blob",
 ).resolve()
 LAPLACIANGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "LaplacianGray_11x11_shaves1.blob",
 ).resolve()
 LAPLACIANGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "LaplacianGray_13x13_shaves1.blob",
 ).resolve()
 LAPLACIANGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "LaplacianGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "LaplacianGray_15x15_shaves1.blob",
 ).resolve()
-LAPLACIANGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_3x3.blob").resolve()
-LAPLACIANGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_5x5.blob").resolve()
-LAPLACIANGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_7x7.blob").resolve()
-LAPLACIANGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "LaplacianGray_9x9.blob").resolve()
-LAPLACIAN_11X11: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_11x11.blob").resolve()
-LAPLACIAN_13X13: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_13x13.blob").resolve()
-LAPLACIAN_15X15: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_15x15.blob").resolve()
-LAPLACIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_3x3.blob").resolve()
-LAPLACIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_5x5.blob").resolve()
-LAPLACIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_7x7.blob").resolve()
-LAPLACIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_9x9.blob").resolve()
-LASERSCAN_10: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10.blob").resolve()
-LASERSCAN_10_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_1.blob").resolve()
-LASERSCAN_10_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_3.blob").resolve()
-LASERSCAN_10_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_10_5.blob").resolve()
-LASERSCAN_20: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20.blob").resolve()
-LASERSCAN_20_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_1.blob").resolve()
-LASERSCAN_20_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_3.blob").resolve()
-LASERSCAN_20_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_20_5.blob").resolve()
-LASERSCAN_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5.blob").resolve()
-LASERSCAN_5_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_1.blob").resolve()
-LASERSCAN_5_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_3.blob").resolve()
-LASERSCAN_5_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_5.blob").resolve()
-POINTCLOUD: Path = Path(Path(_BLOB_FOLDER) / "PointCloud.blob").resolve()
-SOBEL: Path = Path(Path(_BLOB_FOLDER) / "Sobel.blob").resolve()
+LAPLACIANGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_3x3_shaves1.blob",
+).resolve()
+LAPLACIANGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_5x5_shaves1.blob",
+).resolve()
+LAPLACIANGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_7x7_shaves1.blob",
+).resolve()
+LAPLACIANGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "LaplacianGray_9x9_shaves1.blob",
+).resolve()
+LAPLACIAN_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "Laplacian_11x11_shaves1.blob",
+).resolve()
+LAPLACIAN_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "Laplacian_13x13_shaves1.blob",
+).resolve()
+LAPLACIAN_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "Laplacian_15x15_shaves1.blob",
+).resolve()
+LAPLACIAN_3X3: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_3x3_shaves1.blob").resolve()
+LAPLACIAN_5X5: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_5x5_shaves1.blob").resolve()
+LAPLACIAN_7X7: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_7x7_shaves1.blob").resolve()
+LAPLACIAN_9X9: Path = Path(Path(_BLOB_FOLDER) / "Laplacian_9x9_shaves1.blob").resolve()
+LASERSCAN_10_1: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_10_1_shaves1.blob",
+).resolve()
+LASERSCAN_10_3: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_10_3_shaves1.blob",
+).resolve()
+LASERSCAN_10_5: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_10_5_shaves1.blob",
+).resolve()
+LASERSCAN_20_1: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_20_1_shaves1.blob",
+).resolve()
+LASERSCAN_20_3: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_20_3_shaves1.blob",
+).resolve()
+LASERSCAN_20_5: Path = Path(
+    Path(_BLOB_FOLDER) / "Laserscan_20_5_shaves1.blob",
+).resolve()
+LASERSCAN_5_1: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_1_shaves1.blob").resolve()
+LASERSCAN_5_3: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_3_shaves1.blob").resolve()
+LASERSCAN_5_5: Path = Path(Path(_BLOB_FOLDER) / "Laserscan_5_5_shaves1.blob").resolve()
+POINTCLOUD: Path = Path(Path(_BLOB_FOLDER) / "PointCloud_shaves1.blob").resolve()
 SOBELBLURGRAY_11X11: Path = Path(
-    Path(_BLOB_FOLDER) / "SobelBlurGray_11x11.blob",
+    Path(_BLOB_FOLDER) / "SobelBlurGray_11x11_shaves1.blob",
 ).resolve()
 SOBELBLURGRAY_13X13: Path = Path(
-    Path(_BLOB_FOLDER) / "SobelBlurGray_13x13.blob",
+    Path(_BLOB_FOLDER) / "SobelBlurGray_13x13_shaves1.blob",
 ).resolve()
 SOBELBLURGRAY_15X15: Path = Path(
-    Path(_BLOB_FOLDER) / "SobelBlurGray_15x15.blob",
+    Path(_BLOB_FOLDER) / "SobelBlurGray_15x15_shaves1.blob",
 ).resolve()
-SOBELBLURGRAY_3X3: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_3x3.blob").resolve()
-SOBELBLURGRAY_5X5: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_5x5.blob").resolve()
-SOBELBLURGRAY_7X7: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_7x7.blob").resolve()
-SOBELBLURGRAY_9X9: Path = Path(Path(_BLOB_FOLDER) / "SobelBlurGray_9x9.blob").resolve()
-SOBELBLUR_11X11: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_11x11.blob").resolve()
-SOBELBLUR_13X13: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_13x13.blob").resolve()
-SOBELBLUR_15X15: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_15x15.blob").resolve()
-SOBELBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_3x3.blob").resolve()
-SOBELBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_5x5.blob").resolve()
-SOBELBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_7x7.blob").resolve()
-SOBELBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_9x9.blob").resolve()
-SOBELGRAY: Path = Path(Path(_BLOB_FOLDER) / "SobelGray.blob").resolve()
+SOBELBLURGRAY_3X3: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_3x3_shaves1.blob",
+).resolve()
+SOBELBLURGRAY_5X5: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_5x5_shaves1.blob",
+).resolve()
+SOBELBLURGRAY_7X7: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_7x7_shaves1.blob",
+).resolve()
+SOBELBLURGRAY_9X9: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlurGray_9x9_shaves1.blob",
+).resolve()
+SOBELBLUR_11X11: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlur_11x11_shaves1.blob",
+).resolve()
+SOBELBLUR_13X13: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlur_13x13_shaves1.blob",
+).resolve()
+SOBELBLUR_15X15: Path = Path(
+    Path(_BLOB_FOLDER) / "SobelBlur_15x15_shaves1.blob",
+).resolve()
+SOBELBLUR_3X3: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_3x3_shaves1.blob").resolve()
+SOBELBLUR_5X5: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_5x5_shaves1.blob").resolve()
+SOBELBLUR_7X7: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_7x7_shaves1.blob").resolve()
+SOBELBLUR_9X9: Path = Path(Path(_BLOB_FOLDER) / "SobelBlur_9x9_shaves1.blob").resolve()
+SOBELGRAY: Path = Path(Path(_BLOB_FOLDER) / "SobelGray_shaves1.blob").resolve()
+SOBEL: Path = Path(Path(_BLOB_FOLDER) / "Sobel_shaves1.blob").resolve()
 
 __all__ = [
     "GAUSSIANGRAY_3X3",
@@ -1070,15 +1157,12 @@ __all__ = [
     "LAPLACIAN_11X11",
     "LAPLACIAN_13X13",
     "LAPLACIAN_15X15",
-    "LASERSCAN_5",
     "LASERSCAN_5_1",
     "LASERSCAN_5_3",
     "LASERSCAN_5_5",
-    "LASERSCAN_10",
     "LASERSCAN_10_1",
     "LASERSCAN_10_3",
     "LASERSCAN_10_5",
-    "LASERSCAN_20",
     "LASERSCAN_20_1",
     "LASERSCAN_20_3",
     "LASERSCAN_20_5",

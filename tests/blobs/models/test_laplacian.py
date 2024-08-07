@@ -3,60 +3,93 @@
 # MIT License
 from __future__ import annotations
 
-import time
+from functools import partial
 
-import depthai as dai
-
-from oakutils.nodes import create_color_camera, create_xout, get_nn_bgr_frame, get_nn_gray_frame
+from oakutils.blobs import get_model_path
+from oakutils.nodes import get_nn_frame
 from oakutils.nodes.models import create_laplacian
 
-from .utils import eval_model
-from ...helpers import check_device, TIME_TO_RUN
+try:
+    from basic import check_model_equivalence
+    from load import create_model, run_model
+    from hashs import get_run_tables, hash_file, write_model_tables
+except ModuleNotFoundError:
+    from .basic import check_model_equivalence
+    from .load import create_model, run_model
+    from .hashs import get_run_tables, hash_file, write_model_tables
 
 
-def check_laplacian(kernel_size: int, shaves: int, use_blur: bool, grayscale_out: bool):
-    """Test the laplacian node"""
-    pipeline = dai.Pipeline()
+def test_create() -> None:
+    for ks1 in [3, 5, 7, 9, 11, 13, 15]:
+        for ks2 in [3, 5, 7, 9, 11, 13, 15]:
+            for shave in [1, 2, 3, 4, 5, 6]:
+                for use_blur in [True, False]:
+                    for use_gs in [True, False]:
+                        modelfunc = partial(
+                            create_laplacian,
+                            kernel_size=ks1,
+                            blur_kernel_size=ks2,
+                            shaves=shave,
+                            grayscale_out=use_gs,
+                            use_blur=use_blur,
+                        )
+                        assert (
+                            create_model(modelfunc) == 0
+                        ), f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
 
-    color_fps = 15 if use_blur else 30
-    cam = create_color_camera(pipeline, fps=color_fps, preview_size=(640, 480))
-    lp = create_laplacian(
-        pipeline, 
-        cam.preview,
-        kernel_size=kernel_size,
-        shaves=shaves,
-        use_blur=use_blur,
-        grayscale_out=grayscale_out,
-    )
-    _ = create_xout(pipeline, lp.out, "laplacian")
 
-    if len(dai.Device.getAllAvailableDevices()) == 0:
-        return 0  # no device found
-    with dai.Device(pipeline) as device:
-        l_queue: dai.DataOutputQueue = device.getOutputQueue("laplacian")
+def test_run() -> None:
+    hash_table, run_table = get_run_tables()
+    for ks1 in [3, 5, 7, 9, 11, 13, 15]:
+        for ks2 in [3, 5, 7, 9, 11, 13, 15]:
+            for shave in [1, 2, 3, 4, 5, 6]:
+                for use_blur in [True, False]:
+                    for use_gs in [True, False]:
+                        modelname = "laplacian"
+                        attributes = [str(ks1)]
+                        if use_blur:
+                            modelname += "blur"
+                            attributes.append(str(ks2))
+                        if use_gs:
+                            modelname += "gray"
+                        modelpath = get_model_path(modelname, attributes, shave)
+                        model_hash = hash_file(modelpath)
+                        modelkey = modelpath.stem
+                        # if the hash is the same and we have already gotten a successful run, continue
+                        if hash_table[modelkey] == model_hash and run_table[modelkey]:
+                            continue
+                        # if the hash is not the same update the hash and set the run to false
+                        existing_hash = hash_table[modelkey]
+                        if existing_hash != model_hash:
+                            hash_table[modelkey] = model_hash
+                            run_table[modelkey] = False
 
-        t0 = time.perf_counter()
-        while True:
-            l_data = l_queue.get()
-            if grayscale_out:
-                l_frame = get_nn_gray_frame(l_data, frame_size=(640, 480), normalization=255.0)
-            else:
-                l_frame = get_nn_bgr_frame(l_data, frame_size=(640, 480), normalization=255.0)
-            if time.perf_counter() - t0 > TIME_TO_RUN:
-                break
-    return 0
+                        # perform the actual run
+                        modelfunc = partial(
+                            create_laplacian,
+                            kernel_size=ks1,
+                            blur_kernel_size=ks2,
+                            shaves=shave,
+                            grayscale_out=use_gs,
+                            use_blur=use_blur,
+                        )
+                        channels = 1 if use_gs else 3
+                        decodefunc = partial(
+                            get_nn_frame,
+                            channels=channels,
+                        )
+                        retcode = run_model(modelfunc, decodefunc)
+                        tableval = retcode == 0
+                        run_table[modelkey] = tableval
+                        write_model_tables(hash_table, run_table)
+                        assert retcode ==0, f"Failed for {ks1}, {ks2}, {shave}, {use_blur}, {use_gs}"
 
-def test_laplacian_3x3_1_shave():
-    check_device(lambda: check_laplacian(3, 1, False, False), TIME_TO_RUN)
 
-def test_laplacian_3x3_1_shave_gray():
-    check_device(lambda: check_laplacian(3, 1, False, True), TIME_TO_RUN)
+def test_equivalence() -> None:
+    check_model_equivalence("laplacian")
 
-def test_laplacian_3x3_1_shave_blur():
-    check_device(lambda: check_laplacian(3, 1, True, False), TIME_TO_RUN)
 
-def test_laplacian_3x3_1_shave_blur_gray():
-    check_device(lambda: check_laplacian(3, 1, True, True), TIME_TO_RUN)
-
-def test_results():
-    eval_model("laplacian", (640, 480, 3))
+if __name__ == "__main__":
+    test_create()
+    test_run()
+    test_equivalence()

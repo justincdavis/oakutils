@@ -35,12 +35,18 @@ clear_cache
     Clears the cache of compiled blobs.
 get_blob
     Load a blob from a path.
+get_cache_dir
+    Get the cache directory path.
 get_input_layer_data
     Get the input layer data for a blob.
 get_output_layer_data
     Get the output layer data for a blob.
 get_layer_data
     Get the input and output layer data for a blob.
+get_model_name
+    Get the name of a compiled model file.
+get_model_path
+    Get the path to the model blob.
 
 """
 
@@ -56,6 +62,7 @@ from ._analysis import (
     get_output_layer_data,
 )
 from ._benchmark import BenchmarkData, Metric, benchmark_blob
+from ._find import get_model_path
 
 _log = logging.getLogger(__name__)
 
@@ -66,6 +73,7 @@ __all__ = [
     "get_blob",
     "get_input_layer_data",
     "get_layer_data",
+    "get_model_path",
     "get_output_layer_data",
     "models",
 ]
@@ -74,13 +82,21 @@ _log.debug("Loaded blobs.models")
 
 try:
     from . import definitions
-    from ._compiler import clear_cache, compile_model, compile_onnx
+    from ._compiler import (
+        clear_cache,
+        compile_model,
+        compile_onnx,
+        get_cache_dir,
+        get_model_name,
+    )
 
     __all__ += [
         "clear_cache",
         "compile_model",
         "compile_onnx",
         "definitions",
+        "get_cache_dir",
+        "get_model_name",
     ]
 
     _log.debug("Loaded blobs.definitions")

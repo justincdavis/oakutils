@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 import logging
 from pathlib import Path
 from queue import Empty, Queue
@@ -29,8 +30,9 @@ from oakutils.nodes import (
 from oakutils.nodes.buffer import MultiBuffer
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import TracebackType
-    
+
     from typing_extensions import Self
 
 _log = logging.getLogger(__name__)
@@ -62,6 +64,7 @@ class VPU:
         self._data_queue: Queue[list[np.ndarray | list[np.ndarray]]] = Queue()
         self._result_queue: Queue[list[dai.ADatatype | list[dai.ADatatype]]] = Queue()
         self._stopped = False
+        self._crash_msg = ""
 
         # attributes for multi model execution
         self._blob_paths: list[str] = []
@@ -83,7 +86,7 @@ class VPU:
 
     def __enter__(self: Self) -> Self:
         return self
-    
+
     def __exit__(
         self: Self,
         exc_type: type[BaseException] | None,
@@ -177,21 +180,21 @@ class VPU:
 
     def reconfigure_multi(
         self: Self,
-        blob_paths: list[str | Path],
-        input_names: list[list[str] | None] | None = None,
-        modeldata: list[YolomodelData | MobilenetData | None] | None = None,
+        blob_paths: Sequence[str | Path],
+        input_names: Sequence[list[str] | None] | None = None,
+        modeldata: Sequence[YolomodelData | MobilenetData | None] | None = None,
     ) -> None:
         """
         Reconfigure the VPU with multiple blob files.
 
         Parameters
         ----------
-        blob_paths : list[str | Path]
+        blob_paths : Sequence[str | Path]
             The paths to the blob files.
-        input_names : list[list[str] | None]
+        input_names : Sequence[list[str] | None]
             The names of the input layers. Defaults to None.
             Should be filled in if a model has multiple inputs.
-        modeldata : list[YolomodelData | MobilenetData | None]
+        modeldata : Sequence[YolomodelData | MobilenetData | None]
             The model data. Defaults to None.
             Should be filled in if the model is a YOLO or Mobilenet model.
             If None, then a generic neural network will be created.
@@ -206,21 +209,21 @@ class VPU:
 
     def _reconfigure(
         self: Self,
-        blob_paths: list[str | Path],
-        input_names: list[list[str] | None] | None = None,
-        modeldata: list[YolomodelData | MobilenetData | None] | None = None,
+        blob_paths: Sequence[str | Path],
+        input_names: Sequence[list[str] | None] | None = None,
+        modeldata: Sequence[YolomodelData | MobilenetData | None] | None = None,
     ) -> None:
         """
         Handle reconfiguration of the VPU.
 
         Parameters
         ----------
-        blob_paths : list[str | Path]
+        blob_paths : Sequence[str | Path]
             The paths to the blob files.
-        input_names : list[list[str] | None]
+        input_names : Sequence[list[str] | None]
             The names of the input layers. Defaults to None.
             Should be filled in if a model has multiple inputs.
-        modeldata : list[YolomodelData | MobilenetData | None]
+        modeldata : Sequence[YolomodelData | MobilenetData | None]
             The model data. Defaults to None.
 
         Raises
@@ -237,6 +240,8 @@ class VPU:
             If a mobilenet model does not have a single input.
         TypeError
             If modeldata is not YoloModelData or MobilenetData.
+        RuntimeError
+            If the VPU thread could not be launched successfully.
 
         """
         # reset the VPU
@@ -259,7 +264,7 @@ class VPU:
                 raise ValueError(err_msg)
         else:
             input_names = [None] * len(self._blob_paths)
-        self._inputnames = input_names
+        self._inputnames = list(input_names)
 
         # validate the modeldata
         if modeldata is not None:
@@ -344,8 +349,17 @@ class VPU:
         self._thread.start()
 
         # wait for thread to start
-        with self._start_condition:
-            self._start_condition.wait()
+        success = False
+        while self._thread.is_alive():
+            with self._start_condition:
+                success = self._start_condition.wait(timeout=0.5)
+                if success:
+                    break
+        if not success:
+            err_msg = (
+                "Could not open the VPU thread (most likely the Device was not found)."
+            )
+            raise RuntimeError(err_msg)
 
     def _run_thread(
         self: Self,
@@ -365,6 +379,7 @@ class VPU:
         """
         # check pipeline, should always be set
         if self._pipeline is None:
+            self._stopped = True
             err_msg = "Pipeline not set."
             raise RuntimeError(err_msg)
         # create the device
@@ -372,6 +387,11 @@ class VPU:
         with device_object as device:
             # pre-fetch queues and allocate buffers
             buffer: MultiBuffer = MultiBuffer(device, self._xin_names, self._xout_names)
+            _log.debug(
+                f"VPU-Thread: Created MultiBuffer with {len(self._xin_names)} inputs, {len(self._xout_names)} outputs.",
+            )
+            _log.debug(f"VPU-Thread: Input names: {self._xin_names}")
+            _log.debug(f"VPU-Thread: Output names: {self._xout_names}")
 
             # notify the main thread that VPU is ready
             # this will allow the reconfigure call to return
@@ -391,11 +411,27 @@ class VPU:
                 except Empty:
                     continue
 
+                # check length of data and issue warning if more data is sent
+                if len(all_data) > len(self._blob_paths):
+                    warn_msg = f"VPU-Thread: More data sent than blobs: {len(all_data)} > {len(self._blob_paths)}"
+                    warn_msg += " Extra data is ignored."
+                    _log.warning(warn_msg)
+                if len(all_data) < len(self._blob_paths):
+                    self._stopped = True
+                    err_msg = f"Less data sent than blobs: {len(all_data)} < {len(self._blob_paths)}"
+                    _log.error(f"VPU-Thread: {err_msg}")
+                    self._crash_msg = err_msg
+                    err_msg = "VPU has stopped, " + err_msg
+                    raise RuntimeError(err_msg)
+
                 # push data to networks
+                _log.debug(f"VPU-Thread: Recevied {len(all_data)} data elements.")
                 buffer.send(all_data)
 
                 # get the results
+                _log.debug("VPU-Thread: Waiting on results from device.")
                 self._result_queue.put(buffer.receive())
+                _log.debug("VPU-Thread: Results forwarded.")
 
     def run(
         self: Self,
@@ -446,7 +482,7 @@ class VPU:
         if not self._thread.is_alive():
             err_msg = "VPU thread is not alive."
             raise RuntimeError(err_msg)
-        _log.debug("VPU run called.")
+        _log.debug(f"VPU run called with data type: {type(data)}")
         if not self._multimode:
             result = self._run_single(data, safe=safe)  # type: ignore[arg-type, assignment]
         else:
@@ -459,6 +495,7 @@ class VPU:
         *,
         safe: bool | None = None,
     ) -> dai.ADatatype | list[dai.ADatatype]:
+        _log.debug(f"Running single network with data type: {type(data)}")
         if safe is None:
             safe = True
         if safe:
@@ -477,7 +514,15 @@ class VPU:
             # just send it
             self._data_queue.put([data])
         _log.debug("Waiting on VPU result.")
-        return self._result_queue.get()[0]
+        while not self._stopped:
+            # try:
+            #     return self._result_queue.get(timeout=0.1)[0]
+            # except Empty:
+            #     continue
+            with contextlib.suppress(Empty):
+                return self._result_queue.get(timeout=0.1)[0]
+        err_msg = "VPU thread stopped " + self._crash_msg
+        raise RuntimeError(err_msg)
 
     def _run_multi(
         self: Self,
@@ -485,6 +530,7 @@ class VPU:
         *,
         safe: bool | None = None,
     ) -> list[dai.ADatatype | list[dai.ADatatype]]:
+        _log.debug(f"Running multiple networks with data type: {type(data)}")
         if safe is None:
             safe = True
         if safe:
@@ -495,4 +541,12 @@ class VPU:
         else:
             self._data_queue.put(data)
         _log.debug("Waiting on VPU result.")
-        return self._result_queue.get()
+        while not self._stopped:
+            # try:
+            #     return self._result_queue.get(timeout=0.1)
+            # except Empty:
+            #     continue
+            with contextlib.suppress(Empty):
+                return self._result_queue.get(timeout=0.1)
+        err_msg = "VPU thread stopped " + self._crash_msg
+        raise RuntimeError(err_msg)

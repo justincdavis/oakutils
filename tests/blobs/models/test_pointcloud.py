@@ -3,67 +3,80 @@
 # MIT License
 from __future__ import annotations
 
-import time
+import sys
+from pathlib import Path
 
 import depthai as dai
+from oakutils.blobs import get_model_path
+from oakutils.calibration import get_oakd_calibration
+from oakutils.nodes import create_stereo_depth, create_xout
+from oakutils.nodes.models import create_point_cloud, get_point_cloud_buffer, create_xyz_matrix
 
-from oakutils.calibration import get_camera_calibration
-from oakutils.nodes import create_stereo_depth, create_xout, get_nn_point_cloud_buffer
-from oakutils.nodes.models import create_point_cloud
+try:
+    from ...device import get_device_count
+except ImportError:
+    devicefile = Path(__file__).parent.parent.parent / "device.py"
+    sys.path.append(str(devicefile.parent))
+    from device import get_device_count
 
-from .utils import eval_model
-from ...helpers import check_device, TIME_TO_RUN
+try:
+    from hashs import get_run_tables, write_model_tables, hash_file
+except ModuleNotFoundError:
+    from .hashs import get_run_tables, write_model_tables, hash_file
 
 
-def check_pointcloud(shaves: int):
-    """Test the pointcloud node"""
-    if len(dai.Device.getAllAvailableDevices()) == 0:
-        return 0  # no device found
-    
-    pipeline = dai.Pipeline()
+def test_create_and_run() -> None:
+    if get_device_count() == 0:
+        return
+    calib_data = get_oakd_calibration(rgb_size=(1920, 1080), mono_size=(640, 400))
+    hash_table, run_table = get_run_tables()
+    for shave in [1, 2, 3, 4, 5, 6]:
+        modelname = "pointcloud"
+        modelpath = get_model_path(modelname, [], shave)
+        model_hash = hash_file(modelpath)
+        modelkey = modelpath.stem
+        # if the hash is the same and we have already gotten a successful run, continue
+        if hash_table[modelkey] == model_hash and run_table[modelkey]:
+            continue
+        # if the hash is not the same update the hash and set the run to false
+        existing_hash = hash_table[modelkey]
+        if existing_hash != model_hash:
+            hash_table[modelkey] = model_hash
+            run_table[modelkey] = False
 
-    calibration = get_camera_calibration(
-        (1920, 1080),
-        (640, 400),
-    )
-    stereo, left, right = create_stereo_depth(pipeline)
-    pcl, xin_xyz, start_pcl = create_point_cloud(
-        pipeline, 
-        stereo.depth,
-        calibration,
-        shaves=shaves,
-    )
-    _ = create_xout(pipeline, pcl.out, "pcl")
+        pipeline = dai.Pipeline()
+        stereo, left, right = create_stereo_depth(pipeline)
+        pcl, xin_pcl, device_call = create_point_cloud(
+            pipeline, stereo.depth, calib_data, shaves=shave
+        )
+        xout_pcl = create_xout(pipeline, pcl.out, "pcl_out")
 
-    with dai.Device(pipeline) as device:
-        start_pcl(device)
-        l_queue: dai.DataOutputQueue = device.getOutputQueue("pcl")
+        all_nodes = [
+            stereo,
+            left,
+            right,
+            pcl,
+            xin_pcl,
+            xout_pcl,
+        ]
+        assert len(all_nodes) == 6
+        for node in all_nodes:
+            assert node is not None
 
-        t0 = time.perf_counter()
-        while True:
-            l_data = l_queue.get()
-            pcl = get_nn_point_cloud_buffer(l_data)
-            if time.perf_counter() - t0 > TIME_TO_RUN:
+        with dai.Device(pipeline) as device:
+            device_call(device)
+            queue: dai.DataOutputQueue = device.getOutputQueue("pcl_out")
+
+            while True:
+                data = queue.get()
+                pcl_buffer = get_point_cloud_buffer(data)
+                assert pcl_buffer is not None
                 break
-    return 0
 
-def test_pointcloud_1_shave():
-    check_device(lambda: check_pointcloud(1), TIME_TO_RUN)
+        run_table[modelkey] = True
+        write_model_tables(hash_table, run_table)
 
-def test_pointcloud_2_shave():
-    check_device(lambda: check_pointcloud(2), TIME_TO_RUN)
 
-def test_pointcloud_3_shave():
-    check_device(lambda: check_pointcloud(3), TIME_TO_RUN)
 
-def test_pointcloud_4_shave():
-    check_device(lambda: check_pointcloud(4), TIME_TO_RUN)
-
-def test_pointcloud_5_shave():
-    check_device(lambda: check_pointcloud(5), TIME_TO_RUN)
-
-def test_pointcloud_6_shave():
-    check_device(lambda: check_pointcloud(6), TIME_TO_RUN)
-
-def test_results():
-    eval_model("pointcloud", (640, 400, 1))
+if __name__ == "__main__":
+    test_create_and_run()

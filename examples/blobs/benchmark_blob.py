@@ -10,12 +10,6 @@ from pathlib import Path
 from oakutils.blobs import benchmark_blob
 
 
-def main() -> None:
-    """Run a benchmarking example."""
-    yolo_path = Path(__file__).parent / "yolov8n_160"
-    result = benchmark_blob(yolo_path, is_yolo=True)
-    print(result)
-
-
-if __name__ == "__main__":
-    main()
+yolo_path = Path(__file__).parent / "yolov8n_160"
+result = benchmark_blob(yolo_path, is_yolo=True)
+print(result)

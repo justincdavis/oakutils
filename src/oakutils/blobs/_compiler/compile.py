@@ -12,8 +12,8 @@ import shutil
 from pathlib import Path
 from typing import Callable
 
+import requests.exceptions as rexcepts
 import torch
-from requests.exceptions import ConnectionError, HTTPError
 
 from oakutils.blobs.definitions import AbstractModel, InputType
 
@@ -26,6 +26,34 @@ from .utils import dict_to_str, remove_suffix
 _log = logging.getLogger(__name__)
 
 
+def get_model_name(model: AbstractModel, model_args: dict, shaves: int) -> str:
+    """
+    Get the formed name of the model based on model class, args, and shaves.
+
+    Parameters
+    ----------
+    model : AbstractModel
+        The model class to compile
+    model_args : Dict
+        The arguments used to create the model
+    shaves : int
+        The number of shaves to use for the blob
+
+    Returns
+    -------
+    str
+        The name of the model
+
+    """
+    arg_str = dict_to_str(model_args)
+    try:
+        model_name = str(model.__name__)
+    except AttributeError:
+        model_name = str(model.__class__.__name__)
+    model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
+    return f"{model_name}_shaves{shaves}"
+
+
 def _compile(
     model_type: AbstractModel,
     model_args: dict,
@@ -34,8 +62,10 @@ def _compile(
         | tuple[tuple[int, int, int], InputType]
     ),
     shaves: int = 6,
-    creation_func: Callable = torch.rand,
-    onnx_opset: int = 12,
+    mean_value: float | None = None,
+    scale_value: float | None = None,
+    creation_func: Callable = torch.ones,
+    onnx_opset: int = 11,
     openvino_version: str | None = None,
     *,
     cache: bool | None = None,
@@ -62,11 +92,15 @@ def _compile(
         you will need to recompile the blob with cache set to False.
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
+    mean_value : float, optional
+        The mean value to scale inputs, by default None
+    scale_value : float, optional
+        The scale value to scale inputs, by default None
     creation_func : callable, optional
-        The function to use to create the dummy input, by default torch.rand
+        The function to use to create the dummy input, by default torch.ones
         Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
-        The opset to use for the onnx export, by default 12
+        The opset to use for the onnx export, by default 11
     openvino_version : str, optional
         The version of OpenVINO to use for the blob, by default None
         If None, then the version is set based on the input type
@@ -95,14 +129,9 @@ def _compile(
     input_data = model_type.input_names()
     input_names = [x[0] for x in input_data]
     output_names = model_type.output_names()
-    arg_str = dict_to_str(model_args)
 
-    # resolve the paths ahead of time for caching
-    try:
-        model_name = model.__name__
-    except AttributeError:
-        model_name = model.__class__.__name__
-    model_name = remove_suffix(f"{model_name}_{arg_str}", "_")
+    # get model name
+    model_name_shaves = get_model_name(model_type, model_args, shaves)
 
     # handle the cache directorys
     cache_dir = get_cache_dir_path()
@@ -119,10 +148,12 @@ def _compile(
         Path.mkdir(blob_cache_dir, parents=True)
 
     # resolve the paths
-    onnx_path = Path(onnx_cache_dir) / f"{model_name}.onnx"
-    simplfiy_onnx_path = Path(simp_onnx_cache_dir) / f"{model_name}_simplified.onnx"
-    blob_dir = Path(blob_cache_dir) / model_name
-    final_blob_path = Path(cache_dir) / f"{model_name}.blob"
+    onnx_path = Path(onnx_cache_dir) / f"{model_name_shaves}.onnx"
+    simplfiy_onnx_path = (
+        Path(simp_onnx_cache_dir) / f"{model_name_shaves}_simplified.onnx"
+    )
+    blob_dir = Path(blob_cache_dir) / model_name_shaves
+    final_blob_path = Path(cache_dir) / f"{model_name_shaves}.blob"
 
     if verbose:
         _log.debug("Model Paths")
@@ -171,8 +202,12 @@ def _compile(
                 str(simplfiy_onnx_path.resolve()),
                 str(blob_dir.resolve()),
                 shaves=shaves,
+                mean_value=mean_value,
+                scale_value=scale_value,
                 version=openvino_version,
             )
+            if verbose:
+                _log.info(f.getvalue())
     except json.JSONDecodeError as err:
         base_str = "Error compiling blob as JSONDecodeError. "
         base_str += "Usually this is caused by a corrupted json file. "
@@ -184,7 +219,7 @@ def _compile(
         )
         err_msg = base_str
         raise RuntimeError(err_msg) from err
-    except HTTPError as err:
+    except rexcepts.HTTPError as err:
         err_dict: dict[str, str] = {}
         for line in f.getvalue().split("\n"):
             if ": " not in line:
@@ -198,7 +233,7 @@ def _compile(
             f"Error compiling blob for the OAK-D.\n  Error from OpenVINO: {stderr}"
         )
         raise RuntimeError(err_msg) from err
-    except ConnectionError as err:
+    except rexcepts.ConnectionError as err:
         msg_str = "Error compiling blob. "
         msg_str += "Could not connect to the blobconverter server. "
         msg_str += "Check your internet connection and try again."
@@ -214,9 +249,11 @@ def compile_model(
     model_type: AbstractModel,
     model_args: dict,
     shaves: int = 6,
+    mean_value: float | None = None,
+    scale_value: float | None = None,
     shape_mapping: dict[InputType, tuple[int, int, int]] | None = None,
-    creation_func: Callable = torch.rand,
-    onnx_opset: int = 12,
+    creation_func: Callable = torch.ones,
+    onnx_opset: int = 11,
     openvino_version: str | None = None,
     *,
     cache: bool | None = None,
@@ -224,6 +261,15 @@ def compile_model(
 ) -> str:
     """
     Compiles a given torch.nn.Module class into a blob using the provided arguments.
+
+    The mean and scale values are used to normalize the input data, to
+    match what the neural network would have been trained on.
+    It is computed according to the formula:
+        normalized = (input - mean) / scale
+    The common (and default scenario) is for inputs to have range [0, 255]
+    since they are images. Then, the majority of neural networks are trained
+    with [-1, 1] range.
+    Using the default values the input of [0, 255] will be normalized to [-0.5, 0.5]
 
     Parameters
     ----------
@@ -239,6 +285,10 @@ def compile_model(
         Whether or not to cache the blob, by default True
     shaves : int, optional
         The number of shaves to use for the blob, by default 6
+    mean_value : float, optional
+        The mean value to scale inputs, by default None
+    scale_value : float, optional
+        The scale value to scale inputs, by default None
     shape_mapping : Optional[Dict[InputType, Tuple[int, int, int]]], optional
         The shape mapping to convert InputTypes to resolutions based on the setup
         of the camera.
@@ -248,10 +298,10 @@ def compile_model(
         InputType.XYZ -> (640, 400, 3)
         InputType.U8 -> (640, 400, 1)
     creation_func: callable, optional
-        The function to use to create the dummy input, by default torch.rand
+        The function to use to create the dummy input, by default torch.ones
         Examples are: torch.rand, torch.randn, torch.zeros, torch.ones
     onnx_opset : int, optional
-        The opset to use for the onnx export, by default 12
+        The opset to use for the onnx export, by default 11
     openvino_version : str, optional
         The version of OpenVINO to use for the blob, by default None
         If None, then the version is set based on the input type
@@ -304,6 +354,8 @@ def compile_model(
         _log.info(f"    Dummy Input Shapes: {dummy_input_shapes}")
         _log.info(f"    Cache: {cache}")
         _log.info(f"    Shaves: {shaves}")
+        _log.info(f"    Mean Value: {mean_value}")
+        _log.info(f"    Scale Value: {scale_value}")
         _log.info(f"    Creation Func: {creation_func}")
         _log.info(f"    Onnx Opset: {onnx_opset}")
 
@@ -314,6 +366,8 @@ def compile_model(
             dummy_input_shapes=dummy_input_shapes,
             cache=cache,
             shaves=shaves,
+            mean_value=mean_value,
+            scale_value=scale_value,
             creation_func=creation_func,
             onnx_opset=onnx_opset,
             openvino_version=openvino_version,

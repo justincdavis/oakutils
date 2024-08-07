@@ -55,17 +55,41 @@ class Gaussian(AbstractModel):
 
     @classmethod
     def model_type(cls: type[Gaussian]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[Gaussian]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[Gaussian]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -76,6 +100,11 @@ class Gaussian(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         return kornia.filters.gaussian_blur2d(
@@ -114,17 +143,41 @@ class GaussianGray(AbstractModel):
 
     @classmethod
     def model_type(cls: type[GaussianGray]) -> ModelType:
-        """Use to get the type of input this model takes."""
+        """
+        Use to get the type of input this model takes.
+
+        Returns
+        -------
+        ModelType
+            The type of arguments this model takes.
+
+        """
         return ModelType.KERNEL
 
     @classmethod
     def input_names(cls: type[GaussianGray]) -> list[tuple[str, InputType]]:
-        """Use to get the names of the input tensors."""
+        """
+        Use to get the names of the input tensors.
+
+        Returns
+        -------
+        list[tuple[str, InputType]]
+            The names of the input tensors and their datatype.
+
+        """
         return [("input", InputType.FP16)]
 
     @classmethod
     def output_names(cls: type[GaussianGray]) -> list[str]:
-        """Use to get the names of the output tensors."""
+        """
+        Use to get the names of the output tensors.
+
+        Returns
+        -------
+        list[str]
+            The names of the output tensors.
+
+        """
         return ["output"]
 
     def forward(self: Self, image: torch.Tensor) -> torch.Tensor:
@@ -135,6 +188,11 @@ class GaussianGray(AbstractModel):
         ----------
         image : torch.Tensor
             The input tensor to run the model on
+
+        Returns
+        -------
+        torch.Tensor
+            The output tensor
 
         """
         gaussian = kornia.filters.gaussian_blur2d(

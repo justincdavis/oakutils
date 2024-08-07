@@ -57,13 +57,13 @@ def get_oakd_calibration_basic(
 
         k_rgb = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.RGB,
+                dai.CameraBoardSocket.CAM_A,
                 rgb_size[0],
                 rgb_size[1],
             ),
         )
         d_rgb = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RGB),
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.CAM_A),
         )
         fx_rgb = k_rgb[0][0]
         fy_rgb = k_rgb[1][1]
@@ -72,7 +72,7 @@ def get_oakd_calibration_basic(
 
         k_left = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.LEFT,
+                dai.CameraBoardSocket.CAM_B,
                 mono_size[0],
                 mono_size[1],
             ),
@@ -83,7 +83,7 @@ def get_oakd_calibration_basic(
         cy_left = k_left[1][2]
         k_right = np.array(
             calib_data.getCameraIntrinsics(
-                dai.CameraBoardSocket.RIGHT,
+                dai.CameraBoardSocket.CAM_C,
                 mono_size[0],
                 mono_size[1],
             ),
@@ -94,17 +94,17 @@ def get_oakd_calibration_basic(
         cx_right = k_right[0][2]
         cy_right = k_right[1][2]
         d_left = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.LEFT),
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.CAM_B),
         )
         d_right = np.array(
-            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.RIGHT),
+            calib_data.getDistortionCoefficients(dai.CameraBoardSocket.CAM_C),
         )
 
-        rgb_fov = calib_data.getFov(dai.CameraBoardSocket.RGB)
+        rgb_fov = calib_data.getFov(dai.CameraBoardSocket.CAM_A)
         rgb_fov_rad = np.deg2rad(rgb_fov)
-        left_fov = calib_data.getFov(dai.CameraBoardSocket.LEFT)
+        left_fov = calib_data.getFov(dai.CameraBoardSocket.CAM_B)
         left_fov_rad = np.deg2rad(left_fov)
-        right_fov = calib_data.getFov(dai.CameraBoardSocket.RIGHT)
+        right_fov = calib_data.getFov(dai.CameraBoardSocket.CAM_C)
         right_fov_rad = np.deg2rad(right_fov)
 
         r1 = np.array(calib_data.getStereoLeftRectificationRotation())
@@ -113,8 +113,8 @@ def get_oakd_calibration_basic(
         t1 = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.LEFT,
-                    dstCamera=dai.CameraBoardSocket.RIGHT,
+                    srcCamera=dai.CameraBoardSocket.CAM_B,
+                    dstCamera=dai.CameraBoardSocket.CAM_C,
                 ),
             )
             / 100
@@ -122,8 +122,8 @@ def get_oakd_calibration_basic(
         t2 = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.RIGHT,
-                    dstCamera=dai.CameraBoardSocket.LEFT,
+                    srcCamera=dai.CameraBoardSocket.CAM_C,
+                    dstCamera=dai.CameraBoardSocket.CAM_B,
                 ),
             )
             / 100
@@ -131,8 +131,8 @@ def get_oakd_calibration_basic(
         t_l_rgb = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.LEFT,
-                    dstCamera=dai.CameraBoardSocket.RGB,
+                    srcCamera=dai.CameraBoardSocket.CAM_B,
+                    dstCamera=dai.CameraBoardSocket.CAM_A,
                 ),
             )
             / 100
@@ -140,8 +140,8 @@ def get_oakd_calibration_basic(
         t_r_rgb = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.RIGHT,
-                    dstCamera=dai.CameraBoardSocket.RGB,
+                    srcCamera=dai.CameraBoardSocket.CAM_C,
+                    dstCamera=dai.CameraBoardSocket.CAM_A,
                 ),
             )
             / 100
@@ -149,8 +149,8 @@ def get_oakd_calibration_basic(
         t_rgb_l = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.RGB,
-                    dstCamera=dai.CameraBoardSocket.LEFT,
+                    srcCamera=dai.CameraBoardSocket.CAM_A,
+                    dstCamera=dai.CameraBoardSocket.CAM_B,
                 ),
             )
             / 100
@@ -158,8 +158,8 @@ def get_oakd_calibration_basic(
         t_rgb_r = (
             np.array(
                 calib_data.getCameraTranslationVector(
-                    srcCamera=dai.CameraBoardSocket.RGB,
-                    dstCamera=dai.CameraBoardSocket.RIGHT,
+                    srcCamera=dai.CameraBoardSocket.CAM_A,
+                    dstCamera=dai.CameraBoardSocket.CAM_C,
                 ),
             )
             / 100
@@ -170,38 +170,38 @@ def get_oakd_calibration_basic(
 
         l2r_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.LEFT,
-                dstCamera=dai.CameraBoardSocket.RIGHT,
+                srcCamera=dai.CameraBoardSocket.CAM_B,
+                dstCamera=dai.CameraBoardSocket.CAM_C,
             ),
         )
         r2l_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.RIGHT,
-                dstCamera=dai.CameraBoardSocket.LEFT,
+                srcCamera=dai.CameraBoardSocket.CAM_C,
+                dstCamera=dai.CameraBoardSocket.CAM_B,
             ),
         )
         l2rgb_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.LEFT,
-                dstCamera=dai.CameraBoardSocket.RGB,
+                srcCamera=dai.CameraBoardSocket.CAM_B,
+                dstCamera=dai.CameraBoardSocket.CAM_A,
             ),
         )
         r2rgb_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.RIGHT,
-                dstCamera=dai.CameraBoardSocket.RGB,
+                srcCamera=dai.CameraBoardSocket.CAM_C,
+                dstCamera=dai.CameraBoardSocket.CAM_A,
             ),
         )
         rgb2l_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.RGB,
-                dstCamera=dai.CameraBoardSocket.LEFT,
+                srcCamera=dai.CameraBoardSocket.CAM_A,
+                dstCamera=dai.CameraBoardSocket.CAM_B,
             ),
         )
         rgb2r_extrinsic = np.array(
             calib_data.getCameraExtrinsics(
-                srcCamera=dai.CameraBoardSocket.RGB,
-                dstCamera=dai.CameraBoardSocket.RIGHT,
+                srcCamera=dai.CameraBoardSocket.CAM_A,
+                dstCamera=dai.CameraBoardSocket.CAM_C,
             ),
         )
 

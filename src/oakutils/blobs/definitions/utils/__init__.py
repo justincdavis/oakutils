@@ -21,6 +21,6 @@ input_type_to_str
 """
 
 from .conversion import convert_to_fp16
-from .types import InputType, ModelType, input_type_to_str
+from .custom_types import InputType, ModelType, input_type_to_str
 
 __all__ = ["InputType", "ModelType", "convert_to_fp16", "input_type_to_str"]

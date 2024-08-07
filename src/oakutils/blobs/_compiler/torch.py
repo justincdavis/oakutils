@@ -43,6 +43,8 @@ def _create_dummy_input(
         If the input_shape is not in the correct form
 
     """
+    _log.debug("Creating dummy input")
+
     whc = 3
     if len(input_shape) != whc:
         err_msg = "input_shape must be in form width, height, channels"
@@ -52,14 +54,6 @@ def _create_dummy_input(
         raise ValueError(err_msg)
 
     if input_type == InputType.U8:
-        # if we are using a single channel, should assume that it will be grayscale
-        # need to double the columns due to the way data
-        # is propagated through the pipeline
-        # return creation_func(
-        #     (1, input_shape[2], input_shape[1], input_shape[0] * 2),
-        #     dtype=torch.float32,  # type: ignore[call-arg]
-        # )
-        # FIXED IN DEPTHAI 2.22.0+, use regular input shape
         return creation_func(
             (1, input_shape[2], input_shape[1], input_shape[0]),
             dtype=torch.float32,  # type: ignore[call-arg]
@@ -101,6 +95,7 @@ def _create_multiple_dummy_input(
         The dummy input tensors
 
     """
+    _log.debug("Creating multiple dummy inputs")
     return [
         _create_dummy_input(input_shape, input_type, creation_func)
         for input_shape, input_type in input_shapes
@@ -150,7 +145,8 @@ def _export_module_to_onnx(
             _log.debug(f"       Dummy input {idx} shape: {dummy_input_tensor.shape}")
         _log.debug(f"   Opset version: {onnx_opset}")
 
-    torch.onnx.export(
+    _log.debug("Calling torch.onnx.export")
+    torch.onnx.export(  # type: ignore[no-untyped-call]
         model_instance,
         tuple(dummy_input),
         onnx_path,
@@ -159,7 +155,9 @@ def _export_module_to_onnx(
         do_constant_folding=True,
         input_names=input_names,
         output_names=output_names,
+        operator_export_type=torch.onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK,
     )
+    _log.debug("Returned from torch.onnx.export")
 
 
 def export(
@@ -214,6 +212,9 @@ def export(
         dummy_input = _create_dummy_input(input_shape, input_type, creation_func)
     else:
         dummy_input = _create_multiple_dummy_input(dummy_input_shapes, creation_func)
+
+    if verbose:
+        _log.debug("   Dummy inputs created successfully")
 
     _export_module_to_onnx(
         model_instance=model_instance,

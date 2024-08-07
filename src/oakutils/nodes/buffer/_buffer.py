@@ -3,6 +3,7 @@
 # MIT License
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 import depthai as dai
@@ -10,6 +11,8 @@ import numpy as np
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+_log = logging.getLogger(__name__)
 
 
 class Buffer:
@@ -203,6 +206,7 @@ class _Buffer:
         for idx, d in enumerate(data):
             self._buffers[idx].setData(d)
             self._input_queues[idx].send(self._buffers[idx])
+            _log.debug(f"Sent data through buffer: {self._input_streams[idx]}")
 
     def receive(self: Self) -> list[dai.ADatatype]:
         """
@@ -214,4 +218,8 @@ class _Buffer:
             The data received from the buffer.
 
         """
-        return [queue.get() for queue in self._output_queues]
+        outputs = []
+        for queue in self._output_queues:
+            outputs.append(queue.get())
+            _log.debug(f"Received data from buffer: {queue.getName()}")
+        return outputs
