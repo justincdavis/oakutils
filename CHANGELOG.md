@@ -1,9 +1,25 @@
-## 1.5.4 (07-28-2024)
+## 1.6.0 (08-06-2024)
+
+### Added
+
+- blobs.testing.BlobEvaluator introduced
+- Exposed more compiler functionality
+    - blobs.get_model_path
+    - blobs.get_cache_dir
+    - blob.get_model_name
+- Added blobs.models.bulk for easier bulk importing of model paths
+    - i.e. bulk.GAUSSIAN_15x15 is a tuple of all compiled models
+        of that function
+    - ALL_MODELS, as a list of each valid tuple of paths
+- Added new script `model_visualizer` which allows visualizing a variety
+    of pre-compiled models.    
 
 ### Improved
 
 - Explicit call to VPU.stop in blobs.benchmark_blob.
 - Enabled with statement usage with VPU to prevent missing stop calls.
+- Rewrote all existing tests to use new BlobEvaluator
+- More debug logging in VPU and node creation
 
 ## 1.5.3 (07-27-2024)
 
