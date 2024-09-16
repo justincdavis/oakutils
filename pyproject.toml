@@ -11,6 +11,7 @@ authors = [
 maintainers = [
   {name="Justin Davis", email="davisjustin302@gmail.com"},
 ]
+description = "High-level utilities for DepthAI OAK devices"
 readme = "README.md"
 classifiers = [
     "Development Status :: 4 - Beta",
