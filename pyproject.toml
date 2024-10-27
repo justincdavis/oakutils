@@ -48,7 +48,7 @@ classifiers = [
 requires-python=">=3.8, <3.13"
 dependencies = [
     "depthai>=2.24",
-    "numpy>=1.20,<2.0",
+    "numpy>=1.20,<3.0",
     "opencv-contrib-python>=4.9.0",
     "cv2ext>=0.0.10",
     "typing_extensions>=4.9.0",
