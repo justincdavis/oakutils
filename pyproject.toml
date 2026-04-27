@@ -81,7 +81,7 @@ ci = [
     "types-requests>=2.25.0",
 ]
 test = [
-    "pytest>=6.2.0",
+    "pytest>=8.4.2",
     "stdlib_list>=0.10.0",
 ]
 docs = [
