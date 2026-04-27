@@ -72,7 +72,7 @@ compiler = [
     "blobconverter==1.4.3",
     "requests>=2.25.0",
     "boto3>=1.34.37",  # Removes the need for search during install
-    "botocore>=1.34.37",  # Removes the need for search during install
+    "botocore>=1.42.96",  # Removes the need for search during install
 ]
 ci = [
     "ruff>=0.5.6",
